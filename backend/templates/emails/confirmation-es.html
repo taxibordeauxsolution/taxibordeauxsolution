@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Reserva - Taxi Bordeaux Solution</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 32px 24px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 8px 0 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 32px 24px;
+        }
+        .status-badge {
+            display: inline-block;
+            background-color: #10b981;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        .reservation-card {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+        .reservation-id {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 16px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-weight: 600;
+            color: #6b7280;
+            flex-shrink: 0;
+            margin-right: 16px;
+        }
+        .detail-value {
+            text-align: right;
+            flex-grow: 1;
+        }
+        .route-section {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+        .route-point {
+            display: flex;
+            align-items: center;
+            margin: 16px 0;
+        }
+        .route-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .route-icon.from {
+            background-color: #10b981;
+        }
+        .route-icon.to {
+            background-color: #ef4444;
+        }
+        .route-address {
+            font-weight: 500;
+        }
+        .price-section {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 24px 0;
+        }
+        .price-amount {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .price-details {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .contact-section {
+            background-color: #1f2937;
+            color: white;
+            padding: 24px;
+            text-align: center;
+            margin-top: 32px;
+        }
+        .contact-button {
+            display: inline-block;
+            background-color: #10b981;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin: 8px;
+        }
+        .footer {
+            background-color: #f8fafc;
+            color: #6b7280;
+            text-align: center;
+            padding: 24px;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #1e40af;
+            text-decoration: none;
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+            .detail-row {
+                flex-direction: column;
+            }
+            .detail-value {
+                text-align: left;
+                margin-top: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚖 Taxi Bordeaux Solution</h1>
+            <p>Confirmación de su reserva</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="status-badge">✅ Reserva confirmada</div>
+            
+            <h2>Hola {{customer.name}},</h2>
+            <p>Su reserva de taxi en Bordeaux ha sido confirmada con éxito. Le contactaremos en breve para finalizar los detalles.</p>
+
+            <!-- Reservation Details -->
+            <div class="reservation-card">
+                <div class="reservation-id">Reserva {{reservation.reservationId}}</div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">📅 Fecha</div>
+                    <div class="detail-value">{{booking.scheduledDateTime}}</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">👥 Pasajeros</div>
+                    <div class="detail-value">{{booking.passengers}} persona(s)</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">🧳 Equipaje</div>
+                    <div class="detail-value">{{booking.luggage}} maleta(s)</div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">📱 Teléfono</div>
+                    <div class="detail-value">{{customer.phone}}</div>
+                </div>
+            </div>
+
+            <!-- Route -->
+            <div class="route-section">
+                <h3 style="margin-top: 0; color: #1e40af;">📍 Su viaje</h3>
+                
+                <div class="route-point">
+                    <div class="route-icon from"></div>
+                    <div>
+                        <strong>Recogida</strong><br>
+                        <span class="route-address">{{trip.from.address}}</span>
+                    </div>
+                </div>
+                
+                <div style="margin-left: 24px; color: #6b7280; font-size: 14px;">
+                    ↓ {{trip.distance}} km • {{trip.duration}} minutos
+                </div>
+                
+                <div class="route-point">
+                    <div class="route-icon to"></div>
+                    <div>
+                        <strong>Destino</strong><br>
+                        <span class="route-address">{{trip.to.address}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Price -->
+            <div class="price-section">
+                <div class="price-amount">{{pricing.totalPrice}}€</div>
+                <div class="price-details">Precio estimado con impuestos • Pago con tarjeta o efectivo</div>
+            </div>
+
+            <!-- Important Info -->
+            <div style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px; margin: 24px 0;">
+                <h4 style="margin-top: 0; color: #92400e;">⏰ Información importante</h4>
+                <ul style="margin-bottom: 0; color: #92400e;">
+                    <li>Recogida prevista: <strong>5-10 minutos</strong></li>
+                    <li>Se le asignará un conductor en breve</li>
+                    <li>Recibirá un SMS con los detalles del conductor</li>
+                    <li>Cancelación gratuita hasta 15 minutos antes</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <h3>¿Necesita ayuda?</h3>
+            <p>Nuestro equipo está disponible 24/7 para asistirle</p>
+            <a href="tel:+33667237822" class="contact-button">📞 +33 6 67 23 78 22</a>
+            <a href="mailto:contact@taxibordeauxsolution.fr" class="contact-button">✉️ Contacto</a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>
+                <strong>Taxi Bordeaux Solution</strong><br>
+                Servicio profesional de taxi en Bordeaux<br>
+                Disponible 24/7
+            </p>
+            <p>
+                <a href="https://taxibordeauxsolution.fr">Sitio web</a> •
+                <a href="mailto:contact@taxibordeauxsolution.fr">Contacto</a> •
+                <a href="tel:+33667237822">+33 6 67 23 78 22</a>
+            </p>
+            <p style="font-size: 12px; margin-top: 16px;">
+                Este email se envió automáticamente, no responda directamente.<br>
+                Para cualquier pregunta, contáctenos usando los métodos indicados arriba.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
