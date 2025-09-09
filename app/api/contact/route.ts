@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function POST(request) {
+export async function POST(request: Request) {
   console.log('🚀 API Contact appelée')
   
   try {
@@ -271,8 +271,8 @@ export async function POST(request) {
       : `📧 Contact - ${firstName} ${lastName}${hasServiceDetails ? ` (${finalService})` : ''}`;
 
     const { data, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL,
-      to: process.env.RESEND_TO_EMAIL,
+      from: process.env.RESEND_FROM_EMAIL!,
+      to: process.env.RESEND_TO_EMAIL!,
       subject: subject,
       html: emailHtml,
       text: `
@@ -317,8 +317,8 @@ Source: ${isFullBooking ? 'Formulaire de réservation' : 'Formulaire de contact'
     return NextResponse.json(
       { 
         error: 'Erreur serveur interne',
-        details: error.message,
-        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        details: error instanceof Error ? error.message : 'Erreur inconnue',
+        stack: process.env.NODE_ENV === 'development' && error instanceof Error ? error.stack : undefined
       }, 
       { status: 500 }
     );

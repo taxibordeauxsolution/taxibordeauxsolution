@@ -102,7 +102,7 @@ const TaxiBookingHomePreview = () => {
     }
   }
 
-  const t = (key) => translations[language]?.[key] || key
+  const t = (key: string) => translations[language as keyof typeof translations]?.[key as keyof typeof translations.fr] || key
 
   // Initialisation Google Maps
   useEffect(() => {

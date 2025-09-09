@@ -31,7 +31,7 @@ export default function ContactForm() {
     
     // 🔍 VALIDATION CÔTÉ CLIENT
     const requiredFields = ['firstName', 'lastName', 'phone', 'departureAddress', 'destination']
-    const missingFields = requiredFields.filter(field => !formData[field] || formData[field].trim() === '')
+    const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData] || formData[field as keyof typeof formData].trim() === '')
     
     if (missingFields.length > 0) {
       console.log('❌ Champs manquants côté client:', missingFields)
@@ -80,9 +80,9 @@ export default function ContactForm() {
         throw new Error(result.error || 'Erreur envoi')
       }
     } catch (error) {
-      console.error('❌ Erreur serveur:', error.message)
+      console.error('❌ Erreur serveur:', error instanceof Error ? error.message : error)
       setStatus('error')
-      setStatusMessage(`❌ Erreur: ${error.message}. Appelez-nous au 📞 06 67 23 78 22`)
+      setStatusMessage(`❌ Erreur: ${error instanceof Error ? error.message : 'Erreur inconnue'}. Appelez-nous au 📞 06 67 23 78 22`)
     } finally {
       setIsLoading(false)
     }

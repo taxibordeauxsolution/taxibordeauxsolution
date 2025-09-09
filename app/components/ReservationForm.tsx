@@ -30,7 +30,7 @@ export default function ReservationForm() {
     setStatus('idle')
     
     const requiredFields = ['firstName', 'lastName', 'phone', 'departureAddress', 'destination']
-    const missingFields = requiredFields.filter(field => !formData[field] || formData[field].trim() === '')
+    const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData] || formData[field as keyof typeof formData].trim() === '')
     
     if (missingFields.length > 0) {
       setStatus('error')
@@ -79,7 +79,7 @@ export default function ReservationForm() {
       }
     } catch (error) {
       setStatus('error')
-      setStatusMessage(`❌ Erreur: ${error.message}. Appelez-nous au 📞 06 67 23 78 22`)
+      setStatusMessage(`❌ Erreur: ${error instanceof Error ? error.message : 'Erreur inconnue'}. Appelez-nous au 📞 06 67 23 78 22`)
     } finally {
       setIsLoading(false)
     }
