@@ -26,13 +26,13 @@ const TaxiBookingHomePreview = () => {
   const [tripData, setTripData] = useState({
     from: '',
     to: '',
-    fromCoords: null,
-    toCoords: null,
+    fromCoords: null as any,
+    toCoords: null as any,
     distance: 0,
     duration: 0,
     price: 0,
-    priceDetails: {},
-    routeInfo: null,
+    priceDetails: {} as any,
+    routeInfo: null as any,
     serviceAreaValidation: { valid: true }
   })
 
