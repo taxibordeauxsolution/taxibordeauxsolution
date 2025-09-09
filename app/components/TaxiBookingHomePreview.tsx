@@ -150,10 +150,11 @@ const TaxiBookingHomePreview = () => {
         const directionsRendererInstance = new google.maps.DirectionsRenderer({
           map: mapInstance,
           suppressMarkers: false,
+          draggable: false, // Pas de modification manuelle pour garder l'optimisation
           polylineOptions: {
-            strokeColor: '#1e40af',
-            strokeWeight: 4,
-            strokeOpacity: 0.8
+            strokeColor: '#10b981', // Vert pour indiquer route optimisée
+            strokeWeight: 5,        // Plus épais pour visibilité
+            strokeOpacity: 0.9      // Plus opaque pour contraste
           }
         })
 
@@ -259,9 +260,12 @@ const TaxiBookingHomePreview = () => {
       origin: tripData.fromCoords,
       destination: tripData.toCoords,
       travelMode: (window as any).google.maps.TravelMode.DRIVING,
-      avoidHighways: false,
-      avoidTolls: false,
-      unitSystem: (window as any).google.maps.UnitSystem.METRIC
+      avoidHighways: false, // Autorise autoroutes pour plus de rapidité
+      avoidTolls: false,    // Autorise péages pour plus de rapidité
+      unitSystem: (window as any).google.maps.UnitSystem.METRIC,
+      optimizeWaypoints: true, // Optimise l'itinéraire
+      provideRouteAlternatives: false, // Une seule route (la plus rapide)
+      region: 'FR' // Région France pour optimisation locale
     }, (result: any, status: string) => {
       setLoading(false)
       

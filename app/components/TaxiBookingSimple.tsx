@@ -194,7 +194,13 @@ const TaxiBookingSimple = () => {
     directionsService.route({
       origin: tripData.fromCoords,
       destination: tripData.toCoords,
-      travelMode: window.google.maps.TravelMode.DRIVING
+      travelMode: window.google.maps.TravelMode.DRIVING,
+      avoidHighways: false, // Autorise autoroutes pour rapidité
+      avoidTolls: false,    // Autorise péages pour rapidité
+      unitSystem: window.google.maps.UnitSystem.METRIC,
+      optimizeWaypoints: true, // Optimise l'itinéraire
+      provideRouteAlternatives: false, // Route la plus rapide uniquement
+      region: 'FR' // Optimisation locale France
     }, (result: any, status: string) => {
       setLoading(false)
       

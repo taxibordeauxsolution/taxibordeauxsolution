@@ -311,9 +311,12 @@ const TaxiBookingWithBackend = () => {
       origin: tripData.fromCoords,
       destination: tripData.toCoords,
       travelMode: window.google.maps.TravelMode.DRIVING,
-      avoidHighways: false,
-      avoidTolls: false,
-      unitSystem: window.google.maps.UnitSystem.METRIC
+      avoidHighways: false, // Autorise autoroutes pour rapidité maximale
+      avoidTolls: false,    // Autorise péages pour rapidité maximale  
+      unitSystem: window.google.maps.UnitSystem.METRIC,
+      optimizeWaypoints: true, // Optimise automatiquement l'itinéraire
+      provideRouteAlternatives: false, // Une seule route (la plus rapide)
+      region: 'FR' // Optimisation locale pour la France
     }, (result: any, status: string) => {
       setLoading(false)
       
