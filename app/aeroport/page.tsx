@@ -1,6 +1,7 @@
 'use client'
 
 import { Phone, MapPin, Clock, Plane, Shield, Star, Users, CheckCircle, Luggage, CreditCard, Navigation, Zap, ArrowRight, Crown } from 'lucide-react'
+import Image from 'next/image'
 
 export default function TaxiAeroport() {
   return (
@@ -79,10 +80,10 @@ export default function TaxiAeroport() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Où Nous Trouver à l'Aéroport ?
+              Où Nous Trouver à l&apos;Aéroport ?
             </h2>
             <p className="text-xl text-gray-600">
-              Station taxi officielle située à l'extérieur du Hall A, niveau arrivées
+              Station taxi officielle située à l&apos;extérieur du Hall A, niveau arrivées
             </p>
           </div>
 
@@ -97,7 +98,7 @@ export default function TaxiAeroport() {
                     <h3 className="text-xl font-bold text-gray-900 mb-2">Station Hall A - Niveau Extérieur</h3>
                     <p className="text-gray-600">
                       Située juste à la sortie du Hall A arrivées, notre station taxi est le premier point de transport 
-                      que vous verrez en sortant de l'aéroport.
+                      que vous verrez en sortant de l&apos;aéroport.
                     </p>
                   </div>
                 </div>
@@ -109,7 +110,7 @@ export default function TaxiAeroport() {
                   </div>
                   <div className="flex items-center gap-3 text-gray-700">
                     <CheckCircle className="text-green-500" size={20} />
-                    <span>Signalisation claire "TAXI"</span>
+                    <span>Signalisation claire &quot;TAXI&quot;</span>
                   </div>
                   <div className="flex items-center gap-3 text-gray-700">
                     <CheckCircle className="text-green-500" size={20} />
@@ -117,7 +118,7 @@ export default function TaxiAeroport() {
                   </div>
                   <div className="flex items-center gap-3 text-gray-700">
                     <CheckCircle className="text-green-500" size={20} />
-                    <span>Personnel d'accueil présent</span>
+                    <span>Personnel d&apos;accueil présent</span>
                   </div>
                 </div>
               </div>
@@ -143,7 +144,7 @@ export default function TaxiAeroport() {
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
-                    <span className="text-gray-700">Présentez-vous à la file d'attente</span>
+                    <span className="text-gray-700">Présentez-vous à la file d&apos;attente</span>
                   </div>
                 </div>
               </div>
@@ -155,7 +156,7 @@ export default function TaxiAeroport() {
                 <h4 className="text-2xl font-bold text-gray-900 mb-4">Réservation Recommandée</h4>
                 <p className="text-gray-600 mb-6">
                   Pour les vols de nuit, groupes importants ou destinations éloignées, 
-                  contactez-nous à l'avance pour garantir votre prise en charge.
+                  contactez-nous à l&apos;avance pour garantir votre prise en charge.
                 </p>
                 
                 <div className="space-y-4">
@@ -168,7 +169,7 @@ export default function TaxiAeroport() {
                   
                   <div className="bg-white p-4 rounded-xl border border-blue-200">
                     <div className="font-semibold text-blue-800 mb-1">⏰ Conseil</div>
-                    <div className="text-gray-600">Appelez dès la sortie de l'avion</div>
+                    <div className="text-gray-600">Appelez dès la sortie de l&apos;avion</div>
                   </div>
                 </div>
               </div>
@@ -186,10 +187,10 @@ export default function TaxiAeroport() {
             </div>
             <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
               Votre Taxi vous attend à
-              <span className="text-blue-600"> l'Aéroport</span>
+              <span className="text-blue-600"> l&apos;Aéroport</span>
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Découvrez nos services professionnels dans l'environnement aéroportuaire
+              Découvrez nos services professionnels dans l&apos;environnement aéroportuaire
             </p>
           </div>
 
@@ -197,32 +198,28 @@ export default function TaxiAeroport() {
             
             {/* Salle d'embarquement */}
             <div className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500">
-              <img 
-                src="/images/hero/Salle d'embarquement BOD.jpg" 
-                alt="Salle d'embarquement Aéroport Bordeaux" 
+              <Image 
+                src="/images/hero/Salle d&apos;embarquement BOD.jpg" 
+                alt="Salle d&apos;embarquement Aéroport Bordeaux" 
+                width={400}
+                height={256}
                 className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/images/hero/Hall aéroport Bordeaux.jpg";
-                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-lg font-bold mb-1">Salle d'Embarquement</h3>
+                <h3 className="text-lg font-bold mb-1">Salle d&apos;Embarquement</h3>
                 <p className="text-sm opacity-90">Récupération après votre vol</p>
               </div>
             </div>
 
             {/* Avion sur tarmac */}
             <div className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500">
-              <img 
+              <Image 
                 src="/images/hero/Avion sur tarmac Bordeaux.jpg" 
                 alt="Avion sur tarmac Bordeaux" 
+                width={400}
+                height={256}
                 className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/images/hero/Avion.jpg";
-                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
               <div className="absolute bottom-4 left-4 right-4 text-white">
@@ -233,14 +230,12 @@ export default function TaxiAeroport() {
 
             {/* Zone dépose minute */}
             <div className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500">
-              <img 
+              <Image 
                 src="/images/hero/aeroport-bordeaux-dépose minute.webp" 
                 alt="Zone dépose minute Aéroport Bordeaux" 
+                width={400}
+                height={256}
                 className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/images/hero/aéroport de bordeaux.jpg.jpg";
-                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
               <div className="absolute bottom-4 left-4 right-4 text-white">
@@ -576,7 +571,7 @@ export default function TaxiAeroport() {
                     <div className="text-6xl">👑</div>
                     <div>
                       <h3 className="text-3xl font-bold text-gray-900">Service VIP Executive</h3>
-                      <p className="text-xl text-gray-600">Transport premium pour clientèle d'affaires</p>
+                      <p className="text-xl text-gray-600">Transport premium pour clientèle d&apos;affaires</p>
                     </div>
                   </div>
 
@@ -628,7 +623,7 @@ export default function TaxiAeroport() {
                     >
                       06 67 23 78 22
                     </a>
-                    <p className="text-gray-600 mt-4">Réservation obligatoire 24h à l'avance</p>
+                    <p className="text-gray-600 mt-4">Réservation obligatoire 24h à l&apos;avance</p>
                   </div>
 
                   <div className="bg-purple-50 p-6 rounded-2xl border border-purple-200">
@@ -637,7 +632,7 @@ export default function TaxiAeroport() {
                       <li>• Dirigeants et cadres supérieurs</li>
                       <li>• Délégations officielles</li>
                       <li>• Clients internationaux VIP</li>
-                      <li>• Événements d'affaires importants</li>
+                      <li>• Événements d&apos;affaires importants</li>
                       <li>• Transferts de prestige</li>
                     </ul>
                   </div>
@@ -794,7 +789,7 @@ export default function TaxiAeroport() {
                 Conseils pour Votre Arrivée
               </h2>
               <p className="text-xl text-gray-600">
-                Optimisez votre trajet depuis l'aéroport Bordeaux-Mérignac
+                Optimisez votre trajet depuis l&apos;aéroport Bordeaux-Mérignac
               </p>
             </div>
 
@@ -816,13 +811,13 @@ export default function TaxiAeroport() {
                     <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-white text-xs">2</span>
                     </div>
-                    <span>Vérifiez l'heure d'arrivée de votre vol</span>
+                    <span>Vérifiez l&apos;heure d&apos;arrivée de votre vol</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-white text-xs">3</span>
                     </div>
-                    <span>Préparez l'adresse exacte de destination</span>
+                    <span>Préparez l&apos;adresse exacte de destination</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -862,7 +857,7 @@ export default function TaxiAeroport() {
                     <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-white text-xs">4</span>
                     </div>
-                    <span>Présentez-vous à la file d'attente</span>
+                    <span>Présentez-vous à la file d&apos;attente</span>
                   </li>
                 </ul>
               </div>
@@ -887,7 +882,7 @@ export default function TaxiAeroport() {
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-3">Appelez-nous :</h4>
                     <div className="space-y-2 text-gray-700">
-                      <div>• <strong>Dès la sortie de l'avion</strong></div>
+                      <div>• <strong>Dès la sortie de l&apos;avion</strong></div>
                       <div>• <strong>Communiquez votre n° de vol</strong></div>
                       <div>• <strong>Précisez votre destination</strong></div>
                       <div>• <strong>Chauffeur vous attend</strong></div>
@@ -908,7 +903,7 @@ export default function TaxiAeroport() {
               Réservation Anticipée Recommandée
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Garantissez votre transport aéroport en réservant à l'avance - Service personnalisé et sans attente
+              Garantissez votre transport aéroport en réservant à l&apos;avance - Service personnalisé et sans attente
             </p>
           </div>
 
@@ -957,7 +952,7 @@ export default function TaxiAeroport() {
                       </div>
                       <div>
                         <h4 className="font-bold text-gray-900 mb-2">Tarif fixe possible</h4>
-                        <p className="text-gray-600">Devis à l'avance pour certaines destinations éloignées</p>
+                        <p className="text-gray-600">Devis à l&apos;avance pour certaines destinations éloignées</p>
                       </div>
                     </div>
                   </div>
@@ -1049,7 +1044,7 @@ export default function TaxiAeroport() {
               Voyageurs Satisfaits
             </h2>
             <p className="text-xl text-gray-600">
-              Retours d'expérience de nos clients à l'aéroport
+              Retours d&apos;expérience de nos clients à l&apos;aéroport
             </p>
           </div>
 
@@ -1061,8 +1056,8 @@ export default function TaxiAeroport() {
                 ))}
               </div>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                "Vol retardé de 2h30, le chauffeur m'attendait toujours ! 
-                Service exceptionnel, merci pour votre professionnalisme."
+                &quot;Vol retardé de 2h30, le chauffeur m&apos;attendait toujours ! 
+                Service exceptionnel, merci pour votre professionnalisme.&quot;
               </p>
               <div className="font-semibold text-gray-900">Michel R. • Vol Air France Paris-Bordeaux</div>
             </div>
@@ -1074,8 +1069,8 @@ export default function TaxiAeroport() {
                 ))}
               </div>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                "Station très facile à trouver Hall A. 
-                Trajet rapide par les voies de bus, tarif au compteur respecté."
+                &quot;Station très facile à trouver Hall A. 
+                Trajet rapide par les voies de bus, tarif au compteur respecté.&quot;
               </p>
               <div className="font-semibold text-gray-900">Sophie L. • Bordeaux Centre-ville</div>
             </div>
@@ -1087,8 +1082,8 @@ export default function TaxiAeroport() {
                 ))}
               </div>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                "Famille avec 4 valises, chauffeur très aidant. 
-                Véhicule spacieux, accueil parfait pour nos enfants."
+                &quot;Famille avec 4 valises, chauffeur très aidant. 
+                Véhicule spacieux, accueil parfait pour nos enfants.&quot;
               </p>
               <div className="font-semibold text-gray-900">Famille Dubois • Départ vacances</div>
             </div>
@@ -1119,13 +1114,13 @@ export default function TaxiAeroport() {
                     Annulation Gratuite 100%
                   </h3>
                   <p className="text-xl text-gray-600 mb-8">
-                    Aucun frais d'annulation jusqu'à <strong>2 heures avant</strong> votre prise en charge
+                    Aucun frais d&apos;annulation jusqu&apos;à <strong>2 heures avant</strong> votre prise en charge
                   </p>
                   <div className="bg-green-50 p-6 rounded-2xl border border-green-200">
                     <h4 className="font-bold text-green-800 mb-4">🎯 Garantie Sans Frais</h4>
                     <ul className="text-green-700 space-y-2 text-left">
-                      <li>✓ Annulation gratuite jusqu'à 2h avant</li>
-                      <li>✓ Modification d'heure sans supplément</li>
+                      <li>✓ Annulation gratuite jusqu&apos;à 2h avant</li>
+                      <li>✓ Modification d&apos;heure sans supplément</li>
                       <li>✓ Changement de destination accepté</li>
                       <li>✓ Report en cas de vol annulé</li>
                     </ul>
@@ -1134,7 +1129,7 @@ export default function TaxiAeroport() {
 
                 <div>
                   <h4 className="text-2xl font-bold text-gray-900 mb-8">
-                    Conditions d'Annulation Flexible
+                    Conditions d&apos;Annulation Flexible
                   </h4>
                   
                   <div className="space-y-6">
@@ -1157,7 +1152,7 @@ export default function TaxiAeroport() {
                         </div>
                         <div>
                           <h5 className="font-bold text-yellow-800 mb-2">Moins de 2 heures avant</h5>
-                          <p className="text-yellow-700">Frais d'annulation selon situation</p>
+                          <p className="text-yellow-700">Frais d&apos;annulation selon situation</p>
                         </div>
                       </div>
                     </div>
@@ -1191,7 +1186,7 @@ export default function TaxiAeroport() {
               </div>
             </div>
 
-            {/* Cas spéciaux d'annulation */}
+            {/* Cas spéciaux d&apos;annulation */}
             <div className="grid md:grid-cols-3 gap-8">
               <div className="bg-white p-8 rounded-3xl shadow-lg border border-blue-200 text-center">
                 <div className="text-5xl mb-6">✈️</div>
@@ -1206,9 +1201,9 @@ export default function TaxiAeroport() {
 
               <div className="bg-white p-8 rounded-3xl shadow-lg border border-green-200 text-center">
                 <div className="text-5xl mb-6">🔄</div>
-                <h4 className="text-xl font-bold text-gray-900 mb-4">Modification d'Heure</h4>
+                <h4 className="text-xl font-bold text-gray-900 mb-4">Modification d&apos;Heure</h4>
                 <p className="text-gray-600 mb-4">
-                  Changement d'heure gratuit jusqu'à 1 heure avant la prise en charge
+                  Changement d&apos;heure gratuit jusqu&apos;à 1 heure avant la prise en charge
                 </p>
                 <div className="bg-green-50 p-4 rounded-lg border border-green-200">
                   <p className="text-green-800 font-semibold text-sm">Flexibilité maximale</p>
@@ -1219,7 +1214,7 @@ export default function TaxiAeroport() {
                 <div className="text-5xl mb-6">🏥</div>
                 <h4 className="text-xl font-bold text-gray-900 mb-4">Urgence Médicale</h4>
                 <p className="text-gray-600 mb-4">
-                  Annulation gratuite immédiate en cas d'urgence médicale justifiée
+                  Annulation gratuite immédiate en cas d&apos;urgence médicale justifiée
                 </p>
                 <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
                   <p className="text-purple-800 font-semibold text-sm">Compréhension totale</p>
@@ -1230,7 +1225,7 @@ export default function TaxiAeroport() {
             {/* Avantages de la réservation */}
             <div className="mt-16 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-8">
               <h4 className="text-2xl font-bold text-center text-gray-900 mb-8">
-                Pourquoi Réserver à l'Avance ?
+                Pourquoi Réserver à l&apos;Avance ?
               </h4>
               
               <div className="grid md:grid-cols-4 gap-6">
@@ -1280,7 +1275,7 @@ export default function TaxiAeroport() {
             </div>
             <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
               Nous Contacter pour
-              <span className="text-blue-600"> l'Aéroport</span>
+              <span className="text-blue-600"> l&apos;Aéroport</span>
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto font-light">
               Service taxi dédié aéroport Bordeaux-Mérignac
@@ -1340,17 +1335,17 @@ export default function TaxiAeroport() {
                 Services Taxi Aéroport
               </h3>
               <p className="text-lg text-slate-600">
-                Transport depuis et vers l'aéroport Bordeaux-Mérignac
+                Transport depuis et vers l&apos;aéroport Bordeaux-Mérignac
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-              {/* Aller à l'Aéroport */}
+              {/* Aller à l&apos;Aéroport */}
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl shadow-lg p-8 border border-blue-200 hover:shadow-xl transition-all duration-300">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="text-5xl">🛫</div>
                   <div>
-                    <h4 className="text-2xl font-bold text-slate-900">Aller à l'Aéroport</h4>
+                    <h4 className="text-2xl font-bold text-slate-900">Aller à l&apos;Aéroport</h4>
                     <p className="text-slate-600">Depuis votre domicile vers Bordeaux-Mérignac</p>
                   </div>
                 </div>
@@ -1383,12 +1378,12 @@ export default function TaxiAeroport() {
                 </div>
               </div>
 
-              {/* Retour de l'Aéroport */}
+              {/* Retour de l&apos;Aéroport */}
               <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-3xl shadow-lg p-8 border border-green-200 hover:shadow-xl transition-all duration-300">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="text-5xl">🛬</div>
                   <div>
-                    <h4 className="text-2xl font-bold text-slate-900">Retour de l'Aéroport</h4>
+                    <h4 className="text-2xl font-bold text-slate-900">Retour de l&apos;Aéroport</h4>
                     <p className="text-slate-600">Depuis Bordeaux-Mérignac vers votre destination</p>
                   </div>
                 </div>
@@ -1416,7 +1411,7 @@ export default function TaxiAeroport() {
                   <h5 className="font-bold text-green-800 mb-2">📍 Où nous trouver</h5>
                   <p className="text-sm text-slate-700">
                     Sortie Hall A arrivées, niveau extérieur. 
-                    Suivez les panneaux "TAXI" - station immédiatement visible.
+                    Suivez les panneaux &quot;TAXI&quot; - station immédiatement visible.
                   </p>
                 </div>
               </div>
@@ -1473,9 +1468,9 @@ export default function TaxiAeroport() {
                 <div className="bg-white rounded-2xl shadow-lg p-8 border border-blue-100">
                   <h5 className="text-lg font-bold text-blue-800 mb-4">✈️ Où se trouve exactement la station taxi ?</h5>
                   <p className="text-gray-700 leading-relaxed">
-                    Station officielle située à l'extérieur du Hall A niveau arrivées. 
-                    Sortez du terminal, dirigez-vous vers l'extérieur et vous verrez immédiatement 
-                    la signalisation "TAXI" avec la file d'attente organisée.
+                    Station officielle située à l&apos;extérieur du Hall A niveau arrivées. 
+                    Sortez du terminal, dirigez-vous vers l&apos;extérieur et vous verrez immédiatement 
+                    la signalisation &quot;TAXI&quot; avec la file d&apos;attente organisée.
                   </p>
                 </div>
 
@@ -1484,7 +1479,7 @@ export default function TaxiAeroport() {
                   <p className="text-gray-700 leading-relaxed">
                     La station taxi fonctionne selon les horaires de vol. Pour les arrivées 
                     tardives (après 22h) ou très matinales (avant 6h), nous recommandons 
-                    fortement de réserver à l'avance au 06 67 23 78 22.
+                    fortement de réserver à l&apos;avance au 06 67 23 78 22.
                   </p>
                 </div>
 
@@ -1501,7 +1496,7 @@ export default function TaxiAeroport() {
                   <h5 className="text-lg font-bold text-orange-800 mb-4">🧳 Y a-t-il des suppléments pour les bagages ?</h5>
                   <p className="text-gray-700 leading-relaxed">
                     Aucun supplément pour les bagages standards (valises normales). 
-                    Des suppléments peuvent s'appliquer uniquement pour des bagages exceptionnellement 
+                    Des suppléments peuvent s&apos;appliquer uniquement pour des bagages exceptionnellement 
                     volumineux selon la réglementation en vigueur.
                   </p>
                 </div>
@@ -1511,7 +1506,7 @@ export default function TaxiAeroport() {
                   <p className="text-gray-700 leading-relaxed">
                     Si vous avez réservé, nous surveillons automatiquement votre vol. 
                     Sinon, appelez-nous dès que vous connaissez le retard au 06 67 23 78 22. 
-                    Nos chauffeurs s'adaptent aux horaires réels.
+                    Nos chauffeurs s&apos;adaptent aux horaires réels.
                   </p>
                 </div>
 
@@ -1569,7 +1564,7 @@ export default function TaxiAeroport() {
           <p className="text-xl text-blue-100 mb-12 max-w-4xl mx-auto leading-relaxed">
             Hall A niveau extérieur • Voies de bus prioritaires • Suivi des vols • Tarifs réglementés
             <br/>
-            <strong className="text-white">Service taxi professionnel</strong> pour tous vos déplacements depuis l'aéroport
+            <strong className="text-white">Service taxi professionnel</strong> pour tous vos déplacements depuis l&apos;aéroport
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center max-w-2xl mx-auto mb-12">

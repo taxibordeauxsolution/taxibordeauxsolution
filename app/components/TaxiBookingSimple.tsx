@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { MapPin, Clock, Users, Briefcase, Euro, Phone, Mail, Car, Navigation, CheckCircle, Globe, Map, Route, Loader2, ArrowRight } from 'lucide-react'
+import type { Coordinates } from '../../types/booking'
 
 // Configuration API
 const API_BASE_URL = 'http://localhost:3002/api'
@@ -12,14 +13,22 @@ const TaxiBookingSimple = () => {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [language, setLanguage] = useState('fr')
-  const [map, setMap] = useState(null)
-  const [directionsService, setDirectionsService] = useState(null)
-  const [directionsRenderer, setDirectionsRenderer] = useState(null)
+  const [map, setMap] = useState<any>(null)
+  const [directionsService, setDirectionsService] = useState<any>(null)
+  const [directionsRenderer, setDirectionsRenderer] = useState<any>(null)
   const [mapVisible, setMapVisible] = useState(false)
   const [error, setError] = useState('')
 
   // Données du trajet avec valeurs par défaut sécurisées
-  const [tripData, setTripData] = useState({
+  const [tripData, setTripData] = useState<{
+    from: string;
+    to: string;
+    fromCoords: Coordinates | null;
+    toCoords: Coordinates | null;
+    distance: number;
+    duration: number;
+    price: number;
+  }>({
     from: '',
     to: '',
     fromCoords: null,
@@ -41,9 +50,9 @@ const TaxiBookingSimple = () => {
   })
 
   // Références
-  const fromInputRef = useRef(null)
-  const toInputRef = useRef(null)
-  const mapRef = useRef(null)
+  const fromInputRef = useRef<HTMLInputElement>(null)
+  const toInputRef = useRef<HTMLInputElement>(null)
+  const mapRef = useRef<HTMLDivElement>(null)
 
   // Traductions
   const translations = {
@@ -79,7 +88,7 @@ const TaxiBookingSimple = () => {
     }
   }
 
-  const t = (key) => translations[language]?.[key] || key
+  const t = (key: string) => translations[language as keyof typeof translations]?.[key as keyof typeof translations.fr] || key
 
   // Initialisation Google Maps
   useEffect(() => {
@@ -159,14 +168,14 @@ const TaxiBookingSimple = () => {
   }, [])
 
   // Fonction pour déterminer si c'est un tarif de nuit
-  const isNightRate = (time) => {
+  const isNightRate = (time: string) => {
     if (!time) return false
     const hour = parseInt(time.split(':')[0])
     return hour >= 21 || hour < 7
   }
 
   // Fonction pour calculer le prix selon l'heure
-  const calculatePrice = (distance, pickupTime) => {
+  const calculatePrice = useCallback((distance: number, pickupTime: string) => {
     const baseFare = 2.80
     const dayRate = 2.12
     const nightRate = 3.18
@@ -175,24 +184,9 @@ const TaxiBookingSimple = () => {
     const price = baseFare + (distance * rate)
     
     return Math.max(price, 7.30) // Prix minimum
-  }
+  }, [])
 
-  // Calcul itinéraire
-  useEffect(() => {
-    if (tripData.fromCoords && tripData.toCoords && directionsService && directionsRenderer) {
-      calculateRoute()
-    }
-  }, [tripData.fromCoords, tripData.toCoords])
-
-  // Recalcul du prix quand l'heure change
-  useEffect(() => {
-    if (tripData.distance > 0) {
-      const newPrice = calculatePrice(tripData.distance, bookingData.pickupTime)
-      setTripData(prev => ({ ...prev, price: newPrice }))
-    }
-  }, [bookingData.pickupTime, tripData.distance])
-
-  const calculateRoute = () => {
+  const calculateRoute = useCallback(() => {
     if (!tripData.fromCoords || !tripData.toCoords || !directionsService || !directionsRenderer) return
 
     setLoading(true)
@@ -201,7 +195,7 @@ const TaxiBookingSimple = () => {
       origin: tripData.fromCoords,
       destination: tripData.toCoords,
       travelMode: window.google.maps.TravelMode.DRIVING
-    }, (result, status) => {
+    }, (result: any, status: string) => {
       setLoading(false)
       
       if (status === 'OK' && result?.routes?.[0]?.legs?.[0]) {
@@ -221,12 +215,27 @@ const TaxiBookingSimple = () => {
         
         setMapVisible(true)
       } else {
-        setError('Impossible de calculer l\'itinéraire')
+        setError('Impossible de calculer l&apos;itinéraire')
       }
     })
-  }
+  }, [tripData.fromCoords, tripData.toCoords, directionsService, directionsRenderer, bookingData.pickupTime, calculatePrice])
 
-  const handleBookingChange = (field, value) => {
+  // Calcul itinéraire
+  useEffect(() => {
+    if (tripData.fromCoords && tripData.toCoords && directionsService && directionsRenderer) {
+      calculateRoute()
+    }
+  }, [tripData.fromCoords, tripData.toCoords, directionsService, directionsRenderer, calculateRoute])
+
+  // Recalcul du prix quand l'heure change
+  useEffect(() => {
+    if (tripData.distance > 0) {
+      const newPrice = calculatePrice(tripData.distance, bookingData.pickupTime)
+      setTripData(prev => ({ ...prev, price: newPrice }))
+    }
+  }, [bookingData.pickupTime, tripData.distance, calculatePrice])
+
+  const handleBookingChange = (field: string, value: any) => {
     setBookingData(prev => ({ ...prev, [field]: value }))
   }
 

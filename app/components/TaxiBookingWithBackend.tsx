@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { MapPin, Clock, Users, Briefcase, Euro, Calendar, Phone, Mail, Car, Navigation, CheckCircle, AlertCircle, Globe, Map, Route, Loader2, ArrowRight } from 'lucide-react'
+import type { TripData, BookingData, ReservationData } from '../../types/booking'
 
 // Configuration API
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api'
@@ -12,18 +13,18 @@ const TaxiBookingWithBackend = () => {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [language, setLanguage] = useState('fr')
-  const [maps, setMaps] = useState(null)
-  const [map, setMap] = useState(null)
-  const [directionsService, setDirectionsService] = useState(null)
-  const [directionsRenderer, setDirectionsRenderer] = useState(null)
-  const [autocompleteFrom, setAutocompleteFrom] = useState(null)
-  const [autocompleteTo, setAutocompleteTo] = useState(null)
+  const [maps, setMaps] = useState<any>(null)
+  const [map, setMap] = useState<any>(null)
+  const [directionsService, setDirectionsService] = useState<any>(null)
+  const [directionsRenderer, setDirectionsRenderer] = useState<any>(null)
+  const [autocompleteFrom, setAutocompleteFrom] = useState<any>(null)
+  const [autocompleteTo, setAutocompleteTo] = useState<any>(null)
   const [mapVisible, setMapVisible] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
   // Données du trajet
-  const [tripData, setTripData] = useState({
+  const [tripData, setTripData] = useState<TripData>({
     from: '',
     to: '',
     fromCoords: null,
@@ -37,7 +38,7 @@ const TaxiBookingWithBackend = () => {
   })
 
   // Données de réservation
-  const [bookingData, setBookingData] = useState({
+  const [bookingData, setBookingData] = useState<BookingData & { isImmediate: boolean }>({
     passengers: 1,
     luggage: 0,
     departureDate: '',
@@ -51,12 +52,12 @@ const TaxiBookingWithBackend = () => {
   })
 
   // Réservation créée
-  const [reservation, setReservation] = useState(null)
+  const [reservation, setReservation] = useState<ReservationData | null>(null)
 
   // Références
-  const fromInputRef = useRef(null)
-  const toInputRef = useRef(null)
-  const mapRef = useRef(null)
+  const fromInputRef = useRef<HTMLInputElement>(null)
+  const toInputRef = useRef<HTMLInputElement>(null)
+  const mapRef = useRef<HTMLDivElement>(null)
 
   // Dictionnaire de traductions complet
   const translations = {
@@ -179,7 +180,7 @@ const TaxiBookingWithBackend = () => {
     }
   }
 
-  const t = (key) => translations[language]?.[key] || key
+  const t = (key: string) => translations[language as keyof typeof translations]?.[key as keyof typeof translations.fr] || key
 
   // Initialisation Google Maps
   useEffect(() => {
@@ -299,15 +300,8 @@ const TaxiBookingWithBackend = () => {
     loadGoogleMaps()
   }, [language])
 
-  // Calcul automatique de l'itinéraire
-  useEffect(() => {
-    if (tripData.fromCoords && tripData.toCoords && directionsService && directionsRenderer) {
-      calculateRoute()
-    }
-  }, [tripData.fromCoords, tripData.toCoords, bookingData.passengers, bookingData.luggage, directionsService, directionsRenderer])
-
   // Fonction pour calculer l'itinéraire via Google Maps
-  const calculateRoute = () => {
+  const calculateRoute = useCallback(() => {
     if (!directionsService || !directionsRenderer || !tripData.fromCoords || !tripData.toCoords) return
 
     setLoading(true)
@@ -320,7 +314,7 @@ const TaxiBookingWithBackend = () => {
       avoidHighways: false,
       avoidTolls: false,
       unitSystem: window.google.maps.UnitSystem.METRIC
-    }, (result, status) => {
+    }, (result: any, status: string) => {
       setLoading(false)
       
       if (status === 'OK' && result.routes[0]) {
@@ -358,13 +352,19 @@ const TaxiBookingWithBackend = () => {
         }
         setMapVisible(true)
       } else {
-        setError('Impossible de calculer l\'itinéraire')
+        setError('Impossible de calculer l&apos;itinéraire')
       }
     })
-  }
+  }, [directionsService, directionsRenderer, tripData.fromCoords, tripData.toCoords, map])
 
+  // Calcul automatique de l'itinéraire
+  useEffect(() => {
+    if (tripData.fromCoords && tripData.toCoords && directionsService && directionsRenderer) {
+      calculateRoute()
+    }
+  }, [tripData.fromCoords, tripData.toCoords, bookingData.passengers, bookingData.luggage, directionsService, directionsRenderer, calculateRoute])
 
-  const handleBookingChange = (field, value) => {
+  const handleBookingChange = (field: string, value: any) => {
     setBookingData(prev => ({ ...prev, [field]: value }))
   }
 
@@ -382,7 +382,7 @@ const TaxiBookingWithBackend = () => {
         ? new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
         : new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
       
-      const reservationData = {
+      const reservationData: ReservationData = {
         reservationId: reservationId,
         customer: {
           name: bookingData.customerName,
@@ -396,6 +396,11 @@ const TaxiBookingWithBackend = () => {
         },
         pricing: {
           totalPrice: tripData.price
+        },
+        bookingDetails: {
+          passengers: bookingData.passengers,
+          luggage: bookingData.luggage,
+          notes: bookingData.notes
         },
         estimatedPickupTime: pickupTime.toLocaleString('fr-FR', {
           day: '2-digit',
@@ -703,8 +708,8 @@ const TaxiBookingWithBackend = () => {
             {tripData.priceDetails && (
               <div className="text-xs text-green-600 mt-2 space-y-1">
                 <div>Prix course: {(tripData.priceDetails.basePrice || tripData.priceDetails.baseFare || 0).toFixed(2)}€</div>
-                <div>Frais d'approche et réservation: 10,00€</div>
-                {tripData.priceDetails.supplements > 0 && (
+                <div>Frais d&apos;approche et réservation: 10,00€</div>
+                {(tripData.priceDetails.supplements || 0) > 0 && (
                   <div>Suppléments: {tripData.priceDetails.supplements?.toFixed(2)}€</div>
                 )}
               </div>

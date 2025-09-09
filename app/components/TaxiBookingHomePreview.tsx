@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { MapPin, Clock, Users, Briefcase, Euro, Calendar, Phone, Mail, Car, Navigation, CheckCircle, AlertCircle, Globe, Map, Route, Loader2, ArrowRight } from 'lucide-react'
+import type { TripData, BookingData, ReservationData } from '../../types/booking'
 
 // Configuration API
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api'
@@ -12,32 +13,32 @@ const TaxiBookingHomePreview = () => {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [language, setLanguage] = useState('fr')
-  const [maps, setMaps] = useState(null)
-  const [map, setMap] = useState(null)
-  const [directionsService, setDirectionsService] = useState(null)
-  const [directionsRenderer, setDirectionsRenderer] = useState(null)
-  const [autocompleteFrom, setAutocompleteFrom] = useState(null)
-  const [autocompleteTo, setAutocompleteTo] = useState(null)
+  const [maps, setMaps] = useState<any>(null)
+  const [map, setMap] = useState<any>(null)
+  const [directionsService, setDirectionsService] = useState<any>(null)
+  const [directionsRenderer, setDirectionsRenderer] = useState<any>(null)
+  const [autocompleteFrom, setAutocompleteFrom] = useState<any>(null)
+  const [autocompleteTo, setAutocompleteTo] = useState<any>(null)
   const [mapVisible, setMapVisible] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
   // Données du trajet
-  const [tripData, setTripData] = useState({
+  const [tripData, setTripData] = useState<TripData>({
     from: '',
     to: '',
-    fromCoords: null as any,
-    toCoords: null as any,
+    fromCoords: null,
+    toCoords: null,
     distance: 0,
     duration: 0,
     price: 0,
-    priceDetails: {} as any,
-    routeInfo: null as any,
+    priceDetails: {},
+    routeInfo: null,
     serviceAreaValidation: { valid: true }
   })
 
   // Données de réservation avec date/heure par défaut
-  const [bookingData, setBookingData] = useState({
+  const [bookingData, setBookingData] = useState<BookingData>({
     passengers: 1,
     luggage: 0,
     departureDate: new Date().toISOString().split('T')[0],
@@ -50,12 +51,13 @@ const TaxiBookingHomePreview = () => {
   })
 
   // Réservation créée
-  const [reservation, setReservation] = useState(null)
+  const [reservation, setReservation] = useState<ReservationData | null>(null)
 
   // Références
-  const fromInputRef = useRef(null)
-  const toInputRef = useRef(null)
-  const mapRef = useRef(null)
+  const fromInputRef = useRef<HTMLInputElement>(null)
+  const toInputRef = useRef<HTMLInputElement>(null)
+  const mapRef = useRef<HTMLDivElement>(null)
+  const moduleRef = useRef<HTMLDivElement>(null)
 
   // Dictionnaire de traductions complet
   const translations = {
@@ -222,15 +224,8 @@ const TaxiBookingHomePreview = () => {
     loadGoogleMaps()
   }, [language])
 
-  // Calcul automatique de l'itinéraire
-  useEffect(() => {
-    if (tripData.fromCoords && tripData.toCoords && directionsService && directionsRenderer) {
-      calculateRoute()
-    }
-  }, [tripData.fromCoords, tripData.toCoords, bookingData.passengers, bookingData.luggage, bookingData.departureDate, bookingData.departureTime, directionsService, directionsRenderer])
-
   // Fonction pour vérifier si c'est un jour férié
-  const isPublicHoliday = (date) => {
+  const isPublicHoliday = (date: Date) => {
     const year = date.getFullYear()
     const month = date.getMonth() + 1
     const day = date.getDate()
@@ -252,7 +247,7 @@ const TaxiBookingHomePreview = () => {
   }
 
   // Fonction pour calculer l'itinéraire via Google Maps avec tarification
-  const calculateRoute = () => {
+  const calculateRoute = useCallback(() => {
     if (!directionsService || !directionsRenderer || !tripData.fromCoords || !tripData.toCoords) return
 
     setLoading(true)
@@ -265,7 +260,7 @@ const TaxiBookingHomePreview = () => {
       avoidHighways: false,
       avoidTolls: false,
       unitSystem: (window as any).google.maps.UnitSystem.METRIC
-    }, (result, status) => {
+    }, (result: any, status: string) => {
       setLoading(false)
       
       if (status === 'OK' && result.routes[0]) {
@@ -331,13 +326,32 @@ const TaxiBookingHomePreview = () => {
         }
         setMapVisible(true)
       } else {
-        setError('Impossible de calculer l\'itinéraire')
+        setError('Impossible de calculer l&apos;itinéraire')
       }
     })
+  }, [directionsService, directionsRenderer, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, map])
+
+  // Calcul automatique de l'itinéraire
+  useEffect(() => {
+    if (tripData.fromCoords && tripData.toCoords && directionsService && directionsRenderer) {
+      calculateRoute()
+    }
+  }, [tripData.fromCoords, tripData.toCoords, bookingData.passengers, bookingData.luggage, bookingData.departureDate, bookingData.departureTime, directionsService, directionsRenderer, calculateRoute])
+
+
+  const handleBookingChange = (field: keyof BookingData, value: any) => {
+    setBookingData(prev => ({ ...prev, [field]: value }))
   }
 
-  const handleBookingChange = (field, value) => {
-    setBookingData(prev => ({ ...prev, [field]: value }))
+  // Fonction pour centrer le module automatiquement
+  const scrollToModule = () => {
+    if (moduleRef.current) {
+      const offsetTop = moduleRef.current.offsetTop - 20 // 20px de marge
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth'
+      })
+    }
   }
 
   // Soumission de la réservation avec envoi d'email
@@ -426,7 +440,7 @@ const TaxiBookingHomePreview = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('step1Title')}</h3>
-        <p className="text-gray-600">{t('step1Subtitle')}</p>
+        <p className="text-gray-700 sm:text-gray-600">{t('step1Subtitle')}</p>
       </div>
 
       {/* Messages d'erreur */}
@@ -568,33 +582,33 @@ const TaxiBookingHomePreview = () => {
               </h3>
               <div className="grid grid-cols-3 gap-2 text-sm mb-4">
                 <div className="text-center">
-                  <span className="text-gray-600 block">{t('distance')}</span>
+                  <span className="text-gray-700 sm:text-gray-600 block">{t('distance')}</span>
                   <div className="font-semibold text-lg">{(tripData.distance || 0).toFixed(1)} km</div>
                 </div>
                 <div className="text-center">
-                  <span className="text-gray-600 block">{t('duration')}</span>
+                  <span className="text-gray-700 sm:text-gray-600 block">{t('duration')}</span>
                   <div className="font-semibold text-lg">{Math.round(tripData.duration || 0)} min</div>
                 </div>
                 <div className="text-center">
-                  <span className="text-gray-600 block">Passagers</span>
+                  <span className="text-gray-700 sm:text-gray-600 block">Passagers</span>
                   <div className="font-semibold text-lg">{bookingData.passengers}</div>
                 </div>
               </div>
               
               <div className="text-center pt-4 border-t border-green-200">
-                <span className="text-gray-600 text-sm">{t('estimatedPrice')} :</span>
+                <span className="text-gray-700 sm:text-gray-600 text-sm">{t('estimatedPrice')} :</span>
                 <div className="text-3xl font-bold text-green-700">
                   {(tripData.price || 0).toFixed(2)}€
                 </div>
-                <div className="text-xs text-green-600 mt-2 space-y-1">
+                <div className="text-xs text-green-700 sm:text-green-600 mt-2 space-y-1">
                   <div>Le {new Date(bookingData.departureDate).toLocaleDateString('fr-FR')} à {bookingData.departureTime}</div>
                   {tripData.priceDetails && (
                     <div className="flex items-center justify-center gap-2">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        tripData.priceDetails.tariffType === 'Nuit' ? 'bg-blue-100 text-blue-800' :
-                        tripData.priceDetails.tariffType === 'Férié' ? 'bg-red-100 text-red-800' :
-                        tripData.priceDetails.tariffType === 'Dimanche' ? 'bg-purple-100 text-purple-800' :
-                        'bg-green-100 text-green-800'
+                        tripData.priceDetails.tariffType === 'Nuit' ? 'bg-blue-200 sm:bg-blue-100 text-blue-900 sm:text-blue-800' :
+                        tripData.priceDetails.tariffType === 'Férié' ? 'bg-red-200 sm:bg-red-100 text-red-900 sm:text-red-800' :
+                        tripData.priceDetails.tariffType === 'Dimanche' ? 'bg-purple-200 sm:bg-purple-100 text-purple-900 sm:text-purple-800' :
+                        'bg-green-200 sm:bg-green-100 text-green-900 sm:text-green-800'
                       }`}>
                         Tarif {tripData.priceDetails.tariffType}
                       </span>
@@ -619,7 +633,7 @@ const TaxiBookingHomePreview = () => {
             {tripData.distance > 0 && (
               <div className="p-3 bg-white border-t">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center text-green-600">
+                  <span className="flex items-center text-green-700 sm:text-green-600">
                     <MapPin className="w-4 h-4 mr-1" />
                     {tripData.from?.split(',')[0]}
                   </span>
@@ -636,7 +650,10 @@ const TaxiBookingHomePreview = () => {
       </div>
 
       <button
-        onClick={() => setStep(2)}
+        onClick={() => {
+          setStep(2)
+          setTimeout(scrollToModule, 100)
+        }}
         disabled={!tripData.fromCoords || !tripData.toCoords || loading || !tripData.price}
         className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
       >
@@ -651,7 +668,7 @@ const TaxiBookingHomePreview = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h3 className="text-2xl font-bold text-gray-800 mb-2">Résumé de votre réservation</h3>
-        <p className="text-gray-600">Vérifiez les détails avant de finaliser</p>
+        <p className="text-gray-700 sm:text-gray-600">Vérifiez les détails avant de finaliser</p>
       </div>
 
       <div className="max-w-2xl mx-auto">
@@ -666,14 +683,14 @@ const TaxiBookingHomePreview = () => {
                 </div>
                 <div>
                   <div className="font-medium text-gray-900">Trajet</div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-700 sm:text-gray-600">
                     {tripData.from?.split(',')[0]} → {tripData.to?.split(',')[0]}
                   </div>
                 </div>
               </div>
               <div className="text-right">
                 <div className="font-medium">{(tripData.distance || 0).toFixed(1)} km</div>
-                <div className="text-sm text-gray-500">{Math.round(tripData.duration || 0)} min</div>
+                <div className="text-sm text-gray-600 sm:text-gray-500">{Math.round(tripData.duration || 0)} min</div>
               </div>
             </div>
 
@@ -685,7 +702,7 @@ const TaxiBookingHomePreview = () => {
                 </div>
                 <div>
                   <div className="font-medium text-gray-900">Prise en charge</div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-700 sm:text-gray-600">
                     Le {new Date(bookingData.departureDate).toLocaleDateString('fr-FR')} à {bookingData.departureTime}
                   </div>
                 </div>
@@ -700,7 +717,7 @@ const TaxiBookingHomePreview = () => {
                 </div>
                 <div>
                   <div className="font-medium text-gray-900">Détails</div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-700 sm:text-gray-600">
                     {bookingData.passengers} passager{bookingData.passengers > 1 ? 's' : ''} • {bookingData.luggage} bagage{bookingData.luggage > 1 ? 's' : ''}
                   </div>
                 </div>
@@ -710,16 +727,16 @@ const TaxiBookingHomePreview = () => {
             {/* Prix */}
             <div className="bg-green-50 rounded-lg p-4 mt-6">
               <div className="text-center">
-                <div className="text-sm text-green-600 mb-1">Prix total</div>
+                <div className="text-sm text-green-700 sm:text-green-600 mb-1">Prix total</div>
                 <div className="text-3xl font-bold text-green-700">
                   {(tripData.price || 0).toFixed(2)}€
                 </div>
                 {tripData.priceDetails && (
-                  <div className="text-xs text-green-600 mt-2 space-y-1">
+                  <div className="text-xs text-green-700 sm:text-green-600 mt-2 space-y-1">
                     <div>Prix course ({tripData.priceDetails.tariffType}): {(tripData.priceDetails.basePrice || 0).toFixed(2)}€</div>
-                    <div>Frais d'approche et réservation: {tripData.priceDetails.approachFees || 10}€</div>
+                    <div>Frais d&apos;approche et réservation: {tripData.priceDetails.approachFees || 10}€</div>
                     {(tripData.priceDetails.isNight || tripData.priceDetails.isHoliday || tripData.priceDetails.isSunday) && (
-                      <div className="text-blue-600 font-medium">✓ Tarif majoré appliqué</div>
+                      <div className="text-blue-700 sm:text-blue-600 font-medium">✓ Tarif majoré appliqué</div>
                     )}
                   </div>
                 )}
@@ -731,13 +748,19 @@ const TaxiBookingHomePreview = () => {
 
       <div className="flex gap-4 max-w-2xl mx-auto">
         <button
-          onClick={() => setStep(1)}
+          onClick={() => {
+            setStep(1)
+            setTimeout(scrollToModule, 100)
+          }}
           className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors"
         >
           {t('back')}
         </button>
         <button
-          onClick={() => setStep(3)}
+          onClick={() => {
+            setStep(3)
+            setTimeout(scrollToModule, 100)
+          }}
           className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
         >
           {t('continue')}
@@ -858,7 +881,7 @@ const TaxiBookingHomePreview = () => {
             <hr className="my-3" />
             <div className="flex justify-between text-lg font-bold">
               <span>{t('totalPrice')}:</span>
-              <span className="text-green-600">{(tripData.price || 0).toFixed(2)}€</span>
+              <span className="text-green-700 sm:text-green-600 font-semibold">{(tripData.price || 0).toFixed(2)}€</span>
             </div>
           </div>
         </div>
@@ -866,7 +889,10 @@ const TaxiBookingHomePreview = () => {
 
       <div className="flex gap-4">
         <button
-          onClick={() => setStep(2)}
+          onClick={() => {
+            setStep(2)
+            setTimeout(scrollToModule, 100)
+          }}
           className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors"
         >
           {t('back')}
@@ -943,7 +969,7 @@ const TaxiBookingHomePreview = () => {
             <Mail className="w-5 h-5 text-blue-600" />
             <div>
               <p className="text-blue-800 font-medium">Email de confirmation</p>
-              <p className="text-blue-600 text-sm">
+              <p className="text-blue-700 sm:text-blue-600 text-sm">
                 {reservation.customer.email ? (
                   reservation.emailSent ? (
                     `✅ Envoyé à ${reservation.customer.email}`
@@ -997,7 +1023,7 @@ const TaxiBookingHomePreview = () => {
   )
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl shadow-lg p-6 lg:p-8 border border-blue-100">
+    <div ref={moduleRef} className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 border-2 sm:border border-blue-200 sm:border-blue-100">
       {/* Header */}
       <div className="text-center mb-8">
         <div className="flex items-center justify-center mb-4">
@@ -1006,7 +1032,7 @@ const TaxiBookingHomePreview = () => {
           </div>
           <div>
             <h2 className="text-2xl lg:text-3xl font-bold text-gray-800">{t('title')}</h2>
-            <p className="text-gray-600">{t('subtitle')}</p>
+            <p className="text-gray-700 sm:text-gray-600">{t('subtitle')}</p>
           </div>
         </div>
       </div>
@@ -1017,7 +1043,7 @@ const TaxiBookingHomePreview = () => {
           {[1, 2, 3, 4].map((stepNum) => (
             <div key={stepNum} className="flex items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                step >= stepNum ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+                step >= stepNum ? 'bg-blue-600 text-white' : 'bg-gray-300 sm:bg-gray-200 text-gray-700 sm:text-gray-600'
               }`}>
                 {stepNum}
               </div>
@@ -1028,7 +1054,7 @@ const TaxiBookingHomePreview = () => {
       </div>
 
       {/* Contenu principal */}
-      <div className="bg-white rounded-xl shadow-lg p-6 lg:p-8">
+      <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 border sm:border-0 border-gray-200">
         {step === 1 && renderStep1()}
         {step === 2 && renderStep2()}
         {step === 3 && renderStep3()}
@@ -1037,7 +1063,7 @@ const TaxiBookingHomePreview = () => {
 
       {/* Note d'information */}
       {step < 4 && (
-        <div className="mt-6 text-center text-xs text-gray-500">
+        <div className="mt-6 text-center text-xs text-gray-600 sm:text-gray-500">
           <p>Prix calculés selon les tarifs officiels 2025 • Service 24h/24 7j/7</p>
           <p>Paiement en espèces ou carte bancaire • Véhicules climatisés</p>
         </div>

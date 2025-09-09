@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowLeft, Train, Clock, MapPin, Phone, CheckCircle, Star } from 'lucide-react'
 
 export default function GarePage() {
@@ -17,7 +18,7 @@ export default function GarePage() {
           {/* Bouton retour */}
           <Link href="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-8">
             <ArrowLeft size={20} />
-            <span>Retour à l'accueil</span>
+            <span>Retour à l&apos;accueil</span>
           </Link>
 
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -62,14 +63,12 @@ export default function GarePage() {
 
             <div className="hidden lg:block">
               <div className="relative">
-                <img 
+                <Image 
                   src="/images/hero/Horloge quai de la gare saint jean.jpg" 
                   alt="Horloge Gare Saint-Jean Bordeaux - Service Taxi" 
+                  width={600}
+                  height={400}
                   className="w-full h-[400px] object-cover rounded-3xl shadow-2xl"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/images/hero/gae saint jean bordeaux.jpg";
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-3xl"></div>
                 <div className="absolute bottom-6 left-6 right-6">
@@ -156,14 +155,12 @@ export default function GarePage() {
             
             {/* Chauffeur professionnel */}
             <div className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500">
-              <img 
+              <Image 
                 src="/images/hero/Chauffeur privé.jpg" 
                 alt="Chauffeur professionnel Taxi Bordeaux" 
+                width={400}
+                height={256}
                 className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/images/hero/chauffeur vtc bordeaux.jpg";
-                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
               <div className="absolute bottom-4 left-4 right-4 text-white">
@@ -174,14 +171,12 @@ export default function GarePage() {
 
             {/* Service ouverture de porte */}
             <div className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500">
-              <img 
+              <Image 
                 src="/images/hero/ouverture de porte vtc.jpg" 
                 alt="Service ouverture de porte Taxi" 
+                width={400}
+                height={256}
                 className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/images/hero/ouverture de porte vtc.webp";
-                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
               <div className="absolute bottom-4 left-4 right-4 text-white">
@@ -192,14 +187,12 @@ export default function GarePage() {
 
             {/* Gare Saint-Jean alternative */}
             <div className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500">
-              <img 
+              <Image 
                 src="/images/hero/gae saint jean bordeaux.jpg" 
                 alt="Gare Saint-Jean Bordeaux vue extérieure" 
+                width={400}
+                height={256}
                 className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/images/hero/gare de bordeaux.jpg";
-                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
               <div className="absolute bottom-4 left-4 right-4 text-white">
@@ -299,7 +292,7 @@ export default function GarePage() {
               </a>
               
               <div className="text-center">
-                <div className="text-green-400 font-semibold mb-1">⏱️ Temps d'attente moyen</div>
+                <div className="text-green-400 font-semibold mb-1">⏱️ Temps d&apos;attente moyen</div>
                 <div className="text-3xl font-bold">5-10 min</div>
               </div>
             </div>

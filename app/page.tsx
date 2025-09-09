@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { Phone, MapPin, Clock, Star, Shield, Zap, CheckCircle, ArrowRight } from 'lucide-react'
 import TaxiBookingHomePreview from './components/TaxiBookingHomePreview'
 
@@ -94,14 +95,12 @@ export default function HomePage() {
             <div className="hidden lg:block relative">
               <div className="relative">
                 <div className="relative overflow-hidden rounded-3xl shadow-2xl">
-                  <img 
+                  <Image 
                     src="/images/hero/Place de la bourse Bordeaux.jpg" 
                     alt="Taxi Bordeaux Solution - Place de la Bourse" 
+                    width={600}
+                    height={500}
                     className="w-full h-[500px] object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTJlOGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzY0NzQ4YiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfmqQgUGxhY2UgZGUgbGEgQm91cnNlPC90ZXh0Pjwvc3ZnPg==';
-                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
                   <div className="absolute bottom-6 left-6 right-6">
@@ -181,14 +180,12 @@ export default function HomePage() {
                 
                 {/* Photo du service aéroport */}
                 <div className="relative h-48 overflow-hidden">
-                  <img 
+                  <Image 
                     src="/images/hero/Hall aéroport Bordeaux.jpg" 
                     alt="Hall Aéroport Bordeaux Mérignac" 
+                    width={400}
+                    height={192}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkNmZlIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzM3MzNkNyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuKciO+4jyBBw6lyb3BvcnQ8L3RleHQ+PC9zdmc+';
-                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                 </div>
@@ -212,14 +209,12 @@ export default function HomePage() {
                 
                 {/* Photo du service gare */}
                 <div className="relative h-48 overflow-hidden">
-                  <img 
+                  <Image 
                     src="/images/hero/gare de bordeaux.jpg" 
                     alt="Gare de Bordeaux Saint-Jean - Service Taxi" 
+                    width={400}
+                    height={192}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGNmY2U3Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzE2NzMzYSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCflYQgR2FyZSBTdC1KZWFUPC90ZXh0Pjwvc3ZnPg==';
-                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                 </div>
@@ -242,14 +237,12 @@ export default function HomePage() {
               
               {/* Photo du service centre-ville */}
               <div className="relative h-48 overflow-hidden">
-                <img 
+                <Image 
                   src="/images/hero/Panorama Bordeaux.jpg" 
                   alt="Panorama Bordeaux - Vue sur la ville" 
+                  width={400}
+                  height={192}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmVmMGNkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2I0NTMwOSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfj6LvuI8gQ2VudHJlLVZpbGxlPC90ZXh0Pjwvc3ZnPg==';
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -271,14 +264,12 @@ export default function HomePage() {
               
               {/* Photo du service professionnel */}
               <div className="relative h-48 overflow-hidden">
-                <img 
+                <Image 
                   src="/images/hero/Voyage d'affaire.png" 
                   alt="Transport Professionnel Bordeaux - Voyage d'Affaires" 
+                  width={400}
+                  height={192}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmNGY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzM3NDE1MSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfkpcgVm95YWdlIGQnQWZmYWlyZXM8L3RleHQ+PC9zdmc+';
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -288,7 +279,7 @@ export default function HomePage() {
                   Transport Professionnel Bordeaux
                 </h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Déplacements d'affaires à Bordeaux. 
+                  Déplacements d&apos;affaires à Bordeaux. 
                   Service discret, ponctualité garantie, transport régulier et fiable.
                 </p>
               </div>
@@ -300,14 +291,12 @@ export default function HomePage() {
               
               {/* Photo du service événements */}
               <div className="relative h-48 overflow-hidden">
-                <img 
+                <Image 
                   src="/images/hero/village de Saint-Emilion.webp" 
                   alt="Village de Saint-Émilion - Excursions et Événements" 
+                  width={400}
+                  height={192}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVlOGU1Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iI2IwNGY0ZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfj5EgU2FpbnQtw4ltaWxpb248L3RleHQ+PC9zdmc+';
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -329,14 +318,12 @@ export default function HomePage() {
               
               {/* Photo du service 24h */}
               <div className="relative h-48 overflow-hidden">
-                <img 
+                <Image 
                   src="/images/hero/Pont-de-pierre- service taxi bordeaux.jpg" 
                   alt="Pont de Pierre Bordeaux - Service Taxi 24h/24" 
+                  width={400}
+                  height={192}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZTdlZGZmIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzUwNDFhNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfjJkgU2VydmljZSAyNGgvMjQ8L3RleHQ+PC9zdmc+';
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -765,7 +752,7 @@ export default function HomePage() {
             </div>
             
             <h2 className="text-4xl lg:text-6xl font-bold leading-tight">
-              Besoin d'un Taxi à
+              Besoin d&apos;un Taxi à
               <span className="text-yellow-400"> Bordeaux ?</span>
             </h2>
             

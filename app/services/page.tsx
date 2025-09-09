@@ -204,7 +204,7 @@ export default function HomePage() {
                   Transport Professionnel Bordeaux
                 </h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Déplacements d'affaires à Bordeaux. 
+                  Déplacements d&apos;affaires à Bordeaux. 
                   Service discret, ponctualité garantie, véhicules premium.
                 </p>
               </div>
@@ -448,7 +448,7 @@ export default function HomePage() {
             </div>
             
             <h2 className="text-4xl lg:text-6xl font-bold leading-tight">
-              Besoin d'un Taxi à
+              Besoin d&apos;un Taxi à
               <span className="text-yellow-400"> Bordeaux ?</span>
             </h2>
             
