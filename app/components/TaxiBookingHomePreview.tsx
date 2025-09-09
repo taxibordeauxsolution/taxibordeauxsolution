@@ -107,7 +107,7 @@ const TaxiBookingHomePreview = () => {
   // Initialisation Google Maps
   useEffect(() => {
     const loadGoogleMaps = () => {
-      if (window.google && window.google.maps) {
+      if ((window as any).google && (window as any).google.maps) {
         initializeMaps()
         return
       }
@@ -121,8 +121,8 @@ const TaxiBookingHomePreview = () => {
     }
 
     const initializeMaps = () => {
-      if (window.google && window.google.maps && mapRef.current) {
-        const google = window.google
+      if ((window as any).google && (window as any).google.maps && mapRef.current) {
+        const google = (window as any).google
         setMaps(google.maps)
 
         // Initialiser la carte centrée sur Bordeaux
@@ -261,10 +261,10 @@ const TaxiBookingHomePreview = () => {
     directionsService.route({
       origin: tripData.fromCoords,
       destination: tripData.toCoords,
-      travelMode: window.google.maps.TravelMode.DRIVING,
+      travelMode: (window as any).google.maps.TravelMode.DRIVING,
       avoidHighways: false,
       avoidTolls: false,
-      unitSystem: window.google.maps.UnitSystem.METRIC
+      unitSystem: (window as any).google.maps.UnitSystem.METRIC
     }, (result, status) => {
       setLoading(false)
       
