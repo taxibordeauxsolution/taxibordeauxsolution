@@ -37,12 +37,12 @@ const TaxiBookingHomePreview = () => {
     serviceAreaValidation: { valid: true }
   })
 
-  // Données de réservation avec date/heure par défaut
+  // Données de réservation sans valeurs pré-remplies
   const [bookingData, setBookingData] = useState<BookingData>({
-    passengers: 1,
-    luggage: 0,
-    departureDate: new Date().toISOString().split('T')[0],
-    departureTime: new Date(Date.now() + 30 * 60000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
+    passengers: 1, // Valeur minimale requise
+    luggage: 0,   // Valeur par défaut acceptable
+    departureDate: '', // Pas de date pré-remplie
+    departureTime: '', // Pas d'heure pré-remplie
     customerName: '',
     customerPhone: '',
     customerEmail: '',
@@ -66,8 +66,8 @@ const TaxiBookingHomePreview = () => {
       subtitle: "Service 24h/24 • Prise en charge 5-10 minutes",
       step1Title: "Où souhaitez-vous aller ?",
       step1Subtitle: "Entrez votre point de départ et votre destination",
-      fromPlaceholder: "Adresse de départ (ex: Place de la Comédie, Bordeaux)",
-      toPlaceholder: "Adresse de destination (ex: Aéroport Bordeaux-Mérignac)",
+      fromPlaceholder: "Adresse départ (ex: Aéroport Bordeaux, Gare Saint-Jean)",
+      toPlaceholder: "Adresse destination (ex: Place Comédie, Hôtel Intercontinental)",
       fromLabel: "Point de départ",
       toLabel: "Destination",
       calculatingRoute: "Calcul de l'itinéraire...",
@@ -170,7 +170,8 @@ const TaxiBookingHomePreview = () => {
                 new google.maps.LatLng(44.7, -0.7),
                 new google.maps.LatLng(44.9, -0.4)
               ),
-              types: ['address']
+              types: ['establishment', 'geocode'], // Privilégier aéroports, gares, puis adresses
+              strictBounds: false // Permettre des résultats hors bornes pour aéroports
             }
           )
           setAutocompleteFrom(autocompleteFromInstance)
@@ -199,7 +200,8 @@ const TaxiBookingHomePreview = () => {
                 new google.maps.LatLng(44.7, -0.7),
                 new google.maps.LatLng(44.9, -0.4)
               ),
-              types: ['address']
+              types: ['establishment', 'geocode'], // Privilégier aéroports, gares, puis adresses
+              strictBounds: false // Permettre des résultats hors bornes pour aéroports
             }
           )
           setAutocompleteTo(autocompleteToInstance)
@@ -1003,8 +1005,8 @@ const TaxiBookingHomePreview = () => {
           setBookingData({
             passengers: 1,
             luggage: 0,
-            departureDate: new Date().toISOString().split('T')[0],
-            departureTime: new Date(Date.now() + 30 * 60000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
+            departureDate: '', // Reset sans pré-remplir
+            departureTime: '', // Reset sans pré-remplir
             customerName: '',
             customerPhone: '',
             customerEmail: '',
