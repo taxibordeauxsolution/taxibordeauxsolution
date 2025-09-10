@@ -449,11 +449,15 @@ const TaxiBookingHomePreview = () => {
       setSuccess(successMessage)
       setStep(4)
       
-      // Revenir à l'ancre de réservation après confirmation
+      // Revenir précisément au module après confirmation
       setTimeout(() => {
-        const reservationElement = document.getElementById('reservation')
+        const reservationElement = document.getElementById('reservation-title')
         if (reservationElement) {
-          reservationElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const offsetTop = reservationElement.offsetTop - 20 // Petite marge
+          window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+          })
         }
       }, 100)
 
@@ -523,7 +527,7 @@ const TaxiBookingHomePreview = () => {
           </div>
 
           {/* Options de réservation */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Users className="inline w-4 h-4 mr-1" />
@@ -560,7 +564,7 @@ const TaxiBookingHomePreview = () => {
           </div>
 
           {/* Date et heure - OBLIGATOIRES */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Calendar className="inline w-4 h-4 mr-1" />
@@ -1097,7 +1101,7 @@ const TaxiBookingHomePreview = () => {
   )
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-green-50 p-4 sm:p-6 lg:p-6 w-full relative">
+    <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-3xl shadow-2xl border-2 border-blue-300 p-4 sm:p-6 lg:p-6 w-full relative mx-auto max-w-7xl my-8" style={{boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1)'}}>
       {/* Ancre invisible pour le scroll avec offset */}
       <div id="reservation" className="absolute -top-20"></div>
       
@@ -1109,7 +1113,7 @@ const TaxiBookingHomePreview = () => {
             <Car className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h2 id="reservation" className="text-2xl lg:text-3xl font-bold text-gray-800">Réservez votre <span className="text-green-600">Taxi Maintenant</span></h2>
+            <h2 id="reservation-title" className="text-2xl lg:text-3xl font-bold text-gray-800">Réservez votre <span className="text-green-600">Taxi Maintenant</span></h2>
             <p className="text-gray-700 sm:text-gray-600">{t('subtitle')}</p>
           </div>
         </div>
@@ -1132,7 +1136,7 @@ const TaxiBookingHomePreview = () => {
       </div>
 
       {/* Contenu principal */}
-      <div className="bg-white p-4 sm:p-6 lg:p-8 w-full">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 sm:p-6 lg:p-8 w-full">
         {step === 1 && renderStep1()}
         {step === 2 && renderStep2()}
         {step === 3 && renderStep3()}
