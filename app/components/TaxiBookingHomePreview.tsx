@@ -454,9 +454,6 @@ const TaxiBookingHomePreview = () => {
       <div className="text-center mb-8">
         <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('step1Title')}</h3>
         <p className="text-gray-700 sm:text-gray-600">{t('step1Subtitle')}</p>
-        <div className="mt-4 text-sm text-blue-600 bg-blue-50 rounded-lg p-3 max-w-md mx-auto">
-          💡 <strong>Prix calculé :</strong> Avec vos adresses, date et heure, obtenez votre prix instantanément !
-        </div>
       </div>
 
       {/* Messages d'erreur */}
@@ -475,7 +472,7 @@ const TaxiBookingHomePreview = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <MapPin className="inline w-4 h-4 mr-1 text-green-500" />
-              {t('fromLabel')} *
+              {t('fromLabel')} <span className={`${!tripData.fromCoords ? 'text-red-500' : 'text-gray-400'}`}>*</span>
             </label>
             <input
               ref={fromInputRef}
@@ -483,9 +480,7 @@ const TaxiBookingHomePreview = () => {
               placeholder={t('fromPlaceholder')}
               value={tripData.from}
               onChange={(e) => setTripData(prev => ({ ...prev, from: e.target.value }))}
-              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                !tripData.fromCoords ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               disabled={loading}
               required
             />
@@ -494,7 +489,7 @@ const TaxiBookingHomePreview = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <MapPin className="inline w-4 h-4 mr-1 text-red-500" />
-              {t('toLabel')} *
+              {t('toLabel')} <span className={`${!tripData.toCoords ? 'text-red-500' : 'text-gray-400'}`}>*</span>
             </label>
             <input
               ref={toInputRef}
@@ -502,9 +497,7 @@ const TaxiBookingHomePreview = () => {
               placeholder={t('toPlaceholder')}
               value={tripData.to}
               onChange={(e) => setTripData(prev => ({ ...prev, to: e.target.value }))}
-              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
-                !tripData.toCoords ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               disabled={loading}
               required
             />
@@ -515,7 +508,7 @@ const TaxiBookingHomePreview = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Users className="inline w-4 h-4 mr-1" />
-                {t('passengers')}
+                {t('passengers')} <span className="text-red-500">*</span>
               </label>
               <select
                 value={bookingData.passengers}
@@ -531,7 +524,7 @@ const TaxiBookingHomePreview = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Briefcase className="inline w-4 h-4 mr-1" />
-                {t('luggage')}
+                {t('luggage')} <span className="text-red-500">*</span>
               </label>
               <select
                 value={bookingData.luggage}
@@ -550,16 +543,14 @@ const TaxiBookingHomePreview = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Calendar className="inline w-4 h-4 mr-1" />
-                {t('departureDate')} *
+                {t('departureDate')} <span className={`${!bookingData.departureDate ? 'text-red-500' : 'text-gray-400'}`}>*</span>
               </label>
               <input
                 type="date"
                 value={bookingData.departureDate}
                 onChange={(e) => handleBookingChange('departureDate', e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
-                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                  !bookingData.departureDate ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                }`}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
@@ -567,15 +558,13 @@ const TaxiBookingHomePreview = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Clock className="inline w-4 h-4 mr-1" />
-                {t('departureTime')} *
+                {t('departureTime')} <span className={`${!bookingData.departureTime ? 'text-red-500' : 'text-gray-400'}`}>*</span>
               </label>
               <input
                 type="time"
                 value={bookingData.departureTime}
                 onChange={(e) => handleBookingChange('departureTime', e.target.value)}
-                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                  !bookingData.departureTime ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                }`}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
@@ -688,7 +677,7 @@ const TaxiBookingHomePreview = () => {
           setStep(2)
           setTimeout(scrollToModule, 100)
         }}
-        disabled={!tripData.fromCoords || !tripData.toCoords || loading || !bookingData.departureDate || !bookingData.departureTime || !tripData.price}
+        disabled={!tripData.fromCoords || !tripData.toCoords || loading || !bookingData.departureDate || !bookingData.departureTime || !bookingData.passengers || !tripData.price}
         className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
       >
         <Navigation className="w-5 h-5 mr-2" />
