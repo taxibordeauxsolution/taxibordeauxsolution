@@ -23,6 +23,7 @@ const TaxiBookingHomePreview = () => {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [validationAttempted, setValidationAttempted] = useState(false)
+  const [step3ValidationAttempted, setStep3ValidationAttempted] = useState(false)
 
   // Données du trajet
   const [tripData, setTripData] = useState<TripData>({
@@ -832,7 +833,8 @@ const TaxiBookingHomePreview = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <Users className="inline w-4 h-4 mr-1" />
-              {t('fullName')} *
+              {t('fullName')}
+              {step3ValidationAttempted && !bookingData.customerName && <span className="text-red-500 ml-1">*</span>}
             </label>
             <input
               type="text"
@@ -847,7 +849,8 @@ const TaxiBookingHomePreview = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <Phone className="inline w-4 h-4 mr-1" />
-              {t('phone')} *
+              {t('phone')}
+              {step3ValidationAttempted && !bookingData.customerPhone && <span className="text-red-500 ml-1">*</span>}
             </label>
             <input
               type="tel"
@@ -941,8 +944,18 @@ const TaxiBookingHomePreview = () => {
           {t('back')}
         </button>
         <button
-          onClick={submitReservation}
-          disabled={!bookingData.customerName || !bookingData.customerPhone || loading}
+          onClick={() => {
+            // Marquer qu'une tentative de validation a eu lieu
+            setStep3ValidationAttempted(true)
+            
+            // Vérifier si tous les champs requis sont remplis
+            const allFieldsValid = bookingData.customerName && bookingData.customerPhone
+            
+            if (allFieldsValid && !loading) {
+              submitReservation()
+            }
+          }}
+          disabled={loading}
           className="flex-1 bg-green-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
         >
           {loading ? (
@@ -1058,6 +1071,7 @@ const TaxiBookingHomePreview = () => {
           setSuccess('')
           setError('')
           setValidationAttempted(false)
+          setStep3ValidationAttempted(false)
         }}
         className="bg-blue-600 text-white py-3 px-8 rounded-lg font-medium hover:bg-blue-700 transition-colors"
       >
