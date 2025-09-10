@@ -276,12 +276,19 @@ const TaxiBookingHomePreview = () => {
         const distance = (route.distance?.value || 0) / 1000 // en km
         const duration = (route.duration?.value || 0) / 60 // en minutes
         
-        // Calcul de prix avec tarification jour/nuit/férié
-        const departureDate = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
-        const hour = departureDate.getHours()
-        const isNight = hour >= 21 || hour < 7 // 21h-7h = tarif nuit
-        const isHoliday = isPublicHoliday(departureDate)
-        const isSunday = departureDate.getDay() === 0
+        // Calcul de prix - utilise date/heure si disponible, sinon tarif jour par défaut
+        let departureDate: Date
+        let isNight = false
+        let isHoliday = false
+        let isSunday = false
+        
+        if (bookingData.departureDate && bookingData.departureTime) {
+          departureDate = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
+          const hour = departureDate.getHours()
+          isNight = hour >= 21 || hour < 7 // 21h-7h = tarif nuit
+          isHoliday = isPublicHoliday(departureDate)
+          isSunday = departureDate.getDay() === 0
+        }
         
         // Tarifs de base (jour)
         let priseEnCharge = 2.80
@@ -337,12 +344,12 @@ const TaxiBookingHomePreview = () => {
     })
   }, [directionsService, directionsRenderer, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, map])
 
-  // Calcul automatique de l'itinéraire
+  // Calcul automatique de l'itinéraire dès que les adresses sont disponibles
   useEffect(() => {
     if (tripData.fromCoords && tripData.toCoords && directionsService && directionsRenderer) {
       calculateRoute()
     }
-  }, [tripData.fromCoords, tripData.toCoords, bookingData.passengers, bookingData.luggage, bookingData.departureDate, bookingData.departureTime, directionsService, directionsRenderer, calculateRoute])
+  }, [tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, directionsService, directionsRenderer, calculateRoute])
 
 
   const handleBookingChange = (field: keyof BookingData, value: any) => {
@@ -447,6 +454,9 @@ const TaxiBookingHomePreview = () => {
       <div className="text-center mb-8">
         <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('step1Title')}</h3>
         <p className="text-gray-700 sm:text-gray-600">{t('step1Subtitle')}</p>
+        <div className="mt-4 text-sm text-blue-600 bg-blue-50 rounded-lg p-3 max-w-md mx-auto">
+          💡 <strong>Prix instant :</strong> Dès que vous sélectionnez vos adresses, le prix s'affiche automatiquement !
+        </div>
       </div>
 
       {/* Messages d'erreur */}
@@ -465,7 +475,7 @@ const TaxiBookingHomePreview = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <MapPin className="inline w-4 h-4 mr-1 text-green-500" />
-              {t('fromLabel')}
+              {t('fromLabel')} *
             </label>
             <input
               ref={fromInputRef}
@@ -473,15 +483,18 @@ const TaxiBookingHomePreview = () => {
               placeholder={t('fromPlaceholder')}
               value={tripData.from}
               onChange={(e) => setTripData(prev => ({ ...prev, from: e.target.value }))}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                !tripData.fromCoords ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
               disabled={loading}
+              required
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <MapPin className="inline w-4 h-4 mr-1 text-red-500" />
-              {t('toLabel')}
+              {t('toLabel')} *
             </label>
             <input
               ref={toInputRef}
@@ -489,8 +502,11 @@ const TaxiBookingHomePreview = () => {
               placeholder={t('toPlaceholder')}
               value={tripData.to}
               onChange={(e) => setTripData(prev => ({ ...prev, to: e.target.value }))}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                !tripData.toCoords ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
               disabled={loading}
+              required
             />
           </div>
 
@@ -529,32 +545,38 @@ const TaxiBookingHomePreview = () => {
             </div>
           </div>
 
-          {/* Date et heure */}
+          {/* Date et heure - OBLIGATOIRES */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Calendar className="inline w-4 h-4 mr-1" />
-                {t('departureDate')}
+                {t('departureDate')} *
               </label>
               <input
                 type="date"
                 value={bookingData.departureDate}
                 onChange={(e) => handleBookingChange('departureDate', e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
+                  !bookingData.departureDate ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
+                required
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Clock className="inline w-4 h-4 mr-1" />
-                {t('departureTime')}
+                {t('departureTime')} *
               </label>
               <input
                 type="time"
                 value={bookingData.departureTime}
                 onChange={(e) => handleBookingChange('departureTime', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className={`w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
+                  !bookingData.departureTime ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
+                required
               />
             </div>
           </div>
@@ -584,7 +606,7 @@ const TaxiBookingHomePreview = () => {
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
               <h3 className="font-semibold text-green-800 mb-3 flex items-center">
                 <Route className="w-5 h-5 mr-2" />
-                Estimation complète
+                Estimation trajet
               </h3>
               <div className="grid grid-cols-3 gap-2 text-sm mb-4">
                 <div className="text-center">
@@ -607,18 +629,24 @@ const TaxiBookingHomePreview = () => {
                   {(tripData.price || 0).toFixed(2)}€
                 </div>
                 <div className="text-xs text-green-700 sm:text-green-600 mt-2 space-y-1">
-                  <div>Le {new Date(bookingData.departureDate).toLocaleDateString('fr-FR')} à {bookingData.departureTime}</div>
-                  {tripData.priceDetails && (
-                    <div className="flex items-center justify-center gap-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        tripData.priceDetails.tariffType === 'Nuit' ? 'bg-blue-200 sm:bg-blue-100 text-blue-900 sm:text-blue-800' :
-                        tripData.priceDetails.tariffType === 'Férié' ? 'bg-red-200 sm:bg-red-100 text-red-900 sm:text-red-800' :
-                        tripData.priceDetails.tariffType === 'Dimanche' ? 'bg-purple-200 sm:bg-purple-100 text-purple-900 sm:text-purple-800' :
-                        'bg-green-200 sm:bg-green-100 text-green-900 sm:text-green-800'
-                      }`}>
-                        Tarif {tripData.priceDetails.tariffType}
-                      </span>
-                    </div>
+                  {bookingData.departureDate && bookingData.departureTime ? (
+                    <>
+                      <div>Le {new Date(bookingData.departureDate).toLocaleDateString('fr-FR')} à {bookingData.departureTime}</div>
+                      {tripData.priceDetails && (
+                        <div className="flex items-center justify-center gap-2">
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            tripData.priceDetails.tariffType === 'Nuit' ? 'bg-blue-200 sm:bg-blue-100 text-blue-900 sm:text-blue-800' :
+                            tripData.priceDetails.tariffType === 'Férié' ? 'bg-red-200 sm:bg-red-100 text-red-900 sm:text-red-800' :
+                            tripData.priceDetails.tariffType === 'Dimanche' ? 'bg-purple-200 sm:bg-purple-100 text-purple-900 sm:text-purple-800' :
+                            'bg-green-200 sm:bg-green-100 text-green-900 sm:text-green-800'
+                          }`}>
+                            Tarif {tripData.priceDetails.tariffType}
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="text-orange-600 font-medium">💡 Prix affiné avec date et heure</div>
                   )}
                 </div>
               </div>
@@ -1070,8 +1098,9 @@ const TaxiBookingHomePreview = () => {
       {/* Note d'information */}
       {step < 4 && (
         <div className="mt-6 text-center text-xs text-gray-600 sm:text-gray-500">
-          <p>Prix calculés selon les tarifs officiels 2025 • Service 24h/24 7j/7</p>
-          <p>Paiement en espèces ou carte bancaire • Véhicules climatisés</p>
+          <p>✓ Prix calculés selon les tarifs officiels 2025 • Service 24h/24 7j/7</p>
+          <p>✓ Paiement en espèces ou carte bancaire • Véhicules climatisés</p>
+          <p className="text-blue-600 font-medium mt-2">Les champs marqués d'un * sont obligatoires</p>
         </div>
       )}
     </div>
