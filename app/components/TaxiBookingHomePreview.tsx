@@ -22,6 +22,7 @@ const TaxiBookingHomePreview = () => {
   const [mapVisible, setMapVisible] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [validationAttempted, setValidationAttempted] = useState(false)
 
   // Données du trajet
   const [tripData, setTripData] = useState<TripData>({
@@ -473,7 +474,7 @@ const TaxiBookingHomePreview = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <MapPin className="inline w-4 h-4 mr-1 text-green-500" />
               {t('fromLabel')}
-              {!tripData.fromCoords && <span className="text-red-500 ml-1">*</span>}
+              {validationAttempted && !tripData.fromCoords && <span className="text-red-500 ml-1">*</span>}
             </label>
             <input
               ref={fromInputRef}
@@ -491,7 +492,7 @@ const TaxiBookingHomePreview = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <MapPin className="inline w-4 h-4 mr-1 text-red-500" />
               {t('toLabel')}
-              {!tripData.toCoords && <span className="text-red-500 ml-1">*</span>}
+              {validationAttempted && !tripData.toCoords && <span className="text-red-500 ml-1">*</span>}
             </label>
             <input
               ref={toInputRef}
@@ -511,7 +512,7 @@ const TaxiBookingHomePreview = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Users className="inline w-4 h-4 mr-1" />
                 {t('passengers')}
-                {!bookingData.passengers && <span className="text-red-500 ml-1">*</span>}
+                {validationAttempted && !bookingData.passengers && <span className="text-red-500 ml-1">*</span>}
               </label>
               <select
                 value={bookingData.passengers}
@@ -528,7 +529,7 @@ const TaxiBookingHomePreview = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Briefcase className="inline w-4 h-4 mr-1" />
                 {t('luggage')}
-                {(bookingData.luggage === undefined || bookingData.luggage === null) && <span className="text-red-500 ml-1">*</span>}
+                {validationAttempted && (bookingData.luggage === undefined || bookingData.luggage === null) && <span className="text-red-500 ml-1">*</span>}
               </label>
               <select
                 value={bookingData.luggage}
@@ -548,7 +549,7 @@ const TaxiBookingHomePreview = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Calendar className="inline w-4 h-4 mr-1" />
                 {t('departureDate')}
-                {!bookingData.departureDate && <span className="text-red-500 ml-1">*</span>}
+                {validationAttempted && !bookingData.departureDate && <span className="text-red-500 ml-1">*</span>}
               </label>
               <input
                 type="date"
@@ -564,7 +565,7 @@ const TaxiBookingHomePreview = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Clock className="inline w-4 h-4 mr-1" />
                 {t('departureTime')}
-                {!bookingData.departureTime && <span className="text-red-500 ml-1">*</span>}
+                {validationAttempted && !bookingData.departureTime && <span className="text-red-500 ml-1">*</span>}
               </label>
               <input
                 type="time"
@@ -680,10 +681,20 @@ const TaxiBookingHomePreview = () => {
 
       <button
         onClick={() => {
-          setStep(2)
-          setTimeout(scrollToModule, 100)
+          // Marquer qu'une tentative de validation a eu lieu
+          setValidationAttempted(true)
+          
+          // Vérifier si tous les champs requis sont remplis
+          const allFieldsValid = tripData.fromCoords && tripData.toCoords && 
+                                bookingData.departureDate && bookingData.departureTime && 
+                                bookingData.passengers && tripData.price
+          
+          if (allFieldsValid) {
+            setStep(2)
+            setTimeout(scrollToModule, 100)
+          }
         }}
-        disabled={!tripData.fromCoords || !tripData.toCoords || loading || !bookingData.departureDate || !bookingData.departureTime || !bookingData.passengers || !tripData.price}
+        disabled={loading}
         className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
       >
         <Navigation className="w-5 h-5 mr-2" />
@@ -1046,6 +1057,7 @@ const TaxiBookingHomePreview = () => {
           setReservation(null)
           setSuccess('')
           setError('')
+          setValidationAttempted(false)
         }}
         className="bg-blue-600 text-white py-3 px-8 rounded-lg font-medium hover:bg-blue-700 transition-colors"
       >
