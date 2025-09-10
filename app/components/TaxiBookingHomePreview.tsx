@@ -472,7 +472,8 @@ const TaxiBookingHomePreview = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <MapPin className="inline w-4 h-4 mr-1 text-green-500" />
-              {t('fromLabel')} <span className={`${!tripData.fromCoords ? 'text-red-500' : 'text-gray-400'}`}>*</span>
+              {t('fromLabel')}
+              {!tripData.fromCoords && <span className="text-red-500 ml-1">*</span>}
             </label>
             <input
               ref={fromInputRef}
@@ -489,7 +490,8 @@ const TaxiBookingHomePreview = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <MapPin className="inline w-4 h-4 mr-1 text-red-500" />
-              {t('toLabel')} <span className={`${!tripData.toCoords ? 'text-red-500' : 'text-gray-400'}`}>*</span>
+              {t('toLabel')}
+              {!tripData.toCoords && <span className="text-red-500 ml-1">*</span>}
             </label>
             <input
               ref={toInputRef}
@@ -508,7 +510,8 @@ const TaxiBookingHomePreview = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Users className="inline w-4 h-4 mr-1" />
-                {t('passengers')} <span className="text-red-500">*</span>
+                {t('passengers')}
+                {!bookingData.passengers && <span className="text-red-500 ml-1">*</span>}
               </label>
               <select
                 value={bookingData.passengers}
@@ -524,7 +527,8 @@ const TaxiBookingHomePreview = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Briefcase className="inline w-4 h-4 mr-1" />
-                {t('luggage')} <span className="text-red-500">*</span>
+                {t('luggage')}
+                {(bookingData.luggage === undefined || bookingData.luggage === null) && <span className="text-red-500 ml-1">*</span>}
               </label>
               <select
                 value={bookingData.luggage}
@@ -543,7 +547,8 @@ const TaxiBookingHomePreview = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Calendar className="inline w-4 h-4 mr-1" />
-                {t('departureDate')} <span className={`${!bookingData.departureDate ? 'text-red-500' : 'text-gray-400'}`}>*</span>
+                {t('departureDate')}
+                {!bookingData.departureDate && <span className="text-red-500 ml-1">*</span>}
               </label>
               <input
                 type="date"
@@ -558,7 +563,8 @@ const TaxiBookingHomePreview = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Clock className="inline w-4 h-4 mr-1" />
-                {t('departureTime')} <span className={`${!bookingData.departureTime ? 'text-red-500' : 'text-gray-400'}`}>*</span>
+                {t('departureTime')}
+                {!bookingData.departureTime && <span className="text-red-500 ml-1">*</span>}
               </label>
               <input
                 type="time"
