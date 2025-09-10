@@ -448,6 +448,14 @@ const TaxiBookingHomePreview = () => {
         : `Réservation confirmée ! Numéro : ${reservationId}`
       setSuccess(successMessage)
       setStep(4)
+      
+      // Revenir à l'ancre de réservation après confirmation
+      setTimeout(() => {
+        const reservationElement = document.getElementById('reservation')
+        if (reservationElement) {
+          reservationElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
 
     } catch (error) {
       console.error('Erreur soumission réservation:', error)
@@ -1089,7 +1097,11 @@ const TaxiBookingHomePreview = () => {
   )
 
   return (
-    <div ref={moduleRef} className="bg-gradient-to-br from-blue-50 to-green-50 p-4 sm:p-6 lg:p-6 w-full">
+    <div className="bg-gradient-to-br from-blue-50 to-green-50 p-4 sm:p-6 lg:p-6 w-full relative">
+      {/* Ancre invisible pour le scroll avec offset */}
+      <div id="reservation" className="absolute -top-20"></div>
+      
+      <div ref={moduleRef}>
       {/* Header */}
       <div className="text-center mb-8">
         <div className="flex items-center justify-center mb-4">
@@ -1134,6 +1146,7 @@ const TaxiBookingHomePreview = () => {
           <p className="text-blue-600 font-medium mt-1">Les champs marqués d&apos;un * sont obligatoires</p>
         </div>
       )}
+      </div>
     </div>
   )
 }
