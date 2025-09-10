@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft, Train, Clock, MapPin, Phone, CheckCircle, Star } from 'lucide-react'
+import { motion } from 'motion/react'
 
 export default function GarePage() {
   const phoneNumber = "0667237822"
@@ -86,62 +87,134 @@ export default function GarePage() {
       </section>
 
       {/* Services Principaux Gare */}
-      <section className="py-20 bg-gradient-to-b from-slate-50 to-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold text-sm mb-4">
-              SERVICES GARE SAINT-JEAN
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+      <section className="py-20 bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/30 relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-400/10 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-green-400/10 via-transparent to-transparent"></div>
+        
+        <div className="relative container mx-auto px-4">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <motion.div 
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500/20 to-blue-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-700 font-semibold mb-6"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <motion.div
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Train className="w-5 h-5" />
+              </motion.div>
+              <span>SERVICES GARE SAINT-JEAN</span>
+            </motion.div>
+            
+            <motion.h2 
+              className="text-4xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
               Services Taxi
-              <span className="text-green-600"> Gare Saint-Jean</span>
-            </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              <motion.span 
+                className="block text-transparent bg-gradient-to-r from-green-600 via-blue-600 to-green-600 bg-clip-text"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.6 }}
+                viewport={{ once: true }}
+              >
+                Gare Saint-Jean
+              </motion.span>
+            </motion.h2>
+            
+            <motion.p 
+              className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              viewport={{ once: true }}
+            >
               Transport professionnel, assistance bagages et services sur mesure depuis la gare
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 hover:shadow-2xl transition-shadow">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
-                ✈️
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Gare ↔ Aéroport Mérignac</h3>
-              <p className="text-slate-600">
-                Transport direct et fiable entre la gare Saint-Jean et l&apos;aéroport de Bordeaux-Mérignac.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 hover:shadow-2xl transition-shadow">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
-                🧳
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Assistance Bagages</h3>
-              <p className="text-slate-600">
-                Aide au transport de vos bagages depuis les quais jusqu&apos;au taxi. Service personnalisé.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 hover:shadow-2xl transition-shadow">
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
-                📍
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Accueil Parvis Gare</h3>
-              <p className="text-slate-600">
-                Accueil directement sur le parvis de la gare à l&apos;emplacement taxi officiel.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 hover:shadow-2xl transition-shadow">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
-                👨‍💼
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Chauffeur Garanti</h3>
-              <p className="text-slate-600">
-                Chauffeur professionnel présent à l&apos;heure convenue. Service fiable et ponctuel.
-              </p>
-            </div>
-          </div>
+          <motion.div 
+            className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            {[
+              {
+                icon: "✈️",
+                title: "Gare ↔ Aéroport Mérignac",
+                description: "Transport direct et fiable entre la gare Saint-Jean et l'aéroport de Bordeaux-Mérignac.",
+                gradient: "from-blue-500 to-blue-600",
+                bgGradient: "from-blue-50/80 to-blue-100/80",
+                delay: 0.1
+              },
+              {
+                icon: "🧳",
+                title: "Assistance Bagages",
+                description: "Aide au transport de vos bagages depuis les quais jusqu'au taxi. Service personnalisé.",
+                gradient: "from-green-500 to-green-600",
+                bgGradient: "from-green-50/80 to-green-100/80",
+                delay: 0.2
+              },
+              {
+                icon: "📍",
+                title: "Accueil Parvis Gare",
+                description: "Accueil directement sur le parvis de la gare à l'emplacement taxi officiel.",
+                gradient: "from-orange-500 to-orange-600",
+                bgGradient: "from-orange-50/80 to-orange-100/80",
+                delay: 0.3
+              },
+              {
+                icon: "👨‍💼",
+                title: "Chauffeur Garanti",
+                description: "Chauffeur professionnel présent à l'heure convenue. Service fiable et ponctuel.",
+                gradient: "from-purple-500 to-purple-600",
+                bgGradient: "from-purple-50/80 to-purple-100/80",
+                delay: 0.4
+              }
+            ].map((service, index) => (
+              <motion.div
+                key={index}
+                className="group relative"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: service.delay }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                viewport={{ once: true }}
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${service.bgGradient} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+                <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-white/50 p-8">
+                  <motion.div 
+                    className={`w-20 h-20 bg-gradient-to-br ${service.gradient} rounded-3xl flex items-center justify-center text-4xl mb-6 mx-auto shadow-lg`}
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  >
+                    {service.icon}
+                  </motion.div>
+                  <h3 className="text-xl font-bold text-slate-900 mb-4 text-center group-hover:text-slate-800 transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-slate-600 leading-relaxed text-center group-hover:text-slate-700 transition-colors">
+                    {service.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -318,32 +391,96 @@ export default function GarePage() {
           </div>
 
           {/* Tarifs Gare ↔ Aéroport */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-bold text-slate-900 mb-8 text-center">Tarif Gare ↔ Aéroport</h3>
-            <div className="max-w-md mx-auto">
-              {/* Gare → Aéroport */}
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="text-4xl">✈️</div>
-                  <div>
-                    <h4 className="text-xl font-bold text-slate-900">Gare ↔ Aéroport Mérignac</h4>
-                    <p className="text-slate-500">Distance : ~23,3 km</p>
+          <motion.div 
+            className="mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <motion.h3 
+              className="text-3xl font-bold text-slate-900 mb-8 text-center"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              Tarif Gare ↔ Aéroport
+            </motion.h3>
+            
+            <motion.div 
+              className="max-w-lg mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <motion.div 
+                className="relative group"
+                whileHover={{ scale: 1.02, y: -5 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-green-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/50 p-8">
+                  <div className="flex items-center gap-6 mb-8">
+                    <motion.div 
+                      className="w-16 h-16 bg-gradient-to-br from-blue-500 to-green-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg"
+                      whileHover={{ rotate: 360 }}
+                      transition={{ duration: 0.8 }}
+                    >
+                      ✈️
+                    </motion.div>
+                    <div>
+                      <h4 className="text-2xl font-bold text-slate-900 mb-1">Gare ↔ Aéroport Mérignac</h4>
+                      <p className="text-slate-500 font-medium">Distance : ~23,3 km</p>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-6">
+                    <motion.div 
+                      className="bg-gradient-to-br from-yellow-50 to-amber-100 p-6 rounded-2xl border border-yellow-200/50 hover:border-yellow-300 transition-colors group/price"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    >
+                      <div className="text-yellow-800 font-semibold text-sm mb-2 flex items-center gap-2">
+                        <span className="text-lg">☀️</span>
+                        <span>Jour</span>
+                      </div>
+                      <motion.div 
+                        className="text-3xl font-bold text-yellow-900 group-hover/price:scale-110 transition-transform duration-300"
+                        initial={{ scale: 0 }}
+                        whileInView={{ scale: 1 }}
+                        transition={{ duration: 0.5, delay: 0.5 }}
+                        viewport={{ once: true }}
+                      >
+                        63€
+                      </motion.div>
+                    </motion.div>
+                    
+                    <motion.div 
+                      className="bg-gradient-to-br from-indigo-50 to-blue-100 p-6 rounded-2xl border border-indigo-200/50 hover:border-indigo-300 transition-colors group/price"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    >
+                      <div className="text-indigo-800 font-semibold text-sm mb-2 flex items-center gap-2">
+                        <span className="text-lg">🌙</span>
+                        <span>Nuit</span>
+                      </div>
+                      <motion.div 
+                        className="text-3xl font-bold text-indigo-900 group-hover/price:scale-110 transition-transform duration-300"
+                        initial={{ scale: 0 }}
+                        whileInView={{ scale: 1 }}
+                        transition={{ duration: 0.5, delay: 0.7 }}
+                        viewport={{ once: true }}
+                      >
+                        87€
+                      </motion.div>
+                    </motion.div>
                   </div>
                 </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-2xl border border-yellow-200">
-                    <div className="text-yellow-800 font-semibold text-sm mb-1">☀️ Jour</div>
-                    <div className="text-2xl font-bold text-yellow-900">63€</div>
-                  </div>
-                  <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-2xl border border-indigo-200">
-                    <div className="text-indigo-800 font-semibold text-sm mb-1">🌙 Nuit</div>
-                    <div className="text-2xl font-bold text-indigo-900">87€</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
 
           {/* Note importante */}
           <div className="bg-slate-100 rounded-2xl p-6 max-w-4xl mx-auto text-center">
