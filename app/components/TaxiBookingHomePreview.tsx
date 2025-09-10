@@ -81,8 +81,8 @@ const TaxiBookingHomePreview = () => {
       minutes: "minutes",
       continue: "Continuer",
       step2Title: "Détails de votre réservation",
-      passengers: "Nombre de passagers",
-      luggage: "Nombre de bagages",
+      passengers: "Passagers",
+      luggage: "Bagages",
       departureDate: "Date de départ",
       departureTime: "Heure de départ",
       priceEstimate: "Estimation du prix",
@@ -544,7 +544,7 @@ const TaxiBookingHomePreview = () => {
           {/* Options de réservation */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2 min-h-[1.5rem] flex items-center">
                 <Users className="inline w-4 h-4 mr-1" />
                 {t('passengers')}
                 {validationAttempted && !bookingData.passengers && <span className="text-red-500 ml-1">*</span>}
@@ -561,7 +561,7 @@ const TaxiBookingHomePreview = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2 min-h-[1.5rem] flex items-center">
                 <Briefcase className="inline w-4 h-4 mr-1" />
                 {t('luggage')}
                 {validationAttempted && (bookingData.luggage === undefined || bookingData.luggage === null) && <span className="text-red-500 ml-1">*</span>}
