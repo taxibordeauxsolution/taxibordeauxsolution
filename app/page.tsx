@@ -220,12 +220,6 @@ export default function HomePage() {
       {/* Section Module de Réservation */}
       <section id="reservation" className="py-16 bg-white relative">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
-              Réservez votre
-              <span className="text-green-600"> Taxi Maintenant</span>
-            </h2>
-          </div>
           
           {/* Module de réservation complet */}
           <TaxiBookingHomePreview />
