@@ -358,14 +358,21 @@ const TaxiBookingHomePreview = () => {
     setBookingData(prev => ({ ...prev, [field]: value }))
   }
 
-  // Fonction pour centrer le module automatiquement
+  // Fonction pour ajuster le scroll de manière intelligente
   const scrollToModule = () => {
     if (moduleRef.current) {
-      const offsetTop = moduleRef.current.offsetTop - 20 // 20px de marge
-      window.scrollTo({
-        top: offsetTop,
-        behavior: 'smooth'
-      })
+      const element = moduleRef.current
+      const rect = element.getBoundingClientRect()
+      const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight
+      
+      // Si le module n'est pas entièrement visible, le centrer
+      if (!isVisible) {
+        const offsetTop = element.offsetTop - (window.innerHeight - element.offsetHeight) / 2
+        window.scrollTo({
+          top: Math.max(0, offsetTop),
+          behavior: 'smooth'
+        })
+      }
     }
   }
 
@@ -692,7 +699,8 @@ const TaxiBookingHomePreview = () => {
           
           if (allFieldsValid) {
             setStep(2)
-            setTimeout(scrollToModule, 100)
+            // Petit délai pour laisser le DOM se mettre à jour
+            setTimeout(scrollToModule, 150)
           }
         }}
         disabled={loading}
@@ -794,7 +802,7 @@ const TaxiBookingHomePreview = () => {
         <button
           onClick={() => {
             setStep(1)
-            setTimeout(scrollToModule, 100)
+            setTimeout(scrollToModule, 150)
           }}
           className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors"
         >
@@ -803,7 +811,7 @@ const TaxiBookingHomePreview = () => {
         <button
           onClick={() => {
             setStep(3)
-            setTimeout(scrollToModule, 100)
+            setTimeout(scrollToModule, 150)
           }}
           className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
         >
@@ -937,7 +945,7 @@ const TaxiBookingHomePreview = () => {
         <button
           onClick={() => {
             setStep(2)
-            setTimeout(scrollToModule, 100)
+            setTimeout(scrollToModule, 150)
           }}
           className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors"
         >
@@ -1081,7 +1089,7 @@ const TaxiBookingHomePreview = () => {
   )
 
   return (
-    <div ref={moduleRef} className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 border-2 sm:border border-blue-200 sm:border-blue-100">
+    <div ref={moduleRef} className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-6 border-2 sm:border border-blue-200 sm:border-blue-100 max-w-6xl mx-auto">
       {/* Header */}
       <div className="text-center mb-8">
         <div className="flex items-center justify-center mb-4">
