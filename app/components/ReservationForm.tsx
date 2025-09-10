@@ -557,7 +557,6 @@ export default function ReservationForm() {
                       className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-6 rounded-2xl font-bold text-xl transition-all duration-300 flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-green-500/25"
                       whileHover={{ scale: 1.02, y: -2 }}
                       whileTap={{ scale: 0.98 }}
-                      disabled={isLoading}
                     >
                       {isLoading ? (
                         <>
