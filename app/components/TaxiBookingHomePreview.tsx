@@ -1089,7 +1089,7 @@ const TaxiBookingHomePreview = () => {
   )
 
   return (
-    <div ref={moduleRef} className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-6 border-2 sm:border border-blue-200 sm:border-blue-100 max-w-6xl mx-auto">
+    <div ref={moduleRef} className="bg-gradient-to-br from-blue-50 to-green-50 p-4 sm:p-6 lg:p-6 w-full">
       {/* Header */}
       <div className="text-center mb-8">
         <div className="flex items-center justify-center mb-4">
@@ -1120,7 +1120,7 @@ const TaxiBookingHomePreview = () => {
       </div>
 
       {/* Contenu principal */}
-      <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 border sm:border-0 border-gray-200">
+      <div className="bg-white p-4 sm:p-6 lg:p-8 w-full">
         {step === 1 && renderStep1()}
         {step === 2 && renderStep2()}
         {step === 3 && renderStep3()}

@@ -218,12 +218,9 @@ export default function HomePage() {
       </section>
 
       {/* Section Module de Réservation */}
-      <section id="reservation" className="py-16 bg-white relative">
-        <div className="container mx-auto px-4">
-          
-          {/* Module de réservation complet */}
-          <TaxiBookingHomePreview />
-        </div>
+      <section id="reservation" className="bg-white relative">
+        {/* Module de réservation complet */}
+        <TaxiBookingHomePreview />
       </section>
 
       {/* Services Section Moderne */}
