@@ -358,22 +358,31 @@ const TaxiBookingHomePreview = () => {
     setBookingData(prev => ({ ...prev, [field]: value }))
   }
 
-  // Fonction pour ajuster le scroll de manière intelligente
+  // Fonction pour ajuster le scroll de manière intelligente (solution robuste)
   const scrollToModule = () => {
-    if (moduleRef.current) {
-      const element = moduleRef.current
-      const rect = element.getBoundingClientRect()
-      const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight
-      
-      // Si le module n'est pas entièrement visible, le centrer
-      if (!isVisible) {
-        const offsetTop = element.offsetTop - (window.innerHeight - element.offsetHeight) / 2
-        window.scrollTo({
-          top: Math.max(0, offsetTop),
-          behavior: 'smooth'
+    // Solution double : setTimeout + scrollIntoView (plus fiable selon recherches web)
+    setTimeout(() => {
+      const reservationElement = document.getElementById('reservation-title')
+      if (reservationElement) {
+        reservationElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
         })
+      } else if (moduleRef.current) {
+        // Fallback vers l'ancienne méthode
+        const element = moduleRef.current
+        const rect = element.getBoundingClientRect()
+        const isVisible = rect.top >= 0 && rect.bottom <= window.innerHeight
+        
+        if (!isVisible) {
+          const offsetTop = element.offsetTop - 100
+          window.scrollTo({
+            top: Math.max(0, offsetTop),
+            behavior: 'smooth'
+          })
+        }
       }
-    }
+    }, 0) // 0ms delay comme recommandé dans les recherches
   }
 
   // Soumission de la réservation avec envoi d'email
@@ -449,13 +458,19 @@ const TaxiBookingHomePreview = () => {
       setSuccess(successMessage)
       setStep(4)
       
-      // Revenir précisément au module après confirmation
+      // Solution robuste pour le scroll après confirmation (fix problème navigateurs Chrome/Chromium)
       setTimeout(() => {
         const reservationElement = document.getElementById('reservation-title')
         if (reservationElement) {
-          const offsetTop = reservationElement.offsetTop - 20 // Petite marge
+          // Méthode 1: scrollIntoView avec setTimeout (solution la plus fiable selon recherches)
+          reservationElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          })
+        } else {
+          // Méthode de fallback: scroll manuel si l'élément n'est pas trouvé
           window.scrollTo({
-            top: offsetTop,
+            top: 0,
             behavior: 'smooth'
           })
         }
