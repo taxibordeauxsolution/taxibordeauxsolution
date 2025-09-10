@@ -552,7 +552,7 @@ const TaxiBookingHomePreview = () => {
               <select
                 value={bookingData.passengers}
                 onChange={(e) => handleBookingChange('passengers', parseInt(e.target.value))}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 {[1,2,3,4,5,6,7,8].map(num => (
                   <option key={num} value={num}>{num} passager{num > 1 ? 's' : ''}</option>
@@ -569,7 +569,7 @@ const TaxiBookingHomePreview = () => {
               <select
                 value={bookingData.luggage}
                 onChange={(e) => handleBookingChange('luggage', parseInt(e.target.value))}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 {[0,1,2,3,4,5].map(num => (
                   <option key={num} value={num}>{num} bagage{num > 1 ? 's' : ''}</option>
@@ -591,7 +591,7 @@ const TaxiBookingHomePreview = () => {
                 value={bookingData.departureDate}
                 onChange={(e) => handleBookingChange('departureDate', e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
@@ -606,7 +606,7 @@ const TaxiBookingHomePreview = () => {
                 type="time"
                 value={bookingData.departureTime}
                 onChange={(e) => handleBookingChange('departureTime', e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
