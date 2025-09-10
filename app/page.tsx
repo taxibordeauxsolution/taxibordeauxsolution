@@ -218,7 +218,7 @@ export default function HomePage() {
       </section>
 
       {/* Section Module de Réservation */}
-      <section id="reservation" className="bg-white relative">
+      <section className="bg-white relative">
         {/* Module de réservation complet */}
         <TaxiBookingHomePreview />
       </section>

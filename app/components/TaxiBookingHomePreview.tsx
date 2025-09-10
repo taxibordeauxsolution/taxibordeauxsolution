@@ -1097,7 +1097,7 @@ const TaxiBookingHomePreview = () => {
             <Car className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl lg:text-3xl font-bold text-gray-800">Réservez votre <span className="text-green-600">Taxi Maintenant</span></h2>
+            <h2 id="reservation" className="text-2xl lg:text-3xl font-bold text-gray-800">Réservez votre <span className="text-green-600">Taxi Maintenant</span></h2>
             <p className="text-gray-700 sm:text-gray-600">{t('subtitle')}</p>
           </div>
         </div>
