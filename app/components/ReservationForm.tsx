@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react'
 import { Car, MapPin, Clock, Phone, Mail, User, Calendar, MessageSquare, CheckCircle, AlertCircle, Zap } from 'lucide-react'
+import { motion, AnimatePresence } from 'motion/react'
 
 export default function ReservationForm() {
   const [formData, setFormData] = useState({
@@ -104,22 +105,49 @@ export default function ReservationForm() {
           <div className="text-center text-white space-y-8 max-w-4xl mx-auto">
             
             {/* Badge de rapidité */}
-            <div className="inline-flex items-center gap-3 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-400 font-semibold">
-              <Zap size={20} className="animate-pulse" />
+            <motion.div 
+              className="inline-flex items-center gap-3 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-400 font-semibold"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <motion.div
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Zap size={20} />
+              </motion.div>
               <span>Prise en charge en 5-10 minutes</span>
-            </div>
+            </motion.div>
             
-            <h1 className="text-4xl lg:text-6xl font-bold leading-tight tracking-tight">
+            <motion.h1 
+              className="text-4xl lg:text-6xl font-bold leading-tight tracking-tight"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
               <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
                 Réservez votre Taxi
               </span>
               <br />
-              <span className="text-yellow-400">à Bordeaux</span>
-            </h1>
+              <motion.span 
+                className="text-yellow-400"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+              >
+                à Bordeaux
+              </motion.span>
+            </motion.h1>
             
-            <p className="text-xl lg:text-2xl text-slate-300 leading-relaxed font-light">
+            <motion.p 
+              className="text-xl lg:text-2xl text-slate-300 leading-relaxed font-light"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+            >
               Service professionnel 24h/24 • Tarifs réglementés • Prise en charge garantie
-            </p>
+            </motion.p>
 
             {/* Statistiques rapides */}
             <div className="grid grid-cols-3 gap-6 py-8">
@@ -138,75 +166,154 @@ export default function ReservationForm() {
             </div>
 
             {/* CTA Principal */}
-            {!showForm ? (
-              <div className="space-y-6">
-                <button
-                  onClick={() => setShowForm(true)}
-                  className="group bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-12 py-6 rounded-2xl font-bold text-2xl transition-all duration-300 shadow-2xl hover:shadow-green-500/25 hover:scale-105 inline-flex items-center gap-4"
+            <AnimatePresence mode="wait">
+              {!showForm ? (
+                <motion.div 
+                  className="space-y-6"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -30 }}
+                  transition={{ duration: 0.6, delay: 1.0 }}
                 >
-                  <Car size={32} className="group-hover:scale-110 transition-transform" />
-                  <span>RÉSERVER MAINTENANT</span>
-                </button>
-                
-                <div className="flex items-center justify-center gap-6">
-                  <a
-                    href="tel:0667237822"
-                    className="group flex items-center gap-3 text-white hover:text-green-400 transition-colors font-semibold"
+                  <motion.button
+                    onClick={() => setShowForm(true)}
+                    className="group bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-12 py-6 rounded-2xl font-bold text-2xl transition-all duration-300 shadow-2xl hover:shadow-green-500/25 inline-flex items-center gap-4"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <Phone size={20} className="group-hover:rotate-12 transition-transform" />
-                    <span>06 67 23 78 22</span>
-                  </a>
-                  <span className="text-slate-500">|</span>
-                  <span className="text-slate-400">Appel immédiat</span>
-                </div>
-              </div>
-            ) : (
-              <div className="text-left">
-                <button
-                  onClick={() => setShowForm(false)}
-                  className="mb-6 text-slate-400 hover:text-white transition-colors"
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      <Car size={32} />
+                    </motion.div>
+                    <span>RÉSERVER MAINTENANT</span>
+                  </motion.button>
+                
+                  <motion.div 
+                    className="flex items-center justify-center gap-6"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 1.2 }}
+                  >
+                    <motion.a
+                      href="tel:0667237822"
+                      className="group flex items-center gap-3 text-white hover:text-green-400 transition-colors font-semibold"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <motion.div
+                        whileHover={{ rotate: 12 }}
+                        transition={{ type: "spring", stiffness: 400 }}
+                      >
+                        <Phone size={20} />
+                      </motion.div>
+                      <span>06 67 23 78 22</span>
+                    </motion.a>
+                    <span className="text-slate-500">|</span>
+                    <span className="text-slate-400">Appel immédiat</span>
+                  </motion.div>
+                </motion.div>
+              ) : (
+                <motion.div 
+                  className="text-left"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5 }}
                 >
-                  ← Retour
-                </button>
-              </div>
-            )}
+                  <motion.button
+                    onClick={() => setShowForm(false)}
+                    className="mb-6 text-slate-400 hover:text-white transition-colors"
+                    whileHover={{ x: -5 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    ← Retour
+                  </motion.button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
 
       {/* Formulaire de Réservation */}
-      {showForm && (
-        <div className="relative pb-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+      <AnimatePresence>
+        {showForm && (
+          <motion.div 
+            className="relative pb-20"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="container mx-auto px-4">
+              <div className="max-w-4xl mx-auto">
               
-              {/* Status Messages */}
-              {status === 'success' && (
-                <div className="mb-8 p-6 bg-green-50 border border-green-200 rounded-2xl flex items-center gap-4">
-                  <CheckCircle className="text-green-600 shrink-0" size={32} />
-                  <div>
-                    <h4 className="text-lg font-bold text-green-800 mb-1">Réservation Envoyée !</h4>
-                    <p className="text-green-700">{statusMessage}</p>
-                  </div>
-                </div>
-              )}
+                {/* Status Messages */}
+                <AnimatePresence>
+                  {status === 'success' && (
+                    <motion.div 
+                      className="mb-8 p-6 bg-green-50 border border-green-200 rounded-2xl flex items-center gap-4"
+                      initial={{ opacity: 0, scale: 0.9, y: -20 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.2, type: "spring", stiffness: 500 }}
+                      >
+                        <CheckCircle className="text-green-600 shrink-0" size={32} />
+                      </motion.div>
+                      <div>
+                        <h4 className="text-lg font-bold text-green-800 mb-1">Réservation Envoyée !</h4>
+                        <p className="text-green-700">{statusMessage}</p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-              {status === 'error' && (
-                <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-2xl flex items-center gap-4">
-                  <AlertCircle className="text-red-600 shrink-0" size={32} />
-                  <div>
-                    <h4 className="text-lg font-bold text-red-800 mb-1">Erreur</h4>
-                    <p className="text-red-700">{statusMessage}</p>
-                  </div>
-                </div>
-              )}
+                <AnimatePresence>
+                  {status === 'error' && (
+                    <motion.div 
+                      className="mb-8 p-6 bg-red-50 border border-red-200 rounded-2xl flex items-center gap-4"
+                      initial={{ opacity: 0, scale: 0.9, y: -20 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <motion.div
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ delay: 0.2, type: "spring", stiffness: 500 }}
+                      >
+                        <AlertCircle className="text-red-600 shrink-0" size={32} />
+                      </motion.div>
+                      <div>
+                        <h4 className="text-lg font-bold text-red-800 mb-1">Erreur</h4>
+                        <p className="text-red-700">{statusMessage}</p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               
-              {/* Formulaire */}
-              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-8 text-white">
-                  <h2 className="text-3xl font-bold mb-2">Réservation Taxi Bordeaux</h2>
-                  <p className="text-blue-100">Remplissez vos informations pour une prise en charge rapide</p>
-                </div>
+                {/* Formulaire */}
+                <motion.div 
+                  className="bg-white rounded-3xl shadow-2xl overflow-hidden"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  <motion.div 
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 p-8 text-white"
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                  >
+                    <h2 className="text-3xl font-bold mb-2">Réservation Taxi Bordeaux</h2>
+                    <p className="text-blue-100">Remplissez vos informations pour une prise en charge rapide</p>
+                  </motion.div>
                 
                 <form onSubmit={handleSubmit} className="p-8 space-y-8">
                   
@@ -444,10 +551,13 @@ export default function ReservationForm() {
 
                   {/* Bouton de soumission */}
                   <div className="pt-8 border-t border-gray-200">
-                    <button 
+                    <motion.button 
                       type="submit"
                       disabled={isLoading}
-                      className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-6 rounded-2xl font-bold text-xl transition-all duration-300 flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-green-500/25 hover:scale-[1.02]"
+                      className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-6 rounded-2xl font-bold text-xl transition-all duration-300 flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-green-500/25"
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      disabled={isLoading}
                     >
                       {isLoading ? (
                         <>
@@ -460,7 +570,7 @@ export default function ReservationForm() {
                           CONFIRMER MA RÉSERVATION
                         </>
                       )}
-                    </button>
+                    </motion.button>
 
                     <div className="mt-6 text-center space-y-3">
                       <div className="flex items-center justify-center gap-6 text-sm text-gray-600">
@@ -483,11 +593,12 @@ export default function ReservationForm() {
                     </div>
                   </div>
                 </form>
+                </motion.div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

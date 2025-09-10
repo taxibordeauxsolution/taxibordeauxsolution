@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Phone, MapPin, Clock, Star, Shield, Zap, CheckCircle, ArrowRight } from 'lucide-react'
 import TaxiBookingHomePreview from './components/TaxiBookingHomePreview'
+import { motion } from 'motion/react'
 
 export default function HomePage() {
   const phoneNumber = "0667237822"
@@ -26,32 +27,66 @@ export default function HomePage() {
             <div className="space-y-8 lg:space-y-12">
               
               {/* Badge de rapidité */}
-              <div className="inline-flex items-center gap-3 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-400 font-semibold">
-                <Zap size={20} className="animate-pulse" />
+              <motion.div 
+                className="inline-flex items-center gap-3 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-400 font-semibold"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  <Zap size={20} />
+                </motion.div>
                 <span>Taxi en 5-10 minutes à Bordeaux</span>
-              </div>
+              </motion.div>
               
               <div className="space-y-6">
-                <h1 className="text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
+                <motion.h1 
+                  className="text-5xl lg:text-7xl font-bold leading-tight tracking-tight"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                >
                   <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
                     LA Solution
                   </span>
                   <br />
-                  <span className="text-yellow-400">Taxi Bordeaux</span>
-                </h1>
+                  <motion.span 
+                    className="text-yellow-400"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.8, delay: 0.8 }}
+                  >
+                    Taxi Bordeaux
+                  </motion.span>
+                </motion.h1>
                 
-                <p className="text-xl lg:text-2xl text-slate-300 leading-relaxed max-w-2xl font-light">
+                <motion.p 
+                  className="text-xl lg:text-2xl text-slate-300 leading-relaxed max-w-2xl font-light"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 1.0 }}
+                >
                   Service fiable et régulier disponible 24h/24. 
                   <strong className="text-white font-semibold"> Réservation instantanée</strong>, 
                   prise en charge rapide dans toute la métropole bordelaise.
-                </p>
+                </motion.p>
               </div>
 
               {/* CTA Buttons Modernes */}
-              <div className="flex flex-col sm:flex-row gap-4 lg:gap-6">
-                <a
+              <motion.div 
+                className="flex flex-col sm:flex-row gap-4 lg:gap-6"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.2 }}
+              >
+                <motion.a
                   href="#reservation"
-                  className="group relative bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-5 rounded-2xl font-bold text-lg transition-all duration-300 text-center shadow-2xl hover:shadow-green-500/25 hover:scale-105"
+                  className="group relative bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-5 rounded-2xl font-bold text-lg transition-all duration-300 text-center shadow-2xl hover:shadow-green-500/25"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={(e) => {
                     e.preventDefault();
                     document.getElementById('reservation')?.scrollIntoView({ behavior: 'smooth' });
@@ -59,36 +94,86 @@ export default function HomePage() {
                 >
                   <span className="flex items-center justify-center gap-3">
                     📱 Réserver un Taxi
-                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                    <motion.div
+                      whileHover={{ x: 4 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      <ArrowRight size={20} />
+                    </motion.div>
                   </span>
-                </a>
+                </motion.a>
                 
-                <a
+                <motion.a
                   href={`tel:${phoneNumber}`}
-                  className="group relative bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 text-white px-8 py-5 rounded-2xl font-bold text-lg transition-all duration-300 text-center shadow-xl hover:shadow-2xl hover:scale-105"
+                  className="group relative bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 text-white px-8 py-5 rounded-2xl font-bold text-lg transition-all duration-300 text-center shadow-xl hover:shadow-2xl"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   <span className="flex items-center justify-center gap-3">
-                    <Phone size={20} className="group-hover:rotate-12 transition-transform" />
+                    <motion.div
+                      whileHover={{ rotate: 12 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      <Phone size={20} />
+                    </motion.div>
                     {phoneDisplay}
                   </span>
-                </a>
-              </div>
+                </motion.a>
+              </motion.div>
 
               {/* Stats élégantes */}
-              <div className="grid grid-cols-3 gap-8 pt-8 border-t border-white/10">
-                <div className="text-center">
-                  <div className="text-3xl lg:text-4xl font-bold text-yellow-400 mb-1">5-10min</div>
+              <motion.div 
+                className="grid grid-cols-3 gap-8 pt-8 border-t border-white/10"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.4 }}
+              >
+                <motion.div 
+                  className="text-center"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  <motion.div 
+                    className="text-3xl lg:text-4xl font-bold text-yellow-400 mb-1"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 1.6 }}
+                  >
+                    5-10min
+                  </motion.div>
                   <div className="text-sm text-slate-400 font-medium">Prise en charge</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl lg:text-4xl font-bold text-yellow-400 mb-1">24/7</div>
+                </motion.div>
+                <motion.div 
+                  className="text-center"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  <motion.div 
+                    className="text-3xl lg:text-4xl font-bold text-yellow-400 mb-1"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 1.8 }}
+                  >
+                    24/7
+                  </motion.div>
                   <div className="text-sm text-slate-400 font-medium">Service continu</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl lg:text-4xl font-bold text-yellow-400 mb-1">100%</div>
+                </motion.div>
+                <motion.div 
+                  className="text-center"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
+                  <motion.div 
+                    className="text-3xl lg:text-4xl font-bold text-yellow-400 mb-1"
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 2.0 }}
+                  >
+                    100%
+                  </motion.div>
                   <div className="text-sm text-slate-400 font-medium">Fiabilité</div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </div>
 
             {/* Photo Hero - Place de la Bourse */}
@@ -157,25 +242,62 @@ export default function HomePage() {
       <section id="services" className="py-20 bg-gradient-to-b from-slate-50 to-white">
         <div className="container mx-auto px-4">
           
-          <div className="text-center mb-16">
-            <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold text-sm mb-4">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <motion.div 
+              className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold text-sm mb-4"
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
               NOS SERVICES TAXI BORDEAUX
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+            </motion.div>
+            <motion.h2 
+              className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
               La Solution Transport
               <span className="text-blue-600"> à Bordeaux</span>
-            </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto font-light">
+            </motion.h2>
+            <motion.p 
+              className="text-xl text-slate-600 max-w-3xl mx-auto font-light"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
               Service taxi professionnel dans toute la métropole. 
               Réservation simple, prise en charge garantie en 5-10 minutes.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div 
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
             
             {/* Service Aéroport */}
             <Link href="/aeroport" className="block">
-              <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-blue-200 hover:-translate-y-2 overflow-hidden cursor-pointer">
+              <motion.div 
+                className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-blue-200 overflow-hidden cursor-pointer"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                viewport={{ once: true }}
+              >
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 {/* Photo du service aéroport */}
@@ -199,12 +321,19 @@ export default function HomePage() {
                     Prise en charge rapide, suivi des vols, service fiable 24h/24.
                   </p>
                 </div>
-              </div>
+              </motion.div>
             </Link>
 
             {/* Service Gare */}
             <Link href="/gare" className="block">
-              <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-green-200 hover:-translate-y-2 overflow-hidden cursor-pointer">
+              <motion.div 
+                className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-green-200 overflow-hidden cursor-pointer"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                viewport={{ once: true }}
+              >
                 <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 {/* Photo du service gare */}
@@ -228,11 +357,18 @@ export default function HomePage() {
                     Arrivée ponctuelle, aide aux bagages, connexion immédiate.
                   </p>
                 </div>
-              </div>
+              </motion.div>
             </Link>
 
             {/* Service Ville */}
-            <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-yellow-200 hover:-translate-y-2 overflow-hidden">
+            <motion.div 
+              className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-yellow-200 overflow-hidden"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              viewport={{ once: true }}
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-yellow-50/50 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
               {/* Photo du service centre-ville */}
@@ -256,10 +392,17 @@ export default function HomePage() {
                   Prise en charge 5-10 minutes, connaissance parfaite de la ville.
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Service Professionnel */}
-            <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-purple-200 hover:-translate-y-2 overflow-hidden">
+            <motion.div 
+              className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-purple-200 overflow-hidden"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              viewport={{ once: true }}
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
               {/* Photo du service professionnel */}
@@ -283,10 +426,17 @@ export default function HomePage() {
                   Service discret, ponctualité garantie, transport régulier et fiable.
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Service Événements */}
-            <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-pink-200 hover:-translate-y-2 overflow-hidden">
+            <motion.div 
+              className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-pink-200 overflow-hidden"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              viewport={{ once: true }}
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-pink-50/50 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
               {/* Photo du service événements */}
@@ -310,10 +460,17 @@ export default function HomePage() {
                   Mariages, soirées, événements - service sur-mesure.
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Service 24h */}
-            <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-indigo-200 hover:-translate-y-2 overflow-hidden">
+            <motion.div 
+              className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-indigo-200 overflow-hidden"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              viewport={{ once: true }}
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
               {/* Photo du service 24h */}
@@ -337,8 +494,8 @@ export default function HomePage() {
                   Disponible toute la nuit, retours de soirée sécurisés.
                 </p>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
@@ -362,10 +519,20 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             
-            <div className="text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+            <motion.div 
+              className="text-center group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              <motion.div 
+                className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Zap className="text-white" size={36} />
-              </div>
+              </motion.div>
               <h3 className="text-xl font-bold mb-4">
                 Rapidité Bordeaux
               </h3>
@@ -373,12 +540,22 @@ export default function HomePage() {
                 Prise en charge en 5-10 minutes partout à Bordeaux. 
                 Géolocalisation précise, arrivée garantie.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+            <motion.div 
+              className="text-center group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <motion.div 
+                className="w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Shield className="text-white" size={36} />
-              </div>
+              </motion.div>
               <h3 className="text-xl font-bold mb-4">
                 Taxi Réglementé
               </h3>
@@ -386,12 +563,22 @@ export default function HomePage() {
                 Licence officielle taxi Bordeaux. 
                 Véhicules assurés, tarifs préfecture, service légal.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-400 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+            <motion.div 
+              className="text-center group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <motion.div 
+                className="w-20 h-20 bg-gradient-to-br from-purple-400 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Clock className="text-white" size={36} />
-              </div>
+              </motion.div>
               <h3 className="text-xl font-bold mb-4">
                 Disponibilité 24h/24
               </h3>
@@ -399,12 +586,22 @@ export default function HomePage() {
                 Service continu jour et nuit à Bordeaux. 
                 Weekends, jours fériés - toujours disponible.
               </p>
-            </div>
+            </motion.div>
 
-            <div className="text-center group">
-              <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-3xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+            <motion.div 
+              className="text-center group"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
+              <motion.div 
+                className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Star className="text-white" size={36} />
-              </div>
+              </motion.div>
               <h3 className="text-xl font-bold mb-4">
                 Excellence Service
               </h3>
@@ -412,7 +609,7 @@ export default function HomePage() {
                 Chauffeurs expérimentés Bordeaux. 
                 Véhicules propres, accueil professionnel, satisfaction garantie.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
