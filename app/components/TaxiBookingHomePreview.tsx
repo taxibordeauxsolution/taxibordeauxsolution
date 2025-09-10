@@ -460,9 +460,9 @@ const TaxiBookingHomePreview = () => {
   // Interface étape 1 avec toutes les infos nécessaires pour le calcul de prix
   const renderStep1 = () => (
     <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('step1Title')}</h3>
-        <p className="text-gray-700 sm:text-gray-600">{t('step1Subtitle')}</p>
+      <div className="text-center mb-5">
+        <h3 className="text-lg font-bold text-gray-800 mb-1">{t('step1Title')}</h3>
+        <p className="text-sm text-gray-700 sm:text-gray-600">{t('step1Subtitle')}</p>
       </div>
 
       {/* Messages d'erreur */}
@@ -474,9 +474,9 @@ const TaxiBookingHomePreview = () => {
       )}
 
       {/* Formulaire complet */}
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-4">
         {/* Colonne gauche - Formulaire */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           {/* Adresses */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -515,7 +515,7 @@ const TaxiBookingHomePreview = () => {
           </div>
 
           {/* Options de réservation */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Users className="inline w-4 h-4 mr-1" />
@@ -525,7 +525,7 @@ const TaxiBookingHomePreview = () => {
               <select
                 value={bookingData.passengers}
                 onChange={(e) => handleBookingChange('passengers', parseInt(e.target.value))}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 {[1,2,3,4,5,6,7,8].map(num => (
                   <option key={num} value={num}>{num} passager{num > 1 ? 's' : ''}</option>
@@ -542,7 +542,7 @@ const TaxiBookingHomePreview = () => {
               <select
                 value={bookingData.luggage}
                 onChange={(e) => handleBookingChange('luggage', parseInt(e.target.value))}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 {[0,1,2,3,4,5].map(num => (
                   <option key={num} value={num}>{num} bagage{num > 1 ? 's' : ''}</option>
@@ -552,7 +552,7 @@ const TaxiBookingHomePreview = () => {
           </div>
 
           {/* Date et heure - OBLIGATOIRES */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <Calendar className="inline w-4 h-4 mr-1" />
@@ -564,7 +564,7 @@ const TaxiBookingHomePreview = () => {
                 value={bookingData.departureDate}
                 onChange={(e) => handleBookingChange('departureDate', e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
@@ -579,7 +579,7 @@ const TaxiBookingHomePreview = () => {
                 type="time"
                 value={bookingData.departureTime}
                 onChange={(e) => handleBookingChange('departureTime', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
@@ -1089,38 +1089,38 @@ const TaxiBookingHomePreview = () => {
   )
 
   return (
-    <div ref={moduleRef} className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-6 border-2 sm:border border-blue-200 sm:border-blue-100 max-w-6xl mx-auto">
+    <div ref={moduleRef} className="bg-gradient-to-br from-blue-50 to-green-50 rounded-xl shadow-lg p-3 sm:p-4 lg:p-5 border border-blue-200 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="text-center mb-8">
-        <div className="flex items-center justify-center mb-4">
-          <div className="bg-blue-600 p-3 rounded-full mr-4">
-            <Car className="w-8 h-8 text-white" />
+      <div className="text-center mb-6">
+        <div className="flex items-center justify-center mb-3">
+          <div className="bg-blue-600 p-2 rounded-full mr-3">
+            <Car className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl lg:text-3xl font-bold text-gray-800">{t('title')}</h2>
-            <p className="text-gray-700 sm:text-gray-600">{t('subtitle')}</p>
+            <h2 className="text-xl lg:text-2xl font-bold text-gray-800">{t('title')}</h2>
+            <p className="text-sm text-gray-700 sm:text-gray-600">{t('subtitle')}</p>
           </div>
         </div>
       </div>
 
       {/* Indicateur d'étapes */}
-      <div className="flex justify-center mb-8">
-        <div className="flex items-center space-x-4">
+      <div className="flex justify-center mb-6">
+        <div className="flex items-center space-x-3">
           {[1, 2, 3, 4].map((stepNum) => (
             <div key={stepNum} className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium transition-colors ${
                 step >= stepNum ? 'bg-blue-600 text-white' : 'bg-gray-300 sm:bg-gray-200 text-gray-700 sm:text-gray-600'
               }`}>
                 {stepNum}
               </div>
-              {stepNum < 4 && <div className={`w-8 h-0.5 transition-colors ${step > stepNum ? 'bg-blue-600' : 'bg-gray-200'}`} />}
+              {stepNum < 4 && <div className={`w-6 h-0.5 transition-colors ${step > stepNum ? 'bg-blue-600' : 'bg-gray-200'}`} />}
             </div>
           ))}
         </div>
       </div>
 
       {/* Contenu principal */}
-      <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 border sm:border-0 border-gray-200">
+      <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 lg:p-5 border sm:border-0 border-gray-200">
         {step === 1 && renderStep1()}
         {step === 2 && renderStep2()}
         {step === 3 && renderStep3()}
@@ -1129,10 +1129,9 @@ const TaxiBookingHomePreview = () => {
 
       {/* Note d'information */}
       {step < 4 && (
-        <div className="mt-6 text-center text-xs text-gray-600 sm:text-gray-500">
-          <p>✓ Prix calculés selon les tarifs officiels 2025 • Service 24h/24 7j/7</p>
-          <p>✓ Paiement en espèces ou carte bancaire • Véhicules climatisés</p>
-          <p className="text-blue-600 font-medium mt-2">Les champs marqués d&apos;un * sont obligatoires</p>
+        <div className="mt-4 text-center text-xs text-gray-600 sm:text-gray-500">
+          <p>✓ Prix officiels 2025 • Service 24h/24</p>
+          <p className="text-blue-600 font-medium mt-1">Les champs marqués d&apos;un * sont obligatoires</p>
         </div>
       )}
     </div>
