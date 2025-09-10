@@ -85,7 +85,7 @@ export default function GarePage() {
         </div>
       </section>
 
-      {/* Services Spécialisés Gare */}
+      {/* Services Principaux Gare */}
       <section className="py-20 bg-gradient-to-b from-slate-50 to-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
@@ -93,43 +93,139 @@ export default function GarePage() {
               SERVICES GARE SAINT-JEAN
             </div>
             <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
-              Spécialiste des
-              <span className="text-green-600"> Liaisons Ferroviaires</span>
+              Transport vers ou depuis la
+              <span className="text-green-600"> Gare Saint-Jean</span>
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Transport professionnel vers et depuis la gare SNCF Bordeaux Saint-Jean
+              Liaisons vers toute la région et bien plus : hôtels, aéroport, plages, sites touristiques
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 hover:shadow-2xl transition-shadow">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                🏨
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Gare ↔ Hôtel</h3>
+              <p className="text-slate-600">
+                Liaison directe entre la gare et votre hôtel dans Bordeaux et sa région.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 hover:shadow-2xl transition-shadow">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                ✈️
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Gare ↔ Aéroport Mérignac</h3>
+              <p className="text-slate-600">
+                Transport direct et fiable entre la gare Saint-Jean et l&apos;aéroport de Bordeaux-Mérignac.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 hover:shadow-2xl transition-shadow">
+              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                🏖️
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Vers les Plages de Gironde</h3>
+              <p className="text-slate-600">
+                Arcachon, Cap Ferret, Lacanau : accès direct aux plus belles plages depuis la gare.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100 hover:shadow-2xl transition-shadow">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                🚆
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Transfert Intercités</h3>
+              <p className="text-slate-600">
+                Liaisons avec les autres villes : Périgueux, Agen, Mont-de-Marsan, Pau.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Touristiques Région */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold text-sm mb-4">
+              TOURISME & DÉCOUVERTE
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+              Vers les Sites
+              <span className="text-blue-600"> Touristiques</span>
+            </h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              Découvrez les merveilles de la région depuis la gare Saint-Jean
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
-                🚄
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">TGV & Trains Longue Distance</h3>
-              <p className="text-slate-600">
-                Prise en charge pour tous vos voyages TGV vers Paris, Lyon, Marseille et autres destinations.
-              </p>
+            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-3xl p-8 border border-emerald-200">
+              <div className="text-4xl mb-6">🍷</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Route des Vins</h3>
+              <p className="text-slate-600 mb-4">Saint-Émilion, Pomerol, Médoc</p>
+              <ul className="text-sm text-slate-500 space-y-1">
+                <li>• Châteaux viticoles prestigieux</li>
+                <li>• Dégustations et visites</li>
+                <li>• Villages classés UNESCO</li>
+              </ul>
             </div>
 
-            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
-                🚆
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Trains Régionaux</h3>
-              <p className="text-slate-600">
-                Liaisons avec les trains régionaux TER pour vos déplacements en Nouvelle-Aquitaine.
-              </p>
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 border border-blue-200">
+              <div className="text-4xl mb-6">🏖️</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Bassin d&apos;Arcachon</h3>
+              <p className="text-slate-600 mb-4">Arcachon, Cap Ferret, Dune du Pilat</p>
+              <ul className="text-sm text-slate-500 space-y-1">
+                <li>• Plus haute dune d&apos;Europe</li>
+                <li>• Ostréiculture traditionnelle</li>
+                <li>• Plages de l&apos;Océan Atlantique</li>
+              </ul>
             </div>
 
-            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center text-3xl mb-6">
-                ⏰
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Suivi des Horaires</h3>
-              <p className="text-slate-600">
-                Surveillance des horaires de trains en temps réel pour optimiser vos correspondances.
-              </p>
+            <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-3xl p-8 border border-amber-200">
+              <div className="text-4xl mb-6">🏰</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Patrimoine Historique</h3>
+              <p className="text-slate-600 mb-4">Châteaux et sites remarquables</p>
+              <ul className="text-sm text-slate-500 space-y-1">
+                <li>• Château de Roquetaillade</li>
+                <li>• Abbaye de La Sauve-Majeure</li>
+                <li>• Blaye et sa citadelle Vauban</li>
+              </ul>
+            </div>
+
+            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8 border border-green-200">
+              <div className="text-4xl mb-6">🌊</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Côte Atlantique</h3>
+              <p className="text-slate-600 mb-4">Lacanau, Hourtin, Carcans</p>
+              <ul className="text-sm text-slate-500 space-y-1">
+                <li>• Spots de surf renommés</li>
+                <li>• Lacs et forêts de pins</li>
+                <li>• Stations balnéaires</li>
+              </ul>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl p-8 border border-purple-200">
+              <div className="text-4xl mb-6">🦆</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Parc Naturel</h3>
+              <p className="text-slate-600 mb-4">Landes de Gascogne</p>
+              <ul className="text-sm text-slate-500 space-y-1">
+                <li>• Réserve ornithologique</li>
+                <li>• Sentiers de randonnée</li>
+                <li>• Faune et flore protégées</li>
+              </ul>
+            </div>
+
+            <div className="bg-gradient-to-br from-rose-50 to-rose-100 rounded-3xl p-8 border border-rose-200">
+              <div className="text-4xl mb-6">🎪</div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Événements & Culture</h3>
+              <p className="text-slate-600 mb-4">Festivals et manifestations</p>
+              <ul className="text-sm text-slate-500 space-y-1">
+                <li>• Festival de Jazz de Marciac</li>
+                <li>• Foire aux Vins de Bordeaux</li>
+                <li>• Événements saisonniers</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -216,52 +312,135 @@ export default function GarePage() {
               Tarifs depuis la
               <span className="text-green-600"> Gare</span>
             </h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              Prix indicatifs • Tarifs officiels 2025 • Devis gratuit sur demande
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Gare → Centre-ville */}
-            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="text-4xl">🏛️</div>
-                <div>
-                  <h4 className="text-xl font-bold text-slate-900">Gare → Centre-ville</h4>
-                  <p className="text-slate-500">Distance : ~3 km</p>
+          {/* Tarifs Locaux */}
+          <div className="mb-16">
+            <h3 className="text-2xl font-bold text-slate-900 mb-8 text-center">Destinations Locales</h3>
+            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              {/* Gare → Centre-ville */}
+              <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="text-4xl">🏛️</div>
+                  <div>
+                    <h4 className="text-xl font-bold text-slate-900">Centre-ville Bordeaux</h4>
+                    <p className="text-slate-500">Distance : ~3 km</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-2xl border border-yellow-200">
+                    <div className="text-yellow-800 font-semibold text-sm mb-1">☀️ Jour</div>
+                    <div className="text-2xl font-bold text-yellow-900">15-20€</div>
+                  </div>
+                  <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-2xl border border-indigo-200">
+                    <div className="text-indigo-800 font-semibold text-sm mb-1">🌙 Nuit</div>
+                    <div className="text-2xl font-bold text-indigo-900">20-25€</div>
+                  </div>
                 </div>
               </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-2xl border border-yellow-200">
-                  <div className="text-yellow-800 font-semibold text-sm mb-1">☀️ Jour</div>
-                  <div className="text-2xl font-bold text-yellow-900">15-20€</div>
-                </div>
-                <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-2xl border border-indigo-200">
-                  <div className="text-indigo-800 font-semibold text-sm mb-1">🌙 Nuit</div>
-                  <div className="text-2xl font-bold text-indigo-900">20-25€</div>
-                </div>
-              </div>
-            </div>
 
-            {/* Gare → Aéroport */}
-            <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="text-4xl">✈️</div>
-                <div>
-                  <h4 className="text-xl font-bold text-slate-900">Gare → Aéroport Mérignac</h4>
-                  <p className="text-slate-500">Distance : ~25 km</p>
+              {/* Gare → Aéroport */}
+              <div className="bg-white rounded-3xl shadow-lg p-8 border border-slate-100">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="text-4xl">✈️</div>
+                  <div>
+                    <h4 className="text-xl font-bold text-slate-900">Aéroport Mérignac</h4>
+                    <p className="text-slate-500">Distance : ~25 km</p>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-2xl border border-yellow-200">
-                  <div className="text-yellow-800 font-semibold text-sm mb-1">☀️ Jour</div>
-                  <div className="text-2xl font-bold text-yellow-900">65-73€</div>
-                </div>
-                <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-2xl border border-indigo-200">
-                  <div className="text-indigo-800 font-semibold text-sm mb-1">🌙 Nuit</div>
-                  <div className="text-2xl font-bold text-indigo-900">80-92€</div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-2xl border border-yellow-200">
+                    <div className="text-yellow-800 font-semibold text-sm mb-1">☀️ Jour</div>
+                    <div className="text-2xl font-bold text-yellow-900">65-73€</div>
+                  </div>
+                  <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-2xl border border-indigo-200">
+                    <div className="text-indigo-800 font-semibold text-sm mb-1">🌙 Nuit</div>
+                    <div className="text-2xl font-bold text-indigo-900">80-92€</div>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Tarifs Régionaux */}
+          <div className="mb-16">
+            <h3 className="text-2xl font-bold text-slate-900 mb-8 text-center">Destinations Régionales</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              
+              {/* Plages */}
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+                <div className="text-2xl mb-3">🏖️</div>
+                <h4 className="font-bold text-slate-900 mb-3">Plages de Gironde</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Arcachon</span>
+                    <span className="font-semibold">85-95€</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Cap Ferret</span>
+                    <span className="font-semibold">95-110€</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Lacanau</span>
+                    <span className="font-semibold">90-105€</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Vignobles */}
+              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
+                <div className="text-2xl mb-3">🍷</div>
+                <h4 className="font-bold text-slate-900 mb-3">Route des Vins</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Saint-Émilion</span>
+                    <span className="font-semibold">75-85€</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Pauillac (Médoc)</span>
+                    <span className="font-semibold">85-95€</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Pessac-Léognan</span>
+                    <span className="font-semibold">45-55€</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Intercités */}
+              <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-6 border border-emerald-200">
+                <div className="text-2xl mb-3">🚆</div>
+                <h4 className="font-bold text-slate-900 mb-3">Villes Voisines</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span>Périgueux</span>
+                    <span className="font-semibold">180-200€</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Agen</span>
+                    <span className="font-semibold">220-250€</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Mont-de-Marsan</span>
+                    <span className="font-semibold">190-220€</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Note importante */}
+          <div className="bg-slate-100 rounded-2xl p-6 max-w-4xl mx-auto text-center">
+            <p className="text-slate-700">
+              <strong>💡 Bon à savoir :</strong> Tarifs officiels 2025 • Devis gratuit sur demande • 
+              Majoration de 25% les dimanches, jours fériés et de 21h à 7h
+            </p>
           </div>
         </div>
       </section>

@@ -749,11 +749,11 @@ export default function HomePage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-2xl border border-yellow-200">
                   <div className="text-yellow-800 font-semibold text-sm mb-1">☀️ Jour</div>
-                  <div className="text-2xl font-bold text-yellow-900">40,20-49,10€</div>
+                  <div className="text-2xl font-bold text-yellow-900">41€</div>
                 </div>
                 <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-2xl border border-indigo-200">
                   <div className="text-indigo-800 font-semibold text-sm mb-1">🌙 Nuit</div>
-                  <div className="text-2xl font-bold text-indigo-900">50,20-58,50€</div>
+                  <div className="text-2xl font-bold text-indigo-900">55€</div>
                 </div>
               </div>
             </div>
@@ -768,18 +768,18 @@ export default function HomePage() {
                   <h3 className="text-xl font-bold text-slate-900 mb-2">
                     Aéroport → Gare Saint-Jean
                   </h3>
-                  <p className="text-slate-500 text-sm">Distance : ~25 km</p>
+                  <p className="text-slate-500 text-sm">Distance : ~23,3 km</p>
                 </div>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-2xl border border-yellow-200">
                   <div className="text-yellow-800 font-semibold text-sm mb-1">☀️ Jour</div>
-                  <div className="text-2xl font-bold text-yellow-900">65-73€</div>
+                  <div className="text-2xl font-bold text-yellow-900">63€</div>
                 </div>
                 <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-2xl border border-indigo-200">
                   <div className="text-indigo-800 font-semibold text-sm mb-1">🌙 Nuit</div>
-                  <div className="text-2xl font-bold text-indigo-900">80-92€</div>
+                  <div className="text-2xl font-bold text-indigo-900">87€</div>
                 </div>
               </div>
             </div>
@@ -794,18 +794,18 @@ export default function HomePage() {
                   <h3 className="text-xl font-bold text-slate-900 mb-2">
                     Aéroport → Bordeaux-Lac
                   </h3>
-                  <p className="text-slate-500 text-sm">Distance : ~10 km</p>
+                  <p className="text-slate-500 text-sm">Distance : ~16,2 km</p>
                 </div>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-2xl border border-yellow-200">
                   <div className="text-yellow-800 font-semibold text-sm mb-1">☀️ Jour</div>
-                  <div className="text-2xl font-bold text-yellow-900">45-55€</div>
+                  <div className="text-2xl font-bold text-yellow-900">48€</div>
                 </div>
                 <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-2xl border border-indigo-200">
                   <div className="text-indigo-800 font-semibold text-sm mb-1">🌙 Nuit</div>
-                  <div className="text-2xl font-bold text-indigo-900">55-65€</div>
+                  <div className="text-2xl font-bold text-indigo-900">65€</div>
                 </div>
               </div>
             </div>
@@ -820,18 +820,18 @@ export default function HomePage() {
                   <h3 className="text-xl font-bold text-slate-900 mb-2">
                     Aéroport → Bastide
                   </h3>
-                  <p className="text-slate-500 text-sm">Distance : ~18 km</p>
+                  <p className="text-slate-500 text-sm">Distance : ~25,3 km</p>
                 </div>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-2xl border border-yellow-200">
                   <div className="text-yellow-800 font-semibold text-sm mb-1">☀️ Jour</div>
-                  <div className="text-2xl font-bold text-yellow-900">60-70€</div>
+                  <div className="text-2xl font-bold text-yellow-900">67€</div>
                 </div>
                 <div className="bg-gradient-to-br from-indigo-50 to-indigo-100 p-4 rounded-2xl border border-indigo-200">
                   <div className="text-indigo-800 font-semibold text-sm mb-1">🌙 Nuit</div>
-                  <div className="text-2xl font-bold text-indigo-900">75-90€</div>
+                  <div className="text-2xl font-bold text-indigo-900">94€</div>
                 </div>
               </div>
             </div>
