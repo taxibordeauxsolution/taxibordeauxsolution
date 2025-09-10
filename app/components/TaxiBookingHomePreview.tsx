@@ -455,7 +455,7 @@ const TaxiBookingHomePreview = () => {
         <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('step1Title')}</h3>
         <p className="text-gray-700 sm:text-gray-600">{t('step1Subtitle')}</p>
         <div className="mt-4 text-sm text-blue-600 bg-blue-50 rounded-lg p-3 max-w-md mx-auto">
-          💡 <strong>Prix instant :</strong> Dès que vous sélectionnez vos adresses, le prix s'affiche automatiquement !
+          💡 <strong>Prix calculé :</strong> Avec vos adresses, date et heure, obtenez votre prix instantanément !
         </div>
       </div>
 
@@ -602,7 +602,7 @@ const TaxiBookingHomePreview = () => {
             </div>
           )}
 
-          {tripData.distance > 0 && tripData.price > 0 && (
+          {tripData.distance > 0 && tripData.price > 0 && bookingData.departureDate && bookingData.departureTime && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
               <h3 className="font-semibold text-green-800 mb-3 flex items-center">
                 <Route className="w-5 h-5 mr-2" />
@@ -688,11 +688,14 @@ const TaxiBookingHomePreview = () => {
           setStep(2)
           setTimeout(scrollToModule, 100)
         }}
-        disabled={!tripData.fromCoords || !tripData.toCoords || loading || !tripData.price}
+        disabled={!tripData.fromCoords || !tripData.toCoords || loading || !bookingData.departureDate || !bookingData.departureTime || !tripData.price}
         className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
       >
         <Navigation className="w-5 h-5 mr-2" />
-        {t('continue')}
+        {!tripData.fromCoords || !tripData.toCoords ? 'Sélectionnez les adresses' :
+         !bookingData.departureDate || !bookingData.departureTime ? 'Date et heure requises' :
+         !tripData.price ? 'Calcul en cours...' :
+         t('continue')}
       </button>
     </div>
   )
@@ -1100,7 +1103,7 @@ const TaxiBookingHomePreview = () => {
         <div className="mt-6 text-center text-xs text-gray-600 sm:text-gray-500">
           <p>✓ Prix calculés selon les tarifs officiels 2025 • Service 24h/24 7j/7</p>
           <p>✓ Paiement en espèces ou carte bancaire • Véhicules climatisés</p>
-          <p className="text-blue-600 font-medium mt-2">Les champs marqués d'un * sont obligatoires</p>
+          <p className="text-blue-600 font-medium mt-2">Les champs marqués d&apos;un * sont obligatoires</p>
         </div>
       )}
     </div>
