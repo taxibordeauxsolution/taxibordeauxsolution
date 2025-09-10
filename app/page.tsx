@@ -221,16 +221,10 @@ export default function HomePage() {
       <section id="reservation" className="py-16 bg-white relative">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold text-sm mb-4">
-              RÉSERVATION EN LIGNE
-            </div>
             <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
               Réservez votre
               <span className="text-green-600"> Taxi Maintenant</span>
             </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto font-light">
-              Système de réservation instantané • Prix transparent • Prise en charge garantie en 5-10 minutes
-            </p>
           </div>
           
           {/* Module de réservation complet */}

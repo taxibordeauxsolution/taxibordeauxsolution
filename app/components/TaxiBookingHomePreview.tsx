@@ -1089,38 +1089,38 @@ const TaxiBookingHomePreview = () => {
   )
 
   return (
-    <div ref={moduleRef} className="bg-gradient-to-br from-blue-50 to-green-50 rounded-xl shadow-lg p-3 sm:p-4 lg:p-5 border border-blue-200 max-w-4xl mx-auto">
+    <div ref={moduleRef} className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-6 border-2 sm:border border-blue-200 sm:border-blue-100 max-w-6xl mx-auto">
       {/* Header */}
-      <div className="text-center mb-6">
-        <div className="flex items-center justify-center mb-3">
-          <div className="bg-blue-600 p-2 rounded-full mr-3">
-            <Car className="w-6 h-6 text-white" />
+      <div className="text-center mb-8">
+        <div className="flex items-center justify-center mb-4">
+          <div className="bg-blue-600 p-3 rounded-full mr-4">
+            <Car className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h2 className="text-xl lg:text-2xl font-bold text-gray-800">{t('title')}</h2>
-            <p className="text-sm text-gray-700 sm:text-gray-600">{t('subtitle')}</p>
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-800">Réservez votre Taxi Maintenant</h2>
+            <p className="text-gray-700 sm:text-gray-600">{t('subtitle')}</p>
           </div>
         </div>
       </div>
 
       {/* Indicateur d'étapes */}
-      <div className="flex justify-center mb-6">
-        <div className="flex items-center space-x-3">
+      <div className="flex justify-center mb-8">
+        <div className="flex items-center space-x-4">
           {[1, 2, 3, 4].map((stepNum) => (
             <div key={stepNum} className="flex items-center">
-              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium transition-colors ${
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
                 step >= stepNum ? 'bg-blue-600 text-white' : 'bg-gray-300 sm:bg-gray-200 text-gray-700 sm:text-gray-600'
               }`}>
                 {stepNum}
               </div>
-              {stepNum < 4 && <div className={`w-6 h-0.5 transition-colors ${step > stepNum ? 'bg-blue-600' : 'bg-gray-200'}`} />}
+              {stepNum < 4 && <div className={`w-8 h-0.5 transition-colors ${step > stepNum ? 'bg-blue-600' : 'bg-gray-200'}`} />}
             </div>
           ))}
         </div>
       </div>
 
       {/* Contenu principal */}
-      <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 lg:p-5 border sm:border-0 border-gray-200">
+      <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 border sm:border-0 border-gray-200">
         {step === 1 && renderStep1()}
         {step === 2 && renderStep2()}
         {step === 3 && renderStep3()}
