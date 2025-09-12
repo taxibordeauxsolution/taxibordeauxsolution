@@ -3,21 +3,25 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Phone, Menu, X, MapPin, Car, Calendar, PhoneCall } from 'lucide-react'
+import { Phone, Menu, X, MapPin, Car, Calendar, PhoneCall, ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 
 export default function Header() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false)
 
   const phoneNumber = "0667237822"
   const phoneDisplay = "06 67 23 78 22"
 
   const navigation = [
     { name: 'Accueil', href: '/', current: pathname === '/' },
-    { name: 'Services', href: '#services', current: false },
-    { name: 'Aéroport', href: '/aeroport', current: pathname === '/aeroport' },
     { name: 'Contact', href: '/contact', current: pathname === '/contact' },
+  ]
+
+  const servicesMenu = [
+    { name: 'Taxi Aéroport', href: '/aeroport', icon: '✈️', description: 'Service aéroport Bordeaux-Mérignac' },
+    { name: 'Taxi Gare', href: '/gare', icon: '🚂', description: 'Service gare Saint-Jean' },
   ]
 
   return (
@@ -58,25 +62,68 @@ export default function Header() {
                     ? 'text-blue-600 bg-blue-50 font-semibold'
                     : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
                 }`}
-                onClick={() => {
-                  if (item.href.startsWith('#')) {
-                    setTimeout(() => {
-                      const element = document.querySelector(item.href)
-                      element?.scrollIntoView({ behavior: 'smooth' })
-                    }, 100)
-                  }
-                }}
               >
                 {item.name}
               </Link>
             ))}
+            
+            {/* Services Dropdown */}
+            <div className="relative">
+              <button
+                onMouseEnter={() => setServicesDropdownOpen(true)}
+                onMouseLeave={() => setServicesDropdownOpen(false)}
+                className={`font-medium px-3 py-2 rounded-lg transition-all duration-200 flex items-center gap-1 ${
+                  pathname === '/aeroport' || pathname === '/gare'
+                    ? 'text-blue-600 bg-blue-50 font-semibold'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                }`}
+              >
+                Services
+                <ChevronDown size={16} className={`transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {/* Dropdown Menu */}
+              {servicesDropdownOpen && (
+                <div 
+                  className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50"
+                  onMouseEnter={() => setServicesDropdownOpen(true)}
+                  onMouseLeave={() => setServicesDropdownOpen(false)}
+                >
+                  {servicesMenu.map((service) => (
+                    <Link
+                      key={service.name}
+                      href={service.href}
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors group"
+                    >
+                      <span className="text-2xl">{service.icon}</span>
+                      <div>
+                        <div className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+                          {service.name}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {service.description}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Actions Desktop */}
           <div className="hidden lg:flex items-center gap-3">
             <Link
-              href="/contact"
+              href="/#reservation"
               className="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-all duration-200 shadow-md hover:shadow-lg"
+              onClick={(e) => {
+                e.preventDefault();
+                if (pathname === '/') {
+                  document.getElementById('reservation')?.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                  window.location.href = '/#reservation';
+                }
+              }}
             >
               Réserver
             </Link>
@@ -122,24 +169,51 @@ export default function Header() {
                       ? 'text-blue-600 bg-blue-50 font-semibold'
                       : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
                   }`}
-                  onClick={() => {
-                    setMobileMenuOpen(false)
-                    if (item.href.startsWith('#')) {
-                      setTimeout(() => {
-                        document.querySelector(item.href)?.scrollIntoView({ behavior: 'smooth' })
-                      }, 100)
-                    }
-                  }}
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.name}
                 </Link>
               ))}
               
+              {/* Services Mobile */}
+              <div className="space-y-2">
+                <div className="px-4 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                  Nos Services
+                </div>
+                {servicesMenu.map((service) => (
+                  <Link
+                    key={service.name}
+                    href={service.href}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                      pathname === service.href
+                        ? 'text-blue-600 bg-blue-50 font-semibold'
+                        : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className="text-xl">{service.icon}</span>
+                    <div>
+                      <div className="font-medium">{service.name}</div>
+                      <div className="text-xs text-gray-500">{service.description}</div>
+                    </div>
+                  </Link>
+                ))}
+              
               <div className="border-t border-gray-100 pt-4 space-y-3">
                 <Link
-                  href="/contact"
+                  href="/#reservation"
                   className="block w-full bg-green-600 text-white text-center px-4 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setMobileMenuOpen(false);
+                    if (pathname === '/') {
+                      setTimeout(() => {
+                        document.getElementById('reservation')?.scrollIntoView({ behavior: 'smooth' });
+                      }, 100);
+                    } else {
+                      window.location.href = '/#reservation';
+                    }
+                  }}
                 >
                   <Calendar className="w-4 h-4" />
                   Réserver en Ligne

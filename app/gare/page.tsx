@@ -45,20 +45,21 @@ export default function GarePage() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <a 
-                  href={`tel:${phoneNumber}`}
+                <Link
+                  href="/#reservation"
                   className="inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
                 >
-                  <Phone size={24} />
-                  <span>Réserver maintenant</span>
-                </a>
-                
-                <Link 
-                  href="#tarifs"
-                  className="inline-flex items-center justify-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:bg-white/20"
-                >
-                  Voir les tarifs
+                  <span>📱</span>
+                  <span>Réserver en ligne</span>
                 </Link>
+                
+                <a 
+                  href={`tel:${phoneNumber}`}
+                  className="inline-flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                >
+                  <Phone size={24} />
+                  <span>Appeler {phoneDisplay}</span>
+                </a>
               </div>
             </div>
 
@@ -506,9 +507,20 @@ export default function GarePage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+              <Link
+                href="/#reservation"
+                className="inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+              >
+                <span className="text-2xl">📱</span>
+                <div className="text-left">
+                  <div className="text-sm opacity-90">Réservation en ligne</div>
+                  <div className="text-xl font-bold">Module de réservation</div>
+                </div>
+              </Link>
+              
               <a 
                 href={`tel:${phoneNumber}`}
-                className="inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                className="inline-flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl"
               >
                 <Phone size={28} />
                 <div className="text-left">
