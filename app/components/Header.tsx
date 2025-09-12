@@ -198,6 +198,7 @@ export default function Header() {
                     </div>
                   </Link>
                 ))}
+              </div>
               
               <div className="border-t border-gray-100 pt-4 space-y-3">
                 <Link
