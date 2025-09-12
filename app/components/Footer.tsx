@@ -171,8 +171,12 @@ export default function Footer() {
               </p>
               <div className="space-y-2">
                 <Link 
-                  href="/contact"
+                  href="/#reservation"
                   className="block w-full bg-white text-blue-600 text-center py-2 px-4 rounded font-semibold hover:bg-blue-50 transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = '/#reservation';
+                  }}
                 >
                   📝 Réserver en ligne
                 </Link>

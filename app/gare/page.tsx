@@ -48,6 +48,10 @@ export default function GarePage() {
                 <Link
                   href="/#reservation"
                   className="inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = '/#reservation';
+                  }}
                 >
                   <span>📱</span>
                   <span>Réserver en ligne</span>
