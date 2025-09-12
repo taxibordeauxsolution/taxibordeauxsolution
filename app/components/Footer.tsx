@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { Phone, Mail, MapPin, Clock, Star, Shield } from 'lucide-react'
 
 export default function Footer() {
@@ -18,8 +19,14 @@ export default function Footer() {
           {/* Colonne 1: Informations entreprise */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">🚖</span>
+              <div className="w-10 h-10 rounded-lg overflow-hidden">
+                <Image 
+                  src="/images/logo/Logo Taxi Bordeaux Solution.png.png" 
+                  alt="Logo Taxi Bordeaux Solution" 
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
                 <h3 className="text-xl font-bold">Taxi Bordeaux Solution</h3>
@@ -104,13 +111,13 @@ export default function Footer() {
             
             <ul className="space-y-2">
               <li>
-                <Link href="/contact" className="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
+                <Link href="/aeroport" className="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
                   <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
                   Transfert Aéroport Mérignac
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
+                <Link href="/gare" className="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
                   <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
                   Transport Gare Saint-Jean
                 </Link>
