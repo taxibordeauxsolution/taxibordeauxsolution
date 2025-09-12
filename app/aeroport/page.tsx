@@ -481,7 +481,7 @@ export default function TaxiAeroport() {
 
             <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8 border border-green-200 text-center hover:shadow-xl transition-shadow">
               <div className="text-6xl mb-6">🚐</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Monospace Premium</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Monospace</h3>
               <div className="space-y-3 mb-6">
                 <div className="flex items-center justify-center gap-2 text-gray-700">
                   <Users size={18} />
@@ -518,8 +518,8 @@ export default function TaxiAeroport() {
                   <span>Cuir, WiFi, chargeurs</span>
                 </div>
               </div>
-              <div className="bg-white p-3 rounded-lg border border-purple-200">
-                <p className="text-sm font-medium text-purple-800">Service premium & business</p>
+              <div className="bg-white p-3 rounded-lg border border-green-200">
+                <p className="text-sm font-medium text-green-800">Service groupes & familles</p>
               </div>
             </div>
           </div>
@@ -550,175 +550,6 @@ export default function TaxiAeroport() {
         </div>
       </section>
 
-      {/* Services Premium Aéroport */}
-      <section className="py-20 bg-gradient-to-br from-purple-50 to-indigo-100">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Services Premium Aéroport
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Expérience de transport haut de gamme pour voyageurs exigeants - Confort et service personnalisé
-            </p>
-          </div>
-
-          <div className="max-w-6xl mx-auto">
-            {/* Service VIP */}
-            <div className="bg-gradient-to-br from-gold-50 to-yellow-100 rounded-3xl shadow-2xl p-8 mb-12 border border-yellow-200">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="text-6xl">👑</div>
-                    <div>
-                      <h3 className="text-3xl font-bold text-gray-900">Service VIP Executive</h3>
-                      <p className="text-xl text-gray-600">Transport premium pour clientèle d&apos;affaires</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <Star className="text-white" size={18} />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-gray-900 mb-2">Véhicules Haut de Gamme</h4>
-                        <p className="text-gray-600">Mercedes Classe E, BMW Série 5, Audi A6 - Cuir, climatisation automatique, WiFi gratuit</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <Star className="text-white" size={18} />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-gray-900 mb-2">Chauffeur Personnel Dédié</h4>
-                        <p className="text-gray-600">Chauffeur en costume, service personnalisé, assistance VIP, connaissance parfaite de Bordeaux</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <Star className="text-white" size={18} />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-gray-900 mb-2">Services Inclus</h4>
-                        <p className="text-gray-600">Eau minérale, journaux, chargeurs multiples, attente gratuite, assistance complète bagages</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white p-8 rounded-2xl shadow-lg border border-yellow-200">
-                  <h4 className="text-2xl font-bold text-center text-gray-900 mb-8">
-                    Réservation Service VIP
-                  </h4>
-                  
-                  <div className="text-center mb-8">
-                    <div className="text-3xl font-bold text-purple-600 mb-2">Tarif Premium</div>
-                    <div className="text-lg text-gray-600 mb-6">Supplément +50% sur tarif compteur</div>
-                    
-                    <a 
-                      href="tel:0667237822" 
-                      className="inline-block bg-purple-600 hover:bg-purple-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 shadow-xl hover:shadow-purple-500/25 hover:scale-105"
-                    >
-                      06 67 23 78 22
-                    </a>
-                    <p className="text-gray-600 mt-4">Réservation obligatoire 24h à l&apos;avance</p>
-                  </div>
-
-                  <div className="bg-purple-50 p-6 rounded-2xl border border-purple-200">
-                    <h5 className="font-bold text-purple-800 mb-4">🎯 Idéal Pour</h5>
-                    <ul className="text-purple-700 space-y-2 text-sm">
-                      <li>• Dirigeants et cadres supérieurs</li>
-                      <li>• Délégations officielles</li>
-                      <li>• Clients internationaux VIP</li>
-                      <li>• Événements d&apos;affaires importants</li>
-                      <li>• Transferts de prestige</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Autres Services Premium */}
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-blue-200 text-center hover:shadow-xl transition-shadow">
-                <div className="text-5xl mb-6">🚁</div>
-                <h4 className="text-xl font-bold text-gray-900 mb-4">Transport Multi-Modal</h4>
-                <p className="text-gray-600 mb-6">
-                  Coordination avec vols privés, hélicoptères, services nautiques - Transport de bout en bout
-                </p>
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                  <p className="text-blue-800 font-semibold text-sm">Service sur mesure</p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-green-200 text-center hover:shadow-xl transition-shadow">
-                <div className="text-5xl mb-6">🏢</div>
-                <h4 className="text-xl font-bold text-gray-900 mb-4">Contrats Entreprise</h4>
-                <p className="text-gray-600 mb-6">
-                  Tarifs négociés, facturation mensuelle, service dédié pour entreprises et institutions
-                </p>
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                  <p className="text-green-800 font-semibold text-sm">Devis personnalisé</p>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-3xl shadow-lg p-8 border border-purple-200 text-center hover:shadow-xl transition-shadow">
-                <div className="text-5xl mb-6">🌍</div>
-                <h4 className="text-xl font-bold text-gray-900 mb-4">Longue Distance Premium</h4>
-                <p className="text-gray-600 mb-6">
-                  Paris, Lyon, Toulouse - Véhicules confort, chauffeur alternant, arrêts planifiés
-                </p>
-                <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                  <p className="text-purple-800 font-semibold text-sm">Forfait tout compris</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Avantages Services Premium */}
-            <div className="mt-16 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-8">
-              <h4 className="text-2xl font-bold text-center text-gray-900 mb-8">
-                Pourquoi Choisir Nos Services Premium ?
-              </h4>
-              
-              <div className="grid md:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Crown className="text-purple-600" size={24} />
-                  </div>
-                  <h5 className="font-bold text-gray-900 mb-2">Excellence</h5>
-                  <p className="text-sm text-gray-600">Service irréprochable et attention au détail</p>
-                </div>
-
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Users className="text-blue-600" size={24} />
-                  </div>
-                  <h5 className="font-bold text-gray-900 mb-2">Discrétion</h5>
-                  <p className="text-sm text-gray-600">Confidentialité et professionnalisme absolu</p>
-                </div>
-
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Clock className="text-green-600" size={24} />
-                  </div>
-                  <h5 className="font-bold text-gray-900 mb-2">Ponctualité</h5>
-                  <p className="text-sm text-gray-600">Respect strict des horaires et engagement</p>
-                </div>
-
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Star className="text-orange-600" size={24} />
-                  </div>
-                  <h5 className="font-bold text-gray-900 mb-2">Prestige</h5>
-                  <p className="text-sm text-gray-600">Image de marque et représentation parfaite</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Avantages Station Taxi Aéroport */}
       <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-100">
