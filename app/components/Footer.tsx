@@ -19,13 +19,13 @@ export default function Footer() {
           {/* Colonne 1: Informations entreprise */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-lg overflow-hidden">
+              <div className="w-10 h-10 bg-white rounded-lg p-1 overflow-hidden">
                 <Image 
                   src="/images/logo/Logo Taxi Bordeaux Solution.png.png" 
                   alt="Logo Taxi Bordeaux Solution" 
                   width={40}
                   height={40}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-md"
                 />
               </div>
               <div>
