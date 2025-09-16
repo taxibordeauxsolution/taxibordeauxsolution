@@ -801,7 +801,6 @@ export default function TaxiAeroport() {
                     >
                       06 67 23 78 22
                     </a>
-                    <p className="text-gray-600 mt-4">Appelez-nous pour réserver</p>
                   </div>
 
                   <div className="space-y-4">
@@ -815,35 +814,16 @@ export default function TaxiAeroport() {
                       </ul>
                     </div>
 
-                    <div className="bg-white p-4 rounded-xl border border-blue-200">
-                      <h5 className="font-bold text-blue-800 mb-2">⏰ Délais recommandés</h5>
-                      <div className="text-sm text-gray-700 space-y-1">
-                        <div><strong>Vols domestiques :</strong> 2h avant</div>
-                        <div><strong>Vols internationaux :</strong> 3h avant</div>
-                        <div><strong>Vols de nuit :</strong> 24h avant</div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Cas spéciaux nécessitant réservation */}
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-white p-8 rounded-3xl shadow-lg border border-orange-200 text-center">
-                <div className="text-5xl mb-6">🌙</div>
-                <h4 className="text-xl font-bold text-gray-900 mb-4">Vols de Nuit</h4>
-                <p className="text-gray-600 mb-4">
-                  Arrivées après 22h ou départs avant 6h - Station taxi fermée
-                </p>
-                <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-                  <p className="text-orange-800 font-semibold text-sm">Réservation obligatoire</p>
-                </div>
-              </div>
-
+            <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-white p-8 rounded-3xl shadow-lg border border-purple-200 text-center">
                 <div className="text-5xl mb-6">👥</div>
-                <h4 className="text-xl font-bold text-gray-900 mb-4">Groupes Important</h4>
+                <h4 className="text-xl font-bold text-gray-900 mb-4">Groupes Recommandé</h4>
                 <p className="text-gray-600 mb-4">
                   Plus de 4 personnes ou bagages volumineux - Véhicule spécialisé requis
                 </p>
@@ -922,68 +902,110 @@ export default function TaxiAeroport() {
         </div>
       </section>
 
-      {/* Politique d'Annulation Gratuite */}
+      {/* Ponctualité et Fiabilité */}
       <section className="py-20 bg-blue-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Annulation Gratuite
+              Ponctualité et Fiabilité Garanties
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Flexibilité maximale pour vos réservations taxi aéroport - Modifiez ou annulez sans frais
+              Service taxi aéroport professionnel avec suivi des vols en temps réel • Zéro retard garanti
             </p>
           </div>
 
           <div className="max-w-6xl mx-auto">
+            {/* Performance Stats */}
             <div className="bg-white rounded-3xl shadow-2xl p-8 mb-12">
-              <div className="grid lg:grid-cols-2 gap-12">
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8">
-                    <CheckCircle className="text-green-600" size={48} />
+              <div className="text-center mb-12">
+                <h3 className="text-3xl font-bold text-gray-900 mb-6">
+                  Nos Performances Aéroport
+                </h3>
+                <div className="grid md:grid-cols-4 gap-8">
+                  <div className="text-center">
+                    <div className="text-5xl font-bold text-green-600 mb-2">100%</div>
+                    <div className="text-lg font-semibold text-gray-800 mb-1">Ponctualité</div>
+                    <div className="text-sm text-gray-600">Zéro retard depuis 2 ans</div>
                   </div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-6">
-                    Annulation Gratuite 100%
-                  </h3>
-                  <p className="text-xl text-gray-600 mb-8">
-                    Aucun frais d&apos;annulation jusqu&apos;à <strong>2 heures avant</strong> votre prise en charge
-                  </p>
-                  <div className="bg-green-50 p-6 rounded-2xl border border-green-200">
-                    <h4 className="font-bold text-green-800 mb-4">🎯 Garantie Sans Frais</h4>
-                    <ul className="text-green-700 space-y-2 text-left">
-                      <li>✓ Annulation gratuite jusqu&apos;à 2h avant</li>
-                      <li>✓ Modification d&apos;heure sans supplément</li>
-                      <li>✓ Changement de destination accepté</li>
-                      <li>✓ Report en cas de vol annulé</li>
-                    </ul>
+                  <div className="text-center">
+                    <div className="text-5xl font-bold text-blue-600 mb-2">24/7</div>
+                    <div className="text-lg font-semibold text-gray-800 mb-1">Disponibilité</div>
+                    <div className="text-sm text-gray-600">Service continu aéroport</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-5xl font-bold text-purple-600 mb-2">3min</div>
+                    <div className="text-lg font-semibold text-gray-800 mb-1">Temps d'attente</div>
+                    <div className="text-sm text-gray-600">Maximum à la station</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-5xl font-bold text-orange-600 mb-2">5⭐</div>
+                    <div className="text-lg font-semibold text-gray-800 mb-1">Satisfaction</div>
+                    <div className="text-sm text-gray-600">Clients voyageurs</div>
                   </div>
                 </div>
+              </div>
 
+              <div className="grid lg:grid-cols-2 gap-12">
                 <div>
-                  <h4 className="text-2xl font-bold text-gray-900 mb-8">
-                    Conditions d&apos;Annulation Flexible
+                  <h4 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+                    <Clock className="text-green-600" size={32} />
+                    Ponctualité Absolue
                   </h4>
                   
                   <div className="space-y-6">
                     <div className="bg-gradient-to-r from-green-50 to-green-100 p-6 rounded-2xl border border-green-200">
                       <div className="flex items-start gap-4">
                         <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-white text-sm">1</span>
+                          <CheckCircle className="text-white" size={16} />
                         </div>
                         <div>
-                          <h5 className="font-bold text-green-800 mb-2">Plus de 2 heures avant</h5>
-                          <p className="text-green-700">Annulation 100% gratuite - Aucun frais</p>
+                          <h5 className="font-bold text-green-800 mb-2">Suivi des vols en temps réel</h5>
+                          <p className="text-green-700">Surveillance automatique des retards et avances de votre vol</p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 p-6 rounded-2xl border border-yellow-200">
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-200">
                       <div className="flex items-start gap-4">
-                        <div className="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-white text-sm">2</span>
+                        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <CheckCircle className="text-white" size={16} />
                         </div>
                         <div>
-                          <h5 className="font-bold text-yellow-800 mb-2">Moins de 2 heures avant</h5>
-                          <p className="text-yellow-700">Frais d&apos;annulation selon situation</p>
+                          <h5 className="font-bold text-blue-800 mb-2">Chauffeurs positionnés</h5>
+                          <p className="text-blue-700">Taxi déjà sur place à votre arrivée, pas d'attente</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-6 rounded-2xl border border-purple-200">
+                      <div className="flex items-start gap-4">
+                        <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <CheckCircle className="text-white" size={16} />
+                        </div>
+                        <div>
+                          <h5 className="font-bold text-purple-800 mb-2">Voies de bus prioritaires</h5>
+                          <p className="text-purple-700">Trajet rapide garanti depuis l'aéroport</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+                    <Shield className="text-blue-600" size={32} />
+                    Fiabilité Professionnelle
+                  </h4>
+                  
+                  <div className="space-y-6">
+                    <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-6 rounded-2xl border border-orange-200">
+                      <div className="flex items-start gap-4">
+                        <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <CheckCircle className="text-white" size={16} />
+                        </div>
+                        <div>
+                          <h5 className="font-bold text-orange-800 mb-2">Licence officielle aéroport</h5>
+                          <p className="text-orange-700">Station taxi autorisée Hall A par l'aéroport</p>
                         </div>
                       </div>
                     </div>
@@ -991,105 +1013,86 @@ export default function TaxiAeroport() {
                     <div className="bg-gradient-to-r from-red-50 to-red-100 p-6 rounded-2xl border border-red-200">
                       <div className="flex items-start gap-4">
                         <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                          <span className="text-white text-sm">!</span>
+                          <CheckCircle className="text-white" size={16} />
                         </div>
                         <div>
-                          <h5 className="font-bold text-red-800 mb-2">Annulation Immédiate</h5>
-                          <p className="text-red-700">Chauffeur en route - Contact direct requis</p>
+                          <h5 className="font-bold text-red-800 mb-2">Service garanti 24h/24</h5>
+                          <p className="text-red-700">Même pour les vols de nuit et les urgences</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-r from-indigo-50 to-indigo-100 p-6 rounded-2xl border border-indigo-200">
+                      <div className="flex items-start gap-4">
+                        <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <CheckCircle className="text-white" size={16} />
+                        </div>
+                        <div>
+                          <h5 className="font-bold text-indigo-800 mb-2">Backup permanent</h5>
+                          <p className="text-indigo-700">Plan B automatique en cas d'imprévu</p>
                         </div>
                       </div>
                     </div>
                   </div>
-
-                  <div className="mt-8 bg-blue-50 p-6 rounded-2xl border border-blue-200">
-                    <h5 className="font-bold text-blue-800 mb-4">📞 Pour Annuler ou Modifier</h5>
-                    <div className="text-center">
-                      <a 
-                        href="tel:0667237822" 
-                        className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold text-lg transition-colors"
-                      >
-                        06 67 23 78 22
-                      </a>
-                      <p className="text-blue-700 mt-2 text-sm">Disponible 24h/24 pour vos modifications</p>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Cas spéciaux d&apos;annulation */}
+            {/* Engagement Excellence */}
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-white p-8 rounded-3xl shadow-lg border border-blue-200 text-center">
-                <div className="text-5xl mb-6">✈️</div>
-                <h4 className="text-xl font-bold text-gray-900 mb-4">Vol Annulé/Retardé</h4>
+              <div className="bg-white p-8 rounded-3xl shadow-lg border border-green-200 text-center">
+                <div className="text-5xl mb-6">⚡</div>
+                <h4 className="text-xl font-bold text-gray-900 mb-4">Réactivité Immédiate</h4>
                 <p className="text-gray-600 mb-4">
-                  Annulation automatique gratuite en cas de problème sur votre vol
+                  Adaptation instantanée aux changements d'horaires de vol
                 </p>
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                  <p className="text-blue-800 font-semibold text-sm">Report automatique gratuit</p>
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                  <p className="text-green-800 font-semibold text-sm">Suivi automatique des vols</p>
                 </div>
               </div>
 
-              <div className="bg-white p-8 rounded-3xl shadow-lg border border-green-200 text-center">
-                <div className="text-5xl mb-6">🔄</div>
-                <h4 className="text-xl font-bold text-gray-900 mb-4">Modification d&apos;Heure</h4>
+              <div className="bg-white p-8 rounded-3xl shadow-lg border border-blue-200 text-center">
+                <div className="text-5xl mb-6">🎯</div>
+                <h4 className="text-xl font-bold text-gray-900 mb-4">Précision Horaire</h4>
                 <p className="text-gray-600 mb-4">
-                  Changement d&apos;heure gratuit jusqu&apos;à 1 heure avant la prise en charge
+                  Arrivée synchronisée avec votre sortie de l'aéroport
                 </p>
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                  <p className="text-green-800 font-semibold text-sm">Flexibilité maximale</p>
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                  <p className="text-blue-800 font-semibold text-sm">Timing parfait garanti</p>
                 </div>
               </div>
 
               <div className="bg-white p-8 rounded-3xl shadow-lg border border-purple-200 text-center">
-                <div className="text-5xl mb-6">🏥</div>
-                <h4 className="text-xl font-bold text-gray-900 mb-4">Urgence Médicale</h4>
+                <div className="text-5xl mb-6">🛡️</div>
+                <h4 className="text-xl font-bold text-gray-900 mb-4">Engagement Qualité</h4>
                 <p className="text-gray-600 mb-4">
-                  Annulation gratuite immédiate en cas d&apos;urgence médicale justifiée
+                  Service professionnel avec chauffeurs expérimentés aéroport
                 </p>
                 <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                  <p className="text-purple-800 font-semibold text-sm">Compréhension totale</p>
+                  <p className="text-purple-800 font-semibold text-sm">Excellence garantie</p>
                 </div>
               </div>
             </div>
 
-            {/* Avantages de la réservation */}
-            <div className="mt-16 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-8">
-              <h4 className="text-2xl font-bold text-center text-gray-900 mb-8">
-                Pourquoi Réserver à l&apos;Avance ?
+            {/* Contact Fiabilité */}
+            <div className="mt-16 bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-8 text-center">
+              <h4 className="text-2xl font-bold text-gray-900 mb-6">
+                🚀 Service Taxi Aéroport Ultra-Fiable
               </h4>
+              <p className="text-lg text-gray-700 mb-8 max-w-3xl mx-auto">
+                <strong>Zéro stress, zéro retard, zéro attente.</strong> Notre service taxi aéroport est optimisé pour la ponctualité absolue des voyageurs.
+              </p>
               
-              <div className="grid md:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Shield className="text-blue-600" size={24} />
-                  </div>
-                  <h5 className="font-bold text-gray-900 mb-2">Garantie</h5>
-                  <p className="text-sm text-gray-600">Véhicule assuré disponible</p>
-                </div>
-
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Clock className="text-green-600" size={24} />
-                  </div>
-                  <h5 className="font-bold text-gray-900 mb-2">Ponctualité</h5>
-                  <p className="text-sm text-gray-600">Suivi de votre vol en temps réel</p>
-                </div>
-
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Luggage className="text-purple-600" size={24} />
-                  </div>
-                  <h5 className="font-bold text-gray-900 mb-2">Confort</h5>
-                  <p className="text-sm text-gray-600">Véhicule adapté à vos bagages</p>
-                </div>
-
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle className="text-orange-600" size={24} />
-                  </div>
-                  <h5 className="font-bold text-gray-900 mb-2">Flexibilité</h5>
-                  <p className="text-sm text-gray-600">Annulation gratuite facile</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a 
+                  href="tel:0667237822" 
+                  className="bg-green-600 hover:bg-green-700 text-white px-10 py-4 rounded-2xl font-bold text-xl transition-all duration-300 shadow-xl hover:shadow-green-500/25 hover:scale-105"
+                >
+                  📞 06 67 23 78 22
+                </a>
+                <div className="text-gray-600">
+                  <div className="font-semibold">Service garanti 24h/24</div>
+                  <div className="text-sm">Ponctualité absolue • Fiabilité maximale</div>
                 </div>
               </div>
             </div>

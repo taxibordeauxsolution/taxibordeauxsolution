@@ -4,13 +4,18 @@ import { useState, FormEvent } from 'react'
 import { Car, MapPin, Clock, Phone, Mail, User, Calendar, MessageSquare, CheckCircle, AlertCircle, Zap } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 
-export default function ReservationForm() {
+interface ReservationFormProps {
+  context?: 'airport' | 'station' | 'general'
+  defaultService?: string
+}
+
+export default function ReservationForm({ context = 'general', defaultService }: ReservationFormProps) {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     phone: '',
     email: '',
-    serviceType: 'Transfert Aéroport',
+    serviceType: defaultService || 'Transfert Aéroport',
     departureAddress: '',
     destination: '',
     date: '',
@@ -24,6 +29,38 @@ export default function ReservationForm() {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [statusMessage, setStatusMessage] = useState('')
   const [showForm, setShowForm] = useState(false)
+
+  // Configuration du contenu selon le contexte
+  const getContextContent = () => {
+    switch (context) {
+      case 'airport':
+        return {
+          title: 'Réservez votre Taxi Aéroport',
+          subtitle: 'Service depuis/vers Bordeaux-Mérignac • Station taxi officielle',
+          description: 'Prise en charge à la station taxi Hall A ou réservation pour vos départs',
+          badgeText: 'Station officielle aéroport',
+          serviceMessage: 'Le taxi vous attend à l\'emplacement taxi de l\'aéroport'
+        }
+      case 'station':
+        return {
+          title: 'Réservez votre Taxi Gare',
+          subtitle: 'Service depuis/vers Gare Saint-Jean • Accès direct',
+          description: 'Prise en charge devant la gare ou réservation pour vos départs en train',
+          badgeText: 'Service gare prioritaire',
+          serviceMessage: 'Prise en charge devant la gare'
+        }
+      default:
+        return {
+          title: 'Réservez votre Taxi à Bordeaux',
+          subtitle: 'Service professionnel 24h/24 • Tarifs réglementés • Prise en charge garantie',
+          description: 'Service professionnel 24h/24 • Tarifs réglementés • Prise en charge garantie',
+          badgeText: 'Prise en charge en 5-10 minutes',
+          serviceMessage: 'Nous vous retrouvons où vous voulez'
+        }
+    }
+  }
+
+  const contextContent = getContextContent()
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -61,7 +98,7 @@ export default function ReservationForm() {
           lastName: '',
           phone: '',
           email: '',
-          serviceType: 'Transfert Aéroport',
+          serviceType: defaultService || 'Transfert Aéroport',
           departureAddress: '',
           destination: '',
           date: '',
@@ -117,7 +154,7 @@ export default function ReservationForm() {
               >
                 <Zap size={20} />
               </motion.div>
-              <span>Prise en charge en 5-10 minutes</span>
+              <span>{contextContent.badgeText}</span>
             </motion.div>
             
             <motion.h1 
@@ -127,17 +164,8 @@ export default function ReservationForm() {
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
-                Réservez votre Taxi
+                {contextContent.title}
               </span>
-              <br />
-              <motion.span 
-                className="text-yellow-400"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-              >
-                à Bordeaux
-              </motion.span>
             </motion.h1>
             
             <motion.p 
@@ -146,7 +174,7 @@ export default function ReservationForm() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
             >
-              Service professionnel 24h/24 • Tarifs réglementés • Prise en charge garantie
+{contextContent.subtitle}
             </motion.p>
 
             {/* Statistiques rapides */}
@@ -410,13 +438,29 @@ export default function ReservationForm() {
                         className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-lg"
                         required
                       >
-                        <option value="Transfert Aéroport">🛫 Transfert Aéroport Mérignac</option>
-                        <option value="Transport Gare">🚄 Transport Gare Saint-Jean</option>
-                        <option value="Transport Urbain">🏙️ Transport Urbain Bordeaux</option>
-                        <option value="Longue Distance">🛣️ Longue Distance</option>
-                        <option value="Transport Médical">🏥 Transport Médical</option>
-                        <option value="Événement/Mariage">💒 Événement/Mariage</option>
-                        <option value="Transport Professionnel">💼 Transport Professionnel</option>
+                        {context === 'airport' ? (
+                          <>
+                            <option value="Arrivée Aéroport">🛬 Arrivée Aéroport (Station Taxi Hall A)</option>
+                            <option value="Départ vers Aéroport">🛫 Départ vers Aéroport Mérignac</option>
+                            <option value="Transfert Aéroport">✈️ Transfert Aéroport (Aller-Retour)</option>
+                          </>
+                        ) : context === 'station' ? (
+                          <>
+                            <option value="Arrivée Gare">🚂 Arrivée Gare Saint-Jean</option>
+                            <option value="Départ vers Gare">🚄 Départ vers Gare Saint-Jean</option>
+                            <option value="Transport Gare">🚉 Transfert Gare</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="Transfert Aéroport">🛫 Transfert Aéroport Mérignac</option>
+                            <option value="Transport Gare">🚄 Transport Gare Saint-Jean</option>
+                            <option value="Transport Urbain">🏙️ Transport Urbain Bordeaux</option>
+                            <option value="Longue Distance">🛣️ Longue Distance</option>
+                            <option value="Transport Médical">🏥 Transport Médical</option>
+                            <option value="Événement/Mariage">💒 Événement/Mariage</option>
+                            <option value="Transport Professionnel">💼 Transport Professionnel</option>
+                          </>
+                        )}
                       </select>
                     </div>
 
@@ -570,6 +614,15 @@ export default function ReservationForm() {
                         </>
                       )}
                     </motion.button>
+
+                    {/* Message spécifique selon le contexte */}
+                    {context === 'airport' && (
+                      <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+                        <p className="text-blue-800 text-sm font-medium text-center">
+                          ✈️ {contextContent.serviceMessage}
+                        </p>
+                      </div>
+                    )}
 
                     <div className="mt-6 text-center space-y-3">
                       <div className="flex items-center justify-center gap-6 text-sm text-gray-600">
