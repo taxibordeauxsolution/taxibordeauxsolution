@@ -457,8 +457,16 @@ export default function TaxiAeroport() {
 
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 border border-blue-200 text-center hover:shadow-xl transition-shadow">
-              <div className="text-6xl mb-6">🚗</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Berline Confort</h3>
+              <div className="mb-6">
+                <Image
+                  src="/images/hero/toyota-corolla.jpg"
+                  alt="Berline Toyota Corolla"
+                  width={200}
+                  height={150}
+                  className="mx-auto rounded-lg shadow-md"
+                />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Berline</h3>
               <div className="space-y-3 mb-6">
                 <div className="flex items-center justify-center gap-2 text-gray-700">
                   <Users size={18} />
@@ -479,7 +487,15 @@ export default function TaxiAeroport() {
             </div>
 
             <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8 border border-green-200 text-center hover:shadow-xl transition-shadow">
-              <div className="text-6xl mb-6">🚐</div>
+              <div className="mb-6">
+                <Image
+                  src="/images/hero/van.webp"
+                  alt="Van Monospace"
+                  width={200}
+                  height={150}
+                  className="mx-auto rounded-lg shadow-md"
+                />
+              </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Monospace</h3>
               <div className="space-y-3 mb-6">
                 <div className="flex items-center justify-center gap-2 text-gray-700">
