@@ -456,14 +456,14 @@ export default function TaxiAeroport() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 border border-blue-200 text-center hover:shadow-xl transition-shadow">
-              <div className="mb-6">
+            <div className="bg-white rounded-3xl p-8 border border-gray-200 text-center hover:shadow-xl transition-shadow">
+              <div className="mb-6 bg-gray-50 rounded-2xl p-6">
                 <Image
                   src="/images/hero/toyota-corolla.jpg"
                   alt="Berline Toyota Corolla"
-                  width={200}
-                  height={150}
-                  className="mx-auto rounded-lg shadow-md"
+                  width={280}
+                  height={180}
+                  className="mx-auto object-contain"
                 />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Berline</h3>
@@ -481,19 +481,19 @@ export default function TaxiAeroport() {
                   <span>Climatisation</span>
                 </div>
               </div>
-              <div className="bg-white p-3 rounded-lg border border-blue-200">
+              <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
                 <p className="text-sm font-medium text-blue-800">Idéal pour voyageurs individuels</p>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8 border border-green-200 text-center hover:shadow-xl transition-shadow">
-              <div className="mb-6">
+            <div className="bg-white rounded-3xl p-8 border border-gray-200 text-center hover:shadow-xl transition-shadow">
+              <div className="mb-6 bg-gray-50 rounded-2xl p-6">
                 <Image
                   src="/images/hero/van.webp"
                   alt="Van Monospace"
-                  width={200}
-                  height={150}
-                  className="mx-auto rounded-lg shadow-md"
+                  width={280}
+                  height={180}
+                  className="mx-auto object-contain"
                 />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Monospace</h3>
@@ -511,7 +511,7 @@ export default function TaxiAeroport() {
                   <span>Espace extra-large</span>
                 </div>
               </div>
-              <div className="bg-white p-3 rounded-lg border border-green-200">
+              <div className="bg-green-50 p-3 rounded-lg border border-green-200">
                 <p className="text-sm font-medium text-green-800">Parfait pour familles & groupes</p>
               </div>
             </div>
