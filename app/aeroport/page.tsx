@@ -911,7 +911,7 @@ export default function TaxiAeroport() {
                   </div>
                   <div className="text-center">
                     <div className="text-5xl font-bold text-purple-600 mb-2">3min</div>
-                    <div className="text-lg font-semibold text-gray-800 mb-1">Temps d'attente</div>
+                    <div className="text-lg font-semibold text-gray-800 mb-1">Temps d&apos;attente</div>
                     <div className="text-sm text-gray-600">Maximum à la station</div>
                   </div>
                   <div className="text-center">
@@ -949,7 +949,7 @@ export default function TaxiAeroport() {
                         </div>
                         <div>
                           <h5 className="font-bold text-blue-800 mb-2">Chauffeurs positionnés</h5>
-                          <p className="text-blue-700">Taxi déjà sur place à votre arrivée, pas d'attente</p>
+                          <p className="text-blue-700">Taxi déjà sur place à votre arrivée, pas d&apos;attente</p>
                         </div>
                       </div>
                     </div>
@@ -961,7 +961,7 @@ export default function TaxiAeroport() {
                         </div>
                         <div>
                           <h5 className="font-bold text-purple-800 mb-2">Voies de bus prioritaires</h5>
-                          <p className="text-purple-700">Trajet rapide garanti depuis l'aéroport</p>
+                          <p className="text-purple-700">Trajet rapide garanti depuis l&apos;aéroport</p>
                         </div>
                       </div>
                     </div>
@@ -982,7 +982,7 @@ export default function TaxiAeroport() {
                         </div>
                         <div>
                           <h5 className="font-bold text-orange-800 mb-2">Licence officielle aéroport</h5>
-                          <p className="text-orange-700">Station taxi autorisée Hall A par l'aéroport</p>
+                          <p className="text-orange-700">Station taxi autorisée Hall A par l&apos;aéroport</p>
                         </div>
                       </div>
                     </div>
@@ -1006,7 +1006,7 @@ export default function TaxiAeroport() {
                         </div>
                         <div>
                           <h5 className="font-bold text-indigo-800 mb-2">Backup permanent</h5>
-                          <p className="text-indigo-700">Plan B automatique en cas d'imprévu</p>
+                          <p className="text-indigo-700">Plan B automatique en cas d&apos;imprévu</p>
                         </div>
                       </div>
                     </div>
@@ -1021,7 +1021,7 @@ export default function TaxiAeroport() {
                 <div className="text-5xl mb-6">⚡</div>
                 <h4 className="text-xl font-bold text-gray-900 mb-4">Réactivité Immédiate</h4>
                 <p className="text-gray-600 mb-4">
-                  Adaptation instantanée aux changements d'horaires de vol
+                  Adaptation instantanée aux changements d&apos;horaires de vol
                 </p>
                 <div className="bg-green-50 p-4 rounded-lg border border-green-200">
                   <p className="text-green-800 font-semibold text-sm">Suivi automatique des vols</p>
@@ -1032,7 +1032,7 @@ export default function TaxiAeroport() {
                 <div className="text-5xl mb-6">🎯</div>
                 <h4 className="text-xl font-bold text-gray-900 mb-4">Précision Horaire</h4>
                 <p className="text-gray-600 mb-4">
-                  Arrivée synchronisée avec votre sortie de l'aéroport
+                  Arrivée synchronisée avec votre sortie de l&apos;aéroport
                 </p>
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                   <p className="text-blue-800 font-semibold text-sm">Timing parfait garanti</p>
