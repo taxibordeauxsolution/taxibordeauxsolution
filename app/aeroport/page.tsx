@@ -311,9 +311,8 @@ export default function TaxiAeroport() {
 
               <div className="mt-8 p-6 bg-blue-50 rounded-2xl border border-blue-200 text-center">
                 <p className="text-blue-800 leading-relaxed">
-                  <strong>📋 Tarifs réglementés 2025</strong> - Préfecture de Gironde<br/>
-                  Compteur obligatoire • Prix final selon distance réelle et conditions de circulation<br/>
-                  <strong>Suppléments :</strong> Dimanche et jours fériés • Bagages volumineux (selon règlementation)
+                  <strong>📋 Tarifs réglementés</strong><br/>
+                  Prix final selon distance réelle et conditions de circulation
                 </p>
               </div>
             </div>
@@ -456,7 +455,7 @@ export default function TaxiAeroport() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 border border-blue-200 text-center hover:shadow-xl transition-shadow">
               <div className="text-6xl mb-6">🚗</div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Berline Confort</h3>
@@ -498,28 +497,6 @@ export default function TaxiAeroport() {
               </div>
               <div className="bg-white p-3 rounded-lg border border-green-200">
                 <p className="text-sm font-medium text-green-800">Parfait pour familles & groupes</p>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl p-8 border border-purple-200 text-center hover:shadow-xl transition-shadow">
-              <div className="text-6xl mb-6">🏆</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Véhicule Haut de Gamme</h3>
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center justify-center gap-2 text-gray-700">
-                  <Users size={18} />
-                  <span>1-4 passagers VIP</span>
-                </div>
-                <div className="flex items-center justify-center gap-2 text-gray-700">
-                  <Luggage size={18} />
-                  <span>Coffre spacieux</span>
-                </div>
-                <div className="flex items-center justify-center gap-2 text-gray-700">
-                  <CheckCircle size={18} className="text-green-600" />
-                  <span>Cuir, WiFi, chargeurs</span>
-                </div>
-              </div>
-              <div className="bg-white p-3 rounded-lg border border-green-200">
-                <p className="text-sm font-medium text-green-800">Service groupes & familles</p>
               </div>
             </div>
           </div>
