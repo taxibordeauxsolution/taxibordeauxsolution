@@ -24,8 +24,9 @@ export default function TaxiAeroport() {
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
-            <strong>Station officielle Hall A</strong> - Voies de bus prioritaires - Suivi des vols en temps réel
-            <br/>Service taxi licencié disponible <strong>24h/24</strong> avec tarifs réglementés
+            Nous sommes disponibles <strong>tous les jours de la semaine, week-ends et jours fériés compris</strong>,
+            et ce, à toute heure du jour et de la nuit. Notre entreprise est votre spécialiste du transport de personnes
+            vers l&apos;aéroport de <strong>Bordeaux-Mérignac</strong>.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center max-w-2xl mx-auto mb-16">
@@ -70,6 +71,75 @@ export default function TaxiAeroport() {
               <div className="text-3xl mb-3">🕒</div>
               <div className="text-2xl font-bold text-gray-900 mb-1">24h/24</div>
               <div className="text-sm text-gray-600">Service continu</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Transport Professionnel Aéroport */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                  Chauffeurs Professionnels pour Votre Course
+                </h2>
+                <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                  Vous rendre à l&apos;aéroport pour prendre votre avion peut engendrer beaucoup de stress.
+                  Vous devez non seulement prévoir d&apos;arriver suffisamment à l&apos;avance pour passer les contrôles
+                  et l&apos;enregistrement, mais aussi trouver où vous garer et prendre la navette ou le bus à l&apos;heure.
+                </p>
+
+                <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+                  Vous pouvez éviter de tels soucis en faisant appel à nos services.
+                  <strong>Nos chauffeurs connaissent parfaitement les environs</strong> et empruntent
+                  les itinéraires les plus rapides pour que vous puissiez arriver dans les temps
+                  et vous enregistrer en toute sérénité.
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="bg-blue-50 p-6 rounded-2xl border border-blue-200">
+                    <h4 className="font-bold text-blue-800 mb-3 flex items-center gap-2">
+                      <Plane size={20} />
+                      Départ vers l&apos;aéroport
+                    </h4>
+                    <p className="text-sm text-gray-700">
+                      Arrivée garantie dans les temps pour votre vol,
+                      sans stress de parking ou de navette
+                    </p>
+                  </div>
+
+                  <div className="bg-green-50 p-6 rounded-2xl border border-green-200">
+                    <h4 className="font-bold text-green-800 mb-3 flex items-center gap-2">
+                      <MapPin size={20} />
+                      Arrivée à l&apos;aéroport
+                    </h4>
+                    <p className="text-sm text-gray-700">
+                      Nous venons vous chercher pour vous conduire
+                      vers la destination de votre choix
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-3xl">
+                <div className="text-center">
+                  <div className="text-6xl mb-6">🚖</div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Service 24h/24</h3>
+                  <p className="text-gray-700 mb-6">
+                    Contactez-nous pour une course immédiate, effectuer la réservation
+                    d&apos;un trajet ultérieur ou simplement nous demander un renseignement.
+                  </p>
+
+                  <a
+                    href="tel:0667237822"
+                    className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
+                  >
+                    📞 06 67 23 78 22
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -451,7 +521,9 @@ export default function TaxiAeroport() {
               Notre Flotte Aéroport
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Véhicules confortables et spacieux, adaptés aux voyageurs et leurs bagages
+              Pour répondre à toutes les demandes de notre clientèle, nous disposons d&apos;un parc de véhicules
+              conséquent. Si vous souhaitez voyager en groupe ou en famille, nous prévoyons un monospace
+              pouvant accueillir jusqu&apos;à <strong>sept personnes avec leurs bagages</strong>.
             </p>
           </div>
 
