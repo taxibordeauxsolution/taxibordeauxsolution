@@ -23,7 +23,7 @@ export default function HomePage() {
               {/* Badge de rapidité */}
               <div className="inline-flex items-center gap-3 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-400 font-semibold">
                 <Zap size={20} className="animate-pulse" />
-                <span>Taxi en 5-10 minutes à Bordeaux</span>
+                <span>Taxi rapide à Bordeaux</span>
               </div>
               
               <div className="space-y-6">
@@ -68,7 +68,7 @@ export default function HomePage() {
               {/* Stats élégantes */}
               <div className="grid grid-cols-3 gap-8 pt-8 border-t border-white/10">
                 <div className="text-center">
-                  <div className="text-3xl lg:text-4xl font-bold text-yellow-400 mb-1">5-10min</div>
+                  <div className="text-3xl lg:text-4xl font-bold text-yellow-400 mb-1">Rapide</div>
                   <div className="text-sm text-slate-400 font-medium">Prise en charge</div>
                 </div>
                 <div className="text-center">
@@ -136,7 +136,7 @@ export default function HomePage() {
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto font-light">
               Service taxi professionnel dans toute la métropole. 
-              Réservation simple, prise en charge garantie en 5-10 minutes.
+              Réservation simple, prise en charge rapide garantie.
             </p>
           </div>
 
@@ -188,7 +188,7 @@ export default function HomePage() {
                 </h3>
                 <p className="text-slate-600 leading-relaxed">
                   Courses urbaines dans Bordeaux. 
-                  Prise en charge 5-10 minutes, connaissance parfaite de la ville.
+                  Prise en charge rapide, connaissance parfaite de la ville.
                 </p>
               </div>
             </div>
@@ -275,7 +275,7 @@ export default function HomePage() {
                 Rapidité Bordeaux
               </h3>
               <p className="text-slate-400 leading-relaxed">
-                Prise en charge en 5-10 minutes partout à Bordeaux. 
+                Prise en charge rapide partout à Bordeaux. 
                 Géolocalisation précise, arrivée garantie.
               </p>
             </div>
@@ -454,7 +454,7 @@ export default function HomePage() {
             
             <p className="text-xl lg:text-2xl text-slate-300 font-light leading-relaxed">
               <strong className="text-white">Réservation en 30 secondes</strong> - 
-              Prise en charge garantie en 5-10 minutes partout à Bordeaux. 
+              Prise en charge rapide garantie partout à Bordeaux. 
               Service professionnel disponible 24h/24.
             </p>
             
@@ -483,7 +483,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-12 text-slate-300">
               <div className="flex items-center justify-center gap-3">
                 <Zap className="text-yellow-400" size={20} />
-                <span>Prise en charge 5-10 min</span>
+                <span>Prise en charge rapide</span>
               </div>
               <div className="flex items-center justify-center gap-3">
                 <Shield className="text-green-400" size={20} />

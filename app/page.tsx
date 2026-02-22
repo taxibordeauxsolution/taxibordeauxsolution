@@ -39,7 +39,7 @@ export default function HomePage() {
                 >
                   <Zap size={20} />
                 </motion.div>
-                <span>Taxi en 5-10 minutes à Bordeaux</span>
+                <span>Taxi rapide à Bordeaux</span>
               </motion.div>
               
               <div className="space-y-6">
@@ -139,7 +139,7 @@ export default function HomePage() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, delay: 1.6 }}
                   >
-                    5-10min
+                    Rapide
                   </motion.div>
                   <div className="text-sm text-slate-400 font-medium">Prise en charge</div>
                 </motion.div>
@@ -196,7 +196,7 @@ export default function HomePage() {
                           <span className="text-white font-semibold">Disponible Maintenant</span>
                         </div>
                         <h3 className="text-xl font-bold text-white">Taxi Bordeaux Solution</h3>
-                        <p className="text-white/80 text-sm">Service fiable • Prise en charge 5-10min</p>
+                        <p className="text-white/80 text-sm">Service fiable • Prise en charge rapide</p>
                       </div>
                     </div>
                   </div>
@@ -261,7 +261,7 @@ export default function HomePage() {
               viewport={{ once: true }}
             >
               Service taxi professionnel dans toute la métropole. 
-              Réservation simple, prise en charge garantie en 5-10 minutes.
+              Réservation simple, prise en charge rapide garantie.
             </motion.p>
           </motion.div>
 
@@ -374,7 +374,7 @@ export default function HomePage() {
                 </h3>
                 <p className="text-slate-600 leading-relaxed">
                   Courses urbaines dans Bordeaux. 
-                  Prise en charge 5-10 minutes, connaissance parfaite de la ville.
+                  Prise en charge rapide, connaissance parfaite de la ville.
                 </p>
               </div>
             </motion.div>
@@ -522,7 +522,7 @@ export default function HomePage() {
                 Rapidité Bordeaux
               </h3>
               <p className="text-slate-400 leading-relaxed">
-                Prise en charge en 5-10 minutes partout à Bordeaux. 
+                Prise en charge rapide partout à Bordeaux. 
                 Géolocalisation précise, arrivée garantie.
               </p>
             </motion.div>
@@ -940,7 +940,7 @@ export default function HomePage() {
             
             <p className="text-xl lg:text-2xl text-slate-300 font-light leading-relaxed">
               <strong className="text-white">Réservation en 30 secondes</strong> - 
-              Prise en charge garantie en 5-10 minutes partout à Bordeaux. 
+              Prise en charge rapide garantie partout à Bordeaux. 
               Service professionnel disponible 24h/24.
             </p>
             
@@ -973,7 +973,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-12 text-slate-300">
               <div className="flex items-center justify-center gap-3">
                 <Zap className="text-yellow-400" size={20} />
-                <span>Prise en charge 5-10 min</span>
+                <span>Prise en charge rapide</span>
               </div>
               <div className="flex items-center justify-center gap-3">
                 <Shield className="text-green-400" size={20} />

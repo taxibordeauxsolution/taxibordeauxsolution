@@ -54,7 +54,7 @@ export default function ReservationForm({ context = 'general', defaultService }:
           title: 'Réservez votre Taxi à Bordeaux',
           subtitle: 'Service professionnel 24h/24 • Tarifs réglementés • Prise en charge garantie',
           description: 'Service professionnel 24h/24 • Tarifs réglementés • Prise en charge garantie',
-          badgeText: 'Prise en charge en 5-10 minutes',
+          badgeText: 'Prise en charge rapide',
           serviceMessage: 'Nous vous retrouvons où vous voulez'
         }
     }
@@ -90,7 +90,7 @@ export default function ReservationForm({ context = 'general', defaultService }:
 
       if (response.ok) {
         setStatus('success')
-        setStatusMessage('🎉 Votre réservation a été envoyée avec succès ! Nous vous recontacterons dans les 5 minutes.')
+        setStatusMessage('🎉 Votre réservation a été envoyée avec succès ! Nous vous recontacterons rapidement.')
         
         // Reset formulaire
         setFormData({
@@ -180,7 +180,7 @@ export default function ReservationForm({ context = 'general', defaultService }:
             {/* Statistiques rapides */}
             <div className="grid grid-cols-3 gap-6 py-8">
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400 mb-1">5-10min</div>
+                <div className="text-3xl font-bold text-yellow-400 mb-1">Rapide</div>
                 <div className="text-sm text-slate-400">Prise en charge</div>
               </div>
               <div className="text-center">
@@ -628,7 +628,7 @@ export default function ReservationForm({ context = 'general', defaultService }:
                       <div className="flex items-center justify-center gap-6 text-sm text-gray-600">
                         <span className="flex items-center gap-2">
                           <Zap className="text-green-500" size={16} />
-                          Réponse sous 5 min
+                          Réponse rapide
                         </span>
                         <span className="flex items-center gap-2">
                           <Phone className="text-blue-500" size={16} />

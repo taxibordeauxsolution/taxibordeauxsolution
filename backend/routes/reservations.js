@@ -286,15 +286,15 @@ router.post('/', validationMiddleware(createReservationSchema), async (req, res)
       },
       next_steps: language === 'en' ? [
         'You will receive an SMS confirmation',
-        'A driver will be assigned within 5-10 minutes',
+        'A driver will be assigned quickly',
         'Track your booking status online'
       ] : language === 'es' ? [
         'Recibirá una confirmación por SMS',
-        'Se asignará un conductor en 5-10 minutos',
+        'Se asignará un conductor rápidamente',
         'Siga el estado de su reserva online'
       ] : [
         'Vous recevrez une confirmation SMS',
-        'Un chauffeur sera assigné dans 5-10 minutes',
+        'Un chauffeur sera assigné rapidement',
         'Suivez le statut de votre réservation en ligne'
       ]
     })

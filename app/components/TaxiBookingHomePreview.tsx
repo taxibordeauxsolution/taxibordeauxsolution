@@ -65,7 +65,7 @@ const TaxiBookingHomePreview = () => {
   const translations = {
     fr: {
       title: "Réservation Taxi Bordeaux",
-      subtitle: "Service 24h/24 • Prise en charge 5-10 minutes",
+      subtitle: "Service 24h/24 • Prise en charge rapide",
       step1Title: "Où souhaitez-vous aller ?",
       step1Subtitle: "Entrez votre point de départ et votre destination",
       fromPlaceholder: "Adresse départ (ex: Aéroport Bordeaux, Gare Saint-Jean)",
@@ -424,7 +424,7 @@ const TaxiBookingHomePreview = () => {
         }),
         next_steps: [
           "Votre réservation a été confirmée",
-          "Un chauffeur sera assigné 5 minutes avant l'heure de prise en charge",
+          "Un chauffeur sera assigné avant l'heure de prise en charge",
           "Vous recevrez un SMS avec les détails du véhicule",
           "Pour toute modification, appelez le 06 67 23 78 22"
         ]

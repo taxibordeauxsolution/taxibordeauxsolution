@@ -105,7 +105,7 @@ async function sendReservationEmail(reservationData, reservationId) {
   <div class="footer">
     <p><strong>Taxi Bordeaux Solution</strong> - Service 24h/24 7j/7</p>
     <p>📞 06 67 23 78 22 | 🌐 taxibordeauxsolution.fr</p>
-    <p><em>⚡ Prise en charge estimée: 5-10 minutes</em></p>
+    <p><em>⚡ Prise en charge estimée: rapide</em></p>
   </div>
 </body>
 </html>`;
@@ -236,7 +236,7 @@ const server = http.createServer((req, res) => {
           success: true,
           message: 'Réservation reçue avec succès',
           reservationId: reservationId,
-          estimatedPickupTime: '5-10 minutes',
+          estimatedPickupTime: 'rapide',
           data: {
             ...reservationData,
             reservationId,

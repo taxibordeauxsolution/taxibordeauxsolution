@@ -7,13 +7,13 @@ import Footer from './components/Footer'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Taxi Bordeaux 🚖 Service 5-10min | LA Solution Transport Bordeaux 24h/24',
-  description: 'Taxi Bordeaux professionnel - Prise en charge 5-10 minutes partout à Bordeaux. Aéroport Mérignac, Gare Saint-Jean, centre-ville. Réservation taxi Bordeaux 24h/24 7j/7. Service premium, tarifs réglementés.',
+  title: 'Taxi Bordeaux 🚖 Service Rapide | LA Solution Transport Bordeaux 24h/24',
+  description: 'Taxi Bordeaux professionnel - Prise en charge rapide partout à Bordeaux. Aéroport Mérignac, Gare Saint-Jean, centre-ville. Réservation taxi Bordeaux 24h/24 7j/7. Service premium, tarifs réglementés.',
   keywords: 'taxi bordeaux, taxi bordeaux 24h, réserver taxi bordeaux, taxi aéroport bordeaux, taxi gare bordeaux, taxi bordeaux pas cher, taxi bordeaux centre, transport bordeaux, chauffeur bordeaux, taxi bordeaux mérignac, taxi bordeaux saint jean, taxi bordeaux nuit, appeler taxi bordeaux, numero taxi bordeaux, taxi bordeaux rapide',
   
   // Open Graph pour réseaux sociaux
   openGraph: {
-    title: 'Taxi Bordeaux Solution - Prise en charge 5-10 minutes',
+    title: 'Taxi Bordeaux Solution - Prise en charge rapide',
     description: 'LA solution transport à Bordeaux. Service taxi professionnel 24h/24, prise en charge rapide dans toute la métropole bordelaise.',
     type: 'website',
     locale: 'fr_FR',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   // Twitter Cards
   twitter: {
     card: 'summary_large_image',
-    title: 'Taxi Bordeaux Solution - Service 5-10 minutes',
+    title: 'Taxi Bordeaux Solution - Service rapide',
     description: 'Taxi professionnel à Bordeaux. Prise en charge rapide 24h/24 dans toute la métropole.',
     images: ['https://taxibordeauxsolution.fr/images/taxi-bordeaux-twitter.jpg'],
   },
@@ -87,7 +87,7 @@ export default function RootLayout({
               "@id": "https://taxibordeauxsolution.fr",
               "name": "Taxi Bordeaux Solution",
               "alternateName": "LA Solution Transport Bordeaux",
-              "description": "Service taxi professionnel à Bordeaux. Prise en charge 5-10 minutes, disponible 24h/24 dans toute la métropole bordelaise.",
+              "description": "Service taxi professionnel à Bordeaux. Prise en charge rapide, disponible 24h/24 dans toute la métropole bordelaise.",
               "url": "https://taxibordeauxsolution.fr",
               "telephone": "+33667237822",
               "email": "contact@taxibordeauxsolution.fr",
