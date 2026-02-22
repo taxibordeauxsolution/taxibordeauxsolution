@@ -8,12 +8,12 @@ import {
   Buildings,
   Train,
   GraduationCap,
-  OfficeChair,
+  Desk,
   Bridge,
   House,
-  TimerBold,
+  Timer,
   UserCheck
-} from 'phosphor-react'
+} from '@phosphor-icons/react'
 
 export default function TaxiAeroport() {
   return (
@@ -203,7 +203,7 @@ export default function TaxiAeroport() {
             {/* Bordeaux Lac */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <OfficeChair size={40} className="text-orange-600" weight="duotone" />
+                <Desk size={40} className="text-orange-600" weight="duotone" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux-Lac</h3>
               <p className="text-gray-600">
@@ -265,7 +265,7 @@ export default function TaxiAeroport() {
               <div className="bg-white rounded-3xl p-8 shadow-lg">
                 <div className="text-center mb-8">
                   <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                    <TimerBold size={48} className="text-green-600" weight="duotone" />
+                    <Timer size={48} className="text-green-600" weight="bold" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">Ponctualité Garantie</h3>
                 </div>
