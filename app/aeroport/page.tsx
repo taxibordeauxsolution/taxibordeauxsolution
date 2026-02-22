@@ -1,6 +1,7 @@
 'use client'
 
 import { Phone, MapPin, Clock, Plane, Shield, CheckCircle, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 
 export default function TaxiAeroport() {
   return (
@@ -48,19 +49,43 @@ export default function TaxiAeroport() {
           {/* Infos pratiques */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
-              <div className="text-3xl mb-3">🛬</div>
+              <div className="w-12 h-12 mx-auto mb-3 rounded-xl overflow-hidden">
+                <Image
+                  src="/images/airport/airport-terminal.jpg"
+                  alt="Terminal aéroport"
+                  width={48}
+                  height={48}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">Hall A</div>
               <div className="text-sm text-gray-600">Station officielle</div>
             </div>
 
             <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
-              <div className="text-3xl mb-3">🕒</div>
+              <div className="w-12 h-12 mx-auto mb-3 rounded-xl overflow-hidden">
+                <Image
+                  src="/images/airport/punctuality-clock.jpg"
+                  alt="Service 24h/24"
+                  width={48}
+                  height={48}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">24h/24</div>
               <div className="text-sm text-gray-600">Service continu</div>
             </div>
 
             <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
-              <div className="text-3xl mb-3">🚖</div>
+              <div className="w-12 h-12 mx-auto mb-3 rounded-xl overflow-hidden">
+                <Image
+                  src="/images/airport/professional-taxi.jpg"
+                  alt="Taxi professionnel"
+                  width={48}
+                  height={48}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">Direct</div>
               <div className="text-sm text-gray-600">Prise en charge rapide</div>
             </div>
@@ -112,7 +137,15 @@ export default function TaxiAeroport() {
 
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-3xl">
               <div className="text-center">
-                <div className="text-6xl mb-6">🚖</div>
+                <div className="w-24 h-24 mx-auto mb-6 rounded-2xl overflow-hidden shadow-lg">
+                  <Image
+                    src="/images/airport/taxi-service.jpg"
+                    alt="Service taxi immédiat"
+                    width={96}
+                    height={96}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Prise en Charge Immédiate</h3>
                 <p className="text-gray-700 mb-6">
                   Sortez de l'aéroport, dirigez-vous vers la station taxi Hall A.
@@ -121,9 +154,10 @@ export default function TaxiAeroport() {
 
                 <a
                   href="tel:0667237822"
-                  className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
-                  📞 06 67 23 78 22
+                  <Phone size={20} />
+                  06 67 23 78 22
                 </a>
               </div>
             </div>
@@ -147,7 +181,15 @@ export default function TaxiAeroport() {
 
             {/* Bordeaux Centre */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-              <div className="text-5xl mb-4">🏛️</div>
+              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/images/airport/bordeaux-centre.jpg"
+                  alt="Bordeaux Centre-Ville"
+                  width={80}
+                  height={80}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux Centre-Ville</h3>
               <p className="text-gray-600">
                 Quartiers historiques, Chartrons, place des Quinconces
@@ -156,7 +198,15 @@ export default function TaxiAeroport() {
 
             {/* Gare Saint-Jean */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-              <div className="text-5xl mb-4">🚂</div>
+              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/images/airport/train-station.jpg"
+                  alt="Gare Saint-Jean"
+                  width={80}
+                  height={80}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Gare Saint-Jean</h3>
               <p className="text-gray-600">
                 Liaison directe gare SNCF, connexion TGV
@@ -165,7 +215,15 @@ export default function TaxiAeroport() {
 
             {/* Pessac Talence */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-              <div className="text-5xl mb-4">🏫</div>
+              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/images/airport/university-campus.jpg"
+                  alt="Campus Pessac Talence"
+                  width={80}
+                  height={80}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Pessac / Talence</h3>
               <p className="text-gray-600">
                 Campus universitaires, zones résidentielles
@@ -174,7 +232,15 @@ export default function TaxiAeroport() {
 
             {/* Bordeaux Lac */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-              <div className="text-5xl mb-4">🏢</div>
+              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/images/airport/business-district.jpg"
+                  alt="Bordeaux-Lac quartier d'affaires"
+                  width={80}
+                  height={80}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux-Lac</h3>
               <p className="text-gray-600">
                 Quartier d'affaires, centre commercial
@@ -183,7 +249,15 @@ export default function TaxiAeroport() {
 
             {/* Bastide */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-              <div className="text-5xl mb-4">🌊</div>
+              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/images/airport/bordeaux-waterfront.jpg"
+                  alt="Bordeaux Bastide rive droite"
+                  width={80}
+                  height={80}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux Bastide</h3>
               <p className="text-gray-600">
                 Rive droite, quartiers résidentiels
@@ -192,7 +266,15 @@ export default function TaxiAeroport() {
 
             {/* Banlieue */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-              <div className="text-5xl mb-4">🏘️</div>
+              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/images/airport/residential-area.jpg"
+                  alt="Banlieue résidentielle"
+                  width={80}
+                  height={80}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Banlieue Proche</h3>
               <p className="text-gray-600">
                 Mérignac, Le Bouscat, Eysines, Bègles
@@ -230,8 +312,14 @@ export default function TaxiAeroport() {
               {/* Ponctualité */}
               <div className="bg-white rounded-3xl p-8 shadow-lg">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Clock className="text-green-600" size={32} />
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
+                    <Image
+                      src="/images/airport/punctuality-clock.jpg"
+                      alt="Ponctualité garantie"
+                      width={64}
+                      height={64}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">Ponctualité Garantie</h3>
                 </div>
@@ -266,8 +354,14 @@ export default function TaxiAeroport() {
               {/* Fiabilité */}
               <div className="bg-white rounded-3xl p-8 shadow-lg">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Shield className="text-blue-600" size={32} />
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
+                    <Image
+                      src="/images/airport/professional-driver.jpg"
+                      alt="Fiabilité professionnelle"
+                      width={64}
+                      height={64}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">Fiabilité Professionnelle</h3>
                 </div>
