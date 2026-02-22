@@ -51,8 +51,8 @@ export default function TaxiAeroport() {
             <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
               <div className="w-12 h-12 mx-auto mb-3 rounded-xl overflow-hidden">
                 <Image
-                  src="/images/airport/airport-terminal.jpg"
-                  alt="Terminal aéroport"
+                  src="/images/hero/aeroport-bordeaux-dépose minute.webp"
+                  alt="Terminal aéroport Bordeaux"
                   width={48}
                   height={48}
                   className="w-full h-full object-cover"
@@ -65,7 +65,7 @@ export default function TaxiAeroport() {
             <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
               <div className="w-12 h-12 mx-auto mb-3 rounded-xl overflow-hidden">
                 <Image
-                  src="/images/airport/punctuality-clock.jpg"
+                  src="/images/hero/Horloge quai de la gare saint jean.jpg"
                   alt="Service 24h/24"
                   width={48}
                   height={48}
@@ -79,7 +79,7 @@ export default function TaxiAeroport() {
             <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
               <div className="w-12 h-12 mx-auto mb-3 rounded-xl overflow-hidden">
                 <Image
-                  src="/images/airport/professional-taxi.jpg"
+                  src="/images/hero/toyota-corolla.jpg"
                   alt="Taxi professionnel"
                   width={48}
                   height={48}
@@ -139,7 +139,7 @@ export default function TaxiAeroport() {
               <div className="text-center">
                 <div className="w-24 h-24 mx-auto mb-6 rounded-2xl overflow-hidden shadow-lg">
                   <Image
-                    src="/images/airport/taxi-service.jpg"
+                    src="/images/hero/chauffeur vtc bordeaux.jpg"
                     alt="Service taxi immédiat"
                     width={96}
                     height={96}
@@ -183,7 +183,7 @@ export default function TaxiAeroport() {
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
                 <Image
-                  src="/images/airport/bordeaux-centre.jpg"
+                  src="/images/hero/Pont-de-pierre- service taxi bordeaux.jpg"
                   alt="Bordeaux Centre-Ville"
                   width={80}
                   height={80}
@@ -200,7 +200,7 @@ export default function TaxiAeroport() {
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
                 <Image
-                  src="/images/airport/train-station.jpg"
+                  src="/images/hero/gae saint jean bordeaux.jpg"
                   alt="Gare Saint-Jean"
                   width={80}
                   height={80}
@@ -217,7 +217,7 @@ export default function TaxiAeroport() {
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
                 <Image
-                  src="/images/airport/university-campus.jpg"
+                  src="/images/hero/Vignoble bordeaux.jpg"
                   alt="Campus Pessac Talence"
                   width={80}
                   height={80}
@@ -234,7 +234,7 @@ export default function TaxiAeroport() {
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
                 <Image
-                  src="/images/airport/business-district.jpg"
+                  src="/images/hero/Salle d'embarquement BOD.jpg"
                   alt="Bordeaux-Lac quartier d'affaires"
                   width={80}
                   height={80}
@@ -251,7 +251,7 @@ export default function TaxiAeroport() {
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
                 <Image
-                  src="/images/airport/bordeaux-waterfront.jpg"
+                  src="/images/hero/Pont-de-pierre- service taxi bordeaux.jpg"
                   alt="Bordeaux Bastide rive droite"
                   width={80}
                   height={80}
@@ -268,7 +268,7 @@ export default function TaxiAeroport() {
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
                 <Image
-                  src="/images/airport/residential-area.jpg"
+                  src="/images/hero/Vignoble bordeaux.jpg"
                   alt="Banlieue résidentielle"
                   width={80}
                   height={80}
@@ -314,7 +314,7 @@ export default function TaxiAeroport() {
                 <div className="text-center mb-8">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
                     <Image
-                      src="/images/airport/punctuality-clock.jpg"
+                      src="/images/hero/Horloge quai de la gare saint jean.jpg"
                       alt="Ponctualité garantie"
                       width={64}
                       height={64}
@@ -356,7 +356,7 @@ export default function TaxiAeroport() {
                 <div className="text-center mb-8">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
                     <Image
-                      src="/images/airport/professional-driver.jpg"
+                      src="/images/hero/chauffeur vtc bordeaux.jpg"
                       alt="Fiabilité professionnelle"
                       width={64}
                       height={64}
