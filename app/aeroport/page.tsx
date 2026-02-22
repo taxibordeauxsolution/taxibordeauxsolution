@@ -149,72 +149,54 @@ export default function TaxiAeroport() {
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="text-5xl mb-4">🏛️</div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux Centre-Ville</h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600">
                 Quartiers historiques, Chartrons, place des Quinconces
               </p>
-              <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                <p className="text-blue-800 font-semibold text-sm">Distance : ~12 km</p>
-              </div>
             </div>
 
             {/* Gare Saint-Jean */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="text-5xl mb-4">🚂</div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Gare Saint-Jean</h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600">
                 Liaison directe gare SNCF, connexion TGV
               </p>
-              <div className="bg-green-50 p-3 rounded-lg border border-green-200">
-                <p className="text-green-800 font-semibold text-sm">Distance : ~15 km</p>
-              </div>
             </div>
 
             {/* Pessac Talence */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="text-5xl mb-4">🏫</div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Pessac / Talence</h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600">
                 Campus universitaires, zones résidentielles
               </p>
-              <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
-                <p className="text-purple-800 font-semibold text-sm">Distance : ~8 km</p>
-              </div>
             </div>
 
             {/* Bordeaux Lac */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="text-5xl mb-4">🏢</div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux-Lac</h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600">
                 Quartier d'affaires, centre commercial
               </p>
-              <div className="bg-orange-50 p-3 rounded-lg border border-orange-200">
-                <p className="text-orange-800 font-semibold text-sm">Distance : ~10 km</p>
-              </div>
             </div>
 
             {/* Bastide */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="text-5xl mb-4">🌊</div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux Bastide</h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600">
                 Rive droite, quartiers résidentiels
               </p>
-              <div className="bg-cyan-50 p-3 rounded-lg border border-cyan-200">
-                <p className="text-cyan-800 font-semibold text-sm">Distance : ~18 km</p>
-              </div>
             </div>
 
             {/* Banlieue */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
               <div className="text-5xl mb-4">🏘️</div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Banlieue Proche</h3>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600">
                 Mérignac, Le Bouscat, Eysines, Bègles
               </p>
-              <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
-                <p className="text-yellow-800 font-semibold text-sm">Variable selon destination</p>
-              </div>
             </div>
           </div>
 
