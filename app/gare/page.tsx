@@ -1,542 +1,401 @@
 'use client'
 
-import Link from 'next/link'
-import Image from 'next/image'
-import { ArrowLeft, Train, Clock, MapPin, Phone, CheckCircle, Star } from 'lucide-react'
-import { motion } from 'motion/react'
+import { Phone, MapPin, Clock, Plane, Shield, CheckCircle, ArrowRight } from 'lucide-react'
+import {
+  Train,
+  ClockCounterClockwise,
+  Car,
+  Buildings,
+  AirplaneTakeoff,
+  GraduationCap,
+  Desk,
+  Bridge,
+  House,
+  Timer,
+  UserCheck
+} from '@phosphor-icons/react'
 
-export default function GarePage() {
-  const phoneNumber = "0667237822"
-  const phoneDisplay = "06 67 23 78 22"
-
+export default function TaxiGare() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
+
       {/* Hero Section Gare */}
-      <section className="relative min-h-[70vh] bg-gradient-to-br from-green-900 via-emerald-800 to-teal-900 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-400/20 via-transparent to-transparent"></div>
-        
-        <div className="relative container mx-auto px-4 py-16 lg:py-24">
-          {/* Bouton retour */}
-          <Link href="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-8">
-            <ArrowLeft size={20} />
-            <span>Retour à l&apos;accueil</span>
-          </Link>
+      <section className="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-100 py-24 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-green-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-300/15 rounded-full blur-3xl"></div>
 
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              <div className="inline-flex items-center gap-3 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-400 font-semibold">
-                <Train size={20} />
-                <span>Service Gare Saint-Jean</span>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="inline-flex items-center gap-3 bg-green-600/10 backdrop-blur-sm border border-green-200 rounded-full px-6 py-3 text-green-700 font-semibold mb-8">
+            <Train size={20} />
+            <span>Station Taxi Officielle Gare Saint-Jean</span>
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-8">
+            <span className="text-green-600">Taxi Gare</span>
+            <span className="block mt-2 text-4xl md:text-5xl text-gray-700">Saint-Jean</span>
+          </h1>
+
+          <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
+            Service taxi professionnel à la gare SNCF Bordeaux Saint-Jean.
+            Prise en charge rapide, trajets vers toute la région bordelaise.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-6 justify-center max-w-2xl mx-auto mb-16">
+            <a
+              href="tel:0667237822"
+              className="group bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 shadow-xl hover:shadow-green-500/25 hover:scale-105 flex items-center justify-center gap-3"
+            >
+              <Phone size={24} />
+              <span>06 67 23 78 22</span>
+              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </a>
+
+            <div className="bg-white border-2 border-green-200 text-green-600 px-10 py-5 rounded-2xl font-bold text-xl shadow-lg">
+              <div className="flex items-center justify-center gap-3">
+                <Shield size={24} />
+                <span>Tarifs Réglementés</span>
               </div>
-              
-              <div className="space-y-6">
-                <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
-                  <span className="bg-gradient-to-r from-white via-green-100 to-white bg-clip-text text-transparent">
-                    Taxi Gare
-                  </span>
-                  <br />
-                  <span className="text-green-400">Saint-Jean</span>
-                </h1>
-                
-                <p className="text-xl lg:text-2xl text-slate-300 leading-relaxed max-w-2xl">
-                  Liaison directe avec la gare SNCF Bordeaux Saint-Jean. 
-                  <strong className="text-white"> Service fiable 24h/24</strong> pour tous vos déplacements ferroviaires.
+            </div>
+          </div>
+
+          {/* Infos pratiques */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
+              <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <Train size={32} className="text-green-600" weight="duotone" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">Parvis Gare</div>
+              <div className="text-sm text-gray-600">Station officielle</div>
+            </div>
+
+            <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
+              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <ClockCounterClockwise size={32} className="text-blue-600" weight="duotone" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">24h/24</div>
+              <div className="text-sm text-gray-600">Service continu</div>
+            </div>
+
+            <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
+              <div className="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <Car size={32} className="text-yellow-600" weight="duotone" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">Direct</div>
+              <div className="text-sm text-gray-600">Prise en charge rapide</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Taxis Disponibles sur Gare */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              Taxis Disponibles sur la Gare
+            </h2>
+            <p className="text-xl text-gray-600">
+              Notre service taxi est présent en permanence à la gare SNCF Bordeaux Saint-Jean
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                Service Continu 7j/7
+              </h3>
+              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                Nos taxis sont disponibles tous les jours de la semaine, même les week-ends
+                et jours fériés. Station taxi officielle située sur le parvis de la gare.
+              </p>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="text-green-500" size={20} />
+                  <span className="text-gray-700">Taxis disponibles en permanence</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="text-green-500" size={20} />
+                  <span className="text-gray-700">Station officielle parvis gare</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="text-green-500" size={20} />
+                  <span className="text-gray-700">Accès direct depuis la sortie</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="text-green-500" size={20} />
+                  <span className="text-gray-700">Assistance bagages disponible</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-3xl">
+              <div className="text-center">
+                <div className="w-24 h-24 bg-green-200 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <Car size={48} className="text-green-700" weight="duotone" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Prise en Charge Immédiate</h3>
+                <p className="text-gray-700 mb-6">
+                  Sortez de la gare, dirigez-vous vers la station taxi parvis.
+                  Un chauffeur professionnel vous prend en charge directement.
                 </p>
-              </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/#reservation"
-                  className="inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.location.href = '/#reservation';
-                  }}
+                <a
+                  href="tel:0667237822"
+                  className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
-                  <span>📱</span>
-                  <span>Réserver en ligne</span>
-                </Link>
-                
-                <a 
-                  href={`tel:${phoneNumber}`}
-                  className="inline-flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
-                >
-                  <Phone size={24} />
-                  <span>Appeler {phoneDisplay}</span>
+                  <Phone size={20} />
+                  06 67 23 78 22
                 </a>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="hidden lg:block">
-              <div className="relative">
-                <Image 
-                  src="/images/hero/Horloge quai de la gare saint jean.jpg" 
-                  alt="Horloge Gare Saint-Jean Bordeaux - Service Taxi" 
-                  width={600}
-                  height={400}
-                  className="w-full h-[400px] object-cover rounded-3xl shadow-2xl"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-3xl"></div>
-                <div className="absolute bottom-6 left-6 right-6">
-                  <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
-                    <div className="flex items-center gap-3 text-white">
-                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                      <span className="font-semibold">Service disponible maintenant</span>
-                    </div>
+      {/* Principales Destinations Région Bordelaise */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              Principales Destinations depuis la Gare Saint-Jean
+            </h2>
+            <p className="text-xl text-gray-600">
+              Nos taxis vous conduisent vers toutes les destinations de Bordeaux et sa région
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+            {/* Aéroport Bordeaux */}
+            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <AirplaneTakeoff size={40} className="text-blue-600" weight="duotone" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Aéroport Bordeaux-Mérignac</h3>
+              <p className="text-gray-600">
+                Liaison directe gare-aéroport, connexion vols internationaux
+              </p>
+            </div>
+
+            {/* Bordeaux Centre */}
+            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Buildings size={40} className="text-green-600" weight="duotone" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux Centre-Ville</h3>
+              <p className="text-gray-600">
+                Quartiers historiques, Chartrons, place des Quinconces
+              </p>
+            </div>
+
+            {/* Pessac Talence */}
+            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <GraduationCap size={40} className="text-purple-600" weight="duotone" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Pessac / Talence</h3>
+              <p className="text-gray-600">
+                Campus universitaires, zones résidentielles
+              </p>
+            </div>
+
+            {/* Bordeaux Lac */}
+            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Desk size={40} className="text-orange-600" weight="duotone" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux-Lac</h3>
+              <p className="text-gray-600">
+                Quartier d'affaires, centre commercial
+              </p>
+            </div>
+
+            {/* Bastide */}
+            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-cyan-100 to-cyan-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Bridge size={40} className="text-cyan-600" weight="duotone" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux Bastide</h3>
+              <p className="text-gray-600">
+                Rive droite, quartiers résidentiels
+              </p>
+            </div>
+
+            {/* Banlieue */}
+            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
+              <div className="w-20 h-20 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <House size={40} className="text-emerald-600" weight="duotone" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Banlieue Proche</h3>
+              <p className="text-gray-600">
+                Mérignac, Le Bouscat, Eysines, Bègles
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-12 text-center">
+            <div className="bg-white rounded-2xl p-8 max-w-3xl mx-auto shadow-lg">
+              <h4 className="text-xl font-bold text-gray-900 mb-4">Tarifs au Compteur Réglementés</h4>
+              <p className="text-gray-700">
+                Tous nos trajets sont facturés selon les tarifs officiels de la Préfecture de Gironde.
+                Prix final calculé selon la distance réelle et les conditions de circulation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Ponctualité et Fiabilité */}
+      <section className="py-20 bg-green-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              Ponctualité et Fiabilité
+            </h2>
+            <p className="text-xl text-gray-600">
+              Notre priorité : un service taxi fiable pour vos déplacements gare
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-12">
+
+              {/* Ponctualité */}
+              <div className="bg-white rounded-3xl p-8 shadow-lg">
+                <div className="text-center mb-8">
+                  <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <Timer size={48} className="text-green-600" weight="bold" />
                   </div>
+                  <h3 className="text-2xl font-bold text-gray-900">Ponctualité Garantie</h3>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Services Principaux Gare */}
-      <section className="py-20 bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/30 relative overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-400/10 via-transparent to-transparent"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-green-400/10 via-transparent to-transparent"></div>
-        
-        <div className="relative container mx-auto px-4">
-          <motion.div 
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <motion.div 
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500/20 to-blue-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-700 font-semibold mb-6"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <motion.div
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <Train className="w-5 h-5" />
-              </motion.div>
-              <span>SERVICES GARE SAINT-JEAN</span>
-            </motion.div>
-            
-            <motion.h2 
-              className="text-4xl lg:text-6xl font-bold text-slate-900 mb-6 leading-tight"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              Services Taxi
-              <motion.span 
-                className="block text-transparent bg-gradient-to-r from-green-600 via-blue-600 to-green-600 bg-clip-text"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 0.6 }}
-                viewport={{ once: true }}
-              >
-                Gare Saint-Jean
-              </motion.span>
-            </motion.h2>
-            
-            <motion.p 
-              className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              viewport={{ once: true }}
-            >
-              Transport professionnel, assistance bagages et services sur mesure depuis la gare
-            </motion.p>
-          </motion.div>
-
-          <motion.div 
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            {[
-              {
-                icon: "✈️",
-                title: "Gare ↔ Aéroport Mérignac",
-                description: "Transport direct et fiable entre la gare Saint-Jean et l'aéroport de Bordeaux-Mérignac.",
-                gradient: "from-blue-500 to-blue-600",
-                bgGradient: "from-blue-50/80 to-blue-100/80",
-                delay: 0.1
-              },
-              {
-                icon: "🧳",
-                title: "Assistance Bagages",
-                description: "Aide au transport de vos bagages depuis les quais jusqu'au taxi. Service personnalisé.",
-                gradient: "from-green-500 to-green-600",
-                bgGradient: "from-green-50/80 to-green-100/80",
-                delay: 0.2
-              },
-              {
-                icon: "📍",
-                title: "Accueil Parvis Gare",
-                description: "Accueil directement sur le parvis de la gare à l'emplacement taxi officiel.",
-                gradient: "from-orange-500 to-orange-600",
-                bgGradient: "from-orange-50/80 to-orange-100/80",
-                delay: 0.3
-              },
-              {
-                icon: "👨‍💼",
-                title: "Chauffeur Garanti",
-                description: "Chauffeur professionnel présent à l'heure convenue. Service fiable et ponctuel.",
-                gradient: "from-purple-500 to-purple-600",
-                bgGradient: "from-purple-50/80 to-purple-100/80",
-                delay: 0.4
-              }
-            ].map((service, index) => (
-              <motion.div
-                key={index}
-                className="group relative"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: service.delay }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                viewport={{ once: true }}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-br ${service.bgGradient} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-                <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-white/50 p-8">
-                  <motion.div 
-                    className={`w-20 h-20 bg-gradient-to-br ${service.gradient} rounded-3xl flex items-center justify-center text-4xl mb-6 mx-auto shadow-lg`}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  >
-                    {service.icon}
-                  </motion.div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-4 text-center group-hover:text-slate-800 transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-slate-600 leading-relaxed text-center group-hover:text-slate-700 transition-colors">
-                    {service.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Services Touristiques Région */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold text-sm mb-4">
-              TOURISME & DÉCOUVERTE
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
-              Vers les Sites
-              <span className="text-blue-600"> Touristiques</span>
-            </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Découvrez les merveilles de la région depuis la gare Saint-Jean
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-3xl p-8 border border-emerald-200">
-              <div className="text-4xl mb-6">🍷</div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Route des Vins</h3>
-              <p className="text-slate-600 mb-4">Saint-Émilion, Pomerol, Médoc</p>
-              <ul className="text-sm text-slate-500 space-y-1">
-                <li>• Châteaux viticoles prestigieux</li>
-                <li>• Dégustations et visites</li>
-                <li>• Villages classés UNESCO</li>
-              </ul>
-            </div>
-
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 border border-blue-200">
-              <div className="text-4xl mb-6">🏖️</div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Bassin d&apos;Arcachon</h3>
-              <p className="text-slate-600 mb-4">Arcachon, Cap Ferret, Dune du Pilat</p>
-              <ul className="text-sm text-slate-500 space-y-1">
-                <li>• Plus haute dune d&apos;Europe</li>
-                <li>• Ostréiculture traditionnelle</li>
-                <li>• Plages de l&apos;Océan Atlantique</li>
-              </ul>
-            </div>
-
-            <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-3xl p-8 border border-amber-200">
-              <div className="text-4xl mb-6">🏰</div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Patrimoine Historique</h3>
-              <p className="text-slate-600 mb-4">Châteaux et sites remarquables</p>
-              <ul className="text-sm text-slate-500 space-y-1">
-                <li>• Château de Roquetaillade</li>
-                <li>• Abbaye de La Sauve-Majeure</li>
-                <li>• Blaye et sa citadelle Vauban</li>
-              </ul>
-            </div>
-
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-3xl p-8 border border-green-200">
-              <div className="text-4xl mb-6">🌊</div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Côte Atlantique</h3>
-              <p className="text-slate-600 mb-4">Lacanau, Hourtin, Carcans</p>
-              <ul className="text-sm text-slate-500 space-y-1">
-                <li>• Spots de surf renommés</li>
-                <li>• Lacs et forêts de pins</li>
-                <li>• Stations balnéaires</li>
-              </ul>
-            </div>
-
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl p-8 border border-purple-200">
-              <div className="text-4xl mb-6">🦆</div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Parc Naturel</h3>
-              <p className="text-slate-600 mb-4">Landes de Gascogne</p>
-              <ul className="text-sm text-slate-500 space-y-1">
-                <li>• Réserve ornithologique</li>
-                <li>• Sentiers de randonnée</li>
-                <li>• Faune et flore protégées</li>
-              </ul>
-            </div>
-
-            <div className="bg-gradient-to-br from-rose-50 to-rose-100 rounded-3xl p-8 border border-rose-200">
-              <div className="text-4xl mb-6">🎪</div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Événements & Culture</h3>
-              <p className="text-slate-600 mb-4">Festivals et manifestations</p>
-              <ul className="text-sm text-slate-500 space-y-1">
-                <li>• Festival de Jazz de Marciac</li>
-                <li>• Foire aux Vins de Bordeaux</li>
-                <li>• Événements saisonniers</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Galerie Gare & Service Professionnel */}
-      <section className="py-20 bg-gradient-to-b from-slate-50 to-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold text-sm mb-4">
-              SERVICE PROFESSIONNEL
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
-              Notre Service
-              <span className="text-green-600"> Gare</span>
-            </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Service professionnel avec chauffeurs expérimentés pour tous vos déplacements ferroviaires
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            {/* Chauffeur professionnel */}
-            <div className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500">
-              <Image 
-                src="/images/hero/Chauffeur privé.jpg" 
-                alt="Chauffeur professionnel Taxi Bordeaux" 
-                width={400}
-                height={256}
-                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-lg font-bold mb-1">Chauffeur Professionnel</h3>
-                <p className="text-sm opacity-90">Service personnalisé et discret</p>
-              </div>
-            </div>
-
-            {/* Service ouverture de porte */}
-            <div className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500">
-              <Image 
-                src="/images/hero/ouverture de porte vtc.jpg" 
-                alt="Service ouverture de porte Taxi" 
-                width={400}
-                height={256}
-                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-lg font-bold mb-1">Service Fiable</h3>
-                <p className="text-sm opacity-90">Accueil professionnel et pratique</p>
-              </div>
-            </div>
-
-            {/* Gare Saint-Jean alternative */}
-            <div className="group relative overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500">
-              <Image 
-                src="/images/hero/gae saint jean bordeaux.jpg" 
-                alt="Gare Saint-Jean Bordeaux vue extérieure" 
-                width={400}
-                height={256}
-                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-lg font-bold mb-1">Gare Saint-Jean</h3>
-                <p className="text-sm opacity-90">Hub ferroviaire de Bordeaux</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* Tarifs Gare */}
-      <section id="tarifs" className="py-20 bg-gradient-to-b from-white to-slate-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-full font-semibold text-sm mb-4">
-              TARIFS GARE SAINT-JEAN
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
-              Tarifs depuis la
-              <span className="text-green-600"> Gare</span>
-            </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Prix indicatifs • Tarifs officiels 2025 • Devis gratuit sur demande
-            </p>
-          </div>
-
-          {/* Tarifs Gare ↔ Aéroport */}
-          <motion.div 
-            className="mb-16"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <motion.h3 
-              className="text-3xl font-bold text-slate-900 mb-8 text-center"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              Tarif Gare ↔ Aéroport
-            </motion.h3>
-            
-            <motion.div 
-              className="max-w-lg mx-auto"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              <motion.div 
-                className="relative group"
-                whileHover={{ scale: 1.02, y: -5 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-green-400/20 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/50 p-8">
-                  <div className="flex items-center gap-6 mb-8">
-                    <motion.div 
-                      className="w-16 h-16 bg-gradient-to-br from-blue-500 to-green-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg"
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.8 }}
-                    >
-                      ✈️
-                    </motion.div>
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <CheckCircle className="text-green-500 mt-1" size={20} />
                     <div>
-                      <h4 className="text-2xl font-bold text-slate-900 mb-1">Gare ↔ Aéroport Mérignac</h4>
-                      <p className="text-slate-500 font-medium">Distance : ~23,3 km</p>
+                      <h4 className="font-bold text-gray-900 mb-2">Surveillance des trains</h4>
+                      <p className="text-gray-700">Suivi en temps réel des horaires d'arrivée et de départ SNCF</p>
                     </div>
                   </div>
-                  
-                  <div className="grid grid-cols-2 gap-6">
-                    <motion.div 
-                      className="bg-gradient-to-br from-yellow-50 to-amber-100 p-6 rounded-2xl border border-yellow-200/50 hover:border-yellow-300 transition-colors group/price"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    >
-                      <div className="text-yellow-800 font-semibold text-sm mb-2 flex items-center gap-2">
-                        <span className="text-lg">☀️</span>
-                        <span>Jour</span>
-                      </div>
-                      <motion.div 
-                        className="text-3xl font-bold text-yellow-900 group-hover/price:scale-110 transition-transform duration-300"
-                        initial={{ scale: 0 }}
-                        whileInView={{ scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.5 }}
-                        viewport={{ once: true }}
-                      >
-                        63€
-                      </motion.div>
-                    </motion.div>
-                    
-                    <motion.div 
-                      className="bg-gradient-to-br from-indigo-50 to-blue-100 p-6 rounded-2xl border border-indigo-200/50 hover:border-indigo-300 transition-colors group/price"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    >
-                      <div className="text-indigo-800 font-semibold text-sm mb-2 flex items-center gap-2">
-                        <span className="text-lg">🌙</span>
-                        <span>Nuit</span>
-                      </div>
-                      <motion.div 
-                        className="text-3xl font-bold text-indigo-900 group-hover/price:scale-110 transition-transform duration-300"
-                        initial={{ scale: 0 }}
-                        whileInView={{ scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.7 }}
-                        viewport={{ once: true }}
-                      >
-                        87€
-                      </motion.div>
-                    </motion.div>
+
+                  <div className="flex items-start gap-4">
+                    <CheckCircle className="text-green-500 mt-1" size={20} />
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-2">Adaptation aux retards</h4>
+                      <p className="text-gray-700">Ajustement automatique en cas de train retardé</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <CheckCircle className="text-green-500 mt-1" size={20} />
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-2">Trajets directs</h4>
+                      <p className="text-gray-700">Itinéraires optimisés par nos chauffeurs expérimentés</p>
+                    </div>
                   </div>
                 </div>
-              </motion.div>
-            </motion.div>
-          </motion.div>
+              </div>
 
-          {/* Note importante */}
-          <div className="bg-slate-100 rounded-2xl p-6 max-w-4xl mx-auto text-center">
-            <p className="text-slate-700">
-              <strong>💡 Bon à savoir :</strong> Tarifs officiels 2025 • Devis gratuit sur demande • 
-              Majoration de 25% les dimanches, jours fériés et de 21h à 7h
-            </p>
+              {/* Fiabilité */}
+              <div className="bg-white rounded-3xl p-8 shadow-lg">
+                <div className="text-center mb-8">
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <UserCheck size={48} className="text-blue-600" weight="duotone" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900">Fiabilité Professionnelle</h3>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <CheckCircle className="text-blue-500 mt-1" size={20} />
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-2">Service 24h/24</h4>
+                      <p className="text-gray-700">Disponible tous les jours, même les jours fériés</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <CheckCircle className="text-blue-500 mt-1" size={20} />
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-2">Chauffeurs professionnels</h4>
+                      <p className="text-gray-700">Expérience gare, connaissance parfaite de la région</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <CheckCircle className="text-blue-500 mt-1" size={20} />
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-2">Assistance bagages</h4>
+                      <p className="text-gray-700">Aide au transport de vos bagages si nécessaire</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Performances */}
+            <div className="mt-12 bg-white rounded-3xl p-8 shadow-lg text-center">
+              <h4 className="text-2xl font-bold text-gray-900 mb-8">Nos Performances</h4>
+
+              <div className="grid md:grid-cols-3 gap-8">
+                <div>
+                  <div className="text-4xl font-bold text-green-600 mb-2">100%</div>
+                  <div className="text-lg font-semibold text-gray-800 mb-1">Service Assuré</div>
+                  <div className="text-sm text-gray-600">Aucune annulation depuis 2 ans</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold text-blue-600 mb-2">24/7</div>
+                  <div className="text-lg font-semibold text-gray-800 mb-1">Disponibilité</div>
+                  <div className="text-sm text-gray-600">Service continu gare</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold text-purple-600 mb-2">3min</div>
+                  <div className="text-lg font-semibold text-gray-800 mb-1">Temps d'Attente</div>
+                  <div className="text-sm text-gray-600">Maximum à la station</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Gare */}
-      <section className="py-20 bg-gradient-to-br from-green-900 via-emerald-800 to-teal-900 text-white">
+      {/* Contact Final */}
+      <section className="py-20 bg-gradient-to-br from-green-600 to-emerald-700 text-white">
         <div className="container mx-auto px-4 text-center">
-          <div className="max-w-4xl mx-auto space-y-8">
-            <h2 className="text-4xl lg:text-5xl font-bold">
-              Réservez votre
-              <span className="text-green-400"> Taxi Gare</span>
-            </h2>
-            
-            <p className="text-xl text-slate-300 leading-relaxed">
-              Service disponible 24h/24 pour tous vos déplacements depuis et vers la gare Saint-Jean
-            </p>
+          <h2 className="text-4xl md:text-5xl font-bold mb-8">
+            Taxi Gare Saint-Jean Bordeaux
+          </h2>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Link
-                href="/#reservation"
-                className="inline-flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-              >
-                <span className="text-2xl">📱</span>
-                <div className="text-left">
-                  <div className="text-sm opacity-90">Réservation en ligne</div>
-                  <div className="text-xl font-bold">Module de réservation</div>
-                </div>
-              </Link>
-              
-              <a 
-                href={`tel:${phoneNumber}`}
-                className="inline-flex items-center justify-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl"
-              >
-                <Phone size={28} />
-                <div className="text-left">
-                  <div className="text-sm opacity-90">Appelez maintenant</div>
-                  <div className="text-xl font-bold">{phoneDisplay}</div>
-                </div>
-              </a>
-              
-              <div className="text-center">
-                <div className="text-green-400 font-semibold mb-1">⏱️ Temps d&apos;attente moyen</div>
-                <div className="text-3xl font-bold">5-10 min</div>
-              </div>
+          <p className="text-xl text-green-100 mb-12 max-w-3xl mx-auto">
+            Service taxi professionnel • Station officielle Parvis Gare • Disponible 24h/24
+          </p>
+
+          <a
+            href="tel:0667237822"
+            className="group bg-white text-green-600 px-12 py-6 rounded-2xl font-bold text-2xl hover:bg-gray-100 transition-all duration-300 shadow-2xl hover:shadow-white/10 hover:scale-105 inline-flex items-center gap-3"
+          >
+            <Phone size={28} />
+            <span>06 67 23 78 22</span>
+            <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
+          </a>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12 text-green-100 text-sm">
+            <div className="flex items-center justify-center gap-2">
+              <CheckCircle size={16} />
+              <span>Service 24h/24</span>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <CheckCircle size={16} />
+              <span>Tarifs réglementés</span>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <CheckCircle size={16} />
+              <span>Chauffeurs pro</span>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <CheckCircle size={16} />
+              <span>Toute la région</span>
             </div>
           </div>
         </div>
