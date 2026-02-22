@@ -1,7 +1,19 @@
 'use client'
 
 import { Phone, MapPin, Clock, Plane, Shield, CheckCircle, ArrowRight } from 'lucide-react'
-import Image from 'next/image'
+import {
+  AirplaneTakeoff,
+  ClockCounterClockwise,
+  Car,
+  Buildings,
+  Train,
+  GraduationCap,
+  OfficeChair,
+  Bridge,
+  House,
+  TimerBold,
+  UserCheck
+} from 'phosphor-react'
 
 export default function TaxiAeroport() {
   return (
@@ -49,42 +61,24 @@ export default function TaxiAeroport() {
           {/* Infos pratiques */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
-              <div className="w-12 h-12 mx-auto mb-3 rounded-xl overflow-hidden">
-                <Image
-                  src="/images/hero/aeroport-bordeaux-dépose minute.webp"
-                  alt="Terminal aéroport Bordeaux"
-                  width={48}
-                  height={48}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <AirplaneTakeoff size={32} className="text-blue-600" weight="duotone" />
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">Hall A</div>
               <div className="text-sm text-gray-600">Station officielle</div>
             </div>
 
             <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
-              <div className="w-12 h-12 mx-auto mb-3 rounded-xl overflow-hidden">
-                <Image
-                  src="/images/hero/Horloge quai de la gare saint jean.jpg"
-                  alt="Service 24h/24"
-                  width={48}
-                  height={48}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <ClockCounterClockwise size={32} className="text-green-600" weight="duotone" />
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">24h/24</div>
               <div className="text-sm text-gray-600">Service continu</div>
             </div>
 
             <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
-              <div className="w-12 h-12 mx-auto mb-3 rounded-xl overflow-hidden">
-                <Image
-                  src="/images/hero/toyota-corolla.jpg"
-                  alt="Taxi professionnel"
-                  width={48}
-                  height={48}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <Car size={32} className="text-yellow-600" weight="duotone" />
               </div>
               <div className="text-2xl font-bold text-gray-900 mb-1">Direct</div>
               <div className="text-sm text-gray-600">Prise en charge rapide</div>
@@ -137,14 +131,8 @@ export default function TaxiAeroport() {
 
             <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-3xl">
               <div className="text-center">
-                <div className="w-24 h-24 mx-auto mb-6 rounded-2xl overflow-hidden shadow-lg">
-                  <Image
-                    src="/images/hero/chauffeur vtc bordeaux.jpg"
-                    alt="Service taxi immédiat"
-                    width={96}
-                    height={96}
-                    className="w-full h-full object-cover"
-                  />
+                <div className="w-24 h-24 bg-blue-200 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <Car size={48} className="text-blue-700" weight="duotone" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Prise en Charge Immédiate</h3>
                 <p className="text-gray-700 mb-6">
@@ -181,14 +169,8 @@ export default function TaxiAeroport() {
 
             {/* Bordeaux Centre */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
-                <Image
-                  src="/images/hero/Pont-de-pierre- service taxi bordeaux.jpg"
-                  alt="Bordeaux Centre-Ville"
-                  width={80}
-                  height={80}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Buildings size={40} className="text-blue-600" weight="duotone" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux Centre-Ville</h3>
               <p className="text-gray-600">
@@ -198,14 +180,8 @@ export default function TaxiAeroport() {
 
             {/* Gare Saint-Jean */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
-                <Image
-                  src="/images/hero/gae saint jean bordeaux.jpg"
-                  alt="Gare Saint-Jean"
-                  width={80}
-                  height={80}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Train size={40} className="text-green-600" weight="duotone" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Gare Saint-Jean</h3>
               <p className="text-gray-600">
@@ -215,14 +191,8 @@ export default function TaxiAeroport() {
 
             {/* Pessac Talence */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
-                <Image
-                  src="/images/hero/Vignoble bordeaux.jpg"
-                  alt="Campus Pessac Talence"
-                  width={80}
-                  height={80}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <GraduationCap size={40} className="text-purple-600" weight="duotone" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Pessac / Talence</h3>
               <p className="text-gray-600">
@@ -232,14 +202,8 @@ export default function TaxiAeroport() {
 
             {/* Bordeaux Lac */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
-                <Image
-                  src="/images/hero/Salle d'embarquement BOD.jpg"
-                  alt="Bordeaux-Lac quartier d'affaires"
-                  width={80}
-                  height={80}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <OfficeChair size={40} className="text-orange-600" weight="duotone" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux-Lac</h3>
               <p className="text-gray-600">
@@ -249,14 +213,8 @@ export default function TaxiAeroport() {
 
             {/* Bastide */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
-                <Image
-                  src="/images/hero/Pont-de-pierre- service taxi bordeaux.jpg"
-                  alt="Bordeaux Bastide rive droite"
-                  width={80}
-                  height={80}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-20 h-20 bg-gradient-to-br from-cyan-100 to-cyan-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <Bridge size={40} className="text-cyan-600" weight="duotone" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux Bastide</h3>
               <p className="text-gray-600">
@@ -266,14 +224,8 @@ export default function TaxiAeroport() {
 
             {/* Banlieue */}
             <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
-                <Image
-                  src="/images/hero/Vignoble bordeaux.jpg"
-                  alt="Banlieue résidentielle"
-                  width={80}
-                  height={80}
-                  className="w-full h-full object-cover"
-                />
+              <div className="w-20 h-20 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <House size={40} className="text-emerald-600" weight="duotone" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Banlieue Proche</h3>
               <p className="text-gray-600">
@@ -312,14 +264,8 @@ export default function TaxiAeroport() {
               {/* Ponctualité */}
               <div className="bg-white rounded-3xl p-8 shadow-lg">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
-                    <Image
-                      src="/images/hero/Horloge quai de la gare saint jean.jpg"
-                      alt="Ponctualité garantie"
-                      width={64}
-                      height={64}
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <TimerBold size={48} className="text-green-600" weight="duotone" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">Ponctualité Garantie</h3>
                 </div>
@@ -354,14 +300,8 @@ export default function TaxiAeroport() {
               {/* Fiabilité */}
               <div className="bg-white rounded-3xl p-8 shadow-lg">
                 <div className="text-center mb-8">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg">
-                    <Image
-                      src="/images/hero/chauffeur vtc bordeaux.jpg"
-                      alt="Fiabilité professionnelle"
-                      width={64}
-                      height={64}
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <UserCheck size={48} className="text-blue-600" weight="duotone" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">Fiabilité Professionnelle</h3>
                 </div>
