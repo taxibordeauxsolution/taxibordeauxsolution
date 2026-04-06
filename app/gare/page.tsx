@@ -207,7 +207,7 @@ export default function TaxiGare() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux-Lac</h3>
               <p className="text-gray-600">
-                Quartier d'affaires, centre commercial
+                Quartier d&apos;affaires, centre commercial
               </p>
             </div>
 
@@ -275,7 +275,7 @@ export default function TaxiGare() {
                     <CheckCircle className="text-green-500 mt-1" size={20} />
                     <div>
                       <h4 className="font-bold text-gray-900 mb-2">Surveillance des trains</h4>
-                      <p className="text-gray-700">Suivi en temps réel des horaires d'arrivée et de départ SNCF</p>
+                      <p className="text-gray-700">Suivi en temps réel des horaires d&apos;arrivée et de départ SNCF</p>
                     </div>
                   </div>
 
@@ -351,7 +351,7 @@ export default function TaxiGare() {
                 </div>
                 <div>
                   <div className="text-4xl font-bold text-purple-600 mb-2">3min</div>
-                  <div className="text-lg font-semibold text-gray-800 mb-1">Temps d'Attente</div>
+                  <div className="text-lg font-semibold text-gray-800 mb-1">Temps d&apos;Attente</div>
                   <div className="text-sm text-gray-600">Maximum à la station</div>
                 </div>
               </div>

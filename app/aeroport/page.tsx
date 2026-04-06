@@ -36,7 +36,7 @@ export default function TaxiAeroport() {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
-            Service taxi professionnel à l'aéroport de Bordeaux-Mérignac.
+            Service taxi professionnel à l&apos;aéroport de Bordeaux-Mérignac.
             Prise en charge rapide, trajets vers toute la région bordelaise.
           </p>
 
@@ -92,10 +92,10 @@ export default function TaxiAeroport() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Taxis Disponibles sur l'Aéroport
+              Taxis Disponibles sur l&apos;Aéroport
             </h2>
             <p className="text-xl text-gray-600">
-              Notre service taxi est présent en permanence à l'aéroport Bordeaux-Mérignac
+              Notre service taxi est présent en permanence à l&apos;aéroport Bordeaux-Mérignac
             </p>
           </div>
 
@@ -124,7 +124,7 @@ export default function TaxiAeroport() {
                 </div>
                 <div className="flex items-center gap-3">
                   <CheckCircle className="text-green-500" size={20} />
-                  <span className="text-gray-700">File d'attente organisée</span>
+                  <span className="text-gray-700">File d&apos;attente organisée</span>
                 </div>
               </div>
             </div>
@@ -136,7 +136,7 @@ export default function TaxiAeroport() {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Prise en Charge Immédiate</h3>
                 <p className="text-gray-700 mb-6">
-                  Sortez de l'aéroport, dirigez-vous vers la station taxi Hall A.
+                  Sortez de l&apos;aéroport, dirigez-vous vers la station taxi Hall A.
                   Un chauffeur professionnel vous prend en charge directement.
                 </p>
 
@@ -207,7 +207,7 @@ export default function TaxiAeroport() {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Bordeaux-Lac</h3>
               <p className="text-gray-600">
-                Quartier d'affaires, centre commercial
+                Quartier d&apos;affaires, centre commercial
               </p>
             </div>
 
@@ -275,7 +275,7 @@ export default function TaxiAeroport() {
                     <CheckCircle className="text-green-500 mt-1" size={20} />
                     <div>
                       <h4 className="font-bold text-gray-900 mb-2">Surveillance des vols</h4>
-                      <p className="text-gray-700">Suivi en temps réel des horaires d'arrivée et de départ</p>
+                      <p className="text-gray-700">Suivi en temps réel des horaires d&apos;arrivée et de départ</p>
                     </div>
                   </div>
 
@@ -351,7 +351,7 @@ export default function TaxiAeroport() {
                 </div>
                 <div>
                   <div className="text-4xl font-bold text-purple-600 mb-2">5min</div>
-                  <div className="text-lg font-semibold text-gray-800 mb-1">Temps d'Attente</div>
+                  <div className="text-lg font-semibold text-gray-800 mb-1">Temps d&apos;Attente</div>
                   <div className="text-sm text-gray-600">Maximum à la station</div>
                 </div>
               </div>
