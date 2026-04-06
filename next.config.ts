@@ -5,11 +5,7 @@ const nextConfig: NextConfig = {
     // TypeScript strict mode réactivé - erreurs TypeScript maintenant corrigées avec les nouveaux types
     ignoreBuildErrors: false,
   },
-  eslint: {
-    // ESLint activé pour la validation de code
-    ignoreDuringBuilds: false,
-  },
-  experimental: {
+experimental: {
     // CSS optimization désactivé temporairement - problème avec critters
     // optimizeCss: true,
   },
