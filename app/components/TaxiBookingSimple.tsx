@@ -183,7 +183,7 @@ const TaxiBookingSimple = () => {
     const rate = isNightRate(pickupTime) ? nightRate : dayRate
     const price = baseFare + (distance * rate)
     
-    return Math.max(price, 7.30) // Prix minimum
+    return Math.max(price, 30.00) // Prix minimum
   }, [])
 
   const calculateRoute = useCallback(() => {

@@ -49,7 +49,7 @@ export class PricingService {
       weatherSupplement: 0, // Possible selon conditions météo
       
       // Minimums et maximums
-      minimumFare: 7.30, // Minimum légal
+      minimumFare: 30.00, // Minimum de course
       maximumWaitTime: 60, // minutes avant négociation
       
       // Configuration heures

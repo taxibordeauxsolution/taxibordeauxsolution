@@ -304,7 +304,7 @@ const TaxiBookingHomePreview = () => {
         
         const basePrice = priseEnCharge + (distance * tarifKm)
         const approachFees = 7.20 // Frais d'approche et de réservation
-        const finalPrice = Math.round((basePrice + approachFees) * 100) / 100
+        const finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, 30.00)
         
         // Déterminer le type de tarif
         let tariffType = 'Jour'
@@ -810,13 +810,9 @@ const TaxiBookingHomePreview = () => {
                 <div className="text-3xl font-bold text-green-700">
                   {(tripData.price || 0).toFixed(2)}€
                 </div>
-                {tripData.priceDetails && (
-                  <div className="text-xs text-green-700 sm:text-green-600 mt-2 space-y-1">
-                    <div>Prix course ({tripData.priceDetails.tariffType}): {(tripData.priceDetails.basePrice || 0).toFixed(2)}€</div>
-
-                    {(tripData.priceDetails.isNight || tripData.priceDetails.isHoliday || tripData.priceDetails.isSunday) && (
-                      <div className="text-blue-700 sm:text-blue-600 font-medium">✓ Tarif majoré appliqué</div>
-                    )}
+                {tripData.priceDetails && tripData.priceDetails.tariffType && tripData.priceDetails.tariffType !== 'Jour' && (
+                  <div className="text-xs text-blue-700 sm:text-blue-600 mt-2 font-medium">
+                    ✓ Tarif {tripData.priceDetails.tariffType} appliqué
                   </div>
                 )}
               </div>

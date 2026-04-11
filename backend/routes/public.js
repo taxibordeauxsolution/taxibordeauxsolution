@@ -59,7 +59,7 @@ router.get('/pricing', asyncHandler(async (req, res) => {
     nightRate: parseFloat(process.env.PRICING_NIGHT_RATE) || 3.18,
     nightStart: process.env.NIGHT_RATE_START || '21:00',
     nightEnd: process.env.NIGHT_RATE_END || '07:00',
-    minimumFare: 7.30,
+    minimumFare: 30.00,
     currency: 'EUR',
     supplements: {
       luggage: 'Gratuit jusqu\'à 3 bagages, puis 2.00€/bagage',
