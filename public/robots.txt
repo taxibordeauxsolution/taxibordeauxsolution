@@ -1,5 +1,4 @@
 User-agent: *
-Disallow: /
+Allow: /
 
-# Bloque temporairement l'indexation du site en développement
-# À modifier quand le site sera prêt pour la production
+Sitemap: https://taxibordeauxsolution.vercel.app/sitemap.xml
