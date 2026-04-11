@@ -337,19 +337,19 @@ const TaxiBookingHomePreview = () => {
   }
 
   const LanguageSelector = () => (
-    <div className="flex items-center space-x-2">
-      <Globe className="w-4 h-4 text-gray-600" />
+    <div className="flex items-center gap-2 bg-white border border-blue-200 rounded-full px-3 py-1.5 shadow-sm">
+      <Globe className="w-4 h-4 text-blue-500 shrink-0" />
       <select
         value={language}
         onChange={(e) => {
           setLanguage(e.target.value)
           setBookingData(prev => ({ ...prev, language: e.target.value }))
         }}
-        className="bg-white border border-gray-300 rounded px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500"
+        className="bg-transparent border-none outline-none text-sm font-medium text-gray-700 cursor-pointer"
       >
-        <option value="fr">🇫🇷 Français</option>
-        <option value="en">🇬🇧 English</option>
-        <option value="es">🇪🇸 Español</option>
+        <option value="fr">🇫🇷 FR</option>
+        <option value="en">🇬🇧 EN</option>
+        <option value="es">🇪🇸 ES</option>
       </select>
     </div>
   )
