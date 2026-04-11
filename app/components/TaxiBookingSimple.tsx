@@ -234,7 +234,7 @@ const TaxiBookingSimple = () => {
         setError('Impossible de calculer l&apos;itinéraire')
       }
     })
-  }, [tripData.fromCoords, tripData.toCoords, directionsService, directionsRenderer, bookingData.pickupTime, calculatePrice])
+  }, [tripData.fromCoords, tripData.toCoords, directionsService, directionsRenderer, calculatePrice])
 
   // Calcul itinéraire
   useEffect(() => {
@@ -243,13 +243,13 @@ const TaxiBookingSimple = () => {
     }
   }, [tripData.fromCoords, tripData.toCoords, directionsService, directionsRenderer, calculateRoute])
 
-  // Recalcul du prix quand l'heure change
+  // Recalcul du prix quand la date, l'heure, la distance ou la durée changent — sans rappel Google Maps
   useEffect(() => {
-    if (tripData.distance > 0) {
-      const newPrice = calculatePrice(tripData.distance, bookingData.pickupTime)
+    if (tripData.distance > 0 && tripData.duration > 0) {
+      const newPrice = calculatePrice(tripData.distance, bookingData.pickupTime, tripData.duration, bookingData.pickupDate)
       setTripData(prev => ({ ...prev, price: newPrice }))
     }
-  }, [bookingData.pickupTime, tripData.distance, calculatePrice])
+  }, [bookingData.pickupTime, bookingData.pickupDate, tripData.distance, tripData.duration, calculatePrice])
 
   const handleBookingChange = (field: string, value: any) => {
     setBookingData(prev => ({ ...prev, [field]: value }))

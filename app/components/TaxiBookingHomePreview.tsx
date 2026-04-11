@@ -252,7 +252,7 @@ const TaxiBookingHomePreview = () => {
     return fixedHolidays.includes(dateStr)
   }
 
-  // Fonction pour calculer l'itinéraire via Google Maps avec tarification
+  // Calcul de l'itinéraire - uniquement Google Maps, sans calcul de prix
   const calculateRoute = useCallback(() => {
     if (!directionsService || !directionsRenderer || !tripData.fromCoords || !tripData.toCoords) return
 
@@ -263,85 +263,26 @@ const TaxiBookingHomePreview = () => {
       origin: tripData.fromCoords,
       destination: tripData.toCoords,
       travelMode: (window as any).google.maps.TravelMode.DRIVING,
-      avoidHighways: false, // Autorise autoroutes pour plus de rapidité
-      avoidTolls: false,    // Autorise péages pour plus de rapidité
+      avoidHighways: false,
+      avoidTolls: false,
       unitSystem: (window as any).google.maps.UnitSystem.METRIC,
-      optimizeWaypoints: true, // Optimise l'itinéraire
-      provideRouteAlternatives: false, // Une seule route (la plus rapide)
-      region: 'FR' // Région France pour optimisation locale
+      optimizeWaypoints: true,
+      provideRouteAlternatives: false,
+      region: 'FR'
     }, (result: any, status: string) => {
       setLoading(false)
-      
+
       if (status === 'OK' && result.routes[0]) {
         directionsRenderer.setDirections(result)
-        
+
         const route = result.routes[0].legs[0]
-        const distance = (route.distance?.value || 0) / 1000 // en km
-        const duration = (route.duration?.value || 0) / 60 // en minutes
-        
-        // Calcul de prix - utilise date/heure si disponible, sinon tarif jour par défaut
-        let departureDate: Date
-        let isNight = false
-        let isHoliday = false
-        let isSunday = false
-        
-        if (bookingData.departureDate && bookingData.departureTime) {
-          departureDate = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
-          const hour = departureDate.getHours()
-          isNight = hour >= 19 || hour < 6 // 19h-6h = tarif nuit
-          isHoliday = isPublicHoliday(departureDate)
-          isSunday = departureDate.getDay() === 0
-        }
-        
-        const priseEnCharge = 2.83
-        const DAY_RATE = 2.16
-        const NIGHT_RATE = 3.24
+        const distance = (route.distance?.value || 0) / 1000
+        const duration = (route.duration?.value || 0) / 60
 
-        // Calcul kilométrique : tarif plein si férié/dimanche,
-        // sinon calcul mixte qui tient compte du basculement 19h/6h en cours de route
-        let distanceFare: number
-        if (isHoliday || isSunday) {
-          distanceFare = distance * NIGHT_RATE
-        } else if (bookingData.departureDate && bookingData.departureTime) {
-          distanceFare = calculateDistanceFare(departureDate, duration, distance, DAY_RATE, NIGHT_RATE)
-        } else {
-          distanceFare = distance * DAY_RATE
-        }
-
-        const basePrice = priseEnCharge + distanceFare
-        const approachFees = 7.20 // Frais d'approche et de réservation
-        const finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, 30.00)
-
-        // Déterminer le type de tarif pour affichage
-        let tariffType = 'Jour'
-        if (isHoliday) tariffType = 'Férié'
-        else if (isSunday) tariffType = 'Dimanche'
-        else if (bookingData.departureDate && bookingData.departureTime && duration > 0) {
-          const depMin = departureDate.getHours() * 60 + departureDate.getMinutes()
-          const arrMin = depMin + duration
-          const depIsNight = isNightMinutes(depMin)
-          const arrIsNight = isNightMinutes(arrMin)
-          if (depIsNight && arrIsNight) tariffType = 'Nuit'
-          else if (!depIsNight && !arrIsNight) tariffType = 'Jour'
-          else tariffType = 'Mixte'
-        } else if (isNight) tariffType = 'Nuit'
-        
         setTripData(prev => ({
           ...prev,
-          distance: distance,
-          duration: duration,
-          price: finalPrice,
-          priceDetails: {
-            basePrice: Math.round(basePrice * 100) / 100,
-            approachFees: approachFees,
-            totalPrice: finalPrice,
-            tariffType: tariffType,
-            priseEnCharge: priseEnCharge,
-            tarifKm: tarifKm,
-            isNight: isNight,
-            isHoliday: isHoliday,
-            isSunday: isSunday
-          },
+          distance,
+          duration,
           routeInfo: {
             steps: route.steps,
             overview: result.routes[0].overview_polyline,
@@ -358,14 +299,78 @@ const TaxiBookingHomePreview = () => {
         setError('Impossible de calculer l&apos;itinéraire')
       }
     })
-  }, [directionsService, directionsRenderer, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, map])
+  }, [directionsService, directionsRenderer, tripData.fromCoords, tripData.toCoords, map])
 
   // Calcul automatique de l'itinéraire dès que les adresses sont disponibles
   useEffect(() => {
     if (tripData.fromCoords && tripData.toCoords && directionsService && directionsRenderer) {
       calculateRoute()
     }
-  }, [tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, directionsService, directionsRenderer, calculateRoute])
+  }, [tripData.fromCoords, tripData.toCoords, directionsService, directionsRenderer, calculateRoute])
+
+  // Recalcul du prix à chaque changement de distance, durée, date ou heure — sans rappel Google Maps
+  useEffect(() => {
+    if (tripData.distance <= 0 || tripData.duration <= 0) return
+
+    let departureDate: Date | null = null
+    let isNight = false
+    let isHoliday = false
+    let isSunday = false
+
+    if (bookingData.departureDate && bookingData.departureTime) {
+      const d = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
+      if (!isNaN(d.getTime())) {
+        departureDate = d
+        const hour = d.getHours()
+        isNight = hour >= 19 || hour < 6
+        isHoliday = isPublicHoliday(d)
+        isSunday = d.getDay() === 0
+      }
+    }
+
+    const priseEnCharge = 2.83
+    const DAY_RATE = 2.16
+    const NIGHT_RATE = 3.24
+
+    let distanceFare: number
+    if (isHoliday || isSunday) {
+      distanceFare = tripData.distance * NIGHT_RATE
+    } else if (departureDate) {
+      distanceFare = calculateDistanceFare(departureDate, tripData.duration, tripData.distance, DAY_RATE, NIGHT_RATE)
+    } else {
+      distanceFare = tripData.distance * DAY_RATE
+    }
+
+    const basePrice = priseEnCharge + distanceFare
+    const approachFees = 7.20
+    const finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, 30.00)
+
+    let tariffType = 'Jour'
+    if (isHoliday) tariffType = 'Férié'
+    else if (isSunday) tariffType = 'Dimanche'
+    else if (departureDate && tripData.duration > 0) {
+      const depMin = departureDate.getHours() * 60 + departureDate.getMinutes()
+      const arrMin = depMin + tripData.duration
+      if (isNightMinutes(depMin) && isNightMinutes(arrMin)) tariffType = 'Nuit'
+      else if (!isNightMinutes(depMin) && !isNightMinutes(arrMin)) tariffType = 'Jour'
+      else tariffType = 'Mixte'
+    } else if (isNight) tariffType = 'Nuit'
+
+    setTripData(prev => ({
+      ...prev,
+      price: finalPrice,
+      priceDetails: {
+        basePrice: Math.round(basePrice * 100) / 100,
+        approachFees,
+        totalPrice: finalPrice,
+        tariffType,
+        priseEnCharge,
+        isNight,
+        isHoliday,
+        isSunday
+      }
+    }))
+  }, [tripData.distance, tripData.duration, bookingData.departureDate, bookingData.departureTime])
 
 
   const handleBookingChange = (field: keyof BookingData, value: any) => {
