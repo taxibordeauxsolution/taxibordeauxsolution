@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { MapPin, Clock, Users, Briefcase, Euro, Phone, Mail, Car, Navigation, CheckCircle, Globe, Map, Route, Loader2, ArrowRight } from 'lucide-react'
 import type { Coordinates } from '../../types/booking'
+import { calculateDistanceFare } from '@/app/lib/pricing'
 
 // Configuration API
 const API_BASE_URL = 'http://localhost:3002/api'
@@ -174,16 +175,25 @@ const TaxiBookingSimple = () => {
     return hour >= 19 || hour < 6
   }
 
-  // Fonction pour calculer le prix selon l'heure
-  const calculatePrice = useCallback((distance: number, pickupTime: string) => {
+  // Fonction pour calculer le prix selon l'heure avec basculement mixte
+  const calculatePrice = useCallback((distance: number, pickupTime: string, durationMinutes: number, pickupDate?: string) => {
     const baseFare = 2.83
     const dayRate = 2.16
     const nightRate = 3.24
-    
-    const rate = isNightRate(pickupTime) ? nightRate : dayRate
-    const price = baseFare + (distance * rate)
-    
-    return Math.max(price, 30.00) // Prix minimum
+
+    let distanceFare: number
+    if (pickupDate && pickupTime && durationMinutes > 0) {
+      const departureTime = new Date(pickupDate + 'T' + pickupTime)
+      if (!isNaN(departureTime.getTime())) {
+        distanceFare = calculateDistanceFare(departureTime, durationMinutes, distance, dayRate, nightRate)
+      } else {
+        distanceFare = distance * (isNightRate(pickupTime) ? nightRate : dayRate)
+      }
+    } else {
+      distanceFare = distance * (isNightRate(pickupTime) ? nightRate : dayRate)
+    }
+
+    return Math.max(baseFare + distanceFare, 30.00) // Prix minimum
   }, [])
 
   const calculateRoute = useCallback(() => {
@@ -210,7 +220,7 @@ const TaxiBookingSimple = () => {
         const leg = result.routes[0].legs[0]
         const distance = (leg.distance?.value || 0) / 1000
         const duration = (leg.duration?.value || 0) / 60
-        const price = calculatePrice(distance, bookingData.pickupTime)
+        const price = calculatePrice(distance, bookingData.pickupTime, duration, bookingData.pickupDate)
         
         setTripData(prev => ({
           ...prev,

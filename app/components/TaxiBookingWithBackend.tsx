@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { MapPin, Clock, Users, Briefcase, Euro, Calendar, Phone, Mail, Car, Navigation, CheckCircle, AlertCircle, Globe, Map, Route, Loader2, ArrowRight } from 'lucide-react'
 import type { TripData, BookingData, ReservationData } from '../../types/booking'
+import { calculateDistanceFare } from '@/app/lib/pricing'
 
 // Configuration API
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api'
@@ -327,10 +328,17 @@ const TaxiBookingWithBackend = () => {
         const distance = (route.distance?.value || 0) / 1000 // en km
         const duration = (route.duration?.value || 0) / 60 // en minutes
         
-        // Calcul de prix avec frais d'approche
-        const basePrice = 2.83 + (distance * 2.16)
+        // Calcul de prix avec basculement mixte jour/nuit
+        const priseEnCharge = 2.83
+        const departureDate = bookingData.departureDate && bookingData.departureTime
+          ? new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
+          : null
+        const distanceFare = departureDate && !isNaN(departureDate.getTime())
+          ? calculateDistanceFare(departureDate, duration, distance, 2.16, 3.24)
+          : distance * 2.16
+        const basePrice = priseEnCharge + distanceFare
         const approachFees = 7.20 // Frais d'approche et de réservation
-        const finalPrice = Math.round((basePrice + approachFees) * 100) / 100
+        const finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, 30.00)
         
         setTripData(prev => ({
           ...prev,

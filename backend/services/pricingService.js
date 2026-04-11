@@ -122,9 +122,11 @@ export class PricingService {
         // 1. Prise en charge
         baseFare: this.rates.baseFare,
         
-        // 2. Prix kilométrique
+        // 2. Prix kilométrique avec basculement mixte jour/nuit
         kmRate: conditions.isNight ? this.rates.nightRate : this.rates.dayRate,
-        distanceFare: distance * (conditions.isNight ? this.rates.nightRate : this.rates.dayRate),
+        distanceFare: (conditions.isHoliday || conditions.isWeekend)
+          ? distance * this.rates.nightRate
+          : this.calculateDistanceFare(departureTime, duration, distance),
         
         // 3. Temps d'attente
         waitFare: waitTime > 0 ? (waitTime / 60) * this.rates.waitRate : 0,
@@ -262,6 +264,50 @@ export class PricingService {
       originalTime: time,
       dayOfWeek
     }
+  }
+
+  /**
+   * Calcul kilométrique mixte : tient compte du basculement 19h/6h en cours de route
+   */
+  calculateDistanceFare(departureTime, durationMinutes, distanceKm) {
+    const NIGHT_START = 19 * 60
+    const NIGHT_END = 6 * 60
+
+    const isNightAt = (min) => {
+      const t = ((min % 1440) + 1440) % 1440
+      return t >= NIGHT_START || t < NIGHT_END
+    }
+
+    if (distanceKm <= 0) return 0
+
+    const date = new Date(departureTime)
+    const depMin = date.getHours() * 60 + date.getMinutes()
+
+    if (!durationMinutes || durationMinutes <= 0) {
+      return distanceKm * (isNightAt(depMin) ? this.rates.nightRate : this.rates.dayRate)
+    }
+
+    const arrMin = depMin + durationMinutes
+    const speedKmPerMin = distanceKm / durationMinutes
+    const points = [depMin, arrMin]
+    const maxDay = Math.ceil(arrMin / 1440) + 1
+
+    for (let day = 0; day <= maxDay; day++) {
+      const t19 = day * 1440 + NIGHT_START
+      const t6  = day * 1440 + NIGHT_END
+      if (t19 > depMin && t19 < arrMin) points.push(t19)
+      if (t6  > depMin && t6  < arrMin) points.push(t6)
+    }
+
+    points.sort((a, b) => a - b)
+
+    let fare = 0
+    for (let i = 0; i < points.length - 1; i++) {
+      const segKm = (points[i + 1] - points[i]) * speedKmPerMin
+      fare += segKm * (isNightAt(points[i]) ? this.rates.nightRate : this.rates.dayRate)
+    }
+
+    return fare
   }
 
   /**

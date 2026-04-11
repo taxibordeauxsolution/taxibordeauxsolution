@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { MapPin, Clock, Users, Briefcase, Euro, Calendar, Phone, Mail, Car, Navigation, CheckCircle, AlertCircle, Globe, Map, Route, Loader2, ArrowRight } from 'lucide-react'
 import type { TripData, BookingData, ReservationData } from '../../types/booking'
+import { calculateDistanceFare, isNightMinutes } from '@/app/lib/pricing'
 
 // Configuration API
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api'
@@ -292,25 +293,38 @@ const TaxiBookingHomePreview = () => {
           isSunday = departureDate.getDay() === 0
         }
         
-        // Tarifs de base 
-        let priseEnCharge = 2.83 // Identique jour et nuit
-        let tarifKm = 2.16
+        const priseEnCharge = 2.83
+        const DAY_RATE = 2.16
+        const NIGHT_RATE = 3.24
 
-        // Majorations
-        if (isNight || isHoliday || isSunday) {
-          // priseEnCharge reste 2.83€ jour et nuit
-          tarifKm = 3.24 // Tarif kilométrique nuit
+        // Calcul kilométrique : tarif plein si férié/dimanche,
+        // sinon calcul mixte qui tient compte du basculement 19h/6h en cours de route
+        let distanceFare: number
+        if (isHoliday || isSunday) {
+          distanceFare = distance * NIGHT_RATE
+        } else if (bookingData.departureDate && bookingData.departureTime) {
+          distanceFare = calculateDistanceFare(departureDate, duration, distance, DAY_RATE, NIGHT_RATE)
+        } else {
+          distanceFare = distance * DAY_RATE
         }
-        
-        const basePrice = priseEnCharge + (distance * tarifKm)
+
+        const basePrice = priseEnCharge + distanceFare
         const approachFees = 7.20 // Frais d'approche et de réservation
         const finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, 30.00)
-        
-        // Déterminer le type de tarif
+
+        // Déterminer le type de tarif pour affichage
         let tariffType = 'Jour'
         if (isHoliday) tariffType = 'Férié'
         else if (isSunday) tariffType = 'Dimanche'
-        else if (isNight) tariffType = 'Nuit'
+        else if (bookingData.departureDate && bookingData.departureTime && duration > 0) {
+          const depMin = departureDate.getHours() * 60 + departureDate.getMinutes()
+          const arrMin = depMin + duration
+          const depIsNight = isNightMinutes(depMin)
+          const arrIsNight = isNightMinutes(arrMin)
+          if (depIsNight && arrIsNight) tariffType = 'Nuit'
+          else if (!depIsNight && !arrIsNight) tariffType = 'Jour'
+          else tariffType = 'Mixte'
+        } else if (isNight) tariffType = 'Nuit'
         
         setTripData(prev => ({
           ...prev,
