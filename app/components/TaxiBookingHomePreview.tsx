@@ -287,7 +287,7 @@ const TaxiBookingHomePreview = () => {
         if (bookingData.departureDate && bookingData.departureTime) {
           departureDate = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
           const hour = departureDate.getHours()
-          isNight = hour >= 21 || hour < 7 // 21h-7h = tarif nuit
+          isNight = hour >= 19 || hour < 6 // 19h-6h = tarif nuit
           isHoliday = isPublicHoliday(departureDate)
           isSunday = departureDate.getDay() === 0
         }
@@ -303,7 +303,7 @@ const TaxiBookingHomePreview = () => {
         }
         
         const basePrice = priseEnCharge + (distance * tarifKm)
-        const approachFees = 10 // Frais d'approche et de réservation
+        const approachFees = 7.20 // Frais d'approche et de réservation
         const finalPrice = Math.round((basePrice + approachFees) * 100) / 100
         
         // Déterminer le type de tarif
@@ -813,7 +813,7 @@ const TaxiBookingHomePreview = () => {
                 {tripData.priceDetails && (
                   <div className="text-xs text-green-700 sm:text-green-600 mt-2 space-y-1">
                     <div>Prix course ({tripData.priceDetails.tariffType}): {(tripData.priceDetails.basePrice || 0).toFixed(2)}€</div>
-                    <div>Frais d&apos;approche et réservation: {tripData.priceDetails.approachFees || 10}€</div>
+
                     {(tripData.priceDetails.isNight || tripData.priceDetails.isHoliday || tripData.priceDetails.isSunday) && (
                       <div className="text-blue-700 sm:text-blue-600 font-medium">✓ Tarif majoré appliqué</div>
                     )}

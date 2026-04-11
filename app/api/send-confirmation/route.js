@@ -83,7 +83,7 @@ export async function POST(request) {
                     ${reservationData.pricing.priceDetails ? `
                     <div style="font-size: 0.9em; margin-top: 10px; color: #666;">
                         <div>Prix course (${reservationData.pricing.priceDetails.tariffType}) : ${reservationData.pricing.priceDetails.basePrice.toFixed(2)}€</div>
-                        <div>Frais d'approche et réservation : ${reservationData.pricing.priceDetails.approachFees}€</div>
+
                         ${(reservationData.pricing.priceDetails.isNight || reservationData.pricing.priceDetails.isHoliday || reservationData.pricing.priceDetails.isSunday) ? 
                             '<div style="color: #2563eb; font-weight: bold;">✓ Tarif majoré appliqué</div>' : ''}
                     </div>` : ''}

@@ -329,7 +329,7 @@ const TaxiBookingWithBackend = () => {
         
         // Calcul de prix avec frais d'approche
         const basePrice = 2.80 + (distance * 2.12)
-        const approachFees = 10 // Frais d'approche et de réservation
+        const approachFees = 7.20 // Frais d'approche et de réservation
         const finalPrice = Math.round((basePrice + approachFees) * 100) / 100
         
         setTripData(prev => ({
@@ -711,7 +711,7 @@ const TaxiBookingWithBackend = () => {
             {tripData.priceDetails && (
               <div className="text-xs text-green-600 mt-2 space-y-1">
                 <div>Prix course: {(tripData.priceDetails.basePrice || tripData.priceDetails.baseFare || 0).toFixed(2)}€</div>
-                <div>Frais d&apos;approche et réservation: 10,00€</div>
+
                 {(tripData.priceDetails.supplements || 0) > 0 && (
                   <div>Suppléments: {tripData.priceDetails.supplements?.toFixed(2)}€</div>
                 )}

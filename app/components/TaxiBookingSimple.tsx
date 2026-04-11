@@ -171,7 +171,7 @@ const TaxiBookingSimple = () => {
   const isNightRate = (time: string) => {
     if (!time) return false
     const hour = parseInt(time.split(':')[0])
-    return hour >= 21 || hour < 7
+    return hour >= 19 || hour < 6
   }
 
   // Fonction pour calculer le prix selon l'heure
@@ -408,9 +408,9 @@ const TaxiBookingSimple = () => {
                     {tripData.price.toFixed(2)}€
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
-                    {isNightRate(bookingData.pickupTime) ? 
-                      '🌙 Tarif nuit (21h-7h) : 3,18€/km' : 
-                      '☀️ Tarif jour (7h-21h) : 2,12€/km'
+                    {isNightRate(bookingData.pickupTime) ?
+                      '🌙 Tarif nuit (19h-6h) : 3,18€/km' :
+                      '☀️ Tarif jour (6h-19h) : 2,12€/km'
                     }
                   </div>
                 </div>
@@ -501,9 +501,9 @@ const TaxiBookingSimple = () => {
             </div>
             {bookingData.pickupDate && bookingData.pickupTime && (
               <div className="text-xs text-green-500 mt-1">
-                {isNightRate(bookingData.pickupTime) ? 
-                  '🌙 Tarif nuit (21h-7h)' : 
-                  '☀️ Tarif jour (7h-21h)'
+                {isNightRate(bookingData.pickupTime) ?
+                  '🌙 Tarif nuit (19h-6h)' :
+                  '☀️ Tarif jour (6h-19h)'
                 }
               </div>
             )}
