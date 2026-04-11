@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://taxibordeauxsolution.vercel.app/sitemap.xml
+Sitemap: https://www.taxibordeauxsolution.fr/sitemap.xml
