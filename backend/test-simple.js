@@ -269,7 +269,7 @@ const server = http.createServer((req, res) => {
         
         // Simple distance estimation (this would normally use Google Maps)
         const estimatedDistance = 10; // km
-        const estimatedPrice = 2.80 + (estimatedDistance * 2.12); // Base + day rate
+        const estimatedPrice = 2.83 + (estimatedDistance * 2.16); // Base + day rate
         
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
@@ -283,8 +283,8 @@ const server = http.createServer((req, res) => {
               totalPrice: Math.round(estimatedPrice * 100) / 100,
               currency: 'EUR',
               breakdown: {
-                baseFare: 2.80,
-                distanceFare: estimatedDistance * 2.12
+                baseFare: 2.83,
+                distanceFare: estimatedDistance * 2.16
               }
             }
           }

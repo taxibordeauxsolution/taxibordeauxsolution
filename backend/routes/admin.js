@@ -70,9 +70,9 @@ router.get('/stats', asyncHandler(async (req, res) => {
 router.get('/config', asyncHandler(async (req, res) => {
   const config = {
     pricing: {
-      baseFare: parseFloat(process.env.PRICING_BASE_FARE) || 2.80,
-      dayRate: parseFloat(process.env.PRICING_DAY_RATE) || 2.12,
-      nightRate: parseFloat(process.env.PRICING_NIGHT_RATE) || 3.18,
+      baseFare: parseFloat(process.env.PRICING_BASE_FARE) || 2.83,
+      dayRate: parseFloat(process.env.PRICING_DAY_RATE) || 2.16,
+      nightRate: parseFloat(process.env.PRICING_NIGHT_RATE) || 3.24,
       nightStart: process.env.NIGHT_RATE_START || '21:00',
       nightEnd: process.env.NIGHT_RATE_END || '07:00'
     },

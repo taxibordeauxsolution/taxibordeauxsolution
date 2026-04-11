@@ -163,12 +163,12 @@ router.post('/', validationMiddleware(createReservationSchema), async (req, res)
         estimatedCost: {
           totalPrice: 25.00,
           currency: 'EUR',
-          baseFare: 2.80,
-          kmCost: 22.20,
+          baseFare: 2.83,
+          kmCost: 21.60,
           supplements: 0,
           breakdown: {
-            baseFare: 2.80,
-            kmRate: 2.12,
+            baseFare: 2.83,
+            kmRate: 2.16,
             distance: 10,
             passengers: booking.passengers,
             luggage: booking.luggage,

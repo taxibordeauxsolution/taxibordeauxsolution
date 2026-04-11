@@ -29,10 +29,10 @@ export class PricingService {
     // Tarifs officiels Bordeaux 2025 (source Préfecture de Gironde)
     this.rates = {
       // Tarifs de base (en euros)
-      baseFare: parseFloat(process.env.PRICING_BASE_FARE) || 2.80,
-      dayRate: parseFloat(process.env.PRICING_DAY_RATE) || 2.12,
-      nightRate: parseFloat(process.env.PRICING_NIGHT_RATE) || 3.18,
-      waitRate: parseFloat(process.env.PRICING_WAIT_RATE) || 41.61, // par heure
+      baseFare: parseFloat(process.env.PRICING_BASE_FARE) || 2.83,
+      dayRate: parseFloat(process.env.PRICING_DAY_RATE) || 2.16,
+      nightRate: parseFloat(process.env.PRICING_NIGHT_RATE) || 3.24,
+      waitRate: parseFloat(process.env.PRICING_WAIT_RATE) || 41.84, // par heure
       
       // Suppléments
       luggageSupplement: parseFloat(process.env.PRICING_LUGGAGE_SUPPLEMENT) || 2.00, // 4e bagage et +

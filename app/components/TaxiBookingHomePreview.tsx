@@ -293,13 +293,13 @@ const TaxiBookingHomePreview = () => {
         }
         
         // Tarifs de base 
-        let priseEnCharge = 2.80 // Identique jour et nuit
-        let tarifKm = 2.12
-        
+        let priseEnCharge = 2.83 // Identique jour et nuit
+        let tarifKm = 2.16
+
         // Majorations
         if (isNight || isHoliday || isSunday) {
-          // priseEnCharge reste 2.80€ jour et nuit
-          tarifKm = 3.18 // Tarif kilométrique nuit
+          // priseEnCharge reste 2.83€ jour et nuit
+          tarifKm = 3.24 // Tarif kilométrique nuit
         }
         
         const basePrice = priseEnCharge + (distance * tarifKm)

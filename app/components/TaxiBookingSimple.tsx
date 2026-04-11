@@ -176,9 +176,9 @@ const TaxiBookingSimple = () => {
 
   // Fonction pour calculer le prix selon l'heure
   const calculatePrice = useCallback((distance: number, pickupTime: string) => {
-    const baseFare = 2.80
-    const dayRate = 2.12
-    const nightRate = 3.18
+    const baseFare = 2.83
+    const dayRate = 2.16
+    const nightRate = 3.24
     
     const rate = isNightRate(pickupTime) ? nightRate : dayRate
     const price = baseFare + (distance * rate)

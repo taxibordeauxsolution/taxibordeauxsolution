@@ -328,7 +328,7 @@ const TaxiBookingWithBackend = () => {
         const duration = (route.duration?.value || 0) / 60 // en minutes
         
         // Calcul de prix avec frais d'approche
-        const basePrice = 2.80 + (distance * 2.12)
+        const basePrice = 2.83 + (distance * 2.16)
         const approachFees = 7.20 // Frais d'approche et de réservation
         const finalPrice = Math.round((basePrice + approachFees) * 100) / 100
         

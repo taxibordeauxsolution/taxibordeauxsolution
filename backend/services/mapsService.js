@@ -244,9 +244,9 @@ export class AdvancedMapsService {
     try {
       // Tarifs Bordeaux 2025
       const rates = {
-        baseFare: parseFloat(process.env.PRICING_BASE_FARE) || 2.80,
-        dayRate: parseFloat(process.env.PRICING_DAY_RATE) || 2.12,
-        nightRate: parseFloat(process.env.PRICING_NIGHT_RATE) || 3.18,
+        baseFare: parseFloat(process.env.PRICING_BASE_FARE) || 2.83,
+        dayRate: parseFloat(process.env.PRICING_DAY_RATE) || 2.16,
+        nightRate: parseFloat(process.env.PRICING_NIGHT_RATE) || 3.24,
         luggageSupplement: parseFloat(process.env.PRICING_LUGGAGE_SUPPLEMENT) || 2.00,
         fifthPassenger: parseFloat(process.env.PRICING_FIFTH_PASSENGER) || 4.00
       }
