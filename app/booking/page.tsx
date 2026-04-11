@@ -1,4 +1,4 @@
-import TaxiBookingWithBackend from '../components/TaxiBookingWithBackend'
+import TaxiBookingHomePreview from '../components/TaxiBookingHomePreview'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function BookingPage() {
   return (
     <div className="min-h-screen">
-      <TaxiBookingWithBackend />
+      <TaxiBookingHomePreview />
     </div>
   )
 }

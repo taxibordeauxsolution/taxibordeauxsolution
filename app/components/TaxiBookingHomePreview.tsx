@@ -103,11 +103,256 @@ const TaxiBookingHomePreview = () => {
       estimatedPrice: "Prix estimé",
       bookingDetails: "Détails de votre réservation",
       reservationNumber: "Numéro de réservation",
-      nextSteps: "Prochaines étapes"
+      nextSteps: "Prochaines étapes",
+      routeEstimate: "Estimation trajet",
+      passengerSingular: "passager",
+      passengerPlural: "passagers",
+      luggageSingular: "bagage",
+      luggagePlural: "bagages",
+      priceFineWithDateTime: "💡 Prix affiné avec date et heure",
+      tariffLabel: "Tarif",
+      tariffApplied: "appliqué",
+      step2Summary: "Résumé de votre réservation",
+      step2Subtitle: "Vérifiez les détails avant de finaliser",
+      journey: "Trajet",
+      pickup: "Prise en charge",
+      details: "Détails",
+      totalPriceLabel: "Prix total",
+      tripLabel: "Trajet :",
+      distanceLabel: "Distance :",
+      durationLabel: "Durée :",
+      dateLabel: "Date :",
+      timeLabel: "Heure :",
+      passengersLabel: "Passagers :",
+      luggageLabel: "Bagages :",
+      clientLabel: "Client :",
+      phoneLabel: "Téléphone :",
+      priceLabel: "Prix :",
+      pickupLabel: "Prise en charge :",
+      emailConfirmation: "Email de confirmation",
+      emailSent: "Envoyé à",
+      emailFailed: "Échec d'envoi à",
+      emailNone: "Aucun email fourni",
+      bookNow: "Réservez votre",
+      bookNowHighlight: "Taxi Maintenant",
+      officialPrices: "✓ Prix officiels 2026 • Service 24h/24",
+      requiredFields: "Les champs marqués d'un * sont obligatoires",
+      selectAddresses: "Sélectionnez les adresses",
+      dateTimeRequired: "Date et heure requises",
+      calculatingPrice: "Calcul en cours...",
+      notesPlaceholder: "Siège bébé, accessibilité, etc.",
+      pickupOn: "Le",
+      pickupAt: "à",
+      tariffNight: "Nuit",
+      tariffDay: "Jour",
+      tariffMixed: "Mixte",
+      tariffHoliday: "Férié",
+      tariffSunday: "Dimanche",
+    },
+    en: {
+      title: "Taxi Bordeaux Solution",
+      subtitle: "Online booking • 24/7 service",
+      step1Title: "Where would you like to go?",
+      step1Subtitle: "Enter your pickup and destination address",
+      fromPlaceholder: "Pickup address (e.g., Bordeaux Airport, Saint-Jean Station)",
+      toPlaceholder: "Destination address (e.g., Place de la Comédie, Hotel...)",
+      fromLabel: "Pickup point",
+      toLabel: "Destination",
+      calculatingRoute: "Calculating route...",
+      routeCalculated: "Route calculated",
+      showMap: "Show map",
+      hideMap: "Hide map",
+      distance: "Distance",
+      duration: "Estimated time",
+      minutes: "minutes",
+      continue: "Continue",
+      step2Title: "Your booking details",
+      passengers: "Passengers",
+      luggage: "Luggage",
+      departureDate: "Departure date",
+      departureTime: "Departure time",
+      priceEstimate: "Price estimate",
+      totalPrice: "Total Price",
+      step3Title: "Your details",
+      fullName: "Full name",
+      phone: "Phone",
+      email: "Email (optional)",
+      notes: "Additional information",
+      confirmBooking: "Confirm booking",
+      bookingConfirmed: "Booking confirmed!",
+      newBooking: "New booking",
+      back: "Back",
+      loading: "Loading...",
+      error: "Error",
+      outOfServiceArea: "Out of service area",
+      estimatedPrice: "Estimated price",
+      bookingDetails: "Your booking details",
+      reservationNumber: "Reservation number",
+      nextSteps: "Next steps",
+      routeEstimate: "Route estimate",
+      passengerSingular: "passenger",
+      passengerPlural: "passengers",
+      luggageSingular: "bag",
+      luggagePlural: "bags",
+      priceFineWithDateTime: "💡 Price refined with date and time",
+      tariffLabel: "Rate",
+      tariffApplied: "applied",
+      step2Summary: "Your booking summary",
+      step2Subtitle: "Check details before finalizing",
+      journey: "Journey",
+      pickup: "Pickup",
+      details: "Details",
+      totalPriceLabel: "Total price",
+      tripLabel: "Journey:",
+      distanceLabel: "Distance:",
+      durationLabel: "Duration:",
+      dateLabel: "Date:",
+      timeLabel: "Time:",
+      passengersLabel: "Passengers:",
+      luggageLabel: "Bags:",
+      clientLabel: "Customer:",
+      phoneLabel: "Phone:",
+      priceLabel: "Price:",
+      pickupLabel: "Pickup:",
+      emailConfirmation: "Confirmation email",
+      emailSent: "Sent to",
+      emailFailed: "Failed to send to",
+      emailNone: "No email provided",
+      bookNow: "Book your",
+      bookNowHighlight: "Taxi Now",
+      officialPrices: "✓ Official 2026 rates • 24/7 service",
+      requiredFields: "Fields marked with * are required",
+      selectAddresses: "Select addresses",
+      dateTimeRequired: "Date and time required",
+      calculatingPrice: "Calculating...",
+      notesPlaceholder: "Baby seat, accessibility, etc.",
+      pickupOn: "On",
+      pickupAt: "at",
+      tariffNight: "Night",
+      tariffDay: "Day",
+      tariffMixed: "Mixed",
+      tariffHoliday: "Holiday",
+      tariffSunday: "Sunday",
+    },
+    es: {
+      title: "Taxi Bordeaux Solution",
+      subtitle: "Reserva online • Servicio 24h/24",
+      step1Title: "¿A dónde quiere ir?",
+      step1Subtitle: "Introduzca su punto de recogida y destino",
+      fromPlaceholder: "Dirección de recogida (ej: Aeropuerto Burdeos, Estación Saint-Jean)",
+      toPlaceholder: "Dirección de destino (ej: Place de la Comédie, Hotel...)",
+      fromLabel: "Punto de recogida",
+      toLabel: "Destino",
+      calculatingRoute: "Calculando ruta...",
+      routeCalculated: "Ruta calculada",
+      showMap: "Mostrar mapa",
+      hideMap: "Ocultar mapa",
+      distance: "Distancia",
+      duration: "Tiempo estimado",
+      minutes: "minutos",
+      continue: "Continuar",
+      step2Title: "Detalles de su reserva",
+      passengers: "Pasajeros",
+      luggage: "Equipaje",
+      departureDate: "Fecha de salida",
+      departureTime: "Hora de salida",
+      priceEstimate: "Estimación del precio",
+      totalPrice: "Precio Total",
+      step3Title: "Sus datos",
+      fullName: "Nombre completo",
+      phone: "Teléfono",
+      email: "Email (opcional)",
+      notes: "Información adicional",
+      confirmBooking: "Confirmar reserva",
+      bookingConfirmed: "¡Reserva confirmada!",
+      newBooking: "Nueva reserva",
+      back: "Volver",
+      loading: "Cargando...",
+      error: "Error",
+      outOfServiceArea: "Fuera del área de servicio",
+      estimatedPrice: "Precio estimado",
+      bookingDetails: "Detalles de su reserva",
+      reservationNumber: "Número de reserva",
+      nextSteps: "Próximos pasos",
+      routeEstimate: "Estimación del trayecto",
+      passengerSingular: "pasajero",
+      passengerPlural: "pasajeros",
+      luggageSingular: "equipaje",
+      luggagePlural: "equipajes",
+      priceFineWithDateTime: "💡 Precio ajustado con fecha y hora",
+      tariffLabel: "Tarifa",
+      tariffApplied: "aplicada",
+      step2Summary: "Resumen de su reserva",
+      step2Subtitle: "Verifique los detalles antes de finalizar",
+      journey: "Trayecto",
+      pickup: "Recogida",
+      details: "Detalles",
+      totalPriceLabel: "Precio total",
+      tripLabel: "Trayecto:",
+      distanceLabel: "Distancia:",
+      durationLabel: "Duración:",
+      dateLabel: "Fecha:",
+      timeLabel: "Hora:",
+      passengersLabel: "Pasajeros:",
+      luggageLabel: "Equipajes:",
+      clientLabel: "Cliente:",
+      phoneLabel: "Teléfono:",
+      priceLabel: "Precio:",
+      pickupLabel: "Recogida:",
+      emailConfirmation: "Email de confirmación",
+      emailSent: "Enviado a",
+      emailFailed: "Error al enviar a",
+      emailNone: "No se proporcionó email",
+      bookNow: "Reserve su",
+      bookNowHighlight: "Taxi Ahora",
+      officialPrices: "✓ Tarifas oficiales 2026 • Servicio 24h/24",
+      requiredFields: "Los campos marcados con * son obligatorios",
+      selectAddresses: "Seleccione las direcciones",
+      dateTimeRequired: "Fecha y hora requeridas",
+      calculatingPrice: "Calculando...",
+      notesPlaceholder: "Silla de bebé, accesibilidad, etc.",
+      pickupOn: "El",
+      pickupAt: "a las",
+      tariffNight: "Noche",
+      tariffDay: "Día",
+      tariffMixed: "Mixta",
+      tariffHoliday: "Festivo",
+      tariffSunday: "Domingo",
     }
   }
 
   const t = (key: string) => translations[language as keyof typeof translations]?.[key as keyof typeof translations.fr] || key
+
+  const dateLocale = language === 'en' ? 'en-GB' : language === 'es' ? 'es-ES' : 'fr-FR'
+
+  const getTariffLabel = (type: string) => {
+    const map: Record<string, string> = {
+      'Nuit': t('tariffNight'),
+      'Jour': t('tariffDay'),
+      'Mixte': t('tariffMixed'),
+      'Férié': t('tariffHoliday'),
+      'Dimanche': t('tariffSunday'),
+    }
+    return map[type] || type
+  }
+
+  const LanguageSelector = () => (
+    <div className="flex items-center space-x-2">
+      <Globe className="w-4 h-4 text-gray-600" />
+      <select
+        value={language}
+        onChange={(e) => {
+          setLanguage(e.target.value)
+          setBookingData(prev => ({ ...prev, language: e.target.value }))
+        }}
+        className="bg-white border border-gray-300 rounded px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="fr">🇫🇷 Français</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="es">🇪🇸 Español</option>
+      </select>
+    </div>
+  )
 
   // Initialisation Google Maps
   useEffect(() => {
@@ -574,7 +819,7 @@ const TaxiBookingHomePreview = () => {
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 {[1,2,3,4,5,6,7,8].map(num => (
-                  <option key={num} value={num}>{num} passager{num > 1 ? 's' : ''}</option>
+                  <option key={num} value={num}>{num} {num > 1 ? t('passengerPlural') : t('passengerSingular')}</option>
                 ))}
               </select>
             </div>
@@ -591,7 +836,7 @@ const TaxiBookingHomePreview = () => {
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 {[0,1,2,3,4,5].map(num => (
-                  <option key={num} value={num}>{num} bagage{num > 1 ? 's' : ''}</option>
+                  <option key={num} value={num}>{num} {num > 1 ? t('luggagePlural') : t('luggageSingular')}</option>
                 ))}
               </select>
             </div>
@@ -656,7 +901,7 @@ const TaxiBookingHomePreview = () => {
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
               <h3 className="font-semibold text-green-800 mb-3 flex items-center">
                 <Route className="w-5 h-5 mr-2" />
-                Estimation trajet
+                {t('routeEstimate')}
               </h3>
               <div className="grid grid-cols-3 gap-2 text-sm mb-4">
                 <div className="text-center">
@@ -668,7 +913,7 @@ const TaxiBookingHomePreview = () => {
                   <div className="font-semibold text-lg">{Math.round(tripData.duration || 0)} min</div>
                 </div>
                 <div className="text-center">
-                  <span className="text-gray-700 sm:text-gray-600 block">Passagers</span>
+                  <span className="text-gray-700 sm:text-gray-600 block">{t('passengers')}</span>
                   <div className="font-semibold text-lg">{bookingData.passengers}</div>
                 </div>
               </div>
@@ -681,7 +926,7 @@ const TaxiBookingHomePreview = () => {
                 <div className="text-xs text-green-700 sm:text-green-600 mt-2 space-y-1">
                   {bookingData.departureDate && bookingData.departureTime ? (
                     <>
-                      <div>Le {new Date(bookingData.departureDate).toLocaleDateString('fr-FR')} à {bookingData.departureTime}</div>
+                      <div>{t('pickupOn')} {new Date(bookingData.departureDate).toLocaleDateString(dateLocale)} {t('pickupAt')} {bookingData.departureTime}</div>
                       {tripData.priceDetails && (
                         <div className="flex items-center justify-center gap-2">
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -690,13 +935,13 @@ const TaxiBookingHomePreview = () => {
                             tripData.priceDetails.tariffType === 'Dimanche' ? 'bg-purple-200 sm:bg-purple-100 text-purple-900 sm:text-purple-800' :
                             'bg-green-200 sm:bg-green-100 text-green-900 sm:text-green-800'
                           }`}>
-                            Tarif {tripData.priceDetails.tariffType}
+                            {t('tariffLabel')} {getTariffLabel(tripData.priceDetails.tariffType)}
                           </span>
                         </div>
                       )}
                     </>
                   ) : (
-                    <div className="text-orange-600 font-medium">💡 Prix affiné avec date et heure</div>
+                    <div className="text-orange-600 font-medium">{t('priceFineWithDateTime')}</div>
                   )}
                 </div>
               </div>
@@ -753,9 +998,9 @@ const TaxiBookingHomePreview = () => {
         className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
       >
         <Navigation className="w-5 h-5 mr-2" />
-        {!tripData.fromCoords || !tripData.toCoords ? 'Sélectionnez les adresses' :
-         !bookingData.departureDate || !bookingData.departureTime ? 'Date et heure requises' :
-         !tripData.price ? 'Calcul en cours...' :
+        {!tripData.fromCoords || !tripData.toCoords ? t('selectAddresses') :
+         !bookingData.departureDate || !bookingData.departureTime ? t('dateTimeRequired') :
+         !tripData.price ? t('calculatingPrice') :
          t('continue')}
       </button>
     </div>
@@ -765,8 +1010,8 @@ const TaxiBookingHomePreview = () => {
   const renderStep2 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h3 className="text-2xl font-bold text-gray-800 mb-2">Résumé de votre réservation</h3>
-        <p className="text-gray-700 sm:text-gray-600">Vérifiez les détails avant de finaliser</p>
+        <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('step2Summary')}</h3>
+        <p className="text-gray-700 sm:text-gray-600">{t('step2Subtitle')}</p>
       </div>
 
       <div className="max-w-2xl mx-auto">
@@ -780,7 +1025,7 @@ const TaxiBookingHomePreview = () => {
                   <MapPin className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">Trajet</div>
+                  <div className="font-medium text-gray-900">{t('journey')}</div>
                   <div className="text-sm text-gray-700 sm:text-gray-600">
                     {tripData.from?.split(',')[0]} → {tripData.to?.split(',')[0]}
                   </div>
@@ -799,9 +1044,9 @@ const TaxiBookingHomePreview = () => {
                   <Calendar className="w-5 h-5 text-green-600" />
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">Prise en charge</div>
+                  <div className="font-medium text-gray-900">{t('pickup')}</div>
                   <div className="text-sm text-gray-700 sm:text-gray-600">
-                    Le {new Date(bookingData.departureDate).toLocaleDateString('fr-FR')} à {bookingData.departureTime}
+                    {t('pickupOn')} {new Date(bookingData.departureDate).toLocaleDateString(dateLocale)} {t('pickupAt')} {bookingData.departureTime}
                   </div>
                 </div>
               </div>
@@ -814,9 +1059,9 @@ const TaxiBookingHomePreview = () => {
                   <Users className="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">Détails</div>
+                  <div className="font-medium text-gray-900">{t('details')}</div>
                   <div className="text-sm text-gray-700 sm:text-gray-600">
-                    {bookingData.passengers} passager{bookingData.passengers > 1 ? 's' : ''} • {bookingData.luggage} bagage{bookingData.luggage > 1 ? 's' : ''}
+                    {bookingData.passengers} {bookingData.passengers > 1 ? t('passengerPlural') : t('passengerSingular')} • {bookingData.luggage} {bookingData.luggage > 1 ? t('luggagePlural') : t('luggageSingular')}
                   </div>
                 </div>
               </div>
@@ -825,13 +1070,13 @@ const TaxiBookingHomePreview = () => {
             {/* Prix */}
             <div className="bg-green-50 rounded-lg p-4 mt-6">
               <div className="text-center">
-                <div className="text-sm text-green-700 sm:text-green-600 mb-1">Prix total</div>
+                <div className="text-sm text-green-700 sm:text-green-600 mb-1">{t('totalPriceLabel')}</div>
                 <div className="text-3xl font-bold text-green-700">
                   {(tripData.price || 0).toFixed(2)}€
                 </div>
                 {tripData.priceDetails && tripData.priceDetails.tariffType && tripData.priceDetails.tariffType !== 'Jour' && (
                   <div className="text-xs text-blue-700 sm:text-blue-600 mt-2 font-medium">
-                    ✓ Tarif {tripData.priceDetails.tariffType} appliqué
+                    ✓ {t('tariffLabel')} {getTariffLabel(tripData.priceDetails.tariffType)} {t('tariffApplied')}
                   </div>
                 )}
               </div>
@@ -919,7 +1164,7 @@ const TaxiBookingHomePreview = () => {
             </label>
             <input
               type="email"
-              placeholder="votre@email.fr"
+              placeholder={language === 'en' ? 'your@email.com' : language === 'es' ? 'su@email.com' : 'votre@email.fr'}
               value={bookingData.customerEmail}
               onChange={(e) => handleBookingChange('customerEmail', e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -931,7 +1176,7 @@ const TaxiBookingHomePreview = () => {
               {t('notes')}
             </label>
             <textarea
-              placeholder="Siège bébé, accessibilité, etc."
+              placeholder={t('notesPlaceholder')}
               value={bookingData.notes}
               onChange={(e) => handleBookingChange('notes', e.target.value)}
               rows={3}
@@ -945,33 +1190,33 @@ const TaxiBookingHomePreview = () => {
           <h3 className="font-semibold text-gray-800 mb-4">{t('bookingDetails')}</h3>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
-              <span>Trajet:</span>
+              <span>{t('tripLabel')}</span>
               <span className="font-medium text-right">
                 {tripData.from?.split(',')[0]} → {tripData.to?.split(',')[0]}
               </span>
             </div>
             <div className="flex justify-between">
-              <span>Distance:</span>
+              <span>{t('distanceLabel')}</span>
               <span className="font-medium">{(tripData.distance || 0).toFixed(1)} km</span>
             </div>
             <div className="flex justify-between">
-              <span>Durée:</span>
+              <span>{t('durationLabel')}</span>
               <span className="font-medium">{Math.round(tripData.duration || 0)} min</span>
             </div>
             <div className="flex justify-between">
-              <span>Date:</span>
-              <span className="font-medium">{new Date(bookingData.departureDate).toLocaleDateString('fr-FR')}</span>
+              <span>{t('dateLabel')}</span>
+              <span className="font-medium">{new Date(bookingData.departureDate).toLocaleDateString(dateLocale)}</span>
             </div>
             <div className="flex justify-between">
-              <span>Heure:</span>
+              <span>{t('timeLabel')}</span>
               <span className="font-medium">{bookingData.departureTime}</span>
             </div>
             <div className="flex justify-between">
-              <span>Passagers:</span>
+              <span>{t('passengersLabel')}</span>
               <span className="font-medium">{bookingData.passengers}</span>
             </div>
             <div className="flex justify-between">
-              <span>Bagages:</span>
+              <span>{t('luggageLabel')}</span>
               <span className="font-medium">{bookingData.luggage}</span>
             </div>
             <hr className="my-3" />
@@ -1037,12 +1282,12 @@ const TaxiBookingHomePreview = () => {
           <h4 className="font-semibold mb-4">{t('bookingDetails')}</h4>
           <div className="space-y-2 text-sm text-left">
             <div><strong>{t('reservationNumber')} :</strong> {reservation.reservationId}</div>
-            <div><strong>Client :</strong> {reservation.customer.name}</div>
-            <div><strong>Téléphone :</strong> {reservation.customer.phone}</div>
-            <div><strong>Trajet :</strong> {reservation.trip.from.address.split(',')[0]} → {reservation.trip.to.address.split(',')[0]}</div>
-            <div><strong>Prix :</strong> {reservation.pricing.totalPrice.toFixed(2)}€</div>
-            <div><strong>Distance :</strong> {reservation.trip.distance.toFixed(1)} km</div>
-            <div><strong>Prise en charge :</strong> {reservation.estimatedPickupTime}</div>
+            <div><strong>{t('clientLabel')}</strong> {reservation.customer.name}</div>
+            <div><strong>{t('phoneLabel')}</strong> {reservation.customer.phone}</div>
+            <div><strong>{t('tripLabel')}</strong> {reservation.trip.from.address.split(',')[0]} → {reservation.trip.to.address.split(',')[0]}</div>
+            <div><strong>{t('priceLabel')}</strong> {reservation.pricing.totalPrice.toFixed(2)}€</div>
+            <div><strong>{t('distanceLabel')}</strong> {reservation.trip.distance.toFixed(1)} km</div>
+            <div><strong>{t('pickupLabel')}</strong> {reservation.estimatedPickupTime}</div>
           </div>
         </div>
       )}
@@ -1074,16 +1319,16 @@ const TaxiBookingHomePreview = () => {
           <div className="flex items-center gap-2">
             <Mail className="w-5 h-5 text-blue-600" />
             <div>
-              <p className="text-blue-800 font-medium">Email de confirmation</p>
+              <p className="text-blue-800 font-medium">{t('emailConfirmation')}</p>
               <p className="text-blue-700 sm:text-blue-600 text-sm">
                 {reservation.customer.email ? (
                   reservation.emailSent ? (
-                    `✅ Envoyé à ${reservation.customer.email}`
+                    `✅ ${t('emailSent')} ${reservation.customer.email}`
                   ) : (
-                    `⚠️ Échec d'envoi à ${reservation.customer.email}`
+                    `⚠️ ${t('emailFailed')} ${reservation.customer.email}`
                   )
                 ) : (
-                  "❌ Aucun email fourni"
+                  `❌ ${t('emailNone')}`
                 )}
               </p>
             </div>
@@ -1115,7 +1360,7 @@ const TaxiBookingHomePreview = () => {
             customerPhone: '',
             customerEmail: '',
             notes: '',
-            language: 'fr'
+            language: language
           })
           setReservation(null)
           setSuccess('')
@@ -1138,12 +1383,15 @@ const TaxiBookingHomePreview = () => {
       <div ref={moduleRef}>
       {/* Header */}
       <div className="text-center mb-8">
+        <div className="flex justify-end mb-2">
+          <LanguageSelector />
+        </div>
         <div className="flex items-center justify-center mb-4">
           <div className="bg-blue-600 p-3 rounded-full mr-4">
             <Car className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h2 id="reservation-title" className="text-2xl lg:text-3xl font-bold text-gray-800">Réservez votre <span className="text-green-600">Taxi Maintenant</span></h2>
+            <h2 id="reservation-title" className="text-2xl lg:text-3xl font-bold text-gray-800">{t('bookNow')} <span className="text-green-600">{t('bookNowHighlight')}</span></h2>
             <p className="text-gray-700 sm:text-gray-600">{t('subtitle')}</p>
           </div>
         </div>
@@ -1176,8 +1424,8 @@ const TaxiBookingHomePreview = () => {
       {/* Note d'information */}
       {step < 4 && (
         <div className="mt-4 text-center text-xs text-gray-600 sm:text-gray-500">
-          <p>✓ Prix officiels 2025 • Service 24h/24</p>
-          <p className="text-blue-600 font-medium mt-1">Les champs marqués d&apos;un * sont obligatoires</p>
+          <p>{t('officialPrices')}</p>
+          <p className="text-blue-600 font-medium mt-1">{t('requiredFields')}</p>
         </div>
       )}
       </div>
