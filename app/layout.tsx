@@ -166,14 +166,7 @@ export default function RootLayout({
               },
               "sameAs": [
                 "https://www.google.com/maps/place/Taxi+Bordeaux+Solution"
-              ],
-              "aggregateRating": {
-                "@type": "AggregateRating", 
-                "ratingValue": "4.9",
-                "reviewCount": "150",
-                "bestRating": "5",
-                "worstRating": "1"
-              }
+              ]
             })
           }}
         />
