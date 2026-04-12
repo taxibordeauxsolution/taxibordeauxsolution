@@ -17,11 +17,11 @@ export const metadata: Metadata = {
     description: 'LA solution transport à Bordeaux. Service taxi professionnel 24h/24, prise en charge rapide dans toute la métropole bordelaise.',
     type: 'website',
     locale: 'fr_FR',
-    url: 'https://taxibordeauxsolution.fr',
+    url: 'https://www.taxibordeauxsolution.fr',
     siteName: 'Taxi Bordeaux Solution',
     images: [
       {
-        url: 'https://taxibordeauxsolution.fr/images/taxi-bordeaux-og.jpg',
+        url: 'https://www.taxibordeauxsolution.fr/images/taxi-bordeaux-og.jpg',
         width: 1200,
         height: 630,
         alt: 'Taxi Bordeaux Solution - Service professionnel',
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Taxi Bordeaux Solution - Service rapide',
     description: 'Taxi professionnel à Bordeaux. Prise en charge rapide 24h/24 dans toute la métropole.',
-    images: ['https://taxibordeauxsolution.fr/images/taxi-bordeaux-twitter.jpg'],
+    images: ['https://www.taxibordeauxsolution.fr/images/taxi-bordeaux-twitter.jpg'],
   },
 
   // SEO Avancé
