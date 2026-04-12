@@ -781,7 +781,7 @@ const TaxiBookingHomePreview = () => {
               placeholder={t('fromPlaceholder')}
               value={tripData.from}
               onChange={(e) => setTripData(prev => ({ ...prev, from: e.target.value }))}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500"
               disabled={loading}
               required
             />
@@ -799,7 +799,7 @@ const TaxiBookingHomePreview = () => {
               placeholder={t('toPlaceholder')}
               value={tripData.to}
               onChange={(e) => setTripData(prev => ({ ...prev, to: e.target.value }))}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500"
               disabled={loading}
               required
             />
