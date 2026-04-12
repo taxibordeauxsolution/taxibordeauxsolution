@@ -1,0 +1,27 @@
+# Taxi Bordeaux Solution
+
+> Service de taxi professionnel à Bordeaux et Gironde, disponible 24h/24 — 7j/7.
+
+## Services
+
+- Transfert aéroport Bordeaux-Mérignac
+- Taxi gare Saint-Jean
+- Transport urbain Bordeaux
+- Longue distance
+- Transport médical
+- Transport professionnel
+
+## Contact
+
+- Téléphone : 06 67 23 78 22
+- Email : contact@taxibordeauxsolution.fr
+- Site : https://www.taxibordeauxsolution.fr
+
+## Pages
+
+- [Accueil](https://www.taxibordeauxsolution.fr/)
+- [Taxi Aéroport](https://www.taxibordeauxsolution.fr/aeroport)
+- [Taxi Gare](https://www.taxibordeauxsolution.fr/gare)
+- [Services](https://www.taxibordeauxsolution.fr/services)
+- [Réservation](https://www.taxibordeauxsolution.fr/booking)
+- [Contact](https://www.taxibordeauxsolution.fr/contact)

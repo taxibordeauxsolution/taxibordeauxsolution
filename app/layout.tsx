@@ -7,7 +7,7 @@ import Footer from './components/Footer'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Taxi Bordeaux 🚖 Service Rapide | LA Solution Transport Bordeaux 24h/24',
+  title: 'Taxi Bordeaux | Service Rapide 24h/24 — Taxi Bordeaux Solution',
   description: 'Taxi Bordeaux professionnel - Prise en charge rapide partout à Bordeaux. Aéroport Mérignac, Gare Saint-Jean, centre-ville. Réservation taxi Bordeaux 24h/24 7j/7. Service premium, tarifs réglementés.',
   keywords: 'taxi bordeaux, taxi bordeaux 24h, réserver taxi bordeaux, taxi aéroport bordeaux, taxi gare bordeaux, taxi bordeaux pas cher, taxi bordeaux centre, transport bordeaux, chauffeur bordeaux, taxi bordeaux mérignac, taxi bordeaux saint jean, taxi bordeaux nuit, appeler taxi bordeaux, numero taxi bordeaux, taxi bordeaux rapide',
   
