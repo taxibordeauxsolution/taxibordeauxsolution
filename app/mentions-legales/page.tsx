@@ -1,6 +1,10 @@
 export const metadata = {
   title: 'Mentions légales | Taxi Bordeaux Solution',
   description: 'Mentions légales de Taxi Bordeaux Solution — informations légales, hébergeur et éditeur du site.',
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 export default function MentionsLegales() {
