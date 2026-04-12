@@ -61,6 +61,10 @@ export const metadata: Metadata = {
   // Données structurées (Schema.org)
   alternates: {
     canonical: 'https://taxibordeauxsolution.fr',
+    languages: {
+      'fr': 'https://taxibordeauxsolution.fr',
+      'x-default': 'https://taxibordeauxsolution.fr',
+    },
   },
 
   // Auteur et copyright
