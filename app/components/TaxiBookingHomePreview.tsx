@@ -858,7 +858,6 @@ const TaxiBookingHomePreview = () => {
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
                 required
               />
-              <p className="text-xs text-gray-500 mt-1">ex : {new Date().toLocaleDateString('fr-FR')}</p>
             </div>
 
             <div>
@@ -874,7 +873,6 @@ const TaxiBookingHomePreview = () => {
                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
                 required
               />
-              <p className="text-xs text-gray-500 mt-1">ex : 08:30</p>
             </div>
           </div>
 
