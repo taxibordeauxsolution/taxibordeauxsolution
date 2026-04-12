@@ -44,8 +44,8 @@ const TaxiBookingHomePreview = () => {
   const [bookingData, setBookingData] = useState<BookingData>({
     passengers: 1, // Valeur minimale requise
     luggage: 0,   // Valeur par défaut acceptable
-    departureDate: '', // Pas de date pré-remplie
-    departureTime: '', // Pas d'heure pré-remplie
+    departureDate: new Date().toISOString().split('T')[0], // Date d'aujourd'hui par défaut
+    departureTime: '08:00', // Heure par défaut
     customerName: '',
     customerPhone: '',
     customerEmail: '',
@@ -1354,8 +1354,8 @@ const TaxiBookingHomePreview = () => {
           setBookingData({
             passengers: 1,
             luggage: 0,
-            departureDate: '', // Reset sans pré-remplir
-            departureTime: '', // Reset sans pré-remplir
+            departureDate: new Date().toISOString().split('T')[0],
+            departureTime: '08:00',
             customerName: '',
             customerPhone: '',
             customerEmail: '',
