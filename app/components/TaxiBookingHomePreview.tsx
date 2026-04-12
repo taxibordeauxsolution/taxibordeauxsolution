@@ -44,8 +44,8 @@ const TaxiBookingHomePreview = () => {
   const [bookingData, setBookingData] = useState<BookingData>({
     passengers: 1, // Valeur minimale requise
     luggage: 0,   // Valeur par défaut acceptable
-    departureDate: new Date().toISOString().split('T')[0], // Date d'aujourd'hui par défaut
-    departureTime: '08:00', // Heure par défaut
+    departureDate: '',
+    departureTime: '',
     customerName: '',
     customerPhone: '',
     customerEmail: '',
@@ -855,9 +855,10 @@ const TaxiBookingHomePreview = () => {
                 value={bookingData.departureDate}
                 onChange={(e) => handleBookingChange('departureDate', e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
                 required
               />
+              <p className="text-xs text-gray-500 mt-1">ex : {new Date().toLocaleDateString('fr-FR')}</p>
             </div>
 
             <div>
@@ -870,9 +871,10 @@ const TaxiBookingHomePreview = () => {
                 type="time"
                 value={bookingData.departureTime}
                 onChange={(e) => handleBookingChange('departureTime', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
                 required
               />
+              <p className="text-xs text-gray-500 mt-1">ex : 08:30</p>
             </div>
           </div>
 
@@ -1354,8 +1356,8 @@ const TaxiBookingHomePreview = () => {
           setBookingData({
             passengers: 1,
             luggage: 0,
-            departureDate: new Date().toISOString().split('T')[0],
-            departureTime: '08:00',
+            departureDate: '',
+            departureTime: '',
             customerName: '',
             customerPhone: '',
             customerEmail: '',
