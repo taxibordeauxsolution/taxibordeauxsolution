@@ -88,15 +88,18 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
-              "@id": "https://taxibordeauxsolution.fr",
+              "@id": "https://www.taxibordeauxsolution.fr",
               "name": "Taxi Bordeaux Solution",
               "alternateName": "LA Solution Transport Bordeaux",
               "description": "Service taxi professionnel à Bordeaux. Prise en charge rapide, disponible 24h/24 dans toute la métropole bordelaise.",
-              "url": "https://taxibordeauxsolution.fr",
+              "url": "https://www.taxibordeauxsolution.fr",
               "telephone": "+33667237822",
               "email": "contact@taxibordeauxsolution.fr",
-              "image": "https://taxibordeauxsolution.fr/images/taxi-bordeaux.jpg",
-              "logo": "https://taxibordeauxsolution.fr/images/logo/Logo Taxi Bordeaux Solution.png.png",
+              "image": "https://www.taxibordeauxsolution.fr/images/taxi-bordeaux.jpg",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.taxibordeauxsolution.fr/images/logo.png"
+              },
               "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Bordeaux",
@@ -164,19 +167,6 @@ export default function RootLayout({
               "sameAs": [
                 "https://www.google.com/maps/place/Taxi+Bordeaux+Solution"
               ],
-              "review": {
-                "@type": "Review",
-                "reviewRating": {
-                  "@type": "Rating",
-                  "ratingValue": "5",
-                  "bestRating": "5"
-                },
-                "author": {
-                  "@type": "Person",
-                  "name": "Client Satisfait"
-                },
-                "reviewBody": "Service taxi excellent à Bordeaux, prise en charge très rapide et chauffeur professionnel."
-              },
               "aggregateRating": {
                 "@type": "AggregateRating", 
                 "ratingValue": "4.9",
