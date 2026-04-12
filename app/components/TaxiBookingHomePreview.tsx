@@ -935,7 +935,7 @@ const TaxiBookingHomePreview = () => {
                             tripData.priceDetails.tariffType === 'Dimanche' ? 'bg-purple-200 sm:bg-purple-100 text-purple-900 sm:text-purple-800' :
                             'bg-green-200 sm:bg-green-100 text-green-900 sm:text-green-800'
                           }`}>
-                            {t('tariffLabel')} {getTariffLabel(tripData.priceDetails.tariffType)}
+                            {t('tariffLabel')} {getTariffLabel(tripData.priceDetails.tariffType ?? '')}
                           </span>
                         </div>
                       )}
@@ -1076,7 +1076,7 @@ const TaxiBookingHomePreview = () => {
                 </div>
                 {tripData.priceDetails && tripData.priceDetails.tariffType && tripData.priceDetails.tariffType !== 'Jour' && (
                   <div className="text-xs text-blue-700 sm:text-blue-600 mt-2 font-medium">
-                    ✓ {t('tariffLabel')} {getTariffLabel(tripData.priceDetails.tariffType)} {t('tariffApplied')}
+                    ✓ {t('tariffLabel')} {getTariffLabel(tripData.priceDetails.tariffType ?? '')} {t('tariffApplied')}
                   </div>
                 )}
               </div>
