@@ -2,10 +2,10 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: 'https://taxibordeauxsolution.fr/aeroport',
+    canonical: 'https://www.taxibordeauxsolution.fr/aeroport',
     languages: {
-      'fr': 'https://taxibordeauxsolution.fr/aeroport',
-      'x-default': 'https://taxibordeauxsolution.fr/aeroport',
+      'fr': 'https://www.taxibordeauxsolution.fr/aeroport',
+      'x-default': 'https://www.taxibordeauxsolution.fr/aeroport',
     },
   },
 }

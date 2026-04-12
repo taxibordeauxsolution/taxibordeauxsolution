@@ -2,10 +2,10 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: 'https://taxibordeauxsolution.fr/gare',
+    canonical: 'https://www.taxibordeauxsolution.fr/gare',
     languages: {
-      'fr': 'https://taxibordeauxsolution.fr/gare',
-      'x-default': 'https://taxibordeauxsolution.fr/gare',
+      'fr': 'https://www.taxibordeauxsolution.fr/gare',
+      'x-default': 'https://www.taxibordeauxsolution.fr/gare',
     },
   },
 }

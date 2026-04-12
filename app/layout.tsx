@@ -60,10 +60,10 @@ export const metadata: Metadata = {
 
   // Données structurées (Schema.org)
   alternates: {
-    canonical: 'https://taxibordeauxsolution.fr',
+    canonical: 'https://www.taxibordeauxsolution.fr',
     languages: {
-      'fr': 'https://taxibordeauxsolution.fr',
-      'x-default': 'https://taxibordeauxsolution.fr',
+      'fr': 'https://www.taxibordeauxsolution.fr',
+      'x-default': 'https://www.taxibordeauxsolution.fr',
     },
   },
 
@@ -199,8 +199,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
         {/* Hreflang pour le référencement international */}
-        <link rel="alternate" hrefLang="fr" href="https://taxibordeauxsolution.fr" />
-        <link rel="alternate" hrefLang="fr-FR" href="https://taxibordeauxsolution.fr" />
+        <link rel="alternate" hrefLang="fr" href="https://www.taxibordeauxsolution.fr" />
+        <link rel="alternate" hrefLang="fr-FR" href="https://www.taxibordeauxsolution.fr" />
       </head>
       
       <body className={inter.className} suppressHydrationWarning={true}>

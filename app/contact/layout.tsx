@@ -2,10 +2,10 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: 'https://taxibordeauxsolution.fr/contact',
+    canonical: 'https://www.taxibordeauxsolution.fr/contact',
     languages: {
-      'fr': 'https://taxibordeauxsolution.fr/contact',
-      'x-default': 'https://taxibordeauxsolution.fr/contact',
+      'fr': 'https://www.taxibordeauxsolution.fr/contact',
+      'x-default': 'https://www.taxibordeauxsolution.fr/contact',
     },
   },
 }
