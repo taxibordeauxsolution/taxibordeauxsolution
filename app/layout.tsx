@@ -188,9 +188,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
-        {/* Hreflang pour le référencement international */}
-        <link rel="alternate" hrefLang="fr" href="https://www.taxibordeauxsolution.fr" />
-        <link rel="alternate" hrefLang="fr-FR" href="https://www.taxibordeauxsolution.fr" />
       </head>
       
       <body className={inter.className} suppressHydrationWarning={true}>

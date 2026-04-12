@@ -41,9 +41,9 @@ export default function Header() {
               />
             </div>
             <div>
-              <h1 className="text-xl lg:text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+              <div className="text-xl lg:text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
                 Taxi Bordeaux Solution
-              </h1>
+              </div>
               <div className="flex items-center gap-2 text-xs lg:text-sm text-gray-600">
                 <MapPin size={14} className="text-blue-600" />
                 <span>Service 24h/24 - 7j/7</span>
