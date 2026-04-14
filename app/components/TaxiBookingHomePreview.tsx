@@ -591,13 +591,21 @@ const TaxiBookingHomePreview = () => {
     let finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, 28.00)
 
     // Tarif fixe Gare Saint-Jean ↔ Aéroport Bordeaux-Mérignac de nuit : 70 €
-    const isAirportCoords = (c: {lat: number, lng: number} | null) =>
-      !!c && c.lat >= 44.825 && c.lat <= 44.840 && c.lng >= -0.725 && c.lng <= -0.695
-    const isGareSaintJeanCoords = (c: {lat: number, lng: number} | null) =>
-      !!c && c.lat >= 44.818 && c.lat <= 44.832 && c.lng >= -0.575 && c.lng <= -0.540
+    const distanceM = (a: {lat: number, lng: number}, b: {lat: number, lng: number}) => {
+      const R = 6371000
+      const dLat = (b.lat - a.lat) * Math.PI / 180
+      const dLng = (b.lng - a.lng) * Math.PI / 180
+      const x = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLng / 2) ** 2
+      return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x))
+    }
+    const GARE     = { lat: 44.8255, lng: -0.5567 }
+    const AEROPORT = { lat: 44.8283, lng: -0.7156 }
+    const RAYON = 500
+    const isNearGare     = (c: {lat: number, lng: number} | null) => !!c && distanceM(c, GARE) <= RAYON
+    const isNearAeroport = (c: {lat: number, lng: number} | null) => !!c && distanceM(c, AEROPORT) <= RAYON
     const isGareAeroportRoute =
-      (isAirportCoords(tripData.fromCoords) && isGareSaintJeanCoords(tripData.toCoords)) ||
-      (isGareSaintJeanCoords(tripData.fromCoords) && isAirportCoords(tripData.toCoords))
+      (isNearAeroport(tripData.fromCoords) && isNearGare(tripData.toCoords)) ||
+      (isNearGare(tripData.fromCoords) && isNearAeroport(tripData.toCoords))
     if (isGareAeroportRoute && isNight) {
       finalPrice = 70
     }
