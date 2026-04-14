@@ -42,12 +42,16 @@ export default function AdminPrix() {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(prix)
       })
-      const data = await res.json()
-      setMessage(data.success
-        ? { type: 'ok', text: 'Prix sauvegardés !' }
-        : { type: 'err', text: 'Erreur lors de la sauvegarde' })
-    } catch {
-      setMessage({ type: 'err', text: 'Erreur de connexion' })
+      const text = await res.text()
+      let data: any = {}
+      try { data = JSON.parse(text) } catch { /* réponse non-JSON */ }
+      if (!res.ok || !data.success) {
+        setMessage({ type: 'err', text: `Erreur ${res.status} : ${data.message || text.slice(0, 120)}` })
+      } else {
+        setMessage({ type: 'ok', text: 'Prix sauvegardés !' })
+      }
+    } catch (e: any) {
+      setMessage({ type: 'err', text: `Erreur réseau : ${e.message}` })
     } finally {
       setSaving(false)
     }

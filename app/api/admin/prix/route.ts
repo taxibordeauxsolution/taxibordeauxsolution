@@ -21,18 +21,26 @@ const getConfig = async () => {
 }
 
 export async function GET(req: NextRequest) {
-  if (!verifyAdmin(req)) return NextResponse.json({ success: false }, { status: 401 })
-  await connectDB()
-  const config = await getConfig()
-  return NextResponse.json({ success: true, data: config })
+  if (!verifyAdmin(req)) return NextResponse.json({ success: false, message: 'Non autorisé' }, { status: 401 })
+  try {
+    await connectDB()
+    const config = await getConfig()
+    return NextResponse.json({ success: true, data: config })
+  } catch (e: any) {
+    return NextResponse.json({ success: false, message: e.message }, { status: 500 })
+  }
 }
 
 export async function PUT(req: NextRequest) {
-  if (!verifyAdmin(req)) return NextResponse.json({ success: false }, { status: 401 })
-  await connectDB()
-  const body = await req.json()
-  const config = await getConfig()
-  Object.assign(config, body)
-  await config.save()
-  return NextResponse.json({ success: true, data: config })
+  if (!verifyAdmin(req)) return NextResponse.json({ success: false, message: 'Non autorisé' }, { status: 401 })
+  try {
+    await connectDB()
+    const body = await req.json()
+    const config = await getConfig()
+    Object.assign(config, body)
+    await config.save()
+    return NextResponse.json({ success: true, data: config })
+  } catch (e: any) {
+    return NextResponse.json({ success: false, message: e.message }, { status: 500 })
+  }
 }
