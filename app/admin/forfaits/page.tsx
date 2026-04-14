@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Plus, PencilSimple, Trash, ToggleLeft, ToggleRight, ArrowClockwise, X, FloppyDisk, MapPin, Warning } from '@phosphor-icons/react'
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api'
+const API = '/api'
 const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
 
 interface LatLng { lat: number; lng: number }

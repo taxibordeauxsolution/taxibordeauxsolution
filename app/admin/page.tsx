@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Lock, Eye, EyeSlash } from '@phosphor-icons/react'
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api'
+const API = '/api'
 
 export default function AdminLogin() {
   const router = useRouter()

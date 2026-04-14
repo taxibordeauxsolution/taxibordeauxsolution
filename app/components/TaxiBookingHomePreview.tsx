@@ -489,15 +489,15 @@ const TaxiBookingHomePreview = () => {
 
   // Chargement des forfaits et config prix depuis l'API
   useEffect(() => {
-    fetch(`${API_BASE_URL}/public/forfaits`)
+    fetch('/api/public/forfaits')
       .then(r => r.json())
       .then(d => { if (d.success) setForfaits(d.data) })
-      .catch(() => {}) // fallback : pas de forfaits si API indisponible
+      .catch(() => {})
 
-    fetch(`${API_BASE_URL}/public/prix`)
+    fetch('/api/public/prix')
       .then(r => r.json())
       .then(d => { if (d.success) setConfigPrix(d.data) })
-      .catch(() => {}) // fallback : valeurs par défaut conservées
+      .catch(() => {})
   }, [])
 
   // Fonction pour vérifier si c'est un jour férié
