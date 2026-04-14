@@ -594,7 +594,7 @@ const TaxiBookingHomePreview = () => {
     const isAirportCoords = (c: {lat: number, lng: number} | null) =>
       !!c && c.lat >= 44.825 && c.lat <= 44.840 && c.lng >= -0.725 && c.lng <= -0.695
     const isGareSaintJeanCoords = (c: {lat: number, lng: number} | null) =>
-      !!c && c.lat >= 44.818 && c.lat <= 44.832 && c.lng >= -0.585 && c.lng <= -0.560
+      !!c && c.lat >= 44.818 && c.lat <= 44.832 && c.lng >= -0.575 && c.lng <= -0.540
     const isGareAeroportRoute =
       (isAirportCoords(tripData.fromCoords) && isGareSaintJeanCoords(tripData.toCoords)) ||
       (isGareSaintJeanCoords(tripData.fromCoords) && isAirportCoords(tripData.toCoords))
