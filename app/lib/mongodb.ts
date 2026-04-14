@@ -10,7 +10,14 @@ export async function connectDB() {
   if (!MONGODB_URI) throw new Error('MONGODB_URI manquant dans les variables d\'environnement Vercel')
   if (cached.conn) return cached.conn
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, { bufferCommands: false })
+    // Supprimer les paramètres non supportés par cette version du driver
+    const cleanUri = MONGODB_URI
+      .replace(/[?&]retryWrites=[^&]*/g, '')
+      .replace(/[?&]w=[^&]*/g, '')
+      .replace(/[?&]appName=[^&]*/g, '')
+      .replace(/\?&/, '?')
+      .replace(/[?&]$/, '')
+    cached.promise = mongoose.connect(cleanUri, { bufferCommands: false })
   }
   cached.conn = await cached.promise
   return cached.conn
