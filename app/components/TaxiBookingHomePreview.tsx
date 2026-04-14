@@ -588,7 +588,7 @@ const TaxiBookingHomePreview = () => {
 
     const basePrice = priseEnCharge + distanceFare
     const approachFees = 7.20
-    let finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, 30.00)
+    let finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, 28.00)
 
     // Tarif fixe Gare Saint-Jean ↔ Aéroport Bordeaux-Mérignac de nuit : 70 €
     const isAirportCoords = (c: {lat: number, lng: number} | null) =>
