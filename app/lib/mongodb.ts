@@ -1,15 +1,13 @@
 import mongoose from 'mongoose'
 
-const MONGODB_URI = process.env.MONGODB_URI!
-
-if (!MONGODB_URI) throw new Error('MONGODB_URI manquant dans .env.local')
-
 // Cache de connexion pour éviter de recréer à chaque requête (Next.js serverless)
 const cached: { conn: typeof mongoose | null; promise: Promise<typeof mongoose> | null } =
   (global as any).__mongoose || { conn: null, promise: null }
 ;(global as any).__mongoose = cached
 
 export async function connectDB() {
+  const MONGODB_URI = process.env.MONGODB_URI
+  if (!MONGODB_URI) throw new Error('MONGODB_URI manquant dans les variables d\'environnement Vercel')
   if (cached.conn) return cached.conn
   if (!cached.promise) {
     cached.promise = mongoose.connect(MONGODB_URI, { bufferCommands: false })
