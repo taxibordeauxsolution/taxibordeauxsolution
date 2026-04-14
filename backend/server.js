@@ -219,7 +219,7 @@ app.get('/health', (req, res) => {
 app.use('/api/reservations', reservationLimiter, reservationRoutes)
 app.use('/api/maps', apiLimiter, mapsRoutes)
 app.use('/api/translations', apiLimiter, translationRoutes)
-app.use('/api/admin', authenticate, adminRoutes)
+app.use('/api/admin', adminRoutes)
 app.use('/api/public', publicRoutes)
 
 // Route de test pour vérifier le bon fonctionnement
