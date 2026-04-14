@@ -588,7 +588,19 @@ const TaxiBookingHomePreview = () => {
 
     const basePrice = priseEnCharge + distanceFare
     const approachFees = 7.20
-    const finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, 30.00)
+    let finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, 30.00)
+
+    // Tarif fixe Gare Saint-Jean ↔ Aéroport Bordeaux-Mérignac de nuit : 70 €
+    const isAirportCoords = (c: {lat: number, lng: number} | null) =>
+      !!c && c.lat >= 44.825 && c.lat <= 44.840 && c.lng >= -0.725 && c.lng <= -0.695
+    const isGareSaintJeanCoords = (c: {lat: number, lng: number} | null) =>
+      !!c && c.lat >= 44.818 && c.lat <= 44.832 && c.lng >= -0.585 && c.lng <= -0.560
+    const isGareAeroportRoute =
+      (isAirportCoords(tripData.fromCoords) && isGareSaintJeanCoords(tripData.toCoords)) ||
+      (isGareSaintJeanCoords(tripData.fromCoords) && isAirportCoords(tripData.toCoords))
+    if (isGareAeroportRoute && isNight) {
+      finalPrice = 70
+    }
 
     let tariffType = 'Jour'
     if (isHoliday) tariffType = 'Férié'
@@ -615,7 +627,7 @@ const TaxiBookingHomePreview = () => {
         isSunday
       }
     }))
-  }, [tripData.distance, tripData.duration, bookingData.departureDate, bookingData.departureTime])
+  }, [tripData.distance, tripData.duration, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime])
 
 
   const handleBookingChange = (field: keyof BookingData, value: any) => {
