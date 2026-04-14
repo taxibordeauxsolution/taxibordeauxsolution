@@ -612,7 +612,8 @@ const TaxiBookingHomePreview = () => {
     }
 
     const basePrice = priseEnCharge + distanceFare
-    let finalPrice = Math.max(Math.round((basePrice + configPrix.fraisApproche) * 100) / 100, configPrix.courseMini)
+    const approachFees = configPrix.fraisApproche
+    let finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, configPrix.courseMini)
 
     // ── Vérification forfaits (chargés depuis l'API) ─────────────────────
     const distM = (a: {lat: number, lng: number}, b: {lat: number, lng: number}) => {
