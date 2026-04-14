@@ -14,6 +14,18 @@ const TaxiBookingHomePreview = () => {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [language, setLanguage] = useState('fr')
+
+  // Forfaits et config prix chargés depuis l'API
+  const [forfaits, setForfaits] = useState<any[]>([])
+  const [configPrix, setConfigPrix] = useState({
+    priseEnCharge: 2.83,
+    tarifKmJour: 2.16,
+    tarifKmNuit: 3.24,
+    fraisApproche: 7.20,
+    courseMini: 28.00,
+    heureDebutNuit: '19:00',
+    heureFinNuit: '06:00',
+  })
   const [maps, setMaps] = useState<any>(null)
   const [map, setMap] = useState<any>(null)
   const [directionsService, setDirectionsService] = useState<any>(null)
@@ -475,6 +487,19 @@ const TaxiBookingHomePreview = () => {
     loadGoogleMaps()
   }, [language])
 
+  // Chargement des forfaits et config prix depuis l'API
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/public/forfaits`)
+      .then(r => r.json())
+      .then(d => { if (d.success) setForfaits(d.data) })
+      .catch(() => {}) // fallback : pas de forfaits si API indisponible
+
+    fetch(`${API_BASE_URL}/public/prix`)
+      .then(r => r.json())
+      .then(d => { if (d.success) setConfigPrix(d.data) })
+      .catch(() => {}) // fallback : valeurs par défaut conservées
+  }, [])
+
   // Fonction pour vérifier si c'est un jour férié
   const isPublicHoliday = (date: Date) => {
     const year = date.getFullYear()
@@ -573,9 +598,9 @@ const TaxiBookingHomePreview = () => {
       }
     }
 
-    const priseEnCharge = 2.83
-    const DAY_RATE = 2.16
-    const NIGHT_RATE = 3.24
+    const priseEnCharge = configPrix.priseEnCharge
+    const DAY_RATE  = configPrix.tarifKmJour
+    const NIGHT_RATE = configPrix.tarifKmNuit
 
     let distanceFare: number
     if (isHoliday || isSunday) {
@@ -587,27 +612,45 @@ const TaxiBookingHomePreview = () => {
     }
 
     const basePrice = priseEnCharge + distanceFare
-    const approachFees = 7.20
-    let finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, 28.00)
+    let finalPrice = Math.max(Math.round((basePrice + configPrix.fraisApproche) * 100) / 100, configPrix.courseMini)
 
-    // Tarif fixe Gare Saint-Jean ↔ Aéroport Bordeaux-Mérignac de nuit : 70 €
-    const distanceM = (a: {lat: number, lng: number}, b: {lat: number, lng: number}) => {
+    // ── Vérification forfaits (chargés depuis l'API) ─────────────────────
+    const distM = (a: {lat: number, lng: number}, b: {lat: number, lng: number}) => {
       const R = 6371000
       const dLat = (b.lat - a.lat) * Math.PI / 180
       const dLng = (b.lng - a.lng) * Math.PI / 180
       const x = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLng / 2) ** 2
       return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x))
     }
-    const GARE     = { lat: 44.8255, lng: -0.5567 }
-    const AEROPORT = { lat: 44.8283, lng: -0.7156 }
-    const RAYON = 500
-    const isNearGare     = (c: {lat: number, lng: number} | null) => !!c && distanceM(c, GARE) <= RAYON
-    const isNearAeroport = (c: {lat: number, lng: number} | null) => !!c && distanceM(c, AEROPORT) <= RAYON
-    const isGareAeroportRoute =
-      (isNearAeroport(tripData.fromCoords) && isNearGare(tripData.toCoords)) ||
-      (isNearGare(tripData.fromCoords) && isNearAeroport(tripData.toCoords))
-    if (isGareAeroportRoute && isNight) {
-      finalPrice = 70
+
+    // Ray casting : point dans polygone
+    const pointInPolygon = (pt: {lat: number, lng: number}, poly: {lat: number, lng: number}[]) => {
+      let inside = false
+      for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        const xi = poly[i].lng, yi = poly[i].lat
+        const xj = poly[j].lng, yj = poly[j].lat
+        if (((yi > pt.lat) !== (yj > pt.lat)) && (pt.lng < ((xj - xi) * (pt.lat - yi)) / (yj - yi) + xi)) {
+          inside = !inside
+        }
+      }
+      return inside
+    }
+
+    const coordInZone = (coords: {lat: number, lng: number} | null, point: any) => {
+      if (!coords) return false
+      if (point.zone && point.zone.length > 2) return pointInPolygon(coords, point.zone)
+      if (point.lat && point.lng) return distM(coords, { lat: point.lat, lng: point.lng }) <= 500
+      return false
+    }
+
+    for (const f of forfaits) {
+      if (!f.actif) continue
+      const matchAB = coordInZone(tripData.fromCoords, f.pointA) && coordInZone(tripData.toCoords, f.pointB)
+      const matchBA = coordInZone(tripData.fromCoords, f.pointB) && coordInZone(tripData.toCoords, f.pointA)
+      if (matchAB || matchBA) {
+        finalPrice = isNight ? f.prixNuit : f.prixJour
+        break
+      }
     }
 
     let tariffType = 'Jour'
@@ -635,7 +678,7 @@ const TaxiBookingHomePreview = () => {
         isSunday
       }
     }))
-  }, [tripData.distance, tripData.duration, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime])
+  }, [tripData.distance, tripData.duration, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, forfaits, configPrix])
 
 
   const handleBookingChange = (field: keyof BookingData, value: any) => {

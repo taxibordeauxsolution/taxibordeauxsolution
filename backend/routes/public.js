@@ -5,6 +5,8 @@
 
 import express from 'express'
 import { asyncHandler } from '../middleware/errorHandler.js'
+import ConfigPrix from '../models/ConfigPrix.js'
+import Forfait from '../models/Forfait.js'
 
 const router = express.Router()
 
@@ -71,6 +73,25 @@ router.get('/pricing', asyncHandler(async (req, res) => {
     success: true,
     data: pricing
   })
+}))
+
+/**
+ * GET /api/public/forfaits
+ * Forfaits actifs (utilisé par le module de réservation)
+ */
+router.get('/forfaits', asyncHandler(async (req, res) => {
+  const forfaits = await Forfait.find({ actif: true }).select('-__v')
+  res.json({ success: true, data: forfaits })
+}))
+
+/**
+ * GET /api/public/prix
+ * Tarifs de base (utilisé par le module de réservation)
+ */
+router.get('/prix', asyncHandler(async (req, res) => {
+  let config = await ConfigPrix.findOne()
+  if (!config) config = await ConfigPrix.create({})
+  res.json({ success: true, data: config })
 }))
 
 export default router
