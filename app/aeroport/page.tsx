@@ -162,11 +162,10 @@ export default function TaxiAeroport() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {DESTINATIONS.map(({ label, desc, km, min }) => (
+            {DESTINATIONS.map(({ label, desc }) => (
               <div key={label} className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{label}</h3>
-                <p className="text-gray-600 text-sm mb-3">{desc}</p>
-                <span className="text-gray-500 text-xs">{km} km • ~{min} min</span>
+                <p className="text-gray-600 text-sm">{desc}</p>
               </div>
             ))}
           </div>
