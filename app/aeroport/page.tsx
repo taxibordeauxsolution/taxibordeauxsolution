@@ -12,7 +12,6 @@ import {
   Timer,
   UserCheck,
   CreditCard,
-  MapPin,
 } from '@phosphor-icons/react'
 
 const DESTINATIONS = [
@@ -227,18 +226,6 @@ export default function TaxiAeroport() {
               </ul>
             </div>
 
-            <div className="bg-orange-50 p-8 rounded-3xl border border-orange-100">
-              <div className="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center mb-5">
-                <MapPin size={32} className="text-orange-600" weight="duotone" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Frais d&apos;Approche</h3>
-              <p className="text-gray-600 mb-4 text-sm">Pour les réservations à domicile</p>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li className="flex items-center gap-2"><CheckCircle size={15} className="text-orange-500 shrink-0" />Annoncé à la réservation</li>
-                <li className="flex items-center gap-2"><CheckCircle size={15} className="text-orange-500 shrink-0" />Zéro frais sur station aéroport</li>
-                <li className="flex items-center gap-2"><CheckCircle size={15} className="text-orange-500 shrink-0" />Tarif officiel Préfecture de Gironde</li>
-              </ul>
-            </div>
           </div>
         </div>
       </section>
