@@ -73,6 +73,7 @@ const TaxiBookingHomePreview = () => {
   const toInputRef = useRef<HTMLInputElement>(null)
   const mapRef = useRef<HTMLDivElement>(null)
   const moduleRef = useRef<HTMLDivElement>(null)
+  const mapsLoadedRef = useRef(false)
 
   // Dictionnaire de traductions complet
   const translations = {
@@ -366,126 +367,102 @@ const TaxiBookingHomePreview = () => {
     </div>
   )
 
-  // Initialisation Google Maps
-  useEffect(() => {
-    const loadGoogleMaps = () => {
-      if ((window as any).google && (window as any).google.maps) {
-        initializeMaps()
-        return
-      }
+  // Initialisation carte + autocomplete (appelé après chargement du script)
+  const initializeMaps = useCallback(() => {
+    const google = (window as any).google
+    if (!google?.maps || !mapRef.current) return
+    setMaps(google.maps)
 
-      const script = document.createElement('script')
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&language=${language}&region=FR`
-      script.async = true
-      script.defer = true
-      script.onload = initializeMaps
-      document.head.appendChild(script)
+    const mapInstance = new google.maps.Map(mapRef.current, {
+      center: { lat: 44.8378, lng: -0.5792 },
+      zoom: 12,
+      styles: [{ featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }],
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: true
+    })
+    setMap(mapInstance)
+
+    const directionsServiceInstance = new google.maps.DirectionsService()
+    const directionsRendererInstance = new google.maps.DirectionsRenderer({
+      map: mapInstance,
+      suppressMarkers: false,
+      draggable: false,
+      polylineOptions: { strokeColor: '#10b981', strokeWeight: 5, strokeOpacity: 0.9 }
+    })
+    setDirectionsService(directionsServiceInstance)
+    setDirectionsRenderer(directionsRendererInstance)
+
+    if (fromInputRef.current) {
+      const autocompleteFromInstance = new google.maps.places.Autocomplete(
+        fromInputRef.current,
+        {
+          componentRestrictions: { country: 'fr' },
+          bounds: new google.maps.LatLngBounds(
+            new google.maps.LatLng(44.7, -0.7),
+            new google.maps.LatLng(44.9, -0.4)
+          ),
+          types: ['establishment', 'geocode'],
+          strictBounds: false
+        }
+      )
+      setAutocompleteFrom(autocompleteFromInstance)
+      autocompleteFromInstance.addListener('place_changed', () => {
+        const place = autocompleteFromInstance.getPlace()
+        if (place.geometry) {
+          setTripData(prev => ({
+            ...prev,
+            from: place.formatted_address,
+            fromCoords: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }
+          }))
+        }
+      })
     }
 
-    const initializeMaps = () => {
-      if ((window as any).google && (window as any).google.maps && mapRef.current) {
-        const google = (window as any).google
-        setMaps(google.maps)
-
-        // Initialiser la carte centrée sur Bordeaux
-        const mapInstance = new google.maps.Map(mapRef.current, {
-          center: { lat: 44.8378, lng: -0.5792 }, // Centre de Bordeaux
-          zoom: 12,
-          styles: [
-            {
-              featureType: "poi",
-              elementType: "labels",
-              stylers: [{ visibility: "off" }]
-            }
-          ],
-          mapTypeControl: false,
-          streetViewControl: false,
-          fullscreenControl: true
-        })
-
-        setMap(mapInstance)
-
-        // Services de directions
-        const directionsServiceInstance = new google.maps.DirectionsService()
-        const directionsRendererInstance = new google.maps.DirectionsRenderer({
-          map: mapInstance,
-          suppressMarkers: false,
-          draggable: false, // Pas de modification manuelle pour garder l'optimisation
-          polylineOptions: {
-            strokeColor: '#10b981', // Vert pour indiquer route optimisée
-            strokeWeight: 5,        // Plus épais pour visibilité
-            strokeOpacity: 0.9      // Plus opaque pour contraste
-          }
-        })
-
-        setDirectionsService(directionsServiceInstance)
-        setDirectionsRenderer(directionsRendererInstance)
-
-        // Autocomplete pour les champs d'adresse
-        if (fromInputRef.current) {
-          const autocompleteFromInstance = new google.maps.places.Autocomplete(
-            fromInputRef.current,
-            { 
-              componentRestrictions: { country: 'fr' },
-              bounds: new google.maps.LatLngBounds(
-                new google.maps.LatLng(44.7, -0.7),
-                new google.maps.LatLng(44.9, -0.4)
-              ),
-              types: ['establishment', 'geocode'], // Privilégier aéroports, gares, puis adresses
-              strictBounds: false // Permettre des résultats hors bornes pour aéroports
-            }
-          )
-          setAutocompleteFrom(autocompleteFromInstance)
-
-          autocompleteFromInstance.addListener('place_changed', () => {
-            const place = autocompleteFromInstance.getPlace()
-            if (place.geometry) {
-              setTripData(prev => ({
-                ...prev,
-                from: place.formatted_address,
-                fromCoords: {
-                  lat: place.geometry.location.lat(),
-                  lng: place.geometry.location.lng()
-                }
-              }))
-            }
-          })
+    if (toInputRef.current) {
+      const autocompleteToInstance = new google.maps.places.Autocomplete(
+        toInputRef.current,
+        {
+          componentRestrictions: { country: 'fr' },
+          bounds: new google.maps.LatLngBounds(
+            new google.maps.LatLng(44.7, -0.7),
+            new google.maps.LatLng(44.9, -0.4)
+          ),
+          types: ['establishment', 'geocode'],
+          strictBounds: false
         }
-
-        if (toInputRef.current) {
-          const autocompleteToInstance = new google.maps.places.Autocomplete(
-            toInputRef.current,
-            { 
-              componentRestrictions: { country: 'fr' },
-              bounds: new google.maps.LatLngBounds(
-                new google.maps.LatLng(44.7, -0.7),
-                new google.maps.LatLng(44.9, -0.4)
-              ),
-              types: ['establishment', 'geocode'], // Privilégier aéroports, gares, puis adresses
-              strictBounds: false // Permettre des résultats hors bornes pour aéroports
-            }
-          )
-          setAutocompleteTo(autocompleteToInstance)
-
-          autocompleteToInstance.addListener('place_changed', () => {
-            const place = autocompleteToInstance.getPlace()
-            if (place.geometry) {
-              setTripData(prev => ({
-                ...prev,
-                to: place.formatted_address,
-                toCoords: {
-                  lat: place.geometry.location.lat(),
-                  lng: place.geometry.location.lng()
-                }
-              }))
-            }
-          })
+      )
+      setAutocompleteTo(autocompleteToInstance)
+      autocompleteToInstance.addListener('place_changed', () => {
+        const place = autocompleteToInstance.getPlace()
+        if (place.geometry) {
+          setTripData(prev => ({
+            ...prev,
+            to: place.formatted_address,
+            toCoords: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }
+          }))
         }
-      }
+      })
+    }
+  }, []) // Les setters React et les refs sont stables, aucune dépendance nécessaire
+
+  // Chargement lazy : déclenché au premier focus sur un champ d'adresse
+  const loadGoogleMapsLazy = useCallback(() => {
+    if (mapsLoadedRef.current) return
+    mapsLoadedRef.current = true
+
+    if ((window as any).google?.maps) {
+      initializeMaps()
+      return
     }
 
-    loadGoogleMaps()
-  }, [language])
+    const script = document.createElement('script')
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&language=${language}&region=FR`
+    script.async = true
+    script.defer = true
+    script.onload = initializeMaps
+    document.head.appendChild(script)
+  }, [language, initializeMaps])
 
   // Chargement des forfaits et config prix depuis l'API
   useEffect(() => {
@@ -844,6 +821,7 @@ const TaxiBookingHomePreview = () => {
               type="text"
               placeholder={t('fromPlaceholder')}
               value={tripData.from}
+              onFocus={loadGoogleMapsLazy}
               onChange={(e) => setTripData(prev => ({ ...prev, from: e.target.value }))}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 text-gray-900"
               disabled={loading}
@@ -862,6 +840,7 @@ const TaxiBookingHomePreview = () => {
               type="text"
               placeholder={t('toPlaceholder')}
               value={tripData.to}
+              onFocus={loadGoogleMapsLazy}
               onChange={(e) => setTripData(prev => ({ ...prev, to: e.target.value }))}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 text-gray-900"
               disabled={loading}

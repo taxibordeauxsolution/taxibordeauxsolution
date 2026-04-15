@@ -1,4 +1,47 @@
+# Tous les robots standards
 User-agent: *
+Allow: /
+
+# Robots d'IA - OpenAI / ChatGPT
+User-agent: GPTBot
+Allow: /
+
+# Robots d'IA - Anthropic / Claude
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+# Robots d'IA - Google (Gemini / AI Overviews)
+User-agent: Google-Extended
+Allow: /
+
+# Robots d'IA - Microsoft / Bing / Copilot
+User-agent: Bingbot
+Allow: /
+
+User-agent: msnbot
+Allow: /
+
+# Robots d'IA - Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+# Robots d'IA - Common Crawl (utilisé par de nombreux LLM)
+User-agent: CCBot
+Allow: /
+
+# Robots d'IA - Meta / Llama
+User-agent: FacebookBot
+Allow: /
+
+# Robots d'IA - Apple
+User-agent: Applebot
+Allow: /
+
+# Robots d'IA - You.com
+User-agent: YouBot
 Allow: /
 
 Sitemap: https://www.taxibordeauxsolution.fr/sitemap.xml

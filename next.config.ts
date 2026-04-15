@@ -2,12 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   typescript: {
-    // TypeScript strict mode réactivé - erreurs TypeScript maintenant corrigées avec les nouveaux types
     ignoreBuildErrors: false,
   },
-experimental: {
-    // CSS optimization désactivé temporairement - problème avec critters
-    // optimizeCss: true,
+  experimental: {
+    // Réduit le JS envoyé au client en n'incluant que les icônes réellement utilisées
+    optimizePackageImports: ['lucide-react', '@phosphor-icons/react'],
   },
 };
 
