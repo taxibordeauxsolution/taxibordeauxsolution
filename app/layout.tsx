@@ -178,10 +178,6 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         
-        {/* Préchargement des ressources critiques */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
       </head>
       
       <body className={inter.className} suppressHydrationWarning={true}>
