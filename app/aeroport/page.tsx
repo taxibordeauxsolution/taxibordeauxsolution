@@ -1,3 +1,5 @@
+'use client'
+
 import { Phone, MapPin, Clock, Plane, Shield, CheckCircle, ArrowRight } from 'lucide-react'
 import {
   AirplaneTakeoff,

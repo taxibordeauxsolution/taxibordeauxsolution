@@ -1,5 +1,6 @@
-import type { Metadata } from 'next'
-import { Phone, Shield, CheckCircle, ArrowRight, Star, Calendar } from 'lucide-react'
+'use client'
+
+import { Phone, Shield, CheckCircle, ArrowRight, Calendar } from 'lucide-react'
 import BookingSection from '../components/BookingSection'
 import {
   Train,
@@ -15,14 +16,6 @@ import {
   UserCheck
 } from '@phosphor-icons/react'
 
-export const metadata: Metadata = {
-  title: 'Taxi Bordeaux Gare Saint-Jean | Réservation Taxi Bordeaux 24h/24',
-  description: 'Réservez votre taxi Bordeaux Gare Saint-Jean en quelques secondes. Taxi bordelais professionnel disponible 24h/24. Bordeaux taxis transfers vers aéroport, centre-ville et toute la région. Tarifs réglementés.',
-  alternates: {
-    canonical: 'https://www.taxibordeauxsolution.fr/gare',
-  },
-  keywords: 'taxi bordeaux gare, taxi bordeaux, taxi bordelais, réserver taxi bordeaux, taxi bordeaux saint jean, reservation taxi bordeaux, bordeaux taxis transfers, taxi service in bordeaux',
-}
 
 export default function TaxiGare() {
   return (

@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Taxi Gare Saint-Jean Bordeaux | Dépose & Prise en Charge — Taxi Bordeaux Solution',
-  description: 'Taxi Gare Saint-Jean de Bordeaux : départ et arrivée, disponible 24h/24. Chauffeur professionnel, tarifs transparents. Appelez le 06 67 23 78 22.',
+  title: 'Taxi Bordeaux Gare Saint-Jean | Réservation Taxi Bordeaux 24h/24',
+  description: 'Réservez votre taxi Bordeaux Gare Saint-Jean en quelques secondes. Taxi bordelais professionnel disponible 24h/24. Bordeaux taxis transfers vers aéroport, centre-ville et toute la région. Tarifs réglementés.',
+  keywords: 'taxi bordeaux gare, taxi bordeaux, taxi bordelais, réserver taxi bordeaux, taxi bordeaux saint jean, reservation taxi bordeaux, bordeaux taxis transfers, taxi service in bordeaux',
   alternates: {
     canonical: 'https://www.taxibordeauxsolution.fr/gare',
     languages: {
