@@ -1,23 +1,44 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Phone, Shield, CheckCircle, ArrowRight, Calendar } from 'lucide-react'
 import BookingSection from '../components/BookingSection'
 import {
   Train,
   ClockCounterClockwise,
   Car,
-  Buildings,
-  AirplaneTakeoff,
-  GraduationCap,
-  Desk,
-  Bridge,
-  House,
   Timer,
   UserCheck
 } from '@phosphor-icons/react'
 
 
+// Distances réelles depuis la Gare Saint-Jean Bordeaux (Google Maps)
+const DESTINATIONS = [
+  { label: 'Aéroport Bordeaux-Mérignac', desc: 'Liaison directe gare → aéroport. Connexion vols internationaux sans stress.', km: 13.5, min: 23, color: 'blue',    Icon: 'AirplaneTakeoff' },
+  { label: 'Bordeaux Centre-Ville',       desc: 'Chartrons, Quinconces, Triangle d\'Or, hôtels et restaurants du centre.',         km: 2.7,  min: 9,  color: 'green',   Icon: 'Buildings'      },
+  { label: 'Pessac / Talence',            desc: 'Campus universitaires, zones résidentielles au sud de la métropole.',            km: 8.3,  min: 17, color: 'purple',  Icon: 'GraduationCap'  },
+  { label: 'Bordeaux-Lac',               desc: 'Quartier d\'affaires, Palais des Congrès, centre commercial.',                    km: 9.1,  min: 19, color: 'orange',  Icon: 'Desk'           },
+  { label: 'Bordeaux Bastide',            desc: 'Rive droite, Darwin, quartiers résidentiels est de Bordeaux.',                    km: 3.2,  min: 10, color: 'cyan',    Icon: 'Bridge'         },
+  { label: 'Toute la Métropole',          desc: 'Mérignac, Le Bouscat, Eysines, Bègles et toute la Gironde.',                    km: 11,   min: 22, color: 'emerald', Icon: 'House'          },
+]
+
+function calcPrix(km: number, config: { priseEnCharge: number; tarifKmJour: number; tarifKmNuit: number; fraisApproche: number; courseMini: number }, nuit = false) {
+  const tarif = nuit ? config.tarifKmNuit : config.tarifKmJour
+  return Math.max(Math.round((config.priseEnCharge + km * tarif + config.fraisApproche) * 100) / 100, config.courseMini)
+}
+
+const DEFAULT_CONFIG = { priseEnCharge: 2.83, tarifKmJour: 2.16, tarifKmNuit: 3.24, fraisApproche: 7.20, courseMini: 28.00 }
+
 export default function TaxiGare() {
+  const [config, setConfig] = useState(DEFAULT_CONFIG)
+
+  useEffect(() => {
+    fetch('/api/public/prix')
+      .then(r => r.json())
+      .then(d => { if (d.success && d.data) setConfig(d.data) })
+      .catch(() => {})
+  }, [])
+
   return (
     <div className="min-h-screen bg-white">
 
@@ -199,60 +220,28 @@ export default function TaxiGare() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-
-            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <AirplaneTakeoff size={40} className="text-blue-600" weight="duotone" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Aéroport Bordeaux-Mérignac</h3>
-              <p className="text-gray-600 text-sm mb-3">Liaison directe gare → aéroport. Connexion vols internationaux sans stress.</p>
-              <span className="text-green-600 font-semibold text-sm">Transfer direct ~25 min</span>
-            </div>
-
-            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <Buildings size={40} className="text-green-600" weight="duotone" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Bordeaux Centre-Ville</h3>
-              <p className="text-gray-600 text-sm mb-3">Chartrons, Quinconces, Triangle d&apos;Or, hôtels et restaurants du centre.</p>
-              <span className="text-green-600 font-semibold text-sm">Transfer direct ~10 min</span>
-            </div>
-
-            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <GraduationCap size={40} className="text-purple-600" weight="duotone" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Pessac / Talence</h3>
-              <p className="text-gray-600 text-sm mb-3">Campus universitaires, zones résidentielles au sud de la métropole.</p>
-              <span className="text-green-600 font-semibold text-sm">Transfer direct ~20 min</span>
-            </div>
-
-            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-orange-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <Desk size={40} className="text-orange-600" weight="duotone" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Bordeaux-Lac</h3>
-              <p className="text-gray-600 text-sm mb-3">Quartier d&apos;affaires, Palais des Congrès, centre commercial.</p>
-              <span className="text-green-600 font-semibold text-sm">Transfer direct ~20 min</span>
-            </div>
-
-            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
-              <div className="w-20 h-20 bg-gradient-to-br from-cyan-100 to-cyan-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <Bridge size={40} className="text-cyan-600" weight="duotone" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Bordeaux Bastide</h3>
-              <p className="text-gray-600 text-sm mb-3">Rive droite, Darwin, quartiers résidentiels est de Bordeaux.</p>
-              <span className="text-green-600 font-semibold text-sm">Transfer direct ~15 min</span>
-            </div>
-
-            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
-              <div className="w-20 h-20 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-3xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <House size={40} className="text-emerald-600" weight="duotone" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Toute la Métropole</h3>
-              <p className="text-gray-600 text-sm mb-3">Mérignac, Le Bouscat, Eysines, Bègles et toute la Gironde.</p>
-              <span className="text-green-600 font-semibold text-sm">Sur devis au compteur</span>
-            </div>
+            {DESTINATIONS.map(({ label, desc, km, min, color }) => {
+              const prixJour = calcPrix(km, config, false)
+              const prixNuit = calcPrix(km, config, true)
+              const memesPrix = prixJour === prixNuit
+              return (
+                <div key={label} className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{label}</h3>
+                  <p className="text-gray-600 text-sm mb-3">{desc}</p>
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-gray-500 text-xs">{km} km • ~{min} min</span>
+                    {memesPrix ? (
+                      <span className="text-green-700 font-bold text-base">dès {prixJour.toFixed(0)}€</span>
+                    ) : (
+                      <span className="text-green-700 font-bold text-base">
+                        {prixJour.toFixed(0)}€ jour&nbsp;•&nbsp;<span className="text-blue-700">{prixNuit.toFixed(0)}€ nuit</span>
+                      </span>
+                    )}
+                    <span className="text-gray-400 text-xs">tarif compteur officiel</span>
+                  </div>
+                </div>
+              )
+            })}
           </div>
 
           <div className="mt-12 text-center">
@@ -339,7 +328,7 @@ export default function TaxiGare() {
                     <CheckCircle className="text-blue-500 mt-1 shrink-0" size={20} />
                     <div>
                       <h4 className="font-bold text-gray-900 mb-1">Chauffeurs certifiés</h4>
-                      <p className="text-gray-600 text-sm">Tous nos chauffeurs sont titulaires de la carte professionnelle VTC/Taxi délivrée par la Préfecture.</p>
+                      <p className="text-gray-600 text-sm">Tous nos chauffeurs sont titulaires de la carte professionnelle Taxi délivrée par la Préfecture de Gironde.</p>
                     </div>
                   </div>
 
@@ -396,7 +385,7 @@ export default function TaxiGare() {
 
             <div className="border border-gray-200 rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-2">Quel est le tarif taxi Bordeaux gare vers l&apos;aéroport ?</h3>
-              <p className="text-gray-600">Le <strong>taxi Bordeaux</strong> gare Saint-Jean vers l&apos;aéroport de Mérignac est facturé selon le compteur officiel de la Préfecture de Gironde. Le trajet dure environ 25 minutes et coûte entre 35€ et 50€ selon les horaires (tarif jour/nuit).</p>
+              <p className="text-gray-600">Le <strong>taxi Bordeaux</strong> gare Saint-Jean vers l&apos;aéroport de Mérignac est facturé selon le compteur officiel de la Préfecture de Gironde. {`Le trajet dure environ 23 minutes et coûte ${calcPrix(13.5, config, false).toFixed(0)}€ en tarif jour et ${calcPrix(13.5, config, true).toFixed(0)}€ en tarif nuit selon le compteur officiel.`}</p>
             </div>
 
             <div className="border border-gray-200 rounded-2xl p-6">
