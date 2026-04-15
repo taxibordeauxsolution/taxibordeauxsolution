@@ -94,10 +94,10 @@ export default function TaxiAeroport() {
 
             <div className="bg-white/60 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg">
               <div className="w-16 h-16 bg-yellow-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                <Car size={32} className="text-yellow-600" weight="duotone" />
+                <UserCheck size={32} className="text-yellow-600" weight="duotone" />
               </div>
-              <div className="text-2xl font-bold text-gray-900 mb-1">5 min</div>
-              <div className="text-sm text-gray-600">Temps d&apos;attente max</div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">Fiable</div>
+              <div className="text-sm text-gray-600">Chauffeurs certifiés & de confiance</div>
             </div>
           </div>
         </div>
