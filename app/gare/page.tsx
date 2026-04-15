@@ -1,7 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Phone, Shield, CheckCircle, ArrowRight, Calendar } from 'lucide-react'
+import { Phone, CheckCircle, ArrowRight, Calendar } from 'lucide-react'
 import BookingSection from '../components/BookingSection'
 import {
   Train,
@@ -22,22 +21,7 @@ const DESTINATIONS = [
   { label: 'Toute la Métropole',          desc: 'Mérignac, Le Bouscat, Eysines, Bègles et toute la Gironde.',                    km: 11,   min: 22, color: 'emerald', Icon: 'House'          },
 ]
 
-function calcPrix(km: number, config: { priseEnCharge: number; tarifKmJour: number; tarifKmNuit: number; fraisApproche: number; courseMini: number }, nuit = false) {
-  const tarif = nuit ? config.tarifKmNuit : config.tarifKmJour
-  return Math.max(Math.round((config.priseEnCharge + km * tarif + config.fraisApproche) * 100) / 100, config.courseMini)
-}
-
-const DEFAULT_CONFIG = { priseEnCharge: 2.83, tarifKmJour: 2.16, tarifKmNuit: 3.24, fraisApproche: 7.20, courseMini: 28.00 }
-
 export default function TaxiGare() {
-  const [config, setConfig] = useState(DEFAULT_CONFIG)
-
-  useEffect(() => {
-    fetch('/api/public/prix')
-      .then(r => r.json())
-      .then(d => { if (d.success && d.data) setConfig(d.data) })
-      .catch(() => {})
-  }, [])
 
   return (
     <div className="min-h-screen bg-white">
@@ -80,13 +64,6 @@ export default function TaxiGare() {
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </a>
 
-              <a
-                href="#reservation-taxi-bordeaux"
-                className="bg-white border-2 border-green-200 text-green-700 px-10 py-5 rounded-2xl font-bold text-xl shadow-lg hover:border-green-400 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3"
-              >
-                <Shield size={24} />
-                <span>Tarifs Réglementés</span>
-              </a>
             </div>
 
             <a
@@ -144,7 +121,7 @@ export default function TaxiGare() {
           <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                3 façons de réserver votre taxi Bordeaux
+                2 façons de réserver votre taxi Bordeaux
               </h3>
 
               <div className="space-y-6">
@@ -168,15 +145,6 @@ export default function TaxiGare() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-4 p-4 bg-yellow-50 rounded-2xl">
-                  <div className="w-10 h-10 bg-yellow-600 rounded-xl flex items-center justify-center shrink-0">
-                    <span className="text-white font-bold">3</span>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-gray-900 mb-1">Station parvis</h4>
-                    <p className="text-gray-600">Sortez de la gare, dirigez-vous vers le parvis côté sortie principale. La station taxi officielle est signalisée.</p>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -190,7 +158,7 @@ export default function TaxiGare() {
                   <strong>Taxi service in Bordeaux</strong> — professionnel, ponctuel, tarifs officiels.
                 </p>
                 <p className="text-gray-600 mb-6 text-sm">
-                  Aucun supplément caché. Prix compteur selon tarifs Préfecture de Gironde.
+                  Aucun supplément caché. Tarifs officiels réglementés.
                 </p>
 
                 <a
@@ -220,39 +188,15 @@ export default function TaxiGare() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {DESTINATIONS.map(({ label, desc, km, min, color }) => {
-              const prixJour = calcPrix(km, config, false)
-              const prixNuit = calcPrix(km, config, true)
-              const memesPrix = prixJour === prixNuit
-              return (
-                <div key={label} className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{label}</h3>
-                  <p className="text-gray-600 text-sm mb-3">{desc}</p>
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-gray-500 text-xs">{km} km • ~{min} min</span>
-                    {memesPrix ? (
-                      <span className="text-green-700 font-bold text-base">dès {prixJour.toFixed(0)}€</span>
-                    ) : (
-                      <span className="text-green-700 font-bold text-base">
-                        {prixJour.toFixed(0)}€ jour&nbsp;•&nbsp;<span className="text-blue-700">{prixNuit.toFixed(0)}€ nuit</span>
-                      </span>
-                    )}
-                    <span className="text-gray-400 text-xs">tarif compteur officiel</span>
-                  </div>
-                </div>
-              )
-            })}
+            {DESTINATIONS.map(({ label, desc, km, min }) => (
+              <div key={label} className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{label}</h3>
+                <p className="text-gray-600 text-sm mb-3">{desc}</p>
+                <span className="text-gray-500 text-xs">{km} km • ~{min} min</span>
+              </div>
+            ))}
           </div>
 
-          <div className="mt-12 text-center">
-            <div className="bg-white rounded-2xl p-8 max-w-3xl mx-auto shadow-lg border border-green-100">
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Tarifs Compteur — Préfecture de Gironde</h4>
-              <p className="text-gray-700">
-                Tous les <strong>taxis bordelais</strong> de notre service appliquent les tarifs officiels réglementés.
-                Prix calculé selon la distance réelle et les conditions de circulation — aucun supplément non annoncé.
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -385,7 +329,7 @@ export default function TaxiGare() {
 
             <div className="border border-gray-200 rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-2">Quel est le tarif taxi Bordeaux gare vers l&apos;aéroport ?</h3>
-              <p className="text-gray-600">Le <strong>taxi Bordeaux</strong> gare Saint-Jean vers l&apos;aéroport de Mérignac est facturé selon le compteur officiel de la Préfecture de Gironde. {`Le trajet dure environ 23 minutes et coûte ${calcPrix(13.5, config, false).toFixed(0)}€ en tarif jour et ${calcPrix(13.5, config, true).toFixed(0)}€ en tarif nuit selon le compteur officiel.`}</p>
+              <p className="text-gray-600">Le <strong>taxi Bordeaux</strong> gare Saint-Jean vers l&apos;aéroport de Mérignac est facturé selon le compteur officiel de la Préfecture de Gironde. Le trajet dure environ 23 minutes.</p>
             </div>
 
             <div className="border border-gray-200 rounded-2xl p-6">
