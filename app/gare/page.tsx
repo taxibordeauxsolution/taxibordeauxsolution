@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { Phone, Shield, CheckCircle, ArrowRight, Star } from 'lucide-react'
+import { Phone, Shield, CheckCircle, ArrowRight, Star, Calendar } from 'lucide-react'
+import BookingSection from '../components/BookingSection'
 import {
   Train,
   ClockCounterClockwise,
@@ -54,22 +55,33 @@ export default function TaxiGare() {
             Transferts gare, aéroport, hôtels et toute la métropole bordelaise.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center max-w-2xl mx-auto mb-16">
-            <a
-              href="tel:0667237822"
-              className="group bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 shadow-xl hover:shadow-green-500/25 hover:scale-105 flex items-center justify-center gap-3"
-            >
-              <Phone size={24} />
-              <span>06 67 23 78 22</span>
-              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-            </a>
+          <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
+              <a
+                href="tel:0667237822"
+                className="group bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 shadow-xl hover:shadow-green-500/25 hover:scale-105 flex items-center justify-center gap-3"
+              >
+                <Phone size={24} />
+                <span>06 67 23 78 22</span>
+                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              </a>
+
+              <a
+                href="#reservation-taxi-bordeaux"
+                className="bg-white border-2 border-green-200 text-green-700 px-10 py-5 rounded-2xl font-bold text-xl shadow-lg hover:border-green-400 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3"
+              >
+                <Shield size={24} />
+                <span>Tarifs Réglementés</span>
+              </a>
+            </div>
 
             <a
-              href="#reservation-taxi-bordeaux"
-              className="bg-white border-2 border-green-200 text-green-700 px-10 py-5 rounded-2xl font-bold text-xl shadow-lg hover:border-green-400 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3"
+              href="#reserver-en-ligne"
+              className="group bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-blue-500/25 hover:scale-105 flex items-center justify-center gap-3 w-full sm:w-auto"
             >
-              <Shield size={24} />
-              <span>Tarifs Réglementés</span>
+              <Calendar size={22} />
+              <span>Réserver en ligne</span>
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
 
@@ -405,6 +417,15 @@ export default function TaxiGare() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Module de réservation en ligne */}
+      <section id="reserver-en-ligne" className="bg-white">
+        <div className="container mx-auto px-4 pt-16 pb-4 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Réservation en ligne — Taxi Bordeaux Gare</h2>
+          <p className="text-gray-500 mb-0">Calculez votre trajet et réservez votre taxi Bordeaux en quelques clics</p>
+        </div>
+        <BookingSection />
       </section>
 
       {/* CTA Final */}
