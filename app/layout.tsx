@@ -177,7 +177,11 @@ export default function RootLayout({
         <meta name="theme-color" content="#2563eb" />
         <link rel="icon" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        
+
+        {/* Preconnect origines tierces critiques */}
+        <link rel="preconnect" href="https://maps.googleapis.com" />
+        <link rel="preconnect" href="https://maps.gstatic.com" crossOrigin="anonymous" />
+
       </head>
       
       <body className={inter.className} suppressHydrationWarning={true}>

@@ -25,17 +25,15 @@ export default function HomePage() {
               {/* Badge de rapidité */}
               <div
                 className="inline-flex items-center gap-3 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-400 font-semibold"
-                style={{ animation: 'fadeInUp 0.6s ease 0.2s both' }}
+                style={{ animation: 'slideUp 0.5s ease 0.1s both' }}
               >
                 <Zap size={20} className="animate-pulse" />
                 <span>Taxi rapide à Bordeaux</span>
               </div>
 
               <div className="space-y-6">
-                <h1
-                  className="text-5xl lg:text-7xl font-bold leading-tight tracking-tight"
-                  style={{ animation: 'fadeInUp 0.8s ease 0.4s both' }}
-                >
+                {/* H1 : pas de masquage opacity → LCP immédiat */}
+                <h1 className="text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
                   <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
                     LA Solution
                   </span>
@@ -47,7 +45,7 @@ export default function HomePage() {
 
                 <p
                   className="text-xl lg:text-2xl text-slate-300 leading-relaxed max-w-2xl font-light"
-                  style={{ animation: 'fadeInUp 0.6s ease 0.8s both' }}
+                  style={{ animation: 'slideUp 0.5s ease 0.15s both' }}
                 >
                   Service fiable et régulier disponible 24h/24.{' '}
                   <strong className="text-white font-semibold">Réservation instantanée</strong>,{' '}
@@ -58,7 +56,7 @@ export default function HomePage() {
               {/* CTA Buttons */}
               <div
                 className="flex flex-col sm:flex-row gap-4 lg:gap-6"
-                style={{ animation: 'fadeInUp 0.6s ease 1s both' }}
+                style={{ animation: 'slideUp 0.5s ease 0.25s both' }}
               >
                 <a
                   href="#reservation"
@@ -84,7 +82,7 @@ export default function HomePage() {
               {/* Stats */}
               <div
                 className="grid grid-cols-3 gap-8 pt-8 border-t border-white/10"
-                style={{ animation: 'fadeInUp 0.6s ease 1.2s both' }}
+                style={{ animation: 'slideUp 0.5s ease 0.35s both' }}
               >
                 <div className="text-center hover:scale-105 transition-transform duration-300 cursor-default">
                   <div className="text-3xl lg:text-4xl font-bold text-yellow-400 mb-1">Rapide</div>
@@ -102,10 +100,7 @@ export default function HomePage() {
             </div>
 
             {/* Photo Hero - Place de la Bourse */}
-            <div
-              className="hidden lg:block relative"
-              style={{ animation: 'fadeIn 1s ease 0.6s both' }}
-            >
+            <div className="hidden lg:block relative">
               <div className="relative">
                 <div className="relative overflow-hidden rounded-3xl shadow-2xl">
                   <Image
