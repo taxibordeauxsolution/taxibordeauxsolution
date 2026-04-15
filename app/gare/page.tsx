@@ -187,6 +187,29 @@ export default function TaxiGare() {
             </p>
           </div>
 
+          {/* Liaison vedette Gare ↔ Aéroport */}
+          <div className="max-w-6xl mx-auto mb-10">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+              <div>
+                <div className="text-sm font-semibold text-blue-200 mb-1 uppercase tracking-wide">Liaison directe</div>
+                <h3 className="text-2xl font-bold mb-2">Gare Saint-Jean ↔ Aéroport Mérignac</h3>
+                <p className="text-blue-100 text-sm">~23 min • Trajet direct sans escale</p>
+              </div>
+              <div className="flex gap-6 shrink-0">
+                <div className="text-center bg-white/15 rounded-2xl px-6 py-4">
+                  <div className="text-3xl font-bold">60€</div>
+                  <div className="text-blue-200 text-xs mt-1">Tarif jour</div>
+                  <div className="text-blue-300 text-xs">7h – 19h</div>
+                </div>
+                <div className="text-center bg-white/15 rounded-2xl px-6 py-4">
+                  <div className="text-3xl font-bold">75€</div>
+                  <div className="text-blue-200 text-xs mt-1">Tarif nuit</div>
+                  <div className="text-blue-300 text-xs">19h – 7h • dim.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {DESTINATIONS.map(({ label, desc, km, min }) => (
               <div key={label} className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">

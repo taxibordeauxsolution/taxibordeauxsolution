@@ -236,10 +236,23 @@ export default function TaxiAeroport() {
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
               Taxi Aéroport ↔ Gare Saint-Jean
             </h2>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-gray-600 mb-8">
               La liaison <strong>taxi aéroport gare</strong> Bordeaux la plus directe.
               Connectez votre vol à votre TGV sans stress ni changement.
             </p>
+            <div className="inline-flex flex-col sm:flex-row gap-4 bg-white border border-sky-200 rounded-2xl px-8 py-5 shadow-md">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-600">60€</div>
+                <div className="text-sm text-gray-500 mt-1">Tarif jour</div>
+                <div className="text-xs text-gray-400">7h – 19h</div>
+              </div>
+              <div className="hidden sm:block w-px bg-gray-200 self-stretch"></div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-indigo-600">75€</div>
+                <div className="text-sm text-gray-500 mt-1">Tarif nuit / week-end</div>
+                <div className="text-xs text-gray-400">19h – 7h • dim. & fériés</div>
+              </div>
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
