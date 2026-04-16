@@ -88,26 +88,19 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "LocalBusiness",
-              "@id": "https://www.taxibordeauxsolution.fr",
+              "@type": "TaxiService",
+              "@id": "https://www.taxibordeauxsolution.fr/#taxiservice",
               "name": "Taxi Bordeaux Solution",
-              "alternateName": "LA Solution Transport Bordeaux",
-              "description": "Service taxi professionnel à Bordeaux. Prise en charge rapide, disponible 24h/24 dans toute la métropole bordelaise.",
+              "description": "Service taxi professionnel à Bordeaux 24h/24. Transferts aéroport Mérignac, gare Saint-Jean, toute la métropole bordelaise. Tarifs réglementés Préfecture de Gironde.",
               "url": "https://www.taxibordeauxsolution.fr",
               "telephone": "+33667237822",
               "email": "contact@taxibordeauxsolution.fr",
-              "image": "https://www.taxibordeauxsolution.fr/images/taxi-bordeaux.jpg",
-              "logo": {
-                "@type": "ImageObject",
-                "url": "https://www.taxibordeauxsolution.fr/images/logo.png"
-              },
               "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Bordeaux",
                 "addressRegion": "Nouvelle-Aquitaine",
                 "postalCode": "33000",
-                "addressCountry": "FR",
-                "streetAddress": "Bordeaux et métropole"
+                "addressCountry": "FR"
               },
               "geo": {
                 "@type": "GeoCoordinates",
@@ -115,26 +108,20 @@ export default function RootLayout({
                 "longitude": -0.5792
               },
               "areaServed": [
-                {
-                  "@type": "City",
-                  "name": "Bordeaux"
-                },
-                {
-                  "@type": "City", 
-                  "name": "Mérignac"
-                },
-                {
-                  "@type": "City",
-                  "name": "Pessac" 
-                },
-                {
-                  "@type": "City",
-                  "name": "Talence"
-                }
+                { "@type": "City", "name": "Bordeaux" },
+                { "@type": "City", "name": "Mérignac" },
+                { "@type": "City", "name": "Pessac" },
+                { "@type": "City", "name": "Talence" },
+                { "@type": "City", "name": "Le Bouscat" },
+                { "@type": "City", "name": "Eysines" }
               ],
-              "serviceType": "Taxi Service",
               "priceRange": "€€",
-              "openingHours": "Mo-Su 00:00-23:59",
+              "openingHoursSpecification": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+                "opens": "00:00",
+                "closes": "23:59"
+              },
               "hasOfferCatalog": {
                 "@type": "OfferCatalog",
                 "name": "Services Taxi Bordeaux",
@@ -142,32 +129,29 @@ export default function RootLayout({
                   {
                     "@type": "Offer",
                     "itemOffered": {
-                      "@type": "Service",
-                      "name": "Taxi Aéroport Bordeaux Mérignac",
-                      "description": "Transport aéroport Bordeaux-Mérignac"
-                    }
-                  },
-                  {
-                    "@type": "Offer", 
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "Taxi Gare Saint-Jean Bordeaux",
-                      "description": "Transport gare SNCF Saint-Jean"
+                      "@type": "TaxiService",
+                      "name": "Taxi Aéroport Bordeaux-Mérignac",
+                      "description": "Transfert taxi aéroport Bordeaux-Mérignac, tarif réglementé, disponible 24h/24."
                     }
                   },
                   {
                     "@type": "Offer",
                     "itemOffered": {
-                      "@type": "Service", 
+                      "@type": "TaxiService",
+                      "name": "Taxi Gare Saint-Jean Bordeaux",
+                      "description": "Prise en charge gare SNCF Saint-Jean Bordeaux, station officielle parvis."
+                    }
+                  },
+                  {
+                    "@type": "Offer",
+                    "itemOffered": {
+                      "@type": "TaxiService",
                       "name": "Taxi Bordeaux Centre-Ville",
-                      "description": "Courses urbaines dans Bordeaux"
+                      "description": "Courses urbaines dans Bordeaux et toute la métropole bordelaise."
                     }
                   }
                 ]
-              },
-              "sameAs": [
-                "https://www.google.com/maps/place/Taxi+Bordeaux+Solution"
-              ]
+              }
             })
           }}
         />
