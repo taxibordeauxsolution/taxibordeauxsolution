@@ -75,8 +75,9 @@ export default function ContactForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
+            <label htmlFor="cf-firstName" className="block text-sm font-medium text-gray-700 mb-1">Prénom *</label>
             <input
+              id="cf-firstName"
               type="text"
               name="firstName"
               value={formData.firstName}
@@ -87,8 +88,9 @@ export default function ContactForm() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
+            <label htmlFor="cf-lastName" className="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
             <input
+              id="cf-lastName"
               type="text"
               name="lastName"
               value={formData.lastName}
@@ -102,8 +104,9 @@ export default function ContactForm() {
 
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
+            <label htmlFor="cf-phone" className="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
             <input
+              id="cf-phone"
               type="tel"
               name="phone"
               value={formData.phone}
@@ -114,8 +117,9 @@ export default function ContactForm() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label htmlFor="cf-email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input
+              id="cf-email"
               type="email"
               name="email"
               value={formData.email}
@@ -127,8 +131,9 @@ export default function ContactForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Message *</label>
+          <label htmlFor="cf-message" className="block text-sm font-medium text-gray-700 mb-1">Message *</label>
           <textarea
+            id="cf-message"
             name="message"
             value={formData.message}
             onChange={handleChange}
@@ -145,7 +150,7 @@ export default function ContactForm() {
           className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? (
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" role="status" aria-label="Envoi en cours" />
           ) : (
             <>
               <Send size={18} />

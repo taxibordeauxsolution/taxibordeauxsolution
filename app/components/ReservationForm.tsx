@@ -354,10 +354,9 @@ export default function ReservationForm({ context = 'general', defaultService }:
                     
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Prénom *
-                        </label>
-                        <input 
+                        <label htmlFor="rf-firstName" className="block text-sm font-medium text-gray-700 mb-2">Prénom *</label>
+                        <input
+                          id="rf-firstName"
                           type="text"
                           name="firstName"
                           value={formData.firstName}
@@ -368,10 +367,9 @@ export default function ReservationForm({ context = 'general', defaultService }:
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Nom *
-                        </label>
-                        <input 
+                        <label htmlFor="rf-lastName" className="block text-sm font-medium text-gray-700 mb-2">Nom *</label>
+                        <input
+                          id="rf-lastName"
                           type="text"
                           name="lastName"
                           value={formData.lastName}
@@ -385,12 +383,11 @@ export default function ReservationForm({ context = 'general', defaultService }:
 
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Téléphone *
-                        </label>
+                        <label htmlFor="rf-phone" className="block text-sm font-medium text-gray-700 mb-2">Téléphone *</label>
                         <div className="relative">
-                          <Phone className="absolute left-3 top-4 text-gray-400" size={20} />
-                          <input 
+                          <Phone className="absolute left-3 top-4 text-gray-400" size={20} aria-hidden="true" />
+                          <input
+                            id="rf-phone"
                             type="tel"
                             name="phone"
                             value={formData.phone}
@@ -402,12 +399,11 @@ export default function ReservationForm({ context = 'general', defaultService }:
                         </div>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Email <span className="text-gray-400">(optionnel)</span>
-                        </label>
+                        <label htmlFor="rf-email" className="block text-sm font-medium text-gray-700 mb-2">Email <span className="text-gray-400">(optionnel)</span></label>
                         <div className="relative">
-                          <Mail className="absolute left-3 top-4 text-gray-400" size={20} />
-                          <input 
+                          <Mail className="absolute left-3 top-4 text-gray-400" size={20} aria-hidden="true" />
+                          <input
+                            id="rf-email"
                             type="email"
                             name="email"
                             value={formData.email}
@@ -428,10 +424,9 @@ export default function ReservationForm({ context = 'general', defaultService }:
                     </h3>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Type de service *
-                      </label>
-                      <select 
+                      <label htmlFor="rf-serviceType" className="block text-sm font-medium text-gray-700 mb-2">Type de service *</label>
+                      <select
+                        id="rf-serviceType"
                         name="serviceType"
                         value={formData.serviceType}
                         onChange={handleChange}
@@ -466,10 +461,9 @@ export default function ReservationForm({ context = 'general', defaultService }:
 
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Adresse de départ *
-                        </label>
-                        <input 
+                        <label htmlFor="rf-departure" className="block text-sm font-medium text-gray-700 mb-2">Adresse de départ *</label>
+                        <input
+                          id="rf-departure"
                           type="text"
                           name="departureAddress"
                           value={formData.departureAddress}
@@ -480,10 +474,9 @@ export default function ReservationForm({ context = 'general', defaultService }:
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Destination *
-                        </label>
-                        <input 
+                        <label htmlFor="rf-destination" className="block text-sm font-medium text-gray-700 mb-2">Destination *</label>
+                        <input
+                          id="rf-destination"
                           type="text"
                           name="destination"
                           value={formData.destination}
@@ -505,12 +498,11 @@ export default function ReservationForm({ context = 'general', defaultService }:
                     
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Date souhaitée
-                        </label>
+                        <label htmlFor="rf-date" className="block text-sm font-medium text-gray-700 mb-2">Date souhaitée</label>
                         <div className="relative">
-                          <Calendar className="absolute left-3 top-4 text-gray-400" size={20} />
-                          <input 
+                          <Calendar className="absolute left-3 top-4 text-gray-400" size={20} aria-hidden="true" />
+                          <input
+                            id="rf-date"
                             type="date"
                             name="date"
                             value={formData.date}
@@ -521,12 +513,11 @@ export default function ReservationForm({ context = 'general', defaultService }:
                         </div>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Heure souhaitée
-                        </label>
+                        <label htmlFor="rf-time" className="block text-sm font-medium text-gray-700 mb-2">Heure souhaitée</label>
                         <div className="relative">
-                          <Clock className="absolute left-3 top-4 text-gray-400" size={20} />
-                          <input 
+                          <Clock className="absolute left-3 top-4 text-gray-400" size={20} aria-hidden="true" />
+                          <input
+                            id="rf-time"
                             type="time"
                             name="time"
                             value={formData.time}
@@ -539,10 +530,9 @@ export default function ReservationForm({ context = 'general', defaultService }:
 
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Nombre de passagers
-                        </label>
-                        <select 
+                        <label htmlFor="rf-passengers" className="block text-sm font-medium text-gray-700 mb-2">Nombre de passagers</label>
+                        <select
+                          id="rf-passengers"
                           name="passengers"
                           value={formData.passengers}
                           onChange={handleChange}
@@ -557,10 +547,9 @@ export default function ReservationForm({ context = 'general', defaultService }:
                         </select>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Bagages
-                        </label>
-                        <select 
+                        <label htmlFor="rf-luggage" className="block text-sm font-medium text-gray-700 mb-2">Bagages</label>
+                        <select
+                          id="rf-luggage"
                           name="luggage"
                           value={formData.luggage}
                           onChange={handleChange}
@@ -576,12 +565,11 @@ export default function ReservationForm({ context = 'general', defaultService }:
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Informations complémentaires
-                      </label>
+                      <label htmlFor="rf-message" className="block text-sm font-medium text-gray-700 mb-2">Informations complémentaires</label>
                       <div className="relative">
-                        <MessageSquare className="absolute left-3 top-4 text-gray-400" size={20} />
-                        <textarea 
+                        <MessageSquare className="absolute left-3 top-4 text-gray-400" size={20} aria-hidden="true" />
+                        <textarea
+                          id="rf-message"
                           rows={4}
                           name="message"
                           value={formData.message}
@@ -604,7 +592,7 @@ export default function ReservationForm({ context = 'general', defaultService }:
                     >
                       {isLoading ? (
                         <>
-                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" role="status" aria-label="Envoi en cours"></div>
                           Envoi en cours...
                         </>
                       ) : (
