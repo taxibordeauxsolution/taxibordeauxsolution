@@ -2,7 +2,6 @@
 
 import { useState, FormEvent } from 'react'
 import { Car, MapPin, Clock, Phone, Mail, User, Calendar, MessageSquare, CheckCircle, AlertCircle, Zap } from 'lucide-react'
-import { motion, AnimatePresence } from 'motion/react'
 
 interface ReservationFormProps {
   context?: 'airport' | 'station' | 'general'
@@ -24,20 +23,18 @@ export default function ReservationForm({ context = 'general', defaultService }:
     luggage: '0',
     message: ''
   })
-  
+
   const [isLoading, setIsLoading] = useState(false)
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [statusMessage, setStatusMessage] = useState('')
   const [showForm, setShowForm] = useState(false)
 
-  // Configuration du contenu selon le contexte
   const getContextContent = () => {
     switch (context) {
       case 'airport':
         return {
           title: 'Réservez votre Taxi Aéroport',
           subtitle: 'Service depuis/vers Bordeaux-Mérignac • Station taxi officielle',
-          description: 'Prise en charge à la station taxi Hall A ou réservation pour vos départs',
           badgeText: 'Station officielle aéroport',
           serviceMessage: 'Le taxi vous attend à l\'emplacement taxi de l\'aéroport'
         }
@@ -45,7 +42,6 @@ export default function ReservationForm({ context = 'general', defaultService }:
         return {
           title: 'Réservez votre Taxi Gare',
           subtitle: 'Service depuis/vers Gare Saint-Jean • Accès direct',
-          description: 'Prise en charge devant la gare ou réservation pour vos départs en train',
           badgeText: 'Service gare prioritaire',
           serviceMessage: 'Prise en charge devant la gare'
         }
@@ -53,9 +49,8 @@ export default function ReservationForm({ context = 'general', defaultService }:
         return {
           title: 'Réservez votre Taxi à Bordeaux',
           subtitle: 'Service professionnel 24h/24 • Tarifs réglementés • Prise en charge garantie',
-          description: 'Service professionnel 24h/24 • Tarifs réglementés • Prise en charge garantie',
           badgeText: 'Prise en charge rapide',
-          serviceMessage: 'Nous vous retrouvons où vous voulez'
+          serviceMessage: ''
         }
     }
   }
@@ -66,10 +61,10 @@ export default function ReservationForm({ context = 'general', defaultService }:
     e.preventDefault()
     setIsLoading(true)
     setStatus('idle')
-    
+
     const requiredFields = ['firstName', 'lastName', 'phone', 'departureAddress', 'destination']
     const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData] || formData[field as keyof typeof formData].trim() === '')
-    
+
     if (missingFields.length > 0) {
       setStatus('error')
       setStatusMessage(`Veuillez remplir les champs obligatoires : ${missingFields.join(', ')}`)
@@ -80,44 +75,28 @@ export default function ReservationForm({ context = 'general', defaultService }:
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
-      
+
       const result = await response.json()
 
       if (response.ok) {
         setStatus('success')
-        setStatusMessage('🎉 Votre réservation a été envoyée avec succès ! Nous vous recontacterons rapidement.')
-        
-        // Reset formulaire
+        setStatusMessage('Votre réservation a été envoyée avec succès ! Nous vous recontacterons rapidement.')
         setFormData({
-          firstName: '',
-          lastName: '',
-          phone: '',
-          email: '',
+          firstName: '', lastName: '', phone: '', email: '',
           serviceType: defaultService || 'Transfert Aéroport',
-          departureAddress: '',
-          destination: '',
-          date: '',
-          time: '',
-          passengers: '1',
-          luggage: '0',
-          message: ''
+          departureAddress: '', destination: '', date: '', time: '',
+          passengers: '1', luggage: '0', message: ''
         })
-
-        setTimeout(() => {
-          setStatus('idle')
-          setShowForm(false)
-        }, 5000)
+        setTimeout(() => { setStatus('idle'); setShowForm(false) }, 5000)
       } else {
         throw new Error(result.error || 'Erreur envoi')
       }
     } catch (error) {
       setStatus('error')
-      setStatusMessage(`❌ Erreur: ${error instanceof Error ? error.message : 'Erreur inconnue'}. Appelez-nous au 📞 06 67 23 78 22`)
+      setStatusMessage(`Une erreur est survenue. Appelez-nous au 06 67 23 78 22`)
     } finally {
       setIsLoading(false)
     }
@@ -125,59 +104,33 @@ export default function ReservationForm({ context = 'general', defaultService }:
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value
-    })
+    setFormData({ ...formData, [name]: value })
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
-      
-      {/* Hero Section avec CTA */}
+
+      {/* Hero */}
       <div className="relative pt-20 pb-16">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400/10 via-transparent to-transparent"></div>
-        
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400/10 via-transparent to-transparent" aria-hidden="true"></div>
+
         <div className="relative container mx-auto px-4">
           <div className="text-center text-white space-y-8 max-w-4xl mx-auto">
-            
-            {/* Badge de rapidité */}
-            <motion.div 
-              className="inline-flex items-center gap-3 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-400 font-semibold"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <Zap size={20} />
-              </motion.div>
-              <span>{contextContent.badgeText}</span>
-            </motion.div>
-            
-            <motion.h1 
-              className="text-4xl lg:text-6xl font-bold leading-tight tracking-tight"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
-                {contextContent.title}
-              </span>
-            </motion.h1>
-            
-            <motion.p 
-              className="text-xl lg:text-2xl text-slate-300 leading-relaxed font-light"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-            >
-{contextContent.subtitle}
-            </motion.p>
 
-            {/* Statistiques rapides */}
+            <div className="inline-flex items-center gap-3 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-400 font-semibold">
+              <Zap size={20} aria-hidden="true" />
+              <span>{contextContent.badgeText}</span>
+            </div>
+
+            <h1 className="text-4xl lg:text-6xl font-bold leading-tight tracking-tight bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+              {contextContent.title}
+            </h1>
+
+            <p className="text-xl lg:text-2xl text-slate-300 leading-relaxed font-light">
+              {contextContent.subtitle}
+            </p>
+
+            {/* Stats */}
             <div className="grid grid-cols-3 gap-6 py-8">
               <div className="text-center">
                 <div className="text-3xl font-bold text-yellow-400 mb-1">Rapide</div>
@@ -193,165 +146,85 @@ export default function ReservationForm({ context = 'general', defaultService }:
               </div>
             </div>
 
-            {/* CTA Principal */}
-            <AnimatePresence mode="wait">
-              {!showForm ? (
-                <motion.div 
-                  className="space-y-6"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -30 }}
-                  transition={{ duration: 0.6, delay: 1.0 }}
+            {/* CTA */}
+            {!showForm ? (
+              <div className="space-y-6">
+                <button
+                  onClick={() => setShowForm(true)}
+                  className="group bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-12 py-6 rounded-2xl font-bold text-2xl transition-all duration-300 shadow-2xl hover:shadow-green-500/25 hover:scale-105 hover:-translate-y-0.5 active:scale-[0.98] inline-flex items-center gap-4"
                 >
-                  <motion.button
-                    onClick={() => setShowForm(true)}
-                    className="group bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-12 py-6 rounded-2xl font-bold text-2xl transition-all duration-300 shadow-2xl hover:shadow-green-500/25 inline-flex items-center gap-4"
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
+                  <Car size={32} aria-hidden="true" />
+                  <span>RÉSERVER MAINTENANT</span>
+                </button>
+
+                <div className="flex items-center justify-center gap-6">
+                  <a
+                    href="tel:0667237822"
+                    className="flex items-center gap-3 text-white hover:text-green-400 transition-colors font-semibold hover:scale-105"
                   >
-                    <motion.div
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      transition={{ type: "spring", stiffness: 400 }}
-                    >
-                      <Car size={32} />
-                    </motion.div>
-                    <span>RÉSERVER MAINTENANT</span>
-                  </motion.button>
-                
-                  <motion.div 
-                    className="flex items-center justify-center gap-6"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 1.2 }}
-                  >
-                    <motion.a
-                      href="tel:0667237822"
-                      className="group flex items-center gap-3 text-white hover:text-green-400 transition-colors font-semibold"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <motion.div
-                        whileHover={{ rotate: 12 }}
-                        transition={{ type: "spring", stiffness: 400 }}
-                      >
-                        <Phone size={20} />
-                      </motion.div>
-                      <span>06 67 23 78 22</span>
-                    </motion.a>
-                    <span className="text-slate-500">|</span>
-                    <span className="text-slate-400">Appel immédiat</span>
-                  </motion.div>
-                </motion.div>
-              ) : (
-                <motion.div 
-                  className="text-left"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5 }}
+                    <Phone size={20} aria-hidden="true" />
+                    <span>06 67 23 78 22</span>
+                  </a>
+                  <span className="text-slate-500" aria-hidden="true">|</span>
+                  <span className="text-slate-400">Appel immédiat</span>
+                </div>
+              </div>
+            ) : (
+              <div className="text-left">
+                <button
+                  onClick={() => setShowForm(false)}
+                  className="mb-6 text-slate-400 hover:text-white transition-colors hover:-translate-x-1 inline-block"
+                  aria-label="Retour"
                 >
-                  <motion.button
-                    onClick={() => setShowForm(false)}
-                    className="mb-6 text-slate-400 hover:text-white transition-colors"
-                    whileHover={{ x: -5 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    ← Retour
-                  </motion.button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  ← Retour
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Formulaire de Réservation */}
-      <AnimatePresence>
-        {showForm && (
-          <motion.div 
-            className="relative pb-20"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="container mx-auto px-4">
-              <div className="max-w-4xl mx-auto">
-              
-                {/* Status Messages */}
-                <AnimatePresence>
-                  {status === 'success' && (
-                    <motion.div 
-                      className="mb-8 p-6 bg-green-50 border border-green-200 rounded-2xl flex items-center gap-4"
-                      initial={{ opacity: 0, scale: 0.9, y: -20 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.9, y: -20 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.2, type: "spring", stiffness: 500 }}
-                      >
-                        <CheckCircle className="text-green-600 shrink-0" size={32} />
-                      </motion.div>
-                      <div>
-                        <h4 className="text-lg font-bold text-green-800 mb-1">Réservation Envoyée !</h4>
-                        <p className="text-green-700">{statusMessage}</p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+      {/* Formulaire */}
+      {showForm && (
+        <div className="relative pb-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
 
-                <AnimatePresence>
-                  {status === 'error' && (
-                    <motion.div 
-                      className="mb-8 p-6 bg-red-50 border border-red-200 rounded-2xl flex items-center gap-4"
-                      initial={{ opacity: 0, scale: 0.9, y: -20 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.9, y: -20 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <motion.div
-                        initial={{ scale: 0, rotate: -180 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        transition={{ delay: 0.2, type: "spring", stiffness: 500 }}
-                      >
-                        <AlertCircle className="text-red-600 shrink-0" size={32} />
-                      </motion.div>
-                      <div>
-                        <h4 className="text-lg font-bold text-red-800 mb-1">Erreur</h4>
-                        <p className="text-red-700">{statusMessage}</p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              
-                {/* Formulaire */}
-                <motion.div 
-                  className="bg-white rounded-3xl shadow-2xl overflow-hidden"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                >
-                  <motion.div 
-                    className="bg-gradient-to-r from-blue-600 to-blue-700 p-8 text-white"
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 0.4 }}
-                  >
-                    <h2 className="text-3xl font-bold mb-2">Réservation Taxi Bordeaux</h2>
-                    <p className="text-blue-100">Remplissez vos informations pour une prise en charge rapide</p>
-                  </motion.div>
-                
+              {status === 'success' && (
+                <div className="mb-8 p-6 bg-green-50 border border-green-200 rounded-2xl flex items-center gap-4">
+                  <CheckCircle className="text-green-600 shrink-0" size={32} />
+                  <div>
+                    <h4 className="text-lg font-bold text-green-800 mb-1">Réservation Envoyée !</h4>
+                    <p className="text-green-700">{statusMessage}</p>
+                  </div>
+                </div>
+              )}
+
+              {status === 'error' && (
+                <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-2xl flex items-center gap-4">
+                  <AlertCircle className="text-red-600 shrink-0" size={32} />
+                  <div>
+                    <h4 className="text-lg font-bold text-red-800 mb-1">Erreur</h4>
+                    <p className="text-red-700">{statusMessage}</p>
+                  </div>
+                </div>
+              )}
+
+              <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+                <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-8 text-white">
+                  <h2 className="text-3xl font-bold mb-2">Réservation Taxi Bordeaux</h2>
+                  <p className="text-blue-100">Remplissez vos informations pour une prise en charge rapide</p>
+                </div>
+
                 <form onSubmit={handleSubmit} className="p-8 space-y-8">
-                  
+
                   {/* Informations personnelles */}
                   <div className="space-y-6">
                     <h3 className="text-xl font-bold text-slate-900 flex items-center gap-3">
-                      <User className="text-blue-600" size={24} />
+                      <User className="text-blue-600" size={24} aria-hidden="true" />
                       Vos informations
                     </h3>
-                    
+
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
                         <label htmlFor="rf-firstName" className="block text-sm font-medium text-gray-700 mb-2">Prénom *</label>
@@ -416,13 +289,13 @@ export default function ReservationForm({ context = 'general', defaultService }:
                     </div>
                   </div>
 
-                  {/* Service et trajet */}
+                  {/* Trajet */}
                   <div className="space-y-6">
                     <h3 className="text-xl font-bold text-slate-900 flex items-center gap-3">
-                      <MapPin className="text-green-600" size={24} />
+                      <MapPin className="text-green-600" size={24} aria-hidden="true" />
                       Votre trajet
                     </h3>
-                    
+
                     <div>
                       <label htmlFor="rf-serviceType" className="block text-sm font-medium text-gray-700 mb-2">Type de service *</label>
                       <select
@@ -435,25 +308,25 @@ export default function ReservationForm({ context = 'general', defaultService }:
                       >
                         {context === 'airport' ? (
                           <>
-                            <option value="Arrivée Aéroport">🛬 Arrivée Aéroport (Station Taxi Hall A)</option>
-                            <option value="Départ vers Aéroport">🛫 Départ vers Aéroport Mérignac</option>
-                            <option value="Transfert Aéroport">✈️ Transfert Aéroport (Aller-Retour)</option>
+                            <option value="Arrivée Aéroport">Arrivée Aéroport (Station Taxi Hall A)</option>
+                            <option value="Départ vers Aéroport">Départ vers Aéroport Mérignac</option>
+                            <option value="Transfert Aéroport">Transfert Aéroport (Aller-Retour)</option>
                           </>
                         ) : context === 'station' ? (
                           <>
-                            <option value="Arrivée Gare">🚂 Arrivée Gare Saint-Jean</option>
-                            <option value="Départ vers Gare">🚄 Départ vers Gare Saint-Jean</option>
-                            <option value="Transport Gare">🚉 Transfert Gare</option>
+                            <option value="Arrivée Gare">Arrivée Gare Saint-Jean</option>
+                            <option value="Départ vers Gare">Départ vers Gare Saint-Jean</option>
+                            <option value="Transport Gare">Transfert Gare</option>
                           </>
                         ) : (
                           <>
-                            <option value="Transfert Aéroport">🛫 Transfert Aéroport Mérignac</option>
-                            <option value="Transport Gare">🚄 Transport Gare Saint-Jean</option>
-                            <option value="Transport Urbain">🏙️ Transport Urbain Bordeaux</option>
-                            <option value="Longue Distance">🛣️ Longue Distance</option>
-                            <option value="Transport Médical">🏥 Transport Médical</option>
-                            <option value="Événement/Mariage">💒 Événement/Mariage</option>
-                            <option value="Transport Professionnel">💼 Transport Professionnel</option>
+                            <option value="Transfert Aéroport">Transfert Aéroport Mérignac</option>
+                            <option value="Transport Gare">Transport Gare Saint-Jean</option>
+                            <option value="Transport Urbain">Transport Urbain Bordeaux</option>
+                            <option value="Longue Distance">Longue Distance</option>
+                            <option value="Transport Médical">Transport Médical</option>
+                            <option value="Événement/Mariage">Événement / Mariage</option>
+                            <option value="Transport Professionnel">Transport Professionnel</option>
                           </>
                         )}
                       </select>
@@ -489,13 +362,13 @@ export default function ReservationForm({ context = 'general', defaultService }:
                     </div>
                   </div>
 
-                  {/* Détails de réservation */}
+                  {/* Détails */}
                   <div className="space-y-6">
                     <h3 className="text-xl font-bold text-slate-900 flex items-center gap-3">
-                      <Clock className="text-purple-600" size={24} />
+                      <Clock className="text-purple-600" size={24} aria-hidden="true" />
                       Détails de réservation
                     </h3>
-                    
+
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
                         <label htmlFor="rf-date" className="block text-sm font-medium text-gray-700 mb-2">Date souhaitée</label>
@@ -581,14 +454,12 @@ export default function ReservationForm({ context = 'general', defaultService }:
                     </div>
                   </div>
 
-                  {/* Bouton de soumission */}
+                  {/* Submit */}
                   <div className="pt-8 border-t border-gray-200">
-                    <motion.button 
+                    <button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-6 rounded-2xl font-bold text-xl transition-all duration-300 flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-green-500/25"
-                      whileHover={{ scale: 1.02, y: -2 }}
-                      whileTap={{ scale: 0.98 }}
+                      className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-6 rounded-2xl font-bold text-xl transition-all duration-300 flex items-center justify-center gap-4 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-green-500/25 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98]"
                     >
                       {isLoading ? (
                         <>
@@ -597,48 +468,42 @@ export default function ReservationForm({ context = 'general', defaultService }:
                         </>
                       ) : (
                         <>
-                          <Car size={24} />
+                          <Car size={24} aria-hidden="true" />
                           CONFIRMER MA RÉSERVATION
                         </>
                       )}
-                    </motion.button>
+                    </button>
 
-                    {/* Message spécifique selon le contexte */}
-                    {context === 'airport' && (
+                    {context === 'airport' && contextContent.serviceMessage && (
                       <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                        <p className="text-blue-800 text-sm font-medium text-center">
-                          ✈️ {contextContent.serviceMessage}
-                        </p>
+                        <p className="text-blue-800 text-sm font-medium text-center">{contextContent.serviceMessage}</p>
                       </div>
                     )}
 
                     <div className="mt-6 text-center space-y-3">
                       <div className="flex items-center justify-center gap-6 text-sm text-gray-600">
                         <span className="flex items-center gap-2">
-                          <Zap className="text-green-500" size={16} />
+                          <Zap className="text-green-500" size={16} aria-hidden="true" />
                           Réponse rapide
                         </span>
                         <span className="flex items-center gap-2">
-                          <Phone className="text-blue-500" size={16} />
+                          <Phone className="text-blue-500" size={16} aria-hidden="true" />
                           Service 24h/24
                         </span>
                         <span className="flex items-center gap-2">
-                          <CheckCircle className="text-purple-500" size={16} />
+                          <CheckCircle className="text-purple-500" size={16} aria-hidden="true" />
                           Tarifs réglementés
                         </span>
                       </div>
-                      <p className="text-xs text-gray-500">
-                        * Champs obligatoires - Vos données sont sécurisées et ne seront jamais partagées
-                      </p>
+                      <p className="text-xs text-gray-500">* Champs obligatoires — Vos données sont sécurisées et ne seront jamais partagées</p>
                     </div>
                   </div>
                 </form>
-                </motion.div>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
