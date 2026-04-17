@@ -5,6 +5,7 @@ import './globals.css'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
+import CookieBanner from './components/CookieBanner'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -196,6 +197,26 @@ export default function RootLayout({
         </main>
         <Footer />
         <WhatsAppButton />
+        <CookieBanner />
+
+        {/* Restaurer le consentement sauvegardé */}
+        <Script id="restore-consent" strategy="afterInteractive">
+          {`
+            (function() {
+              var consent = localStorage.getItem('cookie_consent');
+              if (consent === 'granted') {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('consent', 'update', {
+                  'ad_storage': 'granted',
+                  'ad_user_data': 'granted',
+                  'ad_personalization': 'granted',
+                  'analytics_storage': 'granted'
+                });
+              }
+            })();
+          `}
+        </Script>
 
         {/* Google Tag (gtag.js) — chargé après le Consent Mode */}
         <Script
