@@ -85,9 +85,11 @@ export default function ReservationForm({ context = 'general', defaultService }:
         // Conversion Google Ads — réservation soumise
         if (typeof window !== 'undefined' && (window as any).gtag) {
           ;(window as any).gtag('event', 'conversion', {
-            send_to: 'AW-16903067402',
+            send_to: 'AW-16903067402/0liaCJ7rw50cEIqugfw-',
             event_category: 'reservation',
             event_label: formData.serviceType,
+            value: 5.0,
+            currency: 'EUR',
           })
         }
         setStatus('success')
