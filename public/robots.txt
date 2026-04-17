@@ -1,6 +1,7 @@
 # Tous les robots standards
 User-agent: *
 Allow: /
+Disallow: /api/
 
 # Robots d'IA - OpenAI / ChatGPT
 User-agent: GPTBot
