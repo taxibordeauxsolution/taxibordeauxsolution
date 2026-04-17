@@ -82,6 +82,14 @@ export default function ReservationForm({ context = 'general', defaultService }:
       const result = await response.json()
 
       if (response.ok) {
+        // Conversion Google Ads — réservation soumise
+        if (typeof window !== 'undefined' && (window as any).gtag) {
+          ;(window as any).gtag('event', 'conversion', {
+            send_to: 'AW-16903067402',
+            event_category: 'reservation',
+            event_label: formData.serviceType,
+          })
+        }
         setStatus('success')
         setStatusMessage('Votre réservation a été envoyée avec succès ! Nous vous recontacterons rapidement.')
         setFormData({

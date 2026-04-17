@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -165,9 +166,29 @@ export default function RootLayout({
         {/* Preconnect origines tierces critiques */}
         <link rel="preconnect" href="https://maps.googleapis.com" />
         <link rel="preconnect" href="https://maps.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+
+        {/* Google Consent Mode v2 — doit être déclaré AVANT le tag Google (obligatoire EU/RGPD) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'analytics_storage': 'denied',
+                'wait_for_update': 500
+              });
+              gtag('set', 'ads_data_redaction', true);
+              gtag('set', 'url_passthrough', true);
+            `
+          }}
+        />
 
       </head>
-      
+
       <body className={inter.className} suppressHydrationWarning={true}>
         <Header />
         <main className="min-h-screen">
@@ -175,6 +196,39 @@ export default function RootLayout({
         </main>
         <Footer />
         <WhatsAppButton />
+
+        {/* Google Tag (gtag.js) — chargé après le Consent Mode */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=GT-NSVFM5FL"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'GT-NSVFM5FL', { 'send_page_view': true });
+            gtag('config', 'AW-16903067402', { 'send_page_view': false });
+          `}
+        </Script>
+
+        {/* Suivi conversions — clics téléphone (tous les liens tel:) */}
+        <Script id="track-phone-clicks" strategy="afterInteractive">
+          {`
+            document.addEventListener('click', function(e) {
+              var el = e.target.closest('a[href^="tel:"]');
+              if (el && window.gtag) {
+                gtag('event', 'conversion', {
+                  send_to: 'AW-16903067402/FgrqCM28x50cEIqugfw-',
+                  event_category: 'contact',
+                  event_label: 'appel_telephone',
+                  value: 1.0,
+                  currency: 'EUR'
+                });
+              }
+            });
+          `}
+        </Script>
       </body>
     </html>
   )
