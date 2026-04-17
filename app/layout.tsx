@@ -209,6 +209,7 @@ export default function RootLayout({
             gtag('js', new Date());
             gtag('config', 'GT-NSVFM5FL', { 'send_page_view': true });
             gtag('config', 'AW-16903067402', { 'send_page_view': false });
+            gtag('config', 'G-XLRN3B9S2D', { 'send_page_view': true });
           `}
         </Script>
 
