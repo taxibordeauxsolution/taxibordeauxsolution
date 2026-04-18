@@ -68,10 +68,12 @@ export default function Header() {
             ))}
             
             {/* Services Dropdown */}
-            <div className="relative">
+            <div
+              className="relative"
+              onMouseEnter={() => setServicesDropdownOpen(true)}
+              onMouseLeave={() => setServicesDropdownOpen(false)}
+            >
               <button
-                onMouseEnter={() => setServicesDropdownOpen(true)}
-                onMouseLeave={() => setServicesDropdownOpen(false)}
                 className={`font-medium px-3 py-2 rounded-lg transition-all duration-200 flex items-center gap-1 ${
                   pathname === '/aeroport' || pathname === '/gare'
                     ? 'text-blue-600 bg-blue-50 font-semibold'
@@ -81,25 +83,23 @@ export default function Header() {
                 Services
                 <ChevronDown size={16} className={`transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
-              
+
               {/* Dropdown Menu */}
               {servicesDropdownOpen && (
-                <div 
-                  className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50"
-                  onMouseEnter={() => setServicesDropdownOpen(true)}
-                  onMouseLeave={() => setServicesDropdownOpen(false)}
-                >
-                  {servicesMenu.map((service) => (
-                    <Link
-                      key={service.name}
-                      href={service.href}
-                      className="block px-4 py-2 hover:bg-gray-50 transition-colors group"
-                    >
-                      <div className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-                        {service.name}
-                      </div>
-                    </Link>
-                  ))}
+                <div className="absolute top-full left-0 pt-2 w-48 z-50">
+                  <div className="bg-white rounded-lg shadow-xl border border-gray-100 py-1">
+                    {servicesMenu.map((service) => (
+                      <Link
+                        key={service.name}
+                        href={service.href}
+                        className="block px-4 py-2 hover:bg-gray-50 transition-colors group"
+                      >
+                        <div className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+                          {service.name}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
