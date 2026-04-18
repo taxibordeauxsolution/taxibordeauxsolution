@@ -209,7 +209,7 @@ export default function Footer() {
                 © {currentYear} Taxi Bordeaux Solution. Tous droits réservés.
               </p>
               <p className="text-gray-500 text-xs mt-1">
-                Entreprise individuelle • Tarifs réglementés • Véhicules assurés
+                Tarifs réglementés • Véhicules assurés
               </p>
             </div>
 
