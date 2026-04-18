@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { Plus, PencilSimple, Trash, ToggleLeft, ToggleRight, ArrowClockwise, X, FloppyDisk, MapPin, Warning } from '@phosphor-icons/react'
 
 const API = '/api'
-const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
+const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyCarUqBqL2yuEy36eOw4JNatmclfOhOGs0'
 
 interface LatLng { lat: number; lng: number }
 interface Point { adresse: string; lat: number; lng: number; zone: LatLng[] }
