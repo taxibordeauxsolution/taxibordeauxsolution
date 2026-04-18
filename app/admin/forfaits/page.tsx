@@ -289,16 +289,24 @@ function ForfaitForm({ initial, token, onSaved, onCancel }: {
       return
     }
 
-    // Supprimer un éventuel script Maps chargé sans drawing
-    const old = document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]')
-    if (old) old.remove()
-    delete (window as any).google
-
-    const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&libraries=places,drawing`
-    script.async = true
-    script.onload = init
-    document.head.appendChild(script)
+    // Si Maps est chargé sans drawing, on ne peut pas le recharger
+    // On utilise le callback Google pour être sûr que tout est prêt
+    if (!document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]')) {
+      (window as any).__gmapsAdminInit = init
+      const script = document.createElement('script')
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&libraries=places,drawing&callback=__gmapsAdminInit`
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      // Maps déjà chargé — attendre que drawing soit dispo via polling
+      const wait = setInterval(() => {
+        if ((window as any).google?.maps?.drawing) {
+          clearInterval(wait)
+          init()
+        }
+      }, 200)
+      setTimeout(() => clearInterval(wait), 10000)
+    }
   }, [])
 
   // Ref pour la zone active dans le listener (évite closure stale)
@@ -451,18 +459,20 @@ function ForfaitForm({ initial, token, onSaved, onCancel }: {
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Prix jour (€) *</label>
           <input
-            type="number" step="0.5" min="0"
-            value={form.prixJour}
+            type="text" inputMode="decimal"
+            value={form.prixJour || ''}
             onChange={e => setField('prixJour', parseFloat(e.target.value) || 0)}
+            placeholder="0"
             className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none"
           />
         </div>
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1">Prix nuit (€) *</label>
           <input
-            type="number" step="0.5" min="0"
-            value={form.prixNuit}
+            type="text" inputMode="decimal"
+            value={form.prixNuit || ''}
             onChange={e => setField('prixNuit', parseFloat(e.target.value) || 0)}
+            placeholder="0"
             className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none"
           />
         </div>
