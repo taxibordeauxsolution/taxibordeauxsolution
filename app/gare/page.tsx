@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { Phone, CheckCircle, ArrowRight, Calendar } from 'lucide-react'
 import BookingSection from '../components/BookingSection'
 import {
@@ -332,6 +333,51 @@ export default function TaxiGare() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Destinations touristiques depuis la Gare */}
+      <section className="py-20 bg-gradient-to-b from-white to-green-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              Destinations touristiques depuis la Gare Saint-Jean
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Votre taxi vous emmène vers les plus beaux sites de la région bordelaise
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {[
+              { name: 'Arcachon', img: '/images/hero/Arcachon/Plage Arcachon.jpg', time: '~50 min', desc: 'Plages, Bassin et cabanes ostréicoles.' },
+              { name: 'Cap Ferret', img: '/images/hero/Cap Ferret/Plage Cap Ferret.jpg', time: '~1h', desc: 'Villages ostréicoles, phare et plages océanes.' },
+              { name: 'Dune du Pilat', img: '/images/hero/Arcachon/Dune du pyla.jpg', time: '~50 min', desc: 'Plus haute dune d\'Europe, vue panoramique.' },
+              { name: 'Saint-Émilion', img: '/images/hero/village de Saint-Emilion.webp', time: '~45 min', desc: 'Village UNESCO, vignobles et cité médiévale.' },
+              { name: 'Lacanau', img: '/images/hero/Plage lacanau.jpg', time: '~1h', desc: 'Spot de surf, lac et station balnéaire.' },
+              { name: 'Bassin d\'Arcachon', img: '/images/hero/Vue sur le Bassin-Arcachon.jpg', time: '~50 min', desc: 'Andernos, Gujan-Mestras, tour du Bassin.' },
+            ].map(d => (
+              <div key={d.name} className="group bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="relative h-48 overflow-hidden">
+                  <Image src={d.img} alt={`Taxi Gare Bordeaux vers ${d.name}`} width={400} height={192} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-semibold px-3 py-1 rounded-full">{d.time}</div>
+                </div>
+                <div className="p-5">
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">Gare Saint-Jean → {d.name}</h3>
+                  <p className="text-gray-600 text-sm">{d.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-10">
+            <a href="tel:0667237822" className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg hover:shadow-xl">
+              <Phone size={22} />
+              Réserver votre transfert
+              <ArrowRight size={20} />
+            </a>
           </div>
         </div>
       </section>

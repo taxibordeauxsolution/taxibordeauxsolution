@@ -329,6 +329,123 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Destinations touristiques depuis Bordeaux */}
+      <section className="py-20 bg-gradient-to-b from-white to-blue-50">
+        <div className="container mx-auto px-4">
+          <AnimateOnScroll className="text-center mb-16">
+            <div className="inline-block bg-amber-100 text-amber-800 px-4 py-2 rounded-full font-semibold text-sm mb-4">
+              EXCURSIONS & DESTINATIONS
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+              Taxi Bordeaux vers les
+              <span className="text-blue-600"> plus belles destinations</span>
+            </h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto font-light">
+              Stations balnéaires, vignobles et sites touristiques — votre taxi vous emmène partout depuis Bordeaux
+            </p>
+          </AnimateOnScroll>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+            <AnimateOnScroll delay={0}>
+              <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 overflow-hidden hover:-translate-y-2">
+                <div className="relative h-52 overflow-hidden">
+                  <Image src="/images/hero/Arcachon/Plage Arcachon.jpg" alt="Taxi Bordeaux Arcachon - Plage" width={400} height={208} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold px-3 py-1 rounded-full">~50 min</div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux → Arcachon</h3>
+                  <p className="text-slate-600 text-sm">Bassin d&apos;Arcachon, plages de sable fin, restaurants de fruits de mer et cabanes ostréicoles.</p>
+                </div>
+              </div>
+            </AnimateOnScroll>
+
+            <AnimateOnScroll delay={100}>
+              <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 overflow-hidden hover:-translate-y-2">
+                <div className="relative h-52 overflow-hidden">
+                  <Image src="/images/hero/Cap Ferret/Plage Cap Ferret.jpg" alt="Taxi Bordeaux Cap Ferret - Plage" width={400} height={208} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold px-3 py-1 rounded-full">~1h</div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux → Cap Ferret</h3>
+                  <p className="text-slate-600 text-sm">Le &quot;Saint-Tropez de l&apos;Atlantique&quot;. Villages ostréicoles, phare, plages océanes et ambiance unique.</p>
+                </div>
+              </div>
+            </AnimateOnScroll>
+
+            <AnimateOnScroll delay={200}>
+              <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 overflow-hidden hover:-translate-y-2">
+                <div className="relative h-52 overflow-hidden">
+                  <Image src="/images/hero/Arcachon/Dune du pyla.jpg" alt="Taxi Bordeaux Dune du Pilat" width={400} height={208} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold px-3 py-1 rounded-full">~50 min</div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux → Dune du Pilat</h3>
+                  <p className="text-slate-600 text-sm">La plus haute dune d&apos;Europe. Vue panoramique sur l&apos;océan, le banc d&apos;Arguin et la forêt des Landes.</p>
+                </div>
+              </div>
+            </AnimateOnScroll>
+
+            <AnimateOnScroll delay={0}>
+              <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 overflow-hidden hover:-translate-y-2">
+                <div className="relative h-52 overflow-hidden">
+                  <Image src="/images/hero/village de Saint-Emilion.webp" alt="Taxi Bordeaux Saint-Émilion" width={400} height={208} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold px-3 py-1 rounded-full">~45 min</div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux → Saint-Émilion</h3>
+                  <p className="text-slate-600 text-sm">Village classé UNESCO. Vignobles prestigieux, cité médiévale et dégustations de grands crus.</p>
+                </div>
+              </div>
+            </AnimateOnScroll>
+
+            <AnimateOnScroll delay={100}>
+              <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 overflow-hidden hover:-translate-y-2">
+                <div className="relative h-52 overflow-hidden">
+                  <Image src="/images/hero/Plage lacanau.jpg" alt="Taxi Bordeaux Lacanau - Plage et surf" width={400} height={208} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold px-3 py-1 rounded-full">~1h</div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux → Lacanau</h3>
+                  <p className="text-slate-600 text-sm">Spot de surf réputé, lac et océan. Station balnéaire familiale très prisée en été.</p>
+                </div>
+              </div>
+            </AnimateOnScroll>
+
+            <AnimateOnScroll delay={200}>
+              <div className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 overflow-hidden hover:-translate-y-2">
+                <div className="relative h-52 overflow-hidden">
+                  <Image src="/images/hero/Vue sur le Bassin-Arcachon.jpg" alt="Taxi Bordeaux Bassin d'Arcachon" width={400} height={208} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                  <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold px-3 py-1 rounded-full">~50 min</div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux → Bassin d&apos;Arcachon</h3>
+                  <p className="text-slate-600 text-sm">Andernos, Gujan-Mestras, La Teste-de-Buch. Tour du Bassin, parcs à huîtres et nature préservée.</p>
+                </div>
+              </div>
+            </AnimateOnScroll>
+
+          </div>
+
+          <AnimateOnScroll className="text-center mt-12">
+            <a
+              href="tel:0667237822"
+              className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+            >
+              <Phone size={22} />
+              Réserver votre transfert
+              <ArrowRight size={20} />
+            </a>
+          </AnimateOnScroll>
+        </div>
+      </section>
+
       {/* Pourquoi nous choisir */}
       <section className="py-20 bg-slate-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20"></div>
