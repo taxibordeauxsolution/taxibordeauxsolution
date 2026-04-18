@@ -201,7 +201,7 @@ export default function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="relative h-48 overflow-hidden">
                   <Image
-                    src="/images/hero/gare de bordeaux.jpg"
+                    src="/images/hero/gare de bordeaux.webp"
                     alt="Gare de Bordeaux Saint-Jean - Service Taxi"
                     width={400}
                     height={192}
@@ -228,7 +228,7 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-gradient-to-br from-yellow-50/50 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative h-48 overflow-hidden">
                 <Image
-                  src="/images/hero/Panorama Bordeaux.jpg"
+                  src="/images/hero/Panorama Bordeaux.webp"
                   alt="Panorama Bordeaux - Vue sur la ville"
                   width={400}
                   height={192}
@@ -254,7 +254,7 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative h-48 overflow-hidden">
                 <Image
-                  src="/images/hero/Voyage d'affaire.png"
+                  src="/images/hero/Voyage d'affaire.webp"
                   alt="Transport Professionnel Bordeaux - Voyage d'Affaires"
                   width={400}
                   height={192}

@@ -37,7 +37,7 @@ export default function MentionsLegales() {
               <p className="font-medium text-gray-800">Registrar du domaine</p>
               <p>Hostinger International Ltd.</p>
               <p>61 Lordou Vironos Street, Larnaca 6023, Chypre</p>
-              <p><a href="https://hostinger.fr" className="text-blue-600">hostinger.fr</a></p>
+              <p><a href="https://www.hostinger.com/fr" className="text-blue-600">hostinger.fr</a></p>
             </div>
           </div>
         </section>
