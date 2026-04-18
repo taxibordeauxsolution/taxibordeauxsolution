@@ -21,6 +21,9 @@ export default function CookieBanner() {
         ad_personalization: 'granted',
         analytics_storage: 'granted',
       });
+      window.gtag('event', 'page_view', {
+        send_to: 'G-XLRN3B9S2D',
+      });
     }
     setVisible(false);
   }

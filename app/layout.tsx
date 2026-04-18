@@ -188,6 +188,27 @@ export default function RootLayout({
           }}
         />
 
+        {/* Restaurer le consentement sauvegardé AVANT de charger gtag */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var consent = localStorage.getItem('cookie_consent');
+                if (consent === 'granted') {
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('consent', 'update', {
+                    'ad_storage': 'granted',
+                    'ad_user_data': 'granted',
+                    'ad_personalization': 'granted',
+                    'analytics_storage': 'granted'
+                  });
+                }
+              })();
+            `
+          }}
+        />
+
       </head>
 
       <body className={inter.className} suppressHydrationWarning={true}>
@@ -198,25 +219,6 @@ export default function RootLayout({
         <Footer />
         <WhatsAppButton />
         <CookieBanner />
-
-        {/* Restaurer le consentement sauvegardé */}
-        <Script id="restore-consent" strategy="afterInteractive">
-          {`
-            (function() {
-              var consent = localStorage.getItem('cookie_consent');
-              if (consent === 'granted') {
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('consent', 'update', {
-                  'ad_storage': 'granted',
-                  'ad_user_data': 'granted',
-                  'ad_personalization': 'granted',
-                  'analytics_storage': 'granted'
-                });
-              }
-            })();
-          `}
-        </Script>
 
         {/* Google Tag (gtag.js) — GA4 + Google Ads */}
         <Script
