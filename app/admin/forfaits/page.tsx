@@ -283,13 +283,22 @@ function ForfaitForm({ initial, token, onSaved, onCancel }: {
       }
     }
 
-    if ((window as any).google?.maps) {
+    const g = (window as any).google
+    if (g?.maps?.drawing) {
       init()
       return
     }
-    // Charger le script avec Drawing library si besoin
+
+    if (g?.maps) {
+      // Maps déjà chargé sans la library drawing — la charger dynamiquement
+      g.maps.importLibrary('drawing').then(() => init())
+      return
+    }
+
     const existing = document.querySelector('script[data-gmaps-admin]')
-    if (existing) { existing.addEventListener('load', init); return }
+    if (existing) { existing.addEventListener('load', () => {
+      (window as any).google.maps.importLibrary('drawing').then(() => init())
+    }); return }
 
     const script = document.createElement('script')
     script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&libraries=places,drawing`
