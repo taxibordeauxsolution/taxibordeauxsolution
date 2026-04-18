@@ -193,7 +193,7 @@ export default function TaxiGare() {
               <div>
                 <div className="text-sm font-semibold text-blue-200 mb-1 uppercase tracking-wide">Liaison directe</div>
                 <h3 className="text-2xl font-bold mb-2">Gare Saint-Jean ↔ Aéroport Mérignac</h3>
-                <p className="text-blue-100 text-sm">~23 min • Trajet direct sans escale</p>
+                <p className="text-blue-100 text-sm">~25 min • Trajet direct sans escale</p>
               </div>
               <div className="flex gap-6 shrink-0">
                 <div className="text-center bg-white/15 rounded-2xl px-6 py-4">
@@ -214,8 +214,7 @@ export default function TaxiGare() {
             {DESTINATIONS.map(({ label, desc, km, min }) => (
               <div key={label} className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{label}</h3>
-                <p className="text-gray-600 text-sm mb-3">{desc}</p>
-                <span className="text-gray-500 text-xs">{km} km • ~{min} min</span>
+                <p className="text-gray-600 text-sm">{desc}</p>
               </div>
             ))}
           </div>
