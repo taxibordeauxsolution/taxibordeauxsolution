@@ -220,7 +220,7 @@ export default function RootLayout({
 
         {/* Google Tag (gtag.js) — chargé après le Consent Mode */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=GT-NSVFM5FL"
+          src="https://www.googletagmanager.com/gtag/js?id=G-XLRN3B9S2D"
           strategy="afterInteractive"
         />
         <Script id="google-tag" strategy="afterInteractive">
@@ -228,7 +228,7 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'GT-NSVFM5FL', { 'send_page_view': true });
+            gtag('config', 'G-XLRN3B9S2D', { 'send_page_view': true });
             gtag('config', 'AW-16903067402', { 'send_page_view': false });
           `}
         </Script>
