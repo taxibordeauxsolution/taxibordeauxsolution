@@ -433,13 +433,20 @@ export default function HomePage() {
 
           </div>
 
-          <AnimateOnScroll className="text-center mt-12">
+          <AnimateOnScroll className="text-center mt-12 flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="tel:0667237822"
               className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
             >
               <Phone size={22} />
               Réserver votre transfert
+              <ArrowRight size={20} />
+            </a>
+            <a
+              href="#reservation"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+            >
+              Réserver en ligne
               <ArrowRight size={20} />
             </a>
           </AnimateOnScroll>
