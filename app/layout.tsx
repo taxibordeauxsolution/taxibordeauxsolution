@@ -218,9 +218,9 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* Google Tag (gtag.js) — chargé après le Consent Mode */}
+        {/* Google Tag (gtag.js) — GA4 + Google Ads */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-XLRN3B9S2D"
+          src="https://www.googletagmanager.com/gtag/js?id=AW-16903067402"
           strategy="afterInteractive"
         />
         <Script id="google-tag" strategy="afterInteractive">
