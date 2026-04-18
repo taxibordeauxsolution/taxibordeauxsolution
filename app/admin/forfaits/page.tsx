@@ -289,21 +289,14 @@ function ForfaitForm({ initial, token, onSaved, onCancel }: {
       return
     }
 
-    if (g?.maps) {
-      // Maps déjà chargé sans la library drawing — la charger dynamiquement
-      g.maps.importLibrary('drawing').then(() => init())
-      return
-    }
-
-    const existing = document.querySelector('script[data-gmaps-admin]')
-    if (existing) { existing.addEventListener('load', () => {
-      (window as any).google.maps.importLibrary('drawing').then(() => init())
-    }); return }
+    // Supprimer un éventuel script Maps chargé sans drawing
+    const old = document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]')
+    if (old) old.remove()
+    delete (window as any).google
 
     const script = document.createElement('script')
     script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&libraries=places,drawing`
     script.async = true
-    script.dataset.gmapsAdmin = '1'
     script.onload = init
     document.head.appendChild(script)
   }, [])

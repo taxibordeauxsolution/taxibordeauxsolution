@@ -457,7 +457,7 @@ const TaxiBookingHomePreview = () => {
     }
 
     const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&language=${language}&region=FR`
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places,drawing&language=${language}&region=FR`
     script.async = true
     script.defer = true
     script.onload = initializeMaps
