@@ -111,7 +111,7 @@ export default function TaxiGare() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Réserver votre Taxi Bordeaux Gare en 30 secondes
+              Réservez votre Taxi Bordeaux Gare en ligne ou par appel
             </h2>
             <p className="text-xl text-gray-600">
               La <strong>réservation taxi Bordeaux</strong> la plus simple depuis la gare Saint-Jean.
@@ -132,7 +132,7 @@ export default function TaxiGare() {
                   </div>
                   <div>
                     <h4 className="font-bold text-gray-900 mb-1">Appel direct</h4>
-                    <p className="text-gray-600">Appelez le <strong>06 67 23 78 22</strong> — réponse immédiate, prise en charge en moins de 5 minutes.</p>
+                    <p className="text-gray-600">Appelez le <strong>06 67 23 78 22</strong> — réponse immédiate, prise en charge en moins de 10 minutes.</p>
                   </div>
                 </div>
 
