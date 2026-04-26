@@ -794,7 +794,7 @@ const TaxiBookingHomePreview = () => {
     <div className="space-y-6">
       <div className="text-center mb-5">
         <h3 className="text-lg font-bold text-gray-800 mb-1">{t('step1Title')}</h3>
-        <p className="text-sm text-gray-700 sm:text-gray-600">{t('step1Subtitle')}</p>
+        <p className="text-sm text-gray-900 sm:text-gray-600">{t('step1Subtitle')}</p>
       </div>
 
       {/* Messages d'erreur */}
@@ -811,7 +811,7 @@ const TaxiBookingHomePreview = () => {
         <div className="space-y-3 min-w-0 overflow-hidden">
           {/* Adresses */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-900 mb-2">
               <MapPin className="inline w-4 h-4 mr-1 text-green-500" />
               {t('fromLabel')}
               {validationAttempted && !tripData.fromCoords && <span className="text-red-500 ml-1">*</span>}
@@ -830,7 +830,7 @@ const TaxiBookingHomePreview = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-900 mb-2">
               <MapPin className="inline w-4 h-4 mr-1 text-red-500" />
               {t('toLabel')}
               {validationAttempted && !tripData.toCoords && <span className="text-red-500 ml-1">*</span>}
@@ -851,7 +851,7 @@ const TaxiBookingHomePreview = () => {
           {/* Options de réservation */}
           <div className="grid grid-cols-2 gap-2 sm:gap-4 overflow-hidden">
             <div className="min-w-0 overflow-hidden">
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 min-h-[1.5rem] flex items-center">
+              <label className="block text-sm font-medium text-gray-800 mb-2 min-h-[1.5rem] flex items-center">
                 <Users className="inline w-4 h-4 mr-1 shrink-0" />
                 <span className="truncate">{t('passengers')}</span>
                 {validationAttempted && !bookingData.passengers && <span className="text-red-500 ml-1">*</span>}
@@ -868,7 +868,7 @@ const TaxiBookingHomePreview = () => {
             </div>
 
             <div className="min-w-0 overflow-hidden">
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 min-h-[1.5rem] flex items-center">
+              <label className="block text-sm font-medium text-gray-800 mb-2 min-h-[1.5rem] flex items-center">
                 <Briefcase className="inline w-4 h-4 mr-1 shrink-0" />
                 <span className="truncate">{t('luggage')}</span>
                 {validationAttempted && (bookingData.luggage === undefined || bookingData.luggage === null) && <span className="text-red-500 ml-1">*</span>}
@@ -888,7 +888,7 @@ const TaxiBookingHomePreview = () => {
           {/* Date et heure - OBLIGATOIRES */}
           <div className="grid grid-cols-2 gap-2 sm:gap-4 overflow-hidden">
             <div className="min-w-0 overflow-hidden">
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 truncate">
+              <label className="block text-sm font-medium text-gray-800 mb-2 truncate">
                 <Calendar className="inline w-4 h-4 mr-1 shrink-0" />
                 {t('departureDate')}
                 {validationAttempted && !bookingData.departureDate && <span className="text-red-500 ml-1">*</span>}
@@ -904,7 +904,7 @@ const TaxiBookingHomePreview = () => {
             </div>
 
             <div className="min-w-0 overflow-hidden">
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 truncate">
+              <label className="block text-sm font-medium text-gray-800 mb-2 truncate">
                 <Clock className="inline w-4 h-4 mr-1 shrink-0" />
                 {t('departureTime')}
                 {validationAttempted && !bookingData.departureTime && <span className="text-red-500 ml-1">*</span>}
@@ -948,25 +948,25 @@ const TaxiBookingHomePreview = () => {
               </h3>
               <div className="grid grid-cols-3 gap-2 text-sm mb-4">
                 <div className="text-center">
-                  <span className="text-gray-700 sm:text-gray-600 block">{t('distance')}</span>
+                  <span className="text-gray-900 sm:text-gray-600 block">{t('distance')}</span>
                   <div className="font-semibold text-lg">{(tripData.distance || 0).toFixed(1)} km</div>
                 </div>
                 <div className="text-center">
-                  <span className="text-gray-700 sm:text-gray-600 block">{t('duration')}</span>
+                  <span className="text-gray-900 sm:text-gray-600 block">{t('duration')}</span>
                   <div className="font-semibold text-lg">{Math.round(tripData.duration || 0)} min</div>
                 </div>
                 <div className="text-center">
-                  <span className="text-gray-700 sm:text-gray-600 block">{t('passengers')}</span>
+                  <span className="text-gray-900 sm:text-gray-600 block">{t('passengers')}</span>
                   <div className="font-semibold text-lg">{bookingData.passengers}</div>
                 </div>
               </div>
               
               <div className="text-center pt-4 border-t border-green-200">
-                <span className="text-gray-700 sm:text-gray-600 text-sm">{t('estimatedPrice')} :</span>
+                <span className="text-gray-900 sm:text-gray-600 text-sm">{t('estimatedPrice')} :</span>
                 <div className="text-3xl font-bold text-green-700">
                   {(tripData.price || 0).toFixed(2)}€
                 </div>
-                <div className="text-xs text-green-700 sm:text-green-600 mt-2 space-y-1">
+                <div className="text-xs text-green-800 sm:text-green-600 mt-2 space-y-1">
                   {bookingData.departureDate && bookingData.departureTime ? (
                     <>
                       <div>{t('pickupOn')} {new Date(bookingData.departureDate).toLocaleDateString(dateLocale)} {t('pickupAt')} {bookingData.departureTime}</div>
@@ -1005,7 +1005,7 @@ const TaxiBookingHomePreview = () => {
             {tripData.distance > 0 && (
               <div className="p-3 bg-white border-t">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center text-green-700 sm:text-green-600">
+                  <span className="flex items-center text-green-800 sm:text-green-600">
                     <MapPin className="w-4 h-4 mr-1" />
                     {tripData.from?.split(',')[0]}
                   </span>
@@ -1054,7 +1054,7 @@ const TaxiBookingHomePreview = () => {
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('step2Summary')}</h3>
-        <p className="text-gray-700 sm:text-gray-600">{t('step2Subtitle')}</p>
+        <p className="text-gray-900 sm:text-gray-600">{t('step2Subtitle')}</p>
       </div>
 
       <div className="max-w-2xl mx-auto">
@@ -1069,14 +1069,14 @@ const TaxiBookingHomePreview = () => {
                 </div>
                 <div>
                   <div className="font-medium text-gray-900">{t('journey')}</div>
-                  <div className="text-sm text-gray-700 sm:text-gray-600">
+                  <div className="text-sm text-gray-900 sm:text-gray-600">
                     {tripData.from?.split(',')[0]} → {tripData.to?.split(',')[0]}
                   </div>
                 </div>
               </div>
               <div className="text-right">
                 <div className="font-medium">{(tripData.distance || 0).toFixed(1)} km</div>
-                <div className="text-sm text-gray-700 sm:text-gray-500">{Math.round(tripData.duration || 0)} min</div>
+                <div className="text-sm text-gray-900 sm:text-gray-500">{Math.round(tripData.duration || 0)} min</div>
               </div>
             </div>
 
@@ -1088,7 +1088,7 @@ const TaxiBookingHomePreview = () => {
                 </div>
                 <div>
                   <div className="font-medium text-gray-900">{t('pickup')}</div>
-                  <div className="text-sm text-gray-700 sm:text-gray-600">
+                  <div className="text-sm text-gray-900 sm:text-gray-600">
                     {t('pickupOn')} {new Date(bookingData.departureDate).toLocaleDateString(dateLocale)} {t('pickupAt')} {bookingData.departureTime}
                   </div>
                 </div>
@@ -1103,7 +1103,7 @@ const TaxiBookingHomePreview = () => {
                 </div>
                 <div>
                   <div className="font-medium text-gray-900">{t('details')}</div>
-                  <div className="text-sm text-gray-700 sm:text-gray-600">
+                  <div className="text-sm text-gray-900 sm:text-gray-600">
                     {bookingData.passengers} {bookingData.passengers > 1 ? t('passengerPlural') : t('passengerSingular')} • {bookingData.luggage} {bookingData.luggage > 1 ? t('luggagePlural') : t('luggageSingular')}
                   </div>
                 </div>
@@ -1113,12 +1113,12 @@ const TaxiBookingHomePreview = () => {
             {/* Prix */}
             <div className="bg-green-50 rounded-lg p-4 mt-6">
               <div className="text-center">
-                <div className="text-sm text-green-700 sm:text-green-600 mb-1">{t('totalPriceLabel')}</div>
+                <div className="text-sm text-green-800 sm:text-green-600 mb-1">{t('totalPriceLabel')}</div>
                 <div className="text-3xl font-bold text-green-700">
                   {(tripData.price || 0).toFixed(2)}€
                 </div>
                 {tripData.priceDetails && tripData.priceDetails.tariffType && tripData.priceDetails.tariffType !== 'Jour' && (
-                  <div className="text-xs text-blue-700 sm:text-blue-600 mt-2 font-medium">
+                  <div className="text-xs text-blue-800 sm:text-blue-600 mt-2 font-medium">
                     ✓ {t('tariffLabel')} {getTariffLabel(tripData.priceDetails.tariffType ?? '')} {t('tariffApplied')}
                   </div>
                 )}
@@ -1169,7 +1169,7 @@ const TaxiBookingHomePreview = () => {
       <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-900 mb-2">
               <Users className="inline w-4 h-4 mr-1" />
               {t('fullName')}
               {step3ValidationAttempted && !bookingData.customerName && <span className="text-red-500 ml-1">*</span>}
@@ -1185,7 +1185,7 @@ const TaxiBookingHomePreview = () => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-900 mb-2">
               <Phone className="inline w-4 h-4 mr-1" />
               {t('phone')}
               {step3ValidationAttempted && !bookingData.customerPhone && <span className="text-red-500 ml-1">*</span>}
@@ -1201,7 +1201,7 @@ const TaxiBookingHomePreview = () => {
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-900 mb-2">
               <Mail className="inline w-4 h-4 mr-1" />
               {t('email')}
             </label>
@@ -1215,7 +1215,7 @@ const TaxiBookingHomePreview = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-900 mb-2">
               {t('notes')}
             </label>
             <textarea
@@ -1231,7 +1231,7 @@ const TaxiBookingHomePreview = () => {
         {/* Résumé de commande */}
         <div className="bg-gray-50 rounded-lg p-6">
           <h3 className="font-semibold text-gray-800 mb-4">{t('bookingDetails')}</h3>
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-sm text-gray-900">
             <div className="flex justify-between">
               <span>{t('tripLabel')}</span>
               <span className="font-medium text-right">
@@ -1265,7 +1265,7 @@ const TaxiBookingHomePreview = () => {
             <hr className="my-3" />
             <div className="flex justify-between text-lg font-bold">
               <span>{t('totalPrice')}:</span>
-              <span className="text-green-700 sm:text-green-600 font-semibold">{(tripData.price || 0).toFixed(2)}€</span>
+              <span className="text-green-800 sm:text-green-600 font-semibold">{(tripData.price || 0).toFixed(2)}€</span>
             </div>
           </div>
         </div>
@@ -1339,7 +1339,7 @@ const TaxiBookingHomePreview = () => {
       {reservation && reservation.next_steps && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 max-w-md mx-auto">
           <h4 className="font-semibold text-blue-800 mb-3">{t('nextSteps')}</h4>
-          <ul className="text-sm text-blue-700 space-y-2 text-left">
+          <ul className="text-sm text-blue-900 sm:text-blue-700 space-y-2 text-left">
             {reservation.next_steps.map((step, index) => (
               <li key={index} className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
@@ -1363,7 +1363,7 @@ const TaxiBookingHomePreview = () => {
             <Mail className="w-5 h-5 text-blue-600" />
             <div>
               <p className="text-blue-800 font-medium">{t('emailConfirmation')}</p>
-              <p className="text-blue-700 sm:text-blue-600 text-sm">
+              <p className="text-blue-800 sm:text-blue-600 text-sm">
                 {reservation.customer.email ? (
                   reservation.emailSent ? (
                     `✅ ${t('emailSent')} ${reservation.customer.email}`
@@ -1435,7 +1435,7 @@ const TaxiBookingHomePreview = () => {
           </div>
           <div>
             <h2 id="reservation-title" className="text-2xl lg:text-3xl font-bold text-gray-800">{t('bookNow')} <span className="text-green-600">{t('bookNowHighlight')}</span></h2>
-            <p className="text-gray-700 sm:text-gray-600">{t('subtitle')}</p>
+            <p className="text-gray-900 sm:text-gray-600">{t('subtitle')}</p>
           </div>
         </div>
       </div>
@@ -1446,7 +1446,7 @@ const TaxiBookingHomePreview = () => {
           {[1, 2, 3, 4].map((stepNum) => (
             <div key={stepNum} className="flex items-center">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                step >= stepNum ? 'bg-blue-600 text-white' : 'bg-gray-300 sm:bg-gray-200 text-gray-700 sm:text-gray-600'
+                step >= stepNum ? 'bg-blue-600 text-white' : 'bg-gray-300 sm:bg-gray-200 text-gray-900 sm:text-gray-600'
               }`}>
                 {stepNum}
               </div>
@@ -1466,7 +1466,7 @@ const TaxiBookingHomePreview = () => {
 
       {/* Note d'information */}
       {step < 4 && (
-        <div className="mt-4 text-center text-xs text-gray-600 sm:text-gray-500">
+        <div className="mt-4 text-center text-xs text-gray-800 sm:text-gray-500">
           <p>{t('officialPrices')}</p>
           <p className="text-blue-600 font-medium mt-1">{t('requiredFields')}</p>
         </div>
