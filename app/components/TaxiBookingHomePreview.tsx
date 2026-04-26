@@ -823,7 +823,7 @@ const TaxiBookingHomePreview = () => {
               value={tripData.from}
               onFocus={loadGoogleMapsLazy}
               onChange={(e) => setTripData(prev => ({ ...prev, from: e.target.value }))}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 text-gray-900"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-700 text-gray-900"
               disabled={loading}
               required
             />
@@ -842,7 +842,7 @@ const TaxiBookingHomePreview = () => {
               value={tripData.to}
               onFocus={loadGoogleMapsLazy}
               onChange={(e) => setTripData(prev => ({ ...prev, to: e.target.value }))}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 text-gray-900"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-700 text-gray-900"
               disabled={loading}
               required
             />
@@ -949,15 +949,15 @@ const TaxiBookingHomePreview = () => {
               <div className="grid grid-cols-3 gap-2 text-sm mb-4">
                 <div className="text-center">
                   <span className="text-gray-900 sm:text-gray-600 block">{t('distance')}</span>
-                  <div className="font-semibold text-lg">{(tripData.distance || 0).toFixed(1)} km</div>
+                  <div className="font-semibold text-lg text-gray-900">{(tripData.distance || 0).toFixed(1)} km</div>
                 </div>
                 <div className="text-center">
                   <span className="text-gray-900 sm:text-gray-600 block">{t('duration')}</span>
-                  <div className="font-semibold text-lg">{Math.round(tripData.duration || 0)} min</div>
+                  <div className="font-semibold text-lg text-gray-900">{Math.round(tripData.duration || 0)} min</div>
                 </div>
                 <div className="text-center">
                   <span className="text-gray-900 sm:text-gray-600 block">{t('passengers')}</span>
-                  <div className="font-semibold text-lg">{bookingData.passengers}</div>
+                  <div className="font-semibold text-lg text-gray-900">{bookingData.passengers}</div>
                 </div>
               </div>
               
@@ -1075,8 +1075,8 @@ const TaxiBookingHomePreview = () => {
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-medium">{(tripData.distance || 0).toFixed(1)} km</div>
-                <div className="text-sm text-gray-900 sm:text-gray-500">{Math.round(tripData.duration || 0)} min</div>
+                <div className="font-medium text-gray-900">{(tripData.distance || 0).toFixed(1)} km</div>
+                <div className="text-sm text-gray-900 sm:text-gray-600">{Math.round(tripData.duration || 0)} min</div>
               </div>
             </div>
 
@@ -1179,7 +1179,7 @@ const TaxiBookingHomePreview = () => {
               placeholder={t('fullName')}
               value={bookingData.customerName}
               onChange={(e) => handleBookingChange('customerName', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-700"
               required
             />
           </div>
@@ -1195,7 +1195,7 @@ const TaxiBookingHomePreview = () => {
               placeholder="06 12 34 56 78"
               value={bookingData.customerPhone}
               onChange={(e) => handleBookingChange('customerPhone', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-700"
               required
             />
           </div>
@@ -1210,7 +1210,7 @@ const TaxiBookingHomePreview = () => {
               placeholder={language === 'en' ? 'your@email.com' : language === 'es' ? 'su@email.com' : 'votre@email.fr'}
               value={bookingData.customerEmail}
               onChange={(e) => handleBookingChange('customerEmail', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-700"
             />
           </div>
 
@@ -1322,8 +1322,8 @@ const TaxiBookingHomePreview = () => {
       
       {reservation && (
         <div className="bg-white border border-green-200 rounded-lg p-6 max-w-md mx-auto">
-          <h4 className="font-semibold mb-4">{t('bookingDetails')}</h4>
-          <div className="space-y-2 text-sm text-left">
+          <h4 className="font-semibold text-gray-900 mb-4">{t('bookingDetails')}</h4>
+          <div className="space-y-2 text-sm text-gray-900 text-left">
             <div><strong>{t('reservationNumber')} :</strong> {reservation.reservationId}</div>
             <div><strong>{t('clientLabel')}</strong> {reservation.customer.name}</div>
             <div><strong>{t('phoneLabel')}</strong> {reservation.customer.phone}</div>
