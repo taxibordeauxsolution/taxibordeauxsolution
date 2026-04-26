@@ -806,9 +806,9 @@ const TaxiBookingHomePreview = () => {
       )}
 
       {/* Formulaire complet */}
-      <div className="grid lg:grid-cols-2 gap-4">
+      <div className="grid lg:grid-cols-2 gap-4 overflow-hidden">
         {/* Colonne gauche - Formulaire */}
-        <div className="space-y-3">
+        <div className="space-y-3 min-w-0 overflow-hidden">
           {/* Adresses */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -849,17 +849,17 @@ const TaxiBookingHomePreview = () => {
           </div>
 
           {/* Options de réservation */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 min-h-[1.5rem] flex items-center">
-                <Users className="inline w-4 h-4 mr-1" />
-                {t('passengers')}
+          <div className="grid grid-cols-2 gap-2 sm:gap-4 overflow-hidden">
+            <div className="min-w-0 overflow-hidden">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 min-h-[1.5rem] flex items-center">
+                <Users className="inline w-4 h-4 mr-1 shrink-0" />
+                <span className="truncate">{t('passengers')}</span>
                 {validationAttempted && !bookingData.passengers && <span className="text-red-500 ml-1">*</span>}
               </label>
               <select
                 value={bookingData.passengers}
                 onChange={(e) => handleBookingChange('passengers', parseInt(e.target.value))}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-gray-900"
               >
                 {[1,2,3,4,5,6,7,8].map(num => (
                   <option key={num} value={num}>{num} {num > 1 ? t('passengerPlural') : t('passengerSingular')}</option>
@@ -867,16 +867,16 @@ const TaxiBookingHomePreview = () => {
               </select>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 min-h-[1.5rem] flex items-center">
-                <Briefcase className="inline w-4 h-4 mr-1" />
-                {t('luggage')}
+            <div className="min-w-0 overflow-hidden">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 min-h-[1.5rem] flex items-center">
+                <Briefcase className="inline w-4 h-4 mr-1 shrink-0" />
+                <span className="truncate">{t('luggage')}</span>
                 {validationAttempted && (bookingData.luggage === undefined || bookingData.luggage === null) && <span className="text-red-500 ml-1">*</span>}
               </label>
               <select
                 value={bookingData.luggage}
                 onChange={(e) => handleBookingChange('luggage', parseInt(e.target.value))}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-gray-900"
               >
                 {[0,1,2,3,4,5].map(num => (
                   <option key={num} value={num}>{num} {num > 1 ? t('luggagePlural') : t('luggageSingular')}</option>
@@ -886,10 +886,10 @@ const TaxiBookingHomePreview = () => {
           </div>
 
           {/* Date et heure - OBLIGATOIRES */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Calendar className="inline w-4 h-4 mr-1" />
+          <div className="grid grid-cols-2 gap-2 sm:gap-4 overflow-hidden">
+            <div className="min-w-0 overflow-hidden">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 truncate">
+                <Calendar className="inline w-4 h-4 mr-1 shrink-0" />
                 {t('departureDate')}
                 {validationAttempted && !bookingData.departureDate && <span className="text-red-500 ml-1">*</span>}
               </label>
@@ -898,14 +898,14 @@ const TaxiBookingHomePreview = () => {
                 value={bookingData.departureDate}
                 onChange={(e) => handleBookingChange('departureDate', e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
+                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-gray-900"
                 required
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Clock className="inline w-4 h-4 mr-1" />
+            <div className="min-w-0 overflow-hidden">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2 truncate">
+                <Clock className="inline w-4 h-4 mr-1 shrink-0" />
                 {t('departureTime')}
                 {validationAttempted && !bookingData.departureTime && <span className="text-red-500 ml-1">*</span>}
               </label>
@@ -913,7 +913,7 @@ const TaxiBookingHomePreview = () => {
                 type="time"
                 value={bookingData.departureTime}
                 onChange={(e) => handleBookingChange('departureTime', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900"
+                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-gray-900"
                 required
               />
             </div>
@@ -1076,7 +1076,7 @@ const TaxiBookingHomePreview = () => {
               </div>
               <div className="text-right">
                 <div className="font-medium">{(tripData.distance || 0).toFixed(1)} km</div>
-                <div className="text-sm text-gray-600 sm:text-gray-500">{Math.round(tripData.duration || 0)} min</div>
+                <div className="text-sm text-gray-700 sm:text-gray-500">{Math.round(tripData.duration || 0)} min</div>
               </div>
             </div>
 
@@ -1419,7 +1419,7 @@ const TaxiBookingHomePreview = () => {
   )
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-3xl shadow-2xl border-2 border-blue-300 p-4 sm:p-6 lg:p-6 w-full relative mx-auto max-w-7xl my-8" style={{boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1)'}}>
+    <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-3xl shadow-2xl border-2 border-blue-300 p-4 sm:p-6 lg:p-6 w-full relative mx-auto max-w-7xl my-8 overflow-hidden" style={{boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1)'}}>
       {/* Ancre invisible pour le scroll avec offset */}
       <div id="reservation" className="absolute -top-20"></div>
       
@@ -1457,7 +1457,7 @@ const TaxiBookingHomePreview = () => {
       </div>
 
       {/* Contenu principal */}
-      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 sm:p-6 lg:p-8 w-full">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 sm:p-6 lg:p-8 w-full overflow-hidden">
         {step === 1 && renderStep1()}
         {step === 2 && renderStep2()}
         {step === 3 && renderStep3()}
