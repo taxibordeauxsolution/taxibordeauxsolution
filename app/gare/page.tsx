@@ -198,7 +198,7 @@ export default function TaxiGare() {
               </div>
               <div className="flex gap-6 shrink-0">
                 <div className="text-center bg-white/15 rounded-2xl px-6 py-4">
-                  <div className="text-3xl font-bold">60€</div>
+                  <div className="text-3xl font-bold">65€</div>
                   <div className="text-blue-200 text-xs mt-1">Tarif jour</div>
                   <div className="text-blue-300 text-xs">7h – 19h</div>
                 </div>
