@@ -8,8 +8,8 @@ const API = '/api'
 
 export default function AdminLogin() {
   const router = useRouter()
-  const [pin, setPin] = useState('')
-  const [showPin, setShowPin] = useState(false)
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -21,11 +21,11 @@ export default function AdminLogin() {
       const res = await fetch(`${API}/admin/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pin })
+        body: JSON.stringify({ password })
       })
       const data = await res.json()
       if (!data.success) {
-        setError('PIN incorrect')
+        setError('Mot de passe incorrect')
         setLoading(false)
         return
       }
@@ -51,23 +51,22 @@ export default function AdminLogin() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">PIN</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Mot de passe</label>
             <div className="relative">
               <input
-                type={showPin ? 'text' : 'password'}
-                value={pin}
-                onChange={e => setPin(e.target.value)}
-                placeholder="••••"
-                maxLength={8}
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-lg tracking-widest font-bold text-center focus:border-blue-500 focus:outline-none"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-lg font-bold text-center focus:border-blue-500 focus:outline-none"
                 autoFocus
               />
               <button
                 type="button"
-                onClick={() => setShowPin(v => !v)}
+                onClick={() => setShowPassword(v => !v)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
               >
-                {showPin ? <EyeSlash size={20} /> : <Eye size={20} />}
+                {showPassword ? <EyeSlash size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
@@ -78,7 +77,7 @@ export default function AdminLogin() {
 
           <button
             type="submit"
-            disabled={loading || !pin}
+            disabled={loading || !password}
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-bold py-3 rounded-xl transition-colors"
           >
             {loading ? 'Connexion...' : 'Accéder'}
