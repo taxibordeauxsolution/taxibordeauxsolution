@@ -115,7 +115,7 @@ export default function TaxiGare() {
             </h2>
             <p className="text-xl text-gray-600">
               La <strong>réservation taxi Bordeaux</strong> la plus simple depuis la gare Saint-Jean.
-              Appelez ou montez directement à bord — votre taxi bordelais est là.
+              Réservez en ligne ou par appel — votre taxi bordelais est là.
             </p>
           </div>
 
