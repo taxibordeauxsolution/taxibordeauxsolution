@@ -42,7 +42,7 @@ export default function Contact() {
                     <div>
                       <p className="font-semibold text-gray-900">Email</p>
                       <a href="mailto:contact@taxibordeauxsolution.fr" className="text-blue-600">contact@taxibordeauxsolution.fr</a>
-                      <p className="text-sm text-gray-500 mt-0.5">Réponse sous 2h</p>
+                      <p className="text-sm text-gray-500 mt-0.5">Réponse rapide</p>
                     </div>
                   </div>
 
