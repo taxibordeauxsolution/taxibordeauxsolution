@@ -970,8 +970,8 @@ const TaxiBookingHomePreview = () => {
           )}
         </div>
 
-        {/* Colonne droite - Carte */}
-        <div className={`${mapVisible ? 'block' : 'hidden'} lg:sticky lg:top-4`}>
+        {/* Colonne droite - Carte (cachée, gardée pour initialisation Google Maps) */}
+        <div className="hidden">
           <div className="bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-200">
             <div className="h-96 lg:h-[500px] w-full">
               <div 
