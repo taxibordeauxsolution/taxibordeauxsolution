@@ -37,7 +37,10 @@ export async function PUT(req: NextRequest) {
     await connectDB()
     const body = await req.json()
     const config = await getConfig()
-    Object.assign(config, body)
+    const fields = ['priseEnCharge', 'tarifKmJour', 'tarifKmNuit', 'fraisApproche', 'courseMini', 'courseMiniDe', 'heureDebutNuit', 'heureFinNuit']
+    for (const f of fields) {
+      if (body[f] !== undefined) config.set(f, body[f])
+    }
     await config.save()
     return NextResponse.json({ success: true, data: config })
   } catch (e: any) {
