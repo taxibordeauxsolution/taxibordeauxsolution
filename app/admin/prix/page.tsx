@@ -28,7 +28,7 @@ export default function AdminPrix() {
   }, [])
 
   const setNum = (k: string, v: string) =>
-    setPrix(prev => ({ ...prev, [k]: parseFloat(v) || 0 }))
+    setPrix(prev => ({ ...prev, [k]: v === '' ? '' : parseFloat(v) } as any))
 
   const setStr = (k: string, v: string) =>
     setPrix(prev => ({ ...prev, [k]: v }))
