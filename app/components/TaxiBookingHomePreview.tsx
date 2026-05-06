@@ -474,7 +474,7 @@ const TaxiBookingHomePreview = () => {
 
     fetch('/api/public/prix')
       .then(r => r.json())
-      .then(d => { if (d.success) setConfigPrix(d.data) })
+      .then(d => { if (d.success) setConfigPrix(prev => ({ ...prev, ...d.data })) })
       .catch(() => {})
   }, [])
 

@@ -22,7 +22,7 @@ export default function AdminPrix() {
     const token = sessionStorage.getItem('admin_token') || ''
     fetch('/api/admin/prix', { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.json())
-      .then(d => { if (d.success) setPrix(d.data) })
+      .then(d => { if (d.success) setPrix(prev => ({ ...prev, ...d.data })) })
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
