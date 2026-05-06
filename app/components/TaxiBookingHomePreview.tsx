@@ -848,40 +848,50 @@ const TaxiBookingHomePreview = () => {
             />
           </div>
 
-          {/* Options de réservation */}
+          {/* Options de réservation - sliders */}
           <div className="grid grid-cols-2 gap-2 sm:gap-4 overflow-hidden">
             <div className="min-w-0 overflow-hidden">
-              <label className="block text-sm font-medium text-gray-800 mb-2 min-h-[1.5rem] flex items-center">
-                <Users className="inline w-4 h-4 mr-1 shrink-0" />
-                <span className="truncate">{t('passengers')}</span>
-                {validationAttempted && !bookingData.passengers && <span className="text-red-500 ml-1">*</span>}
+              <label className="flex items-center justify-between text-sm font-medium text-gray-800 mb-2">
+                <span className="flex items-center">
+                  <Users className="inline w-4 h-4 mr-1 shrink-0" />
+                  <span className="truncate">{t('passengers')}</span>
+                </span>
+                <span className="text-blue-600 font-bold">{bookingData.passengers}</span>
               </label>
-              <select
+              <input
+                type="range"
+                min={1}
+                max={8}
                 value={bookingData.passengers}
                 onChange={(e) => handleBookingChange('passengers', parseInt(e.target.value))}
-                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-gray-900"
-              >
-                {[1,2,3,4,5,6,7,8].map(num => (
-                  <option key={num} value={num}>{num} {num > 1 ? t('passengerPlural') : t('passengerSingular')}</option>
-                ))}
-              </select>
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              />
+              <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <span>1</span>
+                <span>8</span>
+              </div>
             </div>
 
             <div className="min-w-0 overflow-hidden">
-              <label className="block text-sm font-medium text-gray-800 mb-2 min-h-[1.5rem] flex items-center">
-                <Briefcase className="inline w-4 h-4 mr-1 shrink-0" />
-                <span className="truncate">{t('luggage')}</span>
-                {validationAttempted && (bookingData.luggage === undefined || bookingData.luggage === null) && <span className="text-red-500 ml-1">*</span>}
+              <label className="flex items-center justify-between text-sm font-medium text-gray-800 mb-2">
+                <span className="flex items-center">
+                  <Briefcase className="inline w-4 h-4 mr-1 shrink-0" />
+                  <span className="truncate">{t('luggage')}</span>
+                </span>
+                <span className="text-blue-600 font-bold">{bookingData.luggage}</span>
               </label>
-              <select
+              <input
+                type="range"
+                min={0}
+                max={5}
                 value={bookingData.luggage}
                 onChange={(e) => handleBookingChange('luggage', parseInt(e.target.value))}
-                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-gray-900"
-              >
-                {[0,1,2,3,4,5].map(num => (
-                  <option key={num} value={num}>{num} {num > 1 ? t('luggagePlural') : t('luggageSingular')}</option>
-                ))}
-              </select>
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              />
+              <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <span>0</span>
+                <span>5</span>
+              </div>
             </div>
           </div>
 
