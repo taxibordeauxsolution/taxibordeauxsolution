@@ -806,7 +806,7 @@ const TaxiBookingHomePreview = () => {
       )}
 
       {/* Formulaire complet */}
-      <div className="grid lg:grid-cols-2 gap-4 overflow-hidden">
+      <div className="grid gap-4 overflow-hidden">
         {/* Colonne gauche - Formulaire */}
         <div className="space-y-3 min-w-0 overflow-hidden">
           {/* Adresses */}
@@ -993,7 +993,7 @@ const TaxiBookingHomePreview = () => {
         </div>
 
         {/* Colonne droite - Carte */}
-        <div className={`${mapVisible ? 'block' : 'hidden lg:block'} lg:sticky lg:top-4`}>
+        <div className={`${mapVisible ? 'block' : 'hidden'} lg:sticky lg:top-4`}>
           <div className="bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-200">
             <div className="h-96 lg:h-[500px] w-full">
               <div 

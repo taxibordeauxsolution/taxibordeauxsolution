@@ -90,50 +90,16 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Photo Hero - Place de la Bourse */}
-            <div className="hidden lg:block relative">
-              <div className="relative">
-                <div className="relative overflow-hidden rounded-3xl shadow-2xl">
-                  <Image
-                    src="/images/hero/Place de la bourse Bordeaux.jpg"
-                    alt="Taxi Bordeaux Solution - Place de la Bourse"
-                    width={600}
-                    height={500}
-                    className="w-full h-[500px] object-cover"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 border border-white/20">
-                      <div className="text-center space-y-4">
-                        <div className="flex items-center justify-center gap-2">
-                          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                          <span className="text-white font-semibold">Disponible Maintenant</span>
-                        </div>
-                        <h3 className="text-xl font-bold text-white">Taxi Bordeaux Solution</h3>
-                        <p className="text-white/80 text-sm">Service fiable • Prise en charge rapide</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute -top-4 -left-4 w-24 h-24 bg-blue-500/20 rounded-full blur-xl animate-pulse"></div>
-                <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-green-500/20 rounded-full blur-xl animate-pulse delay-1000"></div>
-              </div>
+            {/* Module de réservation - visible sur desktop */}
+            <div className="hidden lg:block" id="reservation">
+              <BookingSection />
             </div>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse"></div>
           </div>
         </div>
       </section>
 
-      {/* Section Module de Réservation */}
-      <section id="reservation" className="bg-white relative">
+      {/* Module de réservation - visible sur mobile uniquement */}
+      <section className="bg-white relative lg:hidden">
         <BookingSection />
       </section>
 
