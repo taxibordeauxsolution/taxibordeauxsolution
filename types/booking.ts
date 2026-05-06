@@ -15,6 +15,7 @@ export interface PriceDetails {
   isHoliday: boolean;
   isSunday: boolean;
   supplements?: number;
+  forfaitMinPrice?: number | null;
 }
 
 export interface RouteInfo {
