@@ -360,9 +360,9 @@ const TaxiBookingHomePreview = () => {
         }}
         className="bg-transparent border-none outline-none text-sm font-medium text-gray-700 cursor-pointer"
       >
-        <option value="fr">🇫🇷 FR</option>
-        <option value="en">🇬🇧 EN</option>
-        <option value="es">🇪🇸 ES</option>
+        <option value="fr">FR</option>
+        <option value="en">EN</option>
+        <option value="es">ES</option>
       </select>
     </div>
   )
