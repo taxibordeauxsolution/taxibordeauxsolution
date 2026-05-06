@@ -97,7 +97,7 @@ export default function HomePage() {
             </div>
 
             {/* Module de réservation - visible sur desktop */}
-            <div className="hidden lg:block" id="reservation">
+            <div className="hidden lg:block relative z-10" id="reservation">
               <BookingSection />
             </div>
           </div>
