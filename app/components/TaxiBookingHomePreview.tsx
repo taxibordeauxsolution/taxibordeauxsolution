@@ -802,13 +802,13 @@ const TaxiBookingHomePreview = () => {
       )}
 
       {/* Formulaire complet */}
-      <div className="grid gap-4 overflow-hidden">
+      <div className="grid gap-4">
         {/* Colonne gauche - Formulaire */}
-        <div className="space-y-3 min-w-0 overflow-hidden">
+        <div className="space-y-3 min-w-0">
 
           {/* Date et heure */}
-          <div className="grid grid-cols-2 gap-2 sm:gap-4 overflow-hidden">
-            <div className="min-w-0 overflow-hidden">
+          <div className="grid grid-cols-2 gap-2 sm:gap-4">
+            <div className="min-w-0">
               <label className="block text-sm font-medium text-gray-800 mb-2 truncate">
                 <Calendar className="inline w-4 h-4 mr-1 shrink-0" />
                 {t('departureDate')}
@@ -824,7 +824,7 @@ const TaxiBookingHomePreview = () => {
               />
             </div>
 
-            <div className="min-w-0 overflow-hidden">
+            <div className="min-w-0">
               <label className="block text-sm font-medium text-gray-800 mb-2 truncate">
                 <Clock className="inline w-4 h-4 mr-1 shrink-0" />
                 {t('departureTime')}
@@ -1406,7 +1406,7 @@ const TaxiBookingHomePreview = () => {
   )
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl shadow-2xl border-2 border-blue-300 p-3 sm:p-4 lg:p-4 w-full relative mx-auto max-w-7xl my-4 overflow-hidden" style={{boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1)'}}>
+    <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl shadow-2xl border-2 border-blue-300 p-3 sm:p-4 lg:p-4 w-full relative mx-auto max-w-7xl my-4" style={{boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1)'}}>
       {/* Ancre invisible pour le scroll avec offset */}
       <div id="reservation" className="absolute -top-20"></div>
 
@@ -1441,7 +1441,7 @@ const TaxiBookingHomePreview = () => {
       )}
 
       {/* Contenu principal */}
-      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-3 sm:p-4 lg:p-5 w-full overflow-hidden">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-3 sm:p-4 lg:p-5 w-full">
         {step === 1 && renderStep1()}
         {step === 2 && renderStep2()}
         {step === 3 && renderStep3()}
