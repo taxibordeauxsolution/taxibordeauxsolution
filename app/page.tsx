@@ -56,11 +56,11 @@ export default function HomePage() {
                 style={{ animation: 'slideUp 0.5s ease 0.25s both' }}
               >
                 <a
-                  href="#reservation"
+                  href="#reservation-mobile"
                   className="lg:hidden group relative bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-5 rounded-2xl font-bold text-lg transition-all duration-300 text-center shadow-2xl hover:shadow-green-500/25 hover:scale-105 hover:-translate-y-0.5 active:scale-[0.98]"
                 >
                   <span className="flex items-center justify-center gap-3">
-                    📱 Réserver un Taxi
+                    Estimez votre trajet en ligne
                     <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                   </span>
                 </a>
@@ -115,7 +115,7 @@ export default function HomePage() {
       </section>
 
       {/* Module de réservation - visible sur mobile uniquement */}
-      <section className="bg-white relative lg:hidden">
+      <section id="reservation-mobile" className="bg-white relative lg:hidden">
         <BookingSection />
       </section>
 
