@@ -23,6 +23,7 @@ const TaxiBookingHomePreview = () => {
     tarifKmNuit: 3.24,
     fraisApproche: 7.20,
     courseMini: 28.00,
+    courseMiniDe: 20.00,
     heureDebutNuit: '19:00',
     heureFinNuit: '07:00',
   })
@@ -947,7 +948,7 @@ const TaxiBookingHomePreview = () => {
                 <div className="text-3xl font-bold text-green-700">
                   {tripData.priceDetails?.isForfait
                     ? `${(tripData.price || 0).toFixed(2)}€`
-                    : `${configPrix.courseMini.toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
+                    : `${configPrix.courseMiniDe.toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
                   }
                 </div>
                 <div className="text-xs text-green-800 sm:text-green-600 mt-2 space-y-1">

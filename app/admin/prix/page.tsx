@@ -10,6 +10,7 @@ export default function AdminPrix() {
     tarifKmNuit: 3.24,
     fraisApproche: 7.20,
     courseMini: 28.00,
+    courseMiniDe: 20.00,
     heureDebutNuit: '19:00',
     heureFinNuit: '06:00',
   })
@@ -118,9 +119,16 @@ export default function AdminPrix() {
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Course minimum</label>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Course minimum (fourchette)</label>
             <div className="flex items-center gap-2">
+              <span className="text-gray-500 text-sm">de</span>
+              <input type="number" step="0.01" min="0"
+                value={prix.courseMiniDe}
+                onChange={e => setNum('courseMiniDe', e.target.value)}
+                className="flex-1 border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none font-medium" />
+              <span className="text-gray-500 text-sm">€</span>
+              <span className="text-gray-500 text-sm">à</span>
               <input type="number" step="0.01" min="0"
                 value={prix.courseMini}
                 onChange={e => setNum('courseMini', e.target.value)}

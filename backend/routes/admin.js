@@ -55,7 +55,7 @@ router.get('/prix', requireAdmin, asyncHandler(async (req, res) => {
 router.put('/prix', requireAdmin, asyncHandler(async (req, res) => {
   const {
     priseEnCharge, tarifKmJour, tarifKmNuit,
-    fraisApproche, courseMini, heureDebutNuit, heureFinNuit
+    fraisApproche, courseMini, courseMiniDe, heureDebutNuit, heureFinNuit
   } = req.body
 
   const config = await getConfig()
@@ -64,6 +64,7 @@ router.put('/prix', requireAdmin, asyncHandler(async (req, res) => {
   if (tarifKmNuit    !== undefined) config.tarifKmNuit    = tarifKmNuit
   if (fraisApproche  !== undefined) config.fraisApproche  = fraisApproche
   if (courseMini     !== undefined) config.courseMini     = courseMini
+  if (courseMiniDe   !== undefined) config.courseMiniDe   = courseMiniDe
   if (heureDebutNuit !== undefined) config.heureDebutNuit = heureDebutNuit
   if (heureFinNuit   !== undefined) config.heureFinNuit   = heureFinNuit
   await config.save()
