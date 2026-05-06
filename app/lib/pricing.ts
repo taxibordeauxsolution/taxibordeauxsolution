@@ -1,5 +1,5 @@
 const NIGHT_START = 19 * 60 // 1140 min depuis minuit
-const NIGHT_END = 6 * 60    // 360 min depuis minuit
+const NIGHT_END = 7 * 60    // 420 min depuis minuit
 
 export function isNightMinutes(minutesFromMidnight: number): boolean {
   const t = ((minutesFromMidnight % 1440) + 1440) % 1440

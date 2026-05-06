@@ -24,7 +24,7 @@ const TaxiBookingHomePreview = () => {
     fraisApproche: 7.20,
     courseMini: 28.00,
     heureDebutNuit: '19:00',
-    heureFinNuit: '06:00',
+    heureFinNuit: '07:00',
   })
   const [maps, setMaps] = useState<any>(null)
   const [map, setMap] = useState<any>(null)
@@ -569,7 +569,7 @@ const TaxiBookingHomePreview = () => {
       if (!isNaN(d.getTime())) {
         departureDate = d
         const hour = d.getHours()
-        isNight = hour >= 19 || hour < 6
+        isNight = hour >= 19 || hour < 7
         isHoliday = isPublicHoliday(d)
         isSunday = d.getDay() === 0
       }

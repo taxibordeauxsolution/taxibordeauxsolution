@@ -267,11 +267,11 @@ export class PricingService {
   }
 
   /**
-   * Calcul kilométrique mixte : tient compte du basculement 19h/6h en cours de route
+   * Calcul kilométrique mixte : tient compte du basculement 19h/7h en cours de route
    */
   calculateDistanceFare(departureTime, durationMinutes, distanceKm) {
     const NIGHT_START = 19 * 60
-    const NIGHT_END = 6 * 60
+    const NIGHT_END = 7 * 60
 
     const isNightAt = (min) => {
       const t = ((min % 1440) + 1440) % 1440
