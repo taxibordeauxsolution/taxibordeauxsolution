@@ -882,13 +882,7 @@ const TaxiBookingHomePreview = () => {
           {/* Passagers et bagages - sliders */}
           <div className="grid grid-cols-2 gap-4 sm:gap-6 overflow-hidden">
             <div className="min-w-0">
-              <label className="flex items-center justify-between text-sm font-medium text-gray-700 mb-3">
-                <span className="flex items-center gap-1">
-                  <Users className="w-4 h-4 shrink-0" />
-                  {t('passengers')}
-                </span>
-                <span className="bg-blue-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">{bookingData.passengers}</span>
-              </label>
+              <span className="text-sm text-gray-600 mb-2 block">{t('passengers')} : {bookingData.passengers}</span>
               <input
                 type="range"
                 min={1}
@@ -897,20 +891,10 @@ const TaxiBookingHomePreview = () => {
                 onChange={(e) => handleBookingChange('passengers', parseInt(e.target.value))}
                 className="slider-styled w-full"
               />
-              <div className="flex justify-between text-[10px] text-gray-400 mt-1 px-0.5">
-                <span>1</span>
-                <span>8</span>
-              </div>
             </div>
 
             <div className="min-w-0">
-              <label className="flex items-center justify-between text-sm font-medium text-gray-700 mb-3">
-                <span className="flex items-center gap-1">
-                  <Briefcase className="w-4 h-4 shrink-0" />
-                  {t('luggage')}
-                </span>
-                <span className="bg-blue-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">{bookingData.luggage}</span>
-              </label>
+              <span className="text-sm text-gray-600 mb-2 block">{t('luggage')} : {bookingData.luggage}</span>
               <input
                 type="range"
                 min={0}
@@ -919,10 +903,6 @@ const TaxiBookingHomePreview = () => {
                 onChange={(e) => handleBookingChange('luggage', parseInt(e.target.value))}
                 className="slider-styled w-full"
               />
-              <div className="flex justify-between text-[10px] text-gray-400 mt-1 px-0.5">
-                <span>0</span>
-                <span>5</span>
-              </div>
             </div>
           </div>
 
