@@ -16,8 +16,6 @@ const ForfaitSchema = new mongoose.Schema({
   pointB:   { type: PointSchema, required: true },
   prixJour: { type: Number, required: true },
   prixNuit: { type: Number, required: true },
-  prixMinJour: { type: Number, default: null },
-  prixMinNuit: { type: Number, default: null },
   actif:    { type: Boolean, default: true },
 }, { timestamps: true })
 

@@ -621,15 +621,14 @@ const TaxiBookingHomePreview = () => {
       return false
     }
 
-    let forfaitMinPrice: number | null = null
+    let isForfait = false
     for (const f of forfaits) {
       if (!f.actif) continue
       const matchAB = coordInZone(tripData.fromCoords, f.pointA) && coordInZone(tripData.toCoords, f.pointB)
       const matchBA = coordInZone(tripData.fromCoords, f.pointB) && coordInZone(tripData.toCoords, f.pointA)
       if (matchAB || matchBA) {
         finalPrice = isNight ? f.prixNuit : f.prixJour
-        const minField = isNight ? f.prixMinNuit : f.prixMinJour
-        if (minField != null) forfaitMinPrice = minField
+        isForfait = true
         break
       }
     }
@@ -657,7 +656,7 @@ const TaxiBookingHomePreview = () => {
         isNight,
         isHoliday,
         isSunday,
-        forfaitMinPrice
+        isForfait
       }
     }))
   }, [tripData.distance, tripData.duration, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, forfaits, configPrix])
@@ -946,10 +945,10 @@ const TaxiBookingHomePreview = () => {
               <div className="text-center pt-4 border-t border-green-200">
                 <span className="text-gray-900 sm:text-gray-600 text-sm">{t('estimatedPrice')} :</span>
                 <div className="text-3xl font-bold text-green-700">
-                  {(tripData.priceDetails?.forfaitMinPrice != null
-                    ? tripData.priceDetails.forfaitMinPrice.toFixed(2)
-                    : Math.max(0, (tripData.price || 0) - 7.20).toFixed(2)
-                  )}€ à {(tripData.price || 0).toFixed(2)}€
+                  {tripData.priceDetails?.isForfait
+                    ? `${(tripData.price || 0).toFixed(2)}€`
+                    : `${configPrix.courseMini.toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
+                  }
                 </div>
                 <div className="text-xs text-green-800 sm:text-green-600 mt-2 space-y-1">
                   {bookingData.departureDate && bookingData.departureTime ? (

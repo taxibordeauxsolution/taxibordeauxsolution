@@ -15,13 +15,11 @@ interface Forfait {
   pointB: Point
   prixJour: number
   prixNuit: number
-  prixMinJour: number | null
-  prixMinNuit: number | null
   actif: boolean
 }
 
 const EMPTY_POINT: Point = { adresse: '', lat: 0, lng: 0, zone: [] }
-const EMPTY: Forfait = { nom: '', pointA: EMPTY_POINT, pointB: EMPTY_POINT, prixJour: 0, prixNuit: 0, prixMinJour: null, prixMinNuit: null, actif: true }
+const EMPTY: Forfait = { nom: '', pointA: EMPTY_POINT, pointB: EMPTY_POINT, prixJour: 0, prixNuit: 0, actif: true }
 
 export default function AdminForfaits() {
   const [forfaits, setForfaits] = useState<Forfait[]>([])
@@ -117,12 +115,8 @@ export default function AdminForfaits() {
                 </div>
               </div>
               <div className="text-right shrink-0">
-                <div className="text-sm font-semibold text-blue-700">
-                  Jour : {f.prixMinJour != null ? `${f.prixMinJour}€ à ` : ''}{f.prixJour}€
-                </div>
-                <div className="text-sm font-semibold text-indigo-700">
-                  Nuit : {f.prixMinNuit != null ? `${f.prixMinNuit}€ à ` : ''}{f.prixNuit}€
-                </div>
+                <div className="text-sm font-semibold text-blue-700">Jour : {f.prixJour} €</div>
+                <div className="text-sm font-semibold text-indigo-700">Nuit : {f.prixNuit} €</div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <button onClick={() => toggleActif(f)} className="p-2 rounded-xl hover:bg-gray-100 transition-colors" title="Activer/Désactiver">
@@ -463,7 +457,7 @@ function ForfaitForm({ initial, token, onSaved, onCancel }: {
       {/* Prix */}
       <div className="grid grid-cols-2 gap-5">
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Prix jour max (€) *</label>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">Prix jour (€) *</label>
           <input
             type="text" inputMode="decimal"
             value={form.prixJour || ''}
@@ -473,36 +467,12 @@ function ForfaitForm({ initial, token, onSaved, onCancel }: {
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Prix nuit max (€) *</label>
+          <label className="block text-sm font-semibold text-gray-700 mb-1">Prix nuit (€) *</label>
           <input
             type="text" inputMode="decimal"
             value={form.prixNuit || ''}
             onChange={e => setField('prixNuit', parseFloat(e.target.value) || 0)}
             placeholder="0"
-            className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none"
-          />
-        </div>
-      </div>
-
-      {/* Prix min (fourchette basse) */}
-      <div className="grid grid-cols-2 gap-5">
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Prix jour min (€)</label>
-          <input
-            type="text" inputMode="decimal"
-            value={form.prixMinJour ?? ''}
-            onChange={e => setField('prixMinJour', e.target.value === '' ? null : parseFloat(e.target.value) || 0)}
-            placeholder="Laisser vide = pas de fourchette"
-            className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Prix nuit min (€)</label>
-          <input
-            type="text" inputMode="decimal"
-            value={form.prixMinNuit ?? ''}
-            onChange={e => setField('prixMinNuit', e.target.value === '' ? null : parseFloat(e.target.value) || 0)}
-            placeholder="Laisser vide = pas de fourchette"
             className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none"
           />
         </div>
