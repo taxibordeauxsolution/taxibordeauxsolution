@@ -808,7 +808,7 @@ const TaxiBookingHomePreview = () => {
 
           {/* Date et heure */}
           <div className="grid grid-cols-2 gap-2 sm:gap-4">
-            <div className="min-w-0">
+            <div className="min-w-0 overflow-hidden">
               <label className="block text-sm font-medium text-gray-800 mb-2 truncate">
                 <Calendar className="inline w-4 h-4 mr-1 shrink-0" />
                 {t('departureDate')}
@@ -819,12 +819,12 @@ const TaxiBookingHomePreview = () => {
                 value={bookingData.departureDate}
                 onChange={(e) => handleBookingChange('departureDate', e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
-                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-gray-900"
+                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-xs sm:text-base text-gray-900"
                 required
               />
             </div>
 
-            <div className="min-w-0">
+            <div className="min-w-0 overflow-hidden">
               <label className="block text-sm font-medium text-gray-800 mb-2 truncate">
                 <Clock className="inline w-4 h-4 mr-1 shrink-0" />
                 {t('departureTime')}
@@ -834,7 +834,7 @@ const TaxiBookingHomePreview = () => {
                 type="time"
                 value={bookingData.departureTime}
                 onChange={(e) => handleBookingChange('departureTime', e.target.value)}
-                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-gray-900"
+                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-xs sm:text-base text-gray-900"
                 required
               />
             </div>
