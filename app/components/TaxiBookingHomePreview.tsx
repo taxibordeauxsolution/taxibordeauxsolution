@@ -949,8 +949,8 @@ const TaxiBookingHomePreview = () => {
                   {tripData.priceDetails?.isForfait
                     ? `${(tripData.price || 0).toFixed(2)}€`
                     : tripData.price <= configPrix.courseMini
-                      ? `${configPrix.courseMiniDe.toFixed(2)}€ à ${configPrix.courseMini.toFixed(2)}€`
-                      : `${(tripData.price - configPrix.fraisApproche).toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
+                      ? `${(configPrix.courseMiniDe || 0).toFixed(2)}€ à ${(configPrix.courseMini || 0).toFixed(2)}€`
+                      : `${(tripData.price || 0).toFixed(2)}€`
                   }
                 </div>
                 <div className="text-xs text-green-800 sm:text-green-600 mt-2 space-y-1">
