@@ -880,7 +880,7 @@ const TaxiBookingHomePreview = () => {
           </div>
 
           {/* Passagers et bagages - sliders */}
-          <div className="grid grid-cols-2 gap-4 sm:gap-6 overflow-hidden">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 pb-3">
             <div className="min-w-0">
               <span className="text-sm text-gray-600 mb-2 block">{t('passengers')} : {bookingData.passengers}</span>
               <input
