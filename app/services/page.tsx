@@ -20,12 +20,6 @@ export default function HomePage() {
             {/* Contenu principal */}
             <div className="space-y-8 lg:space-y-12">
               
-              {/* Badge de rapidité */}
-              <div className="inline-flex items-center gap-3 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-400 font-semibold">
-                <Zap size={20} className="animate-pulse" />
-                <span>Taxi rapide à Bordeaux</span>
-              </div>
-              
               <div className="space-y-6">
                 <h1 className="text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
                   <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
@@ -127,9 +121,6 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           
           <div className="text-center mb-16">
-            <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold text-sm mb-4">
-              NOS SERVICES TAXI BORDEAUX
-            </div>
             <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
               La Solution Transport
               <span className="text-blue-600"> à Bordeaux</span>
@@ -326,9 +317,6 @@ export default function HomePage() {
       <section id="zones-bordeaux" className="py-20 bg-gradient-to-b from-white to-slate-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full font-semibold text-sm mb-4">
-              TAXI BORDEAUX - ZONES COUVERTES
-            </div>
             <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
               Service Taxi dans tout
               <span className="text-blue-600"> Bordeaux</span>
@@ -442,10 +430,6 @@ export default function HomePage() {
         
         <div className="relative container mx-auto px-4 text-center">
           <div className="max-w-4xl mx-auto space-y-8">
-            
-            <div className="inline-block bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-full px-6 py-3 text-green-400 font-semibold mb-8">
-              🚀 RÉSERVATION TAXI BORDEAUX INSTANTANÉE
-            </div>
             
             <h2 className="text-4xl lg:text-6xl font-bold leading-tight">
               Besoin d&apos;un Taxi à

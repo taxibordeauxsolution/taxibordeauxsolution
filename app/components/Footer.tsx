@@ -202,26 +202,9 @@ export default function Footer() {
       {/* Section légale */}
       <div className="border-t border-gray-800">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            
-            <div className="text-center md:text-left">
-              <p className="text-gray-400 text-sm">
-                © {currentYear} Taxi Bordeaux Solution. Tous droits réservés.
-              </p>
-              <p className="text-gray-500 text-xs mt-1">
-                Tarifs réglementés • Véhicules assurés
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-6 text-sm">
-              <Link href="/mentions-legales" className="text-gray-400 hover:text-white transition-colors">
-                Mentions légales
-              </Link>
-              <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
-                Contact
-              </Link>
-            </div>
-          </div>
+          <p className="text-gray-400 text-sm text-center">
+            © {currentYear} Taxi Bordeaux Solution. Tous droits réservés.
+          </p>
         </div>
       </div>
     </footer>

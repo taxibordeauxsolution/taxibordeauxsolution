@@ -1435,7 +1435,6 @@ const TaxiBookingHomePreview = () => {
           </div>
           <div>
             <h2 id="reservation-title" className="text-2xl lg:text-3xl font-bold text-gray-800">{t('bookNow')} <span className="text-green-600">{t('bookNowHighlight')}</span></h2>
-            <p className="text-gray-900 sm:text-gray-600">{t('subtitle')}</p>
           </div>
         </div>
       </div>
@@ -1467,7 +1466,6 @@ const TaxiBookingHomePreview = () => {
       {/* Note d'information */}
       {step < 4 && (
         <div className="mt-4 text-center text-xs text-gray-800 sm:text-gray-500">
-          <p>{t('officialPrices')}</p>
           <p className="text-blue-600 font-medium mt-1">{t('requiredFields')}</p>
         </div>
       )}
