@@ -53,17 +53,21 @@ const TaxiBookingHomePreview = () => {
     serviceAreaValidation: { valid: true }
   })
 
-  // Données de réservation sans valeurs pré-remplies
-  const [bookingData, setBookingData] = useState<BookingData>({
-    passengers: 1, // Valeur minimale requise
-    luggage: 0,   // Valeur par défaut acceptable
-    departureDate: '',
-    departureTime: '',
-    customerName: '',
-    customerPhone: '',
-    customerEmail: '',
-    notes: '',
-    language: 'fr'
+  const [bookingData, setBookingData] = useState<BookingData>(() => {
+    const now = new Date()
+    const date = now.toISOString().split('T')[0]
+    const time = now.toTimeString().slice(0, 5)
+    return {
+      passengers: 1,
+      luggage: 0,
+      departureDate: date,
+      departureTime: time,
+      customerName: '',
+      customerPhone: '',
+      customerEmail: '',
+      notes: '',
+      language: 'fr'
+    }
   })
 
   // Réservation créée
