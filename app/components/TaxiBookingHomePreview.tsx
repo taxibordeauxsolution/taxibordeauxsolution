@@ -906,16 +906,6 @@ const TaxiBookingHomePreview = () => {
             </div>
           </div>
 
-          {/* Bouton pour afficher/masquer la carte */}
-          {(tripData.fromCoords || tripData.toCoords) && (
-            <button
-              onClick={() => setMapVisible(!mapVisible)}
-              className="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-200 flex items-center justify-center transition-colors"
-            >
-              <Map className="w-4 h-4 mr-2" />
-              {mapVisible ? t('hideMap') : t('showMap')}
-            </button>
-          )}
 
           {/* Informations de trajet */}
           {loading && (
@@ -951,7 +941,7 @@ const TaxiBookingHomePreview = () => {
               <div className="text-center pt-4 border-t border-green-200">
                 <span className="text-gray-900 sm:text-gray-600 text-sm">{t('estimatedPrice')} :</span>
                 <div className="text-3xl font-bold text-green-700">
-                  {(tripData.price || 0).toFixed(2)}€
+                  {Math.max(0, (tripData.price || 0) - 7.20).toFixed(2)}€ à {(tripData.price || 0).toFixed(2)}€
                 </div>
                 <div className="text-xs text-green-800 sm:text-green-600 mt-2 space-y-1">
                   {bookingData.departureDate && bookingData.departureTime ? (
@@ -979,33 +969,6 @@ const TaxiBookingHomePreview = () => {
           )}
         </div>
 
-        {/* Colonne droite - Carte */}
-        <div className={`${mapVisible ? 'block' : 'hidden'} lg:sticky lg:top-4`}>
-          <div className="bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-200">
-            <div className="h-96 lg:h-[500px] w-full">
-              <div 
-                ref={mapRef} 
-                className="w-full h-full"
-                style={{ minHeight: '300px' }}
-              />
-            </div>
-            {tripData.distance > 0 && (
-              <div className="p-3 bg-white border-t">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center text-green-800 sm:text-green-600">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {tripData.from?.split(',')[0]}
-                  </span>
-                  <ArrowRight className="text-gray-400" size={16} />
-                  <span className="flex items-center text-red-600">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {tripData.to?.split(',')[0]}
-                  </span>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
 
       <button
