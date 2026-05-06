@@ -76,9 +76,11 @@ export async function POST(request) {
                 </div>` : ''}
 
                 <div class="price-box">
-                    <h3>💰 Prix total</h3>
+                    <h3>💰 Prix estimé</h3>
                     <div style="font-size: 2em; font-weight: bold; color: #16a34a;">
-                        ${reservationData.pricing.totalPrice.toFixed(2)}€
+                        ${reservationData.pricing.fourchette
+                          ? `${reservationData.pricing.fourchette.de.toFixed(2)}€ à ${reservationData.pricing.fourchette.a.toFixed(2)}€`
+                          : `${reservationData.pricing.totalPrice.toFixed(2)}€`}
                     </div>
                     ${reservationData.pricing.priceDetails && (reservationData.pricing.priceDetails.isNight || reservationData.pricing.priceDetails.isHoliday || reservationData.pricing.priceDetails.isSunday) ?
                         '<div style="font-size: 0.9em; margin-top: 10px; color: #2563eb; font-weight: bold;">✓ Tarif majoré appliqué</div>' : ''}
@@ -136,7 +138,9 @@ export async function POST(request) {
         <li><strong>Départ :</strong> ${reservationData.trip.from.address}</li>
         <li><strong>Destination :</strong> ${reservationData.trip.to.address}</li>
         <li><strong>Distance :</strong> ${reservationData.trip.distance.toFixed(1)} km</li>
-        <li><strong>Prix :</strong> ${reservationData.pricing.totalPrice.toFixed(2)}€</li>
+        <li><strong>Prix :</strong> ${reservationData.pricing.fourchette
+              ? `${reservationData.pricing.fourchette.de.toFixed(2)}€ à ${reservationData.pricing.fourchette.a.toFixed(2)}€`
+              : `${reservationData.pricing.totalPrice.toFixed(2)}€`}</li>
     </ul>
 
     <h3>Détails</h3>

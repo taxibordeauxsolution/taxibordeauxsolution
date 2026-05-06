@@ -77,7 +77,7 @@ export default function HomePage() {
 
                 <a
                   href="/contact"
-                  className="group relative bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 text-white px-8 py-5 rounded-2xl font-bold text-lg transition-all duration-300 text-center shadow-xl hover:shadow-2xl hover:scale-105 hover:-translate-y-0.5 active:scale-[0.98]"
+                  className="hidden lg:block group relative bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 text-white px-8 py-5 rounded-2xl font-bold text-lg transition-all duration-300 text-center shadow-xl hover:shadow-2xl hover:scale-105 hover:-translate-y-0.5 active:scale-[0.98]"
                 >
                   <span className="flex items-center justify-center gap-3">
                     Nous contacter

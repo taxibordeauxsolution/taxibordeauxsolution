@@ -30,7 +30,7 @@ export default function Header() {
         <div className="flex justify-between items-center">
           
           {/* Logo et Nom */}
-          <Link href="/" className="flex items-center space-x-3 group">
+          <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center space-x-3 group">
             <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-200">
               <Image 
                 src="/images/logo/Logo Taxi Bordeaux Solution.png.png" 

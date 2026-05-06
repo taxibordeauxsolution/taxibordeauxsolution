@@ -717,7 +717,12 @@ const TaxiBookingHomePreview = () => {
         },
         pricing: {
           totalPrice: tripData.price,
-          priceDetails: tripData.priceDetails
+          priceDetails: tripData.priceDetails,
+          fourchette: tripData.priceDetails?.isForfait
+            ? null
+            : tripData.price <= configPrix.courseMini
+              ? { de: configPrix.courseMiniDe || 0, a: configPrix.courseMini || 0 }
+              : { de: (tripData.price || 0) - (configPrix.fraisApproche || 0), a: tripData.price || 0 }
         },
         bookingDetails: {
           passengers: bookingData.passengers,
@@ -1102,7 +1107,12 @@ const TaxiBookingHomePreview = () => {
               <div className="text-center">
                 <div className="text-sm text-green-800 sm:text-green-600 mb-1">{t('totalPriceLabel')}</div>
                 <div className="text-3xl font-bold text-green-700">
-                  {(tripData.price || 0).toFixed(2)}€
+                  {tripData.priceDetails?.isForfait
+                    ? `${(tripData.price || 0).toFixed(2)}€`
+                    : tripData.price <= configPrix.courseMini
+                      ? `${(configPrix.courseMiniDe || 0).toFixed(2)}€ à ${(configPrix.courseMini || 0).toFixed(2)}€`
+                      : `${((tripData.price || 0) - (configPrix.fraisApproche || 0)).toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
+                  }
                 </div>
                 {tripData.priceDetails && tripData.priceDetails.tariffType && tripData.priceDetails.tariffType !== 'Jour' && (
                   <div className="text-xs text-blue-800 sm:text-blue-600 mt-2 font-medium">
@@ -1252,7 +1262,14 @@ const TaxiBookingHomePreview = () => {
             <hr className="my-3" />
             <div className="flex justify-between text-lg font-bold">
               <span>{t('totalPrice')}:</span>
-              <span className="text-green-800 sm:text-green-600 font-semibold">{(tripData.price || 0).toFixed(2)}€</span>
+              <span className="text-green-800 sm:text-green-600 font-semibold">
+                {tripData.priceDetails?.isForfait
+                  ? `${(tripData.price || 0).toFixed(2)}€`
+                  : tripData.price <= configPrix.courseMini
+                    ? `${(configPrix.courseMiniDe || 0).toFixed(2)}€ à ${(configPrix.courseMini || 0).toFixed(2)}€`
+                    : `${((tripData.price || 0) - (configPrix.fraisApproche || 0)).toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
+                }
+              </span>
             </div>
           </div>
         </div>
