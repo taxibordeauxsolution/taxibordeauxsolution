@@ -12,9 +12,15 @@ export default function HomePage() {
     <div className="min-h-screen">
 
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-400/20 via-transparent to-transparent"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-indigo-400/20 via-transparent to-transparent"></div>
+      <section className="relative min-h-[90vh] text-white overflow-hidden">
+        <Image
+          src="/images/hero/taxi-sign-sunset.jpg"
+          alt="Taxi Bordeaux"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/60"></div>
 
         <div className="relative container mx-auto px-4 py-16 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[70vh]">
