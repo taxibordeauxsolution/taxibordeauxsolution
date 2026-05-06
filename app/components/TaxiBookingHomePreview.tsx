@@ -146,8 +146,8 @@ const TaxiBookingHomePreview = () => {
       emailSent: "Envoyé à",
       emailFailed: "Échec d'envoi à",
       emailNone: "Aucun email fourni",
-      bookNow: "Réservez votre",
-      bookNowHighlight: "Taxi Maintenant",
+      bookNow: "Estimez et réservez",
+      bookNowHighlight: "votre trajet",
       officialPrices: "✓ Prix officiels 2026 • Service 24h/24",
       requiredFields: "Les champs marqués d'un * sont obligatoires",
       selectAddresses: "Sélectionnez les adresses",
@@ -231,8 +231,8 @@ const TaxiBookingHomePreview = () => {
       emailSent: "Sent to",
       emailFailed: "Failed to send to",
       emailNone: "No email provided",
-      bookNow: "Book your",
-      bookNowHighlight: "Taxi Now",
+      bookNow: "Estimate and book",
+      bookNowHighlight: "your trip",
       officialPrices: "✓ Official 2026 rates • 24/7 service",
       requiredFields: "Fields marked with * are required",
       selectAddresses: "Select addresses",
@@ -316,8 +316,8 @@ const TaxiBookingHomePreview = () => {
       emailSent: "Enviado a",
       emailFailed: "Error al enviar a",
       emailNone: "No se proporcionó email",
-      bookNow: "Reserve su",
-      bookNowHighlight: "Taxi Ahora",
+      bookNow: "Estime y reserve",
+      bookNowHighlight: "su trayecto",
       officialPrices: "✓ Tarifas oficiales 2026 • Servicio 24h/24",
       requiredFields: "Los campos marcados con * son obligatorios",
       selectAddresses: "Seleccione las direcciones",
@@ -792,10 +792,6 @@ const TaxiBookingHomePreview = () => {
   // Interface étape 1 avec toutes les infos nécessaires pour le calcul de prix
   const renderStep1 = () => (
     <div className="space-y-6">
-      <div className="text-center mb-5">
-        <h3 className="text-lg font-bold text-gray-800 mb-1">{t('step1Title')}</h3>
-        <p className="text-sm text-gray-900 sm:text-gray-600">{t('step1Subtitle')}</p>
-      </div>
 
       {/* Messages d'erreur */}
       {error && (
@@ -809,6 +805,41 @@ const TaxiBookingHomePreview = () => {
       <div className="grid gap-4 overflow-hidden">
         {/* Colonne gauche - Formulaire */}
         <div className="space-y-3 min-w-0 overflow-hidden">
+
+          {/* Date et heure */}
+          <div className="grid grid-cols-2 gap-2 sm:gap-4 overflow-hidden">
+            <div className="min-w-0 overflow-hidden">
+              <label className="block text-sm font-medium text-gray-800 mb-2 truncate">
+                <Calendar className="inline w-4 h-4 mr-1 shrink-0" />
+                {t('departureDate')}
+                {validationAttempted && !bookingData.departureDate && <span className="text-red-500 ml-1">*</span>}
+              </label>
+              <input
+                type="date"
+                value={bookingData.departureDate}
+                onChange={(e) => handleBookingChange('departureDate', e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
+                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-gray-900"
+                required
+              />
+            </div>
+
+            <div className="min-w-0 overflow-hidden">
+              <label className="block text-sm font-medium text-gray-800 mb-2 truncate">
+                <Clock className="inline w-4 h-4 mr-1 shrink-0" />
+                {t('departureTime')}
+                {validationAttempted && !bookingData.departureTime && <span className="text-red-500 ml-1">*</span>}
+              </label>
+              <input
+                type="time"
+                value={bookingData.departureTime}
+                onChange={(e) => handleBookingChange('departureTime', e.target.value)}
+                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-gray-900"
+                required
+              />
+            </div>
+          </div>
+
           {/* Adresses */}
           <div>
             <label className="block text-sm font-medium text-gray-900 mb-2">
@@ -848,15 +879,15 @@ const TaxiBookingHomePreview = () => {
             />
           </div>
 
-          {/* Options de réservation - sliders */}
-          <div className="grid grid-cols-2 gap-2 sm:gap-4 overflow-hidden">
-            <div className="min-w-0 overflow-hidden">
-              <label className="flex items-center justify-between text-sm font-medium text-gray-800 mb-2">
-                <span className="flex items-center">
-                  <Users className="inline w-4 h-4 mr-1 shrink-0" />
-                  <span className="truncate">{t('passengers')}</span>
+          {/* Passagers et bagages - sliders */}
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 overflow-hidden">
+            <div className="min-w-0">
+              <label className="flex items-center justify-between text-sm font-medium text-gray-700 mb-3">
+                <span className="flex items-center gap-1">
+                  <Users className="w-4 h-4 shrink-0" />
+                  {t('passengers')}
                 </span>
-                <span className="text-blue-600 font-bold">{bookingData.passengers}</span>
+                <span className="bg-blue-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">{bookingData.passengers}</span>
               </label>
               <input
                 type="range"
@@ -864,21 +895,21 @@ const TaxiBookingHomePreview = () => {
                 max={8}
                 value={bookingData.passengers}
                 onChange={(e) => handleBookingChange('passengers', parseInt(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                className="slider-styled w-full"
               />
-              <div className="flex justify-between text-xs text-gray-400 mt-1">
+              <div className="flex justify-between text-[10px] text-gray-400 mt-1 px-0.5">
                 <span>1</span>
                 <span>8</span>
               </div>
             </div>
 
-            <div className="min-w-0 overflow-hidden">
-              <label className="flex items-center justify-between text-sm font-medium text-gray-800 mb-2">
-                <span className="flex items-center">
-                  <Briefcase className="inline w-4 h-4 mr-1 shrink-0" />
-                  <span className="truncate">{t('luggage')}</span>
+            <div className="min-w-0">
+              <label className="flex items-center justify-between text-sm font-medium text-gray-700 mb-3">
+                <span className="flex items-center gap-1">
+                  <Briefcase className="w-4 h-4 shrink-0" />
+                  {t('luggage')}
                 </span>
-                <span className="text-blue-600 font-bold">{bookingData.luggage}</span>
+                <span className="bg-blue-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">{bookingData.luggage}</span>
               </label>
               <input
                 type="range"
@@ -886,46 +917,12 @@ const TaxiBookingHomePreview = () => {
                 max={5}
                 value={bookingData.luggage}
                 onChange={(e) => handleBookingChange('luggage', parseInt(e.target.value))}
-                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                className="slider-styled w-full"
               />
-              <div className="flex justify-between text-xs text-gray-400 mt-1">
+              <div className="flex justify-between text-[10px] text-gray-400 mt-1 px-0.5">
                 <span>0</span>
                 <span>5</span>
               </div>
-            </div>
-          </div>
-
-          {/* Date et heure - OBLIGATOIRES */}
-          <div className="grid grid-cols-2 gap-2 sm:gap-4 overflow-hidden">
-            <div className="min-w-0 overflow-hidden">
-              <label className="block text-sm font-medium text-gray-800 mb-2 truncate">
-                <Calendar className="inline w-4 h-4 mr-1 shrink-0" />
-                {t('departureDate')}
-                {validationAttempted && !bookingData.departureDate && <span className="text-red-500 ml-1">*</span>}
-              </label>
-              <input
-                type="date"
-                value={bookingData.departureDate}
-                onChange={(e) => handleBookingChange('departureDate', e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
-                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-gray-900"
-                required
-              />
-            </div>
-
-            <div className="min-w-0 overflow-hidden">
-              <label className="block text-sm font-medium text-gray-800 mb-2 truncate">
-                <Clock className="inline w-4 h-4 mr-1 shrink-0" />
-                {t('departureTime')}
-                {validationAttempted && !bookingData.departureTime && <span className="text-red-500 ml-1">*</span>}
-              </label>
-              <input
-                type="time"
-                value={bookingData.departureTime}
-                onChange={(e) => handleBookingChange('departureTime', e.target.value)}
-                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base text-gray-900"
-                required
-              />
             </div>
           </div>
 
