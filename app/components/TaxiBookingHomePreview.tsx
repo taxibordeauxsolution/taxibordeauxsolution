@@ -791,7 +791,7 @@ const TaxiBookingHomePreview = () => {
 
   // Interface étape 1 avec toutes les infos nécessaires pour le calcul de prix
   const renderStep1 = () => (
-    <div className="space-y-6">
+    <div className="space-y-3">
 
       {/* Messages d'erreur */}
       {error && (
@@ -1406,44 +1406,42 @@ const TaxiBookingHomePreview = () => {
   )
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-3xl shadow-2xl border-2 border-blue-300 p-4 sm:p-6 lg:p-6 w-full relative mx-auto max-w-7xl my-8 overflow-hidden" style={{boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1)'}}>
+    <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl shadow-2xl border-2 border-blue-300 p-3 sm:p-4 lg:p-4 w-full relative mx-auto max-w-7xl my-4 overflow-hidden" style={{boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1)'}}>
       {/* Ancre invisible pour le scroll avec offset */}
       <div id="reservation" className="absolute -top-20"></div>
-      
+
       <div ref={moduleRef}>
-      {/* Header */}
-      <div className="text-center mb-8">
-        <div className="flex justify-end mb-2">
-          <LanguageSelector />
-        </div>
-        <div className="flex items-center justify-center mb-4">
-          <div className="bg-blue-600 p-3 rounded-full mr-4">
-            <Car className="w-8 h-8 text-white" />
+      {/* Header compact */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center">
+          <div className="bg-blue-600 p-2 rounded-full mr-3">
+            <Car className="w-5 h-5 text-white" />
           </div>
-          <div>
-            <h2 id="reservation-title" className="text-2xl lg:text-3xl font-bold text-gray-800">{t('bookNow')} <span className="text-green-600">{t('bookNowHighlight')}</span></h2>
-          </div>
+          <h2 id="reservation-title" className="text-lg lg:text-xl font-bold text-gray-800">{t('bookNow')} <span className="text-green-600">{t('bookNowHighlight')}</span></h2>
         </div>
+        <LanguageSelector />
       </div>
 
-      {/* Indicateur d'étapes */}
-      <div className="flex justify-center mb-8">
-        <div className="flex items-center space-x-4">
+      {/* Indicateur d'étapes — masqué à l'étape 1 */}
+      {step > 1 && (
+      <div className="flex justify-center mb-4">
+        <div className="flex items-center space-x-3">
           {[1, 2, 3, 4].map((stepNum) => (
             <div key={stepNum} className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium transition-colors ${
                 step >= stepNum ? 'bg-blue-600 text-white' : 'bg-gray-300 sm:bg-gray-200 text-gray-900 sm:text-gray-600'
               }`}>
                 {stepNum}
               </div>
-              {stepNum < 4 && <div className={`w-8 h-0.5 transition-colors ${step > stepNum ? 'bg-blue-600' : 'bg-gray-200'}`} />}
+              {stepNum < 4 && <div className={`w-6 h-0.5 transition-colors ${step > stepNum ? 'bg-blue-600' : 'bg-gray-200'}`} />}
             </div>
           ))}
         </div>
       </div>
+      )}
 
       {/* Contenu principal */}
-      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 sm:p-6 lg:p-8 w-full overflow-hidden">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-3 sm:p-4 lg:p-5 w-full overflow-hidden">
         {step === 1 && renderStep1()}
         {step === 2 && renderStep2()}
         {step === 3 && renderStep3()}
@@ -1452,8 +1450,8 @@ const TaxiBookingHomePreview = () => {
 
       {/* Note d'information */}
       {step < 4 && (
-        <div className="mt-4 text-center text-xs text-gray-800 sm:text-gray-500">
-          <p className="text-blue-600 font-medium mt-1">{t('requiredFields')}</p>
+        <div className="mt-2 text-center text-xs text-gray-800 sm:text-gray-500">
+          <p className="text-blue-600 font-medium">{t('requiredFields')}</p>
         </div>
       )}
       </div>
