@@ -367,14 +367,31 @@ const TaxiBookingHomePreview = () => {
     </div>
   )
 
-  // Initialisation autocomplete (appelé après chargement du script)
+  // Initialisation carte + autocomplete (appelé après chargement du script)
   const initializeMaps = useCallback(() => {
     const google = (window as any).google
-    if (!google?.maps) return
+    if (!google?.maps || !mapRef.current) return
     setMaps(google.maps)
 
+    const mapInstance = new google.maps.Map(mapRef.current, {
+      center: { lat: 44.8378, lng: -0.5792 },
+      zoom: 12,
+      styles: [{ featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }],
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: true
+    })
+    setMap(mapInstance)
+
     const directionsServiceInstance = new google.maps.DirectionsService()
+    const directionsRendererInstance = new google.maps.DirectionsRenderer({
+      map: mapInstance,
+      suppressMarkers: false,
+      draggable: false,
+      polylineOptions: { strokeColor: '#10b981', strokeWeight: 5, strokeOpacity: 0.9 }
+    })
     setDirectionsService(directionsServiceInstance)
+    setDirectionsRenderer(directionsRendererInstance)
 
     if (fromInputRef.current) {
       const autocompleteFromInstance = new google.maps.places.Autocomplete(
@@ -889,6 +906,7 @@ const TaxiBookingHomePreview = () => {
             </div>
           </div>
 
+          {/* Carte masquée — le div reste dans le DOM pour l'initialisation Google Maps */}
 
           {/* Informations de trajet */}
           {loading && (
@@ -952,6 +970,33 @@ const TaxiBookingHomePreview = () => {
           )}
         </div>
 
+        {/* Colonne droite - Carte */}
+        <div className={`${mapVisible ? 'block' : 'hidden'} lg:sticky lg:top-4`}>
+          <div className="bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-200">
+            <div className="h-96 lg:h-[500px] w-full">
+              <div 
+                ref={mapRef} 
+                className="w-full h-full"
+                style={{ minHeight: '300px' }}
+              />
+            </div>
+            {tripData.distance > 0 && (
+              <div className="p-3 bg-white border-t">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="flex items-center text-green-800 sm:text-green-600">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    {tripData.from?.split(',')[0]}
+                  </span>
+                  <ArrowRight className="text-gray-400" size={16} />
+                  <span className="flex items-center text-red-600">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    {tripData.to?.split(',')[0]}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <button
