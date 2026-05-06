@@ -950,7 +950,7 @@ const TaxiBookingHomePreview = () => {
                     ? `${(tripData.price || 0).toFixed(2)}€`
                     : tripData.price <= configPrix.courseMini
                       ? `${(configPrix.courseMiniDe || 0).toFixed(2)}€ à ${(configPrix.courseMini || 0).toFixed(2)}€`
-                      : `${(tripData.price || 0).toFixed(2)}€`
+                      : `${((tripData.price || 0) - (configPrix.fraisApproche || 0)).toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
                   }
                 </div>
                 <div className="text-xs text-green-800 sm:text-green-600 mt-2 space-y-1">
