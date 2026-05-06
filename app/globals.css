@@ -63,37 +63,12 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Fix iOS Safari native date/time inputs overflow in grid */
+/* Date/time inputs — garder le picker natif, juste limiter la largeur */
 input[type="date"],
 input[type="time"] {
-  -webkit-appearance: none;
-  appearance: none;
   display: block;
   max-width: 100%;
   box-sizing: border-box;
-}
-
-/* Reset WebKit Shadow DOM padding that causes overflow on iOS */
-input[type="date"]::-webkit-datetime-edit,
-input[type="time"]::-webkit-datetime-edit,
-input[type="date"]::-webkit-datetime-edit-fields-wrapper,
-input[type="time"]::-webkit-datetime-edit-fields-wrapper,
-input[type="date"]::-webkit-datetime-edit-text,
-input[type="time"]::-webkit-datetime-edit-text,
-input[type="date"]::-webkit-datetime-edit-month-field,
-input[type="time"]::-webkit-datetime-edit-hour-field,
-input[type="date"]::-webkit-datetime-edit-day-field,
-input[type="time"]::-webkit-datetime-edit-minute-field,
-input[type="date"]::-webkit-datetime-edit-year-field,
-input[type="time"]::-webkit-datetime-edit-meridiem-field {
-  padding: 0;
-}
-
-input[type="date"]::-webkit-inner-spin-button,
-input[type="time"]::-webkit-inner-spin-button,
-input[type="date"]::-webkit-calendar-picker-indicator,
-input[type="time"]::-webkit-calendar-picker-indicator {
-  height: auto;
 }
 
 /* Custom range slider */
