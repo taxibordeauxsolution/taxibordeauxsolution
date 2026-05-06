@@ -367,31 +367,14 @@ const TaxiBookingHomePreview = () => {
     </div>
   )
 
-  // Initialisation carte + autocomplete (appelé après chargement du script)
+  // Initialisation autocomplete (appelé après chargement du script)
   const initializeMaps = useCallback(() => {
     const google = (window as any).google
-    if (!google?.maps || !mapRef.current) return
+    if (!google?.maps) return
     setMaps(google.maps)
 
-    const mapInstance = new google.maps.Map(mapRef.current, {
-      center: { lat: 44.8378, lng: -0.5792 },
-      zoom: 12,
-      styles: [{ featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }],
-      mapTypeControl: false,
-      streetViewControl: false,
-      fullscreenControl: true
-    })
-    setMap(mapInstance)
-
     const directionsServiceInstance = new google.maps.DirectionsService()
-    const directionsRendererInstance = new google.maps.DirectionsRenderer({
-      map: mapInstance,
-      suppressMarkers: false,
-      draggable: false,
-      polylineOptions: { strokeColor: '#10b981', strokeWeight: 5, strokeOpacity: 0.9 }
-    })
     setDirectionsService(directionsServiceInstance)
-    setDirectionsRenderer(directionsRendererInstance)
 
     if (fromInputRef.current) {
       const autocompleteFromInstance = new google.maps.places.Autocomplete(
