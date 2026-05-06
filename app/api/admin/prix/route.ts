@@ -36,12 +36,12 @@ export async function PUT(req: NextRequest) {
   try {
     await connectDB()
     const body = await req.json()
-    const config = await getConfig()
     const fields = ['priseEnCharge', 'tarifKmJour', 'tarifKmNuit', 'fraisApproche', 'courseMini', 'courseMiniDe', 'heureDebutNuit', 'heureFinNuit']
+    const update: Record<string, any> = {}
     for (const f of fields) {
-      if (body[f] !== undefined) config.set(f, body[f])
+      if (body[f] !== undefined && body[f] !== '') update[f] = body[f]
     }
-    await config.save()
+    const config = await ConfigPrix.findOneAndUpdate({}, { $set: update }, { upsert: true, new: true })
     return NextResponse.json({ success: true, data: config })
   } catch (e: any) {
     return NextResponse.json({ success: false, message: e.message }, { status: 500 })
