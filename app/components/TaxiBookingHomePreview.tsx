@@ -963,17 +963,17 @@ const TaxiBookingHomePreview = () => {
                 <span className="block text-center text-gray-900 sm:text-gray-600 text-sm mb-2">{t('estimatedPrice')} :</span>
                 <div className="flex items-center justify-center gap-2">
                   {tripData.priceDetails?.isForfait
-                    ? <span className="text-3xl font-extrabold tracking-tight text-green-700">{(tripData.price || 0).toFixed(0)}<span className="text-xl">,{((tripData.price || 0) % 1 * 100).toFixed(0).padStart(2, '0')}€</span></span>
+                    ? <span className="text-3xl font-extrabold tracking-tight text-green-700">{(tripData.price || 0).toFixed(2)}€</span>
                     : tripData.price <= configPrix.courseMini
                       ? <>
-                          <span className="text-3xl font-extrabold tracking-tight text-green-700">{(configPrix.courseMiniDe || 0).toFixed(0)}<span className="text-xl">€</span></span>
-                          <span className="text-gray-400 text-lg mx-1">—</span>
-                          <span className="text-3xl font-extrabold tracking-tight text-green-700">{(configPrix.courseMini || 0).toFixed(0)}<span className="text-xl">€</span></span>
+                          <span className="text-3xl font-extrabold tracking-tight text-green-700">{(configPrix.courseMiniDe || 0).toFixed(2)}€</span>
+                          <span className="text-green-700 text-lg mx-1">à</span>
+                          <span className="text-3xl font-extrabold tracking-tight text-green-700">{(configPrix.courseMini || 0).toFixed(2)}€</span>
                         </>
                       : <>
-                          <span className="text-3xl font-extrabold tracking-tight text-green-700">{((tripData.price || 0) - (configPrix.fraisApproche || 0)).toFixed(0)}<span className="text-xl">€</span></span>
-                          <span className="text-gray-400 text-lg mx-1">—</span>
-                          <span className="text-3xl font-extrabold tracking-tight text-green-700">{(tripData.price || 0).toFixed(0)}<span className="text-xl">€</span></span>
+                          <span className="text-3xl font-extrabold tracking-tight text-green-700">{((tripData.price || 0) - (configPrix.fraisApproche || 0)).toFixed(2)}€</span>
+                          <span className="text-green-700 text-lg mx-1">à</span>
+                          <span className="text-3xl font-extrabold tracking-tight text-green-700">{(tripData.price || 0).toFixed(2)}€</span>
                         </>
                   }
                 </div>
