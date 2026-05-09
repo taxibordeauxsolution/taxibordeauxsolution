@@ -664,6 +664,41 @@ const TaxiBookingHomePreview = () => {
         isForfait
       }
     }))
+
+    const fourchetteTrack = isForfait
+      ? null
+      : finalPrice <= configPrix.courseMini
+        ? { de: configPrix.courseMiniDe || 0, a: configPrix.courseMini || 0 }
+        : { de: (finalPrice || 0) - (configPrix.fraisApproche || 0), a: finalPrice || 0 }
+
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'estimation_prix', {
+        event_category: 'estimation',
+        from: tripData.from,
+        to: tripData.to,
+        distance: tripData.distance,
+        duration: tripData.duration,
+        price: finalPrice,
+        tariff_type: tariffType,
+        is_forfait: isForfait,
+      })
+    }
+
+    fetch('/api/estimations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: tripData.from,
+        to: tripData.to,
+        distance: tripData.distance,
+        duration: tripData.duration,
+        price: finalPrice,
+        fourchette: fourchetteTrack,
+        tariffType,
+        isForfait,
+        departureDate: departureDate ? departureDate.toISOString() : null,
+      }),
+    }).catch(() => {})
   }, [tripData.distance, tripData.duration, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, forfaits, configPrix])
 
 

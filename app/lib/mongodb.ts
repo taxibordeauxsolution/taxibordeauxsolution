@@ -62,3 +62,25 @@ const ForfaitSchema = new mongoose.Schema({
 
 export const Forfait =
   mongoose.models.Forfait || mongoose.model('Forfait', ForfaitSchema)
+
+// ── Modèle Estimation ────────────────────────────────────────────────────
+const EstimationSchema = new mongoose.Schema({
+  from:          { type: String, required: true },
+  to:            { type: String, required: true },
+  distance:      { type: Number, required: true },
+  duration:      { type: Number, required: true },
+  price:         { type: Number, required: true },
+  fourchette:    {
+    de: { type: Number },
+    a:  { type: Number },
+  },
+  tariffType:    { type: String, required: true },
+  isForfait:     { type: Boolean, default: false },
+  departureDate: { type: Date },
+  createdAt:     { type: Date, default: Date.now },
+})
+
+EstimationSchema.index({ createdAt: -1 })
+
+export const Estimation =
+  mongoose.models.Estimation || mongoose.model('Estimation', EstimationSchema)
