@@ -632,7 +632,7 @@ const TaxiBookingHomePreview = () => {
       const matchAB = coordInZone(tripData.fromCoords, f.pointA) && coordInZone(tripData.toCoords, f.pointB)
       const matchBA = coordInZone(tripData.fromCoords, f.pointB) && coordInZone(tripData.toCoords, f.pointA)
       if (matchAB || matchBA) {
-        finalPrice = isNight ? f.prixNuit : f.prixJour
+        finalPrice = (isNight || isHoliday || isSunday) ? f.prixNuit : f.prixJour
         isForfait = true
         break
       }
