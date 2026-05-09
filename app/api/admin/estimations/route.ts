@@ -70,3 +70,22 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: false, message: e.message }, { status: 500 })
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  if (!verifyAdmin(req))
+    return NextResponse.json({ success: false, message: 'Non autorisé' }, { status: 401 })
+
+  try {
+    await connectDB()
+    const { ids } = await req.json()
+
+    if (!ids || !Array.isArray(ids) || ids.length === 0) {
+      return NextResponse.json({ success: false, message: 'IDs manquants' }, { status: 400 })
+    }
+
+    const result = await Estimation.deleteMany({ _id: { $in: ids } })
+    return NextResponse.json({ success: true, deleted: result.deletedCount })
+  } catch (e: any) {
+    return NextResponse.json({ success: false, message: e.message }, { status: 500 })
+  }
+}

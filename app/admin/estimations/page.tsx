@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { ArrowClockwise, DownloadSimple, ChartBar, MapPin, CurrencyEur, Path } from '@phosphor-icons/react'
+import { ArrowClockwise, DownloadSimple, ChartBar, MapPin, CurrencyEur, Path, Trash } from '@phosphor-icons/react'
 
 interface Estimation {
   _id: string
@@ -28,6 +28,7 @@ export default function AdminEstimations() {
   const [estimations, setEstimations] = useState<Estimation[]>([])
   const [stats, setStats] = useState<Stats>({ total: 0, avgPrice: 0, topRoutes: [], forfaitCount: 0 })
   const [loading, setLoading] = useState(true)
+  const [selected, setSelected] = useState<Set<string>>(new Set())
 
   const today = new Date().toISOString().split('T')[0]
   const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().split('T')[0]
@@ -72,6 +73,36 @@ export default function AdminEstimations() {
       case 'Mixte': return 'bg-orange-100 text-orange-800'
       default: return 'bg-green-100 text-green-800'
     }
+  }
+
+  const toggleSelect = (id: string) => {
+    setSelected(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
+  }
+
+  const toggleAll = () => {
+    if (selected.size === estimations.length) {
+      setSelected(new Set())
+    } else {
+      setSelected(new Set(estimations.map(e => e._id)))
+    }
+  }
+
+  const deleteSelected = async () => {
+    if (selected.size === 0) return
+    if (!confirm(`Supprimer ${selected.size} estimation(s) ?`)) return
+    try {
+      await fetch('/api/admin/estimations', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        body: JSON.stringify({ ids: [...selected] })
+      })
+      setSelected(new Set())
+      load()
+    } catch { }
   }
 
   const exportCSV = () => {
@@ -163,6 +194,13 @@ export default function AdminEstimations() {
           <DownloadSimple size={16} />
           Export CSV
         </button>
+        {selected.size > 0 && (
+          <button onClick={deleteSelected}
+            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors flex items-center gap-2">
+            <Trash size={16} />
+            Supprimer ({selected.size})
+          </button>
+        )}
       </div>
 
       {/* Tableau */}
@@ -171,6 +209,10 @@ export default function AdminEstimations() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="px-4 py-3">
+                  <input type="checkbox" checked={estimations.length > 0 && selected.size === estimations.length}
+                    onChange={toggleAll} className="rounded border-slate-300" />
+                </th>
                 <th className="text-left px-4 py-3 text-slate-600 font-semibold">Date</th>
                 <th className="text-left px-4 py-3 text-slate-600 font-semibold">Départ</th>
                 <th className="text-left px-4 py-3 text-slate-600 font-semibold">Destination</th>
@@ -182,12 +224,16 @@ export default function AdminEstimations() {
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={7} className="text-center py-8 text-slate-400">Chargement...</td></tr>
+                <tr><td colSpan={8} className="text-center py-8 text-slate-400">Chargement...</td></tr>
               ) : estimations.length === 0 ? (
-                <tr><td colSpan={7} className="text-center py-8 text-slate-400">Aucune estimation sur cette période</td></tr>
+                <tr><td colSpan={8} className="text-center py-8 text-slate-400">Aucune estimation sur cette période</td></tr>
               ) : (
                 estimations.map(e => (
-                  <tr key={e._id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                  <tr key={e._id} className={`border-b border-slate-100 hover:bg-slate-50 transition-colors ${selected.has(e._id) ? 'bg-blue-50' : ''}`}>
+                    <td className="px-4 py-3">
+                      <input type="checkbox" checked={selected.has(e._id)}
+                        onChange={() => toggleSelect(e._id)} className="rounded border-slate-300" />
+                    </td>
                     <td className="px-4 py-3 text-slate-500 whitespace-nowrap">{formatDate(e.createdAt)}</td>
                     <td className="px-4 py-3 text-slate-800" title={e.from}>{truncate(e.from)}</td>
                     <td className="px-4 py-3 text-slate-800" title={e.to}>{truncate(e.to)}</td>
