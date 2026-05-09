@@ -874,7 +874,7 @@ const TaxiBookingHomePreview = () => {
               value={tripData.from}
               onFocus={loadGoogleMapsLazy}
               onChange={(e) => setTripData(prev => ({ ...prev, from: e.target.value }))}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-700 text-gray-900"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 text-gray-900"
               disabled={loading}
               required
             />
@@ -893,7 +893,7 @@ const TaxiBookingHomePreview = () => {
               value={tripData.to}
               onFocus={loadGoogleMapsLazy}
               onChange={(e) => setTripData(prev => ({ ...prev, to: e.target.value }))}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-700 text-gray-900"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 text-gray-900"
               disabled={loading}
               required
             />
@@ -959,37 +959,39 @@ const TaxiBookingHomePreview = () => {
                 </div>
               </div>
               
-              <div className="text-center pt-4 border-t border-green-200">
-                <span className="text-gray-900 sm:text-gray-600 text-sm">{t('estimatedPrice')} :</span>
-                <div className="text-3xl font-bold text-green-700">
+              <div className="pt-4 border-t border-green-200">
+                <span className="block text-center text-gray-900 sm:text-gray-600 text-sm mb-2">{t('estimatedPrice')} :</span>
+                <div className="flex items-center justify-center gap-2">
                   {tripData.priceDetails?.isForfait
-                    ? `${(tripData.price || 0).toFixed(2)}€`
+                    ? <span className="text-3xl font-extrabold tracking-tight text-green-700">{(tripData.price || 0).toFixed(0)}<span className="text-xl">,{((tripData.price || 0) % 1 * 100).toFixed(0).padStart(2, '0')}€</span></span>
                     : tripData.price <= configPrix.courseMini
-                      ? `${(configPrix.courseMiniDe || 0).toFixed(2)}€ à ${(configPrix.courseMini || 0).toFixed(2)}€`
-                      : `${((tripData.price || 0) - (configPrix.fraisApproche || 0)).toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
+                      ? <>
+                          <span className="text-3xl font-extrabold tracking-tight text-green-700">{(configPrix.courseMiniDe || 0).toFixed(0)}<span className="text-xl">€</span></span>
+                          <span className="text-gray-400 text-lg mx-1">—</span>
+                          <span className="text-3xl font-extrabold tracking-tight text-green-700">{(configPrix.courseMini || 0).toFixed(0)}<span className="text-xl">€</span></span>
+                        </>
+                      : <>
+                          <span className="text-3xl font-extrabold tracking-tight text-green-700">{((tripData.price || 0) - (configPrix.fraisApproche || 0)).toFixed(0)}<span className="text-xl">€</span></span>
+                          <span className="text-gray-400 text-lg mx-1">—</span>
+                          <span className="text-3xl font-extrabold tracking-tight text-green-700">{(tripData.price || 0).toFixed(0)}<span className="text-xl">€</span></span>
+                        </>
                   }
                 </div>
-                <div className="text-xs text-green-800 sm:text-green-600 mt-2 space-y-1">
-                  {bookingData.departureDate && bookingData.departureTime ? (
-                    <>
-                      <div>{t('pickupOn')} {new Date(bookingData.departureDate).toLocaleDateString(dateLocale)} {t('pickupAt')} {bookingData.departureTime}</div>
-                      {tripData.priceDetails && (
-                        <div className="flex items-center justify-center gap-2">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            tripData.priceDetails.tariffType === 'Nuit' ? 'bg-blue-200 sm:bg-blue-100 text-blue-900 sm:text-blue-800' :
-                            tripData.priceDetails.tariffType === 'Férié' ? 'bg-red-200 sm:bg-red-100 text-red-900 sm:text-red-800' :
-                            tripData.priceDetails.tariffType === 'Dimanche' ? 'bg-purple-200 sm:bg-purple-100 text-purple-900 sm:text-purple-800' :
-                            'bg-green-200 sm:bg-green-100 text-green-900 sm:text-green-800'
-                          }`}>
-                            {t('tariffLabel')} {getTariffLabel(tripData.priceDetails.tariffType ?? '')}
-                          </span>
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <div className="text-orange-600 font-medium">{t('priceFineWithDateTime')}</div>
-                  )}
-                </div>
+                {tripData.priceDetails && tripData.priceDetails.tariffType !== 'Jour' && (
+                  <div className="flex items-center justify-center mt-2">
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      tripData.priceDetails.tariffType === 'Nuit' ? 'bg-blue-200 sm:bg-blue-100 text-blue-900 sm:text-blue-800' :
+                      tripData.priceDetails.tariffType === 'Férié' ? 'bg-red-200 sm:bg-red-100 text-red-900 sm:text-red-800' :
+                      tripData.priceDetails.tariffType === 'Dimanche' ? 'bg-purple-200 sm:bg-purple-100 text-purple-900 sm:text-purple-800' :
+                      'bg-green-200 sm:bg-green-100 text-green-900 sm:text-green-800'
+                    }`}>
+                      {t('tariffLabel')} {getTariffLabel(tripData.priceDetails.tariffType ?? '')}
+                    </span>
+                  </div>
+                )}
+                {!bookingData.departureDate || !bookingData.departureTime ? (
+                  <div className="text-center text-orange-600 font-medium text-xs mt-2">{t('priceFineWithDateTime')}</div>
+                ) : null}
               </div>
             </div>
           )}
@@ -1187,7 +1189,7 @@ const TaxiBookingHomePreview = () => {
               placeholder={t('fullName')}
               value={bookingData.customerName}
               onChange={(e) => handleBookingChange('customerName', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-700"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
               required
             />
           </div>
@@ -1203,7 +1205,7 @@ const TaxiBookingHomePreview = () => {
               placeholder="06 12 34 56 78"
               value={bookingData.customerPhone}
               onChange={(e) => handleBookingChange('customerPhone', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-700"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
               required
             />
           </div>
@@ -1218,7 +1220,7 @@ const TaxiBookingHomePreview = () => {
               placeholder={language === 'en' ? 'your@email.com' : language === 'es' ? 'su@email.com' : 'votre@email.fr'}
               value={bookingData.customerEmail}
               onChange={(e) => handleBookingChange('customerEmail', e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-700"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
             />
           </div>
 
@@ -1231,7 +1233,7 @@ const TaxiBookingHomePreview = () => {
               value={bookingData.notes}
               onChange={(e) => handleBookingChange('notes', e.target.value)}
               rows={3}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none text-gray-900 placeholder-gray-500"
             />
           </div>
         </div>
@@ -1368,29 +1370,6 @@ const TaxiBookingHomePreview = () => {
       {success && (
         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
           <p className="text-green-800">{success}</p>
-        </div>
-      )}
-
-      {/* Information email */}
-      {reservation && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md mx-auto">
-          <div className="flex items-center gap-2">
-            <Mail className="w-5 h-5 text-blue-600" />
-            <div>
-              <p className="text-blue-800 font-medium">{t('emailConfirmation')}</p>
-              <p className="text-blue-800 sm:text-blue-600 text-sm">
-                {reservation.customer.email ? (
-                  reservation.emailSent ? (
-                    `✅ ${t('emailSent')} ${reservation.customer.email}`
-                  ) : (
-                    `⚠️ ${t('emailFailed')} ${reservation.customer.email}`
-                  )
-                ) : (
-                  `❌ ${t('emailNone')}`
-                )}
-              </p>
-            </div>
-          </div>
         </div>
       )}
 
