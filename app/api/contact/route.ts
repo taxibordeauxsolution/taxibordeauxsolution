@@ -115,6 +115,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: `Erreur email: ${error.message}` }, { status: 400 });
     }
 
+    // Notification Telegram instantanée
+    const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
+    const telegramChatId = process.env.TELEGRAM_CHAT_ID;
+    if (telegramToken && telegramChatId) {
+      const telegramText = `📩 Nouveau message de contact\n\n👤 ${firstName} ${lastName}\n📞 ${phone}${email ? `\n📧 ${email}` : ''}\n\n💬 ${message}`;
+      fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: telegramChatId, text: telegramText })
+      }).catch(() => {});
+    }
+
     // Envoi confirmation client (seulement si email fourni)
     if (email.trim()) {
       await resend.emails.send({

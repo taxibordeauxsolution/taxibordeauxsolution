@@ -158,10 +158,25 @@ export async function POST(request) {
       html: companyEmailHtml,
     });
 
-    return Response.json({ 
-      success: true, 
+    // Notification Telegram instantanée
+    const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
+    const telegramChatId = process.env.TELEGRAM_CHAT_ID;
+    if (telegramToken && telegramChatId) {
+      const prix = reservationData.pricing.fourchette
+        ? `${reservationData.pricing.fourchette.de.toFixed(2)}€ à ${reservationData.pricing.fourchette.a.toFixed(2)}€`
+        : `${reservationData.pricing.totalPrice.toFixed(2)}€`;
+      const telegramText = `🚖 Nouvelle réservation N°${reservationData.reservationId}\n\n👤 ${reservationData.customer.name}\n📞 ${reservationData.customer.phone}\n📧 ${reservationData.customer.email}\n\n📍 ${reservationData.trip.from.address}\n➡️ ${reservationData.trip.to.address}\n📏 ${reservationData.trip.distance.toFixed(1)} km\n\n📅 ${reservationData.estimatedPickupTime}\n👥 ${reservationData.bookingDetails.passengers} passager(s)\n🧳 ${reservationData.bookingDetails.luggage} bagage(s)\n\n💰 ${prix}`;
+      fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: telegramChatId, text: telegramText })
+      }).catch(() => {});
+    }
+
+    return Response.json({
+      success: true,
       clientEmailId: clientEmail.data?.id,
-      companyEmailId: companyEmail.data?.id 
+      companyEmailId: companyEmail.data?.id
     });
     
   } catch (error) {
