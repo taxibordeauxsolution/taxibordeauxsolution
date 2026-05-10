@@ -912,17 +912,48 @@ const TaxiBookingHomePreview = () => {
               {t('fromLabel')}
               {validationAttempted && !tripData.fromCoords && <span className="text-red-500 ml-1">*</span>}
             </label>
-            <input
-              ref={fromInputRef}
-              type="text"
-              placeholder={t('fromPlaceholder')}
-              value={tripData.from}
-              onFocus={loadGoogleMapsLazy}
-              onChange={(e) => setTripData(prev => ({ ...prev, from: e.target.value }))}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 text-gray-900"
-              disabled={loading}
-              required
-            />
+            <div className="flex gap-2">
+              <input
+                ref={fromInputRef}
+                type="text"
+                placeholder={t('fromPlaceholder')}
+                value={tripData.from}
+                onFocus={loadGoogleMapsLazy}
+                onChange={(e) => setTripData(prev => ({ ...prev, from: e.target.value }))}
+                className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 text-gray-900"
+                disabled={loading}
+                required
+              />
+              <button
+                type="button"
+                onClick={async () => {
+                  if (!navigator.geolocation) return
+                  setLoading(true)
+                  navigator.geolocation.getCurrentPosition(
+                    async (pos) => {
+                      try {
+                        await loadGoogleMapsLazy()
+                        const geocoder = new (window as any).google.maps.Geocoder()
+                        const result = await geocoder.geocode({ location: { lat: pos.coords.latitude, lng: pos.coords.longitude } })
+                        if (result.results[0]) {
+                          const addr = result.results[0].formatted_address
+                          setTripData(prev => ({ ...prev, from: addr, fromCoords: { lat: pos.coords.latitude, lng: pos.coords.longitude } }))
+                          if (fromInputRef.current) fromInputRef.current.value = addr
+                        }
+                      } catch { }
+                      setLoading(false)
+                    },
+                    () => { setLoading(false) },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                  )
+                }}
+                disabled={loading}
+                className="px-3 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 shrink-0"
+                title={t('geolocate') || 'Me localiser'}
+              >
+                <Navigation size={20} />
+              </button>
+            </div>
           </div>
 
           <div>
