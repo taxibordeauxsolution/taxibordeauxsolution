@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
             ].filter(Boolean).join('\n'),
             start: { dateTime: pickup.toISOString(), timeZone: 'Europe/Paris' },
             end: { dateTime: end.toISOString(), timeZone: 'Europe/Paris' },
-            reminders: { useDefault: false, overrides: [{ method: 'popup', minutes: 60 }] },
+            reminders: { useDefault: false, overrides: [{ method: 'popup', minutes: 1440 }, { method: 'popup', minutes: 60 }] },
           }
 
           const calRes = await fetch(
