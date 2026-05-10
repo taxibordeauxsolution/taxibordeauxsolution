@@ -1420,7 +1420,7 @@ const TaxiBookingHomePreview = () => {
             <div><strong>{t('reservationNumber')} :</strong> {reservation.reservationId}</div>
             <div><strong>{t('clientLabel')}</strong> {reservation.customer.name}</div>
             <div><strong>{t('phoneLabel')}</strong> {reservation.customer.phone}</div>
-            <div><strong>{t('tripLabel')}</strong> {reservation.trip.from.address.split(',')[0]} → {reservation.trip.to.address.split(',')[0]}</div>
+            <div><strong>{t('tripLabel')}</strong> {(typeof reservation.trip.from === 'string' ? reservation.trip.from : reservation.trip.from?.address || '').split(',')[0]} → {(typeof reservation.trip.to === 'string' ? reservation.trip.to : reservation.trip.to?.address || '').split(',')[0]}</div>
             <div><strong>{t('priceLabel')}</strong> {reservation.pricing.totalPrice.toFixed(2)}€</div>
             <div><strong>{t('distanceLabel')}</strong> {reservation.trip.distance.toFixed(1)} km</div>
             <div><strong>{t('pickupLabel')}</strong> {reservation.estimatedPickupTime}</div>
