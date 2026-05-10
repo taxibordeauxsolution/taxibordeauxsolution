@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { MapPin, Clock, Users, Briefcase, Euro, Calendar, Phone, Mail, Car, Navigation, CheckCircle, AlertCircle, Globe, Map, Route, Loader2, ArrowRight } from 'lucide-react'
+import { MapPin, Clock, Users, Briefcase, Euro, Calendar, Phone, Mail, Car, Navigation, CheckCircle, AlertCircle, Globe, Map, Route, Loader2, ArrowRight, Crosshair } from 'lucide-react'
 import type { TripData, BookingData, ReservationData } from '../../types/booking'
 import { calculateDistanceFare, isNightMinutes } from '@/app/lib/pricing'
 
@@ -951,7 +951,7 @@ const TaxiBookingHomePreview = () => {
                 className="px-3 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 shrink-0"
                 title={t('geolocate') || 'Me localiser'}
               >
-                <Navigation size={20} />
+                <Crosshair size={20} />
               </button>
             </div>
           </div>
