@@ -783,6 +783,16 @@ const TaxiBookingHomePreview = () => {
         ]
       }
 
+      // Sauvegarde en base + Google Calendar
+      fetch('/api/reservations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...reservationData,
+          pickupDate: pickupTime.toISOString(),
+        })
+      }).catch(() => {})
+
       // Notification Telegram instantanée
       fetch('/api/notify-telegram', {
         method: 'POST',

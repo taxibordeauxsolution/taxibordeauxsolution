@@ -84,3 +84,41 @@ EstimationSchema.index({ createdAt: -1 })
 
 export const Estimation =
   mongoose.models.Estimation || mongoose.model('Estimation', EstimationSchema)
+
+// ── Modèle Reservation ───────────────────────────────────────────────────
+const ReservationSchema = new mongoose.Schema({
+  reservationId:  { type: String, required: true, unique: true },
+  status:         { type: String, default: 'en_attente', enum: ['en_attente', 'confirmee', 'terminee', 'annulee'] },
+  customer: {
+    name:  { type: String, required: true },
+    phone: { type: String, required: true },
+    email: { type: String, default: '' },
+  },
+  trip: {
+    from:     { type: String, required: true },
+    to:       { type: String, required: true },
+    distance: { type: Number, required: true },
+  },
+  pricing: {
+    totalPrice: { type: Number, required: true },
+    fourchette: {
+      de: { type: Number },
+      a:  { type: Number },
+    },
+    tariffType: { type: String },
+    isForfait:  { type: Boolean, default: false },
+  },
+  passengers: { type: Number, default: 1 },
+  luggage:    { type: Number, default: 0 },
+  notes:      { type: String, default: '' },
+  pickupDate: { type: Date, required: true },
+  rappelEnvoye: { type: Boolean, default: false },
+  googleEventId: { type: String, default: '' },
+}, { timestamps: true })
+
+ReservationSchema.index({ pickupDate: 1 })
+ReservationSchema.index({ status: 1 })
+ReservationSchema.index({ createdAt: -1 })
+
+export const Reservation =
+  mongoose.models.Reservation || mongoose.model('Reservation', ReservationSchema)

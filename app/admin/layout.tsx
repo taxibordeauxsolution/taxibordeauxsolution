@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { CurrencyEur, Path, SignOut, House, ChartBar } from '@phosphor-icons/react'
+import { CurrencyEur, Path, SignOut, House, ChartBar, Taxi } from '@phosphor-icons/react'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -60,6 +60,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           >
             <Path size={18} />
             Forfaits
+          </Link>
+          <Link
+            href="/admin/reservations"
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+              pathname === '/admin/reservations' ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-700'
+            }`}
+          >
+            <Taxi size={18} />
+            Résas
           </Link>
           <Link
             href="/admin/estimations"
