@@ -8,7 +8,7 @@ interface Reservation {
   reservationId: string
   status: string
   customer: { name: string; phone: string; email: string }
-  trip: { from: string; to: string; distance: number }
+  trip: { from: string | { address?: string }; to: string | { address?: string }; distance: number }
   pricing: { totalPrice: number; fourchette?: { de: number; a: number }; tariffType: string; isForfait: boolean }
   passengers: number
   luggage: number
@@ -179,9 +179,9 @@ export default function AdminReservations() {
                       <Clock size={14} className="inline" /> {formatDate(r.pickupDate)}
                     </div>
                     <div className="text-sm text-slate-500 mt-0.5 truncate">
-                      <MapPin size={14} className="inline text-green-500" /> {r.trip.from?.split(',')[0]}
+                      <MapPin size={14} className="inline text-green-500" /> {(typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || '').split(',')[0]}
                       <span className="mx-1">→</span>
-                      <MapPin size={14} className="inline text-red-500" /> {r.trip.to?.split(',')[0]}
+                      <MapPin size={14} className="inline text-red-500" /> {(typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || '').split(',')[0]}
                     </div>
                   </div>
                   <div className="text-right shrink-0">
@@ -226,8 +226,8 @@ export default function AdminReservations() {
                     )}
 
                     <div className="text-xs text-slate-400">
-                      Départ complet : {r.trip.from}
-                      <br />Destination complète : {r.trip.to}
+                      Départ complet : {typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || ''}
+                      <br />Destination complète : {typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || ''}
                       <br />Créée le {formatDate(r.createdAt)}
                     </div>
 
