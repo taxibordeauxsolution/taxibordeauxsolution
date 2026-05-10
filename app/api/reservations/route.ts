@@ -50,7 +50,6 @@ export async function POST(req: NextRequest) {
     const gcalClientSecret = process.env.GOOGLE_CLIENT_SECRET
     const gcalCalendarId = process.env.GOOGLE_CALENDAR_ID || 'primary'
 
-    console.log('Google Calendar config:', { hasRefresh: !!gcalRefreshToken, hasClient: !!gcalClientId, hasSecret: !!gcalClientSecret })
 
     if (gcalRefreshToken && gcalClientId && gcalClientSecret) {
       try {

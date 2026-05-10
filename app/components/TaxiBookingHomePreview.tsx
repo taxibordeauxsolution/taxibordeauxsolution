@@ -948,7 +948,7 @@ const TaxiBookingHomePreview = () => {
                   )
                 }}
                 disabled={loading}
-                className="px-3 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 shrink-0"
+                className="px-3 py-3 bg-gray-200 text-gray-500 rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50 shrink-0"
                 title={t('geolocate') || 'Me localiser'}
               >
                 <Crosshair size={20} />
