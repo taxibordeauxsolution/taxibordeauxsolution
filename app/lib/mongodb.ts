@@ -112,7 +112,8 @@ const ReservationSchema = new mongoose.Schema({
   luggage:    { type: Number, default: 0 },
   notes:      { type: String, default: '' },
   pickupDate: { type: Date, required: true },
-  rappelEnvoye: { type: Boolean, default: false },
+  rappel24h: { type: Boolean, default: false },
+  rappel1h:  { type: Boolean, default: false },
   googleEventId: { type: String, default: '' },
 }, { timestamps: true })
 
