@@ -7,7 +7,10 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
 
     const { reservationId, customer, trip, pricing, bookingDetails, pickupDate } = body
-    if (!reservationId || !customer?.name || !customer?.phone || !trip?.from || !trip?.to || !pickupDate) {
+    const tripFrom = typeof trip?.from === 'object' ? trip.from.address : trip?.from
+    const tripTo = typeof trip?.to === 'object' ? trip.to.address : trip?.to
+
+    if (!reservationId || !customer?.name || !customer?.phone || !tripFrom || !tripTo || !pickupDate) {
       return NextResponse.json({ success: false, message: 'Champs requis manquants' }, { status: 400 })
     }
 
@@ -24,8 +27,8 @@ export async function POST(req: NextRequest) {
         email: customer.email || '',
       },
       trip: {
-        from: trip.from,
-        to: trip.to,
+        from: tripFrom,
+        to: tripTo,
         distance: trip.distance || 0,
       },
       pricing: {
@@ -79,8 +82,8 @@ export async function POST(req: NextRequest) {
               `Tel : ${customer.phone}`,
               customer.email ? `Email : ${customer.email}` : '',
               '',
-              `Départ : ${trip.from}`,
-              `Destination : ${trip.to}`,
+              `Départ : ${tripFrom}`,
+              `Destination : ${tripTo}`,
               `Distance : ${trip.distance?.toFixed(1)} km`,
               '',
               `Prix : ${prix}`,
