@@ -36,10 +36,8 @@ export default function AdminReservations() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
-  const today = new Date().toISOString().split('T')[0]
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().split('T')[0]
-  const [dateFrom, setDateFrom] = useState(thirtyDaysAgo)
-  const [dateTo, setDateTo] = useState(today)
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
 
   const token = () => sessionStorage.getItem('admin_token') || ''
 
@@ -152,20 +150,18 @@ export default function AdminReservations() {
       let y = 15
 
       if (logoBase64) {
-        doc.addImage(logoBase64, 'PNG', 20, y, 30, 30)
+        doc.addImage(logoBase64, 'PNG', 20, y, 40, 40)
       }
 
-      const textX = logoBase64 ? 55 : 20
-      doc.setFont('helvetica', 'bold')
-      doc.setFontSize(20)
-      doc.setTextColor(30, 64, 175)
-      doc.text('TAXI BORDEAUX SOLUTION', textX, y + 8)
+      const textX = logoBase64 ? 65 : 20
       doc.setFontSize(9)
       doc.setFont('helvetica', 'normal')
       doc.setTextColor(100, 100, 100)
-      doc.text('Sainte-Eulalie, 33560  |  Tél : 06 67 23 78 22', textX, y + 15)
-      doc.text('Email : contact@taxibordeauxsolution.fr  |  SIRET : 987 573 128 00012', textX, y + 20)
-      y += 35
+      doc.text('Sainte-Eulalie, 33560', textX, y + 12)
+      doc.text('Tél : 06 67 23 78 22', textX, y + 17)
+      doc.text('Email : contact@taxibordeauxsolution.fr', textX, y + 22)
+      doc.text('SIRET : 987 573 128 00012', textX, y + 27)
+      y += 45
 
       doc.setDrawColor(30, 64, 175)
       doc.setLineWidth(0.8)
