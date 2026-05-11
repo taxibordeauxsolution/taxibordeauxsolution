@@ -52,6 +52,7 @@ const TaxiBookingHomePreview = () => {
     routeInfo: null,
     serviceAreaValidation: { valid: true }
   })
+  const [tollCost, setTollCost] = useState(0)
 
   const [bookingData, setBookingData] = useState<BookingData>(() => {
     const now = new Date()
@@ -547,6 +548,18 @@ const TaxiBookingHomePreview = () => {
           map.fitBounds(result.routes[0].bounds)
         }
         setMapVisible(true)
+
+        // Estimation péages
+        if (tripData.fromCoords && tripData.toCoords) {
+          fetch('/api/toll-estimate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ origin: tripData.fromCoords, destination: tripData.toCoords }),
+          })
+            .then(r => r.json())
+            .then(d => setTollCost(d.tollCost || 0))
+            .catch(() => setTollCost(0))
+        }
       } else {
         setError('Impossible de calculer l&apos;itinéraire')
       }
@@ -595,7 +608,7 @@ const TaxiBookingHomePreview = () => {
 
     const basePrice = priseEnCharge + distanceFare
     const approachFees = configPrix.fraisApproche
-    let finalPrice = Math.max(Math.round((basePrice + approachFees) * 100) / 100, configPrix.courseMini)
+    let finalPrice = Math.max(Math.round((basePrice + approachFees + tollCost) * 100) / 100, configPrix.courseMini)
 
     // ── Vérification forfaits (chargés depuis l'API) ─────────────────────
     const distM = (a: {lat: number, lng: number}, b: {lat: number, lng: number}) => {
@@ -655,6 +668,7 @@ const TaxiBookingHomePreview = () => {
       priceDetails: {
         basePrice: Math.round(basePrice * 100) / 100,
         approachFees,
+        tollCost,
         totalPrice: finalPrice,
         tariffType,
         priseEnCharge,
@@ -699,7 +713,7 @@ const TaxiBookingHomePreview = () => {
         departureDate: departureDate ? departureDate.toISOString() : null,
       }),
     }).catch(() => {})
-  }, [tripData.distance, tripData.duration, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, forfaits, configPrix])
+  }, [tripData.distance, tripData.duration, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, forfaits, configPrix, tollCost])
 
 
   const handleBookingChange = (field: keyof BookingData, value: any) => {
@@ -1063,6 +1077,11 @@ const TaxiBookingHomePreview = () => {
                     }`}>
                       {t('tariffLabel')} {getTariffLabel(tripData.priceDetails.tariffType ?? '')}
                     </span>
+                  </div>
+                )}
+                {tollCost > 0 && !tripData.priceDetails?.isForfait && (
+                  <div className="text-center text-slate-500 text-xs mt-2">
+                    Dont {tollCost.toFixed(2)}€ de péage inclus
                   </div>
                 )}
                 {!bookingData.departureDate || !bookingData.departureTime ? (
@@ -1464,6 +1483,7 @@ const TaxiBookingHomePreview = () => {
             routeInfo: null,
             serviceAreaValidation: { valid: true }
           })
+          setTollCost(0)
           setBookingData({
             passengers: 1,
             luggage: 0,
