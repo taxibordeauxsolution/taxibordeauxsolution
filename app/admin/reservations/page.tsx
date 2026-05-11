@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { ArrowClockwise, Trash, Taxi, Phone, Envelope, MapPin, Clock, CheckCircle, XCircle, HourglassSimple, CaretDown, CaretLeft, CaretRight, MagnifyingGlass } from '@phosphor-icons/react'
+import { ArrowClockwise, Trash, Taxi, Phone, Envelope, MapPin, Clock, CheckCircle, XCircle, HourglassSimple, CaretDown, CaretLeft, CaretRight, MagnifyingGlass, Receipt } from '@phosphor-icons/react'
+import jsPDF from 'jspdf'
 
 interface Reservation {
   _id: string
@@ -114,6 +115,144 @@ export default function AdminReservations() {
   }
 
   const isPast = (d: string) => new Date(d) < new Date()
+
+  const generateInvoice = async (r: Reservation) => {
+    try {
+      const res = await fetch('/api/admin/invoice-number', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token()}` }
+      })
+      const json = await res.json()
+      if (!json.success) { alert('Erreur génération numéro de facture'); return }
+      const num = json.invoiceNumber
+
+      const doc = new jsPDF()
+      const w = doc.internal.pageSize.getWidth()
+      let y = 20
+
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(22)
+      doc.setTextColor(30, 64, 175)
+      doc.text('TAXI BORDEAUX SOLUTION', 20, y)
+      y += 8
+      doc.setFontSize(9)
+      doc.setFont('helvetica', 'normal')
+      doc.setTextColor(100, 100, 100)
+      doc.text('Sainte-Eulalie, 33560', 20, y)
+      y += 4.5
+      doc.text('Tél : 06 67 23 78 22', 20, y)
+      y += 4.5
+      doc.text('Email : contact@taxibordeauxsolution.fr', 20, y)
+      y += 4.5
+      doc.text('SIRET : 987 573 128 00012', 20, y)
+      y += 12
+
+      doc.setDrawColor(30, 64, 175)
+      doc.setLineWidth(0.8)
+      doc.line(20, y, w - 20, y)
+      y += 10
+
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(16)
+      doc.setTextColor(30, 30, 30)
+      doc.text(`FACTURE N° FAC-${num}`, 20, y)
+      const dateFacture = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(10)
+      doc.text(`Date : ${dateFacture}`, w - 20, y, { align: 'right' })
+      y += 14
+
+      doc.setFillColor(245, 247, 250)
+      doc.roundedRect(20, y, w - 40, 32, 3, 3, 'F')
+      y += 7
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(11)
+      doc.setTextColor(30, 30, 30)
+      doc.text('Client', 26, y)
+      y += 6
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(10)
+      doc.setTextColor(60, 60, 60)
+      doc.text(`${r.customer.name}`, 26, y)
+      y += 5
+      doc.text(`Tél : ${r.customer.phone}`, 26, y)
+      if (r.customer.email) {
+        y += 5
+        doc.text(`Email : ${r.customer.email}`, 26, y)
+      }
+      y += 14
+
+      doc.setFillColor(245, 247, 250)
+      doc.roundedRect(20, y, w - 40, 28, 3, 3, 'F')
+      y += 7
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(11)
+      doc.setTextColor(30, 30, 30)
+      doc.text('Trajet', 26, y)
+      y += 6
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(10)
+      doc.setTextColor(60, 60, 60)
+      const fromAddr = typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || ''
+      const toAddr = typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || ''
+      doc.text(`De : ${fromAddr}`, 26, y, { maxWidth: w - 52 })
+      y += 5
+      doc.text(`À : ${toAddr}`, 26, y, { maxWidth: w - 52 })
+      const pickupDateStr = new Date(r.pickupDate).toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+      y += 5
+      doc.text(`Date de prise en charge : ${pickupDateStr}`, 26, y)
+      y += 16
+
+      const ttc = r.pricing.totalPrice
+      const ht = Math.round((ttc / 1.10) * 100) / 100
+      const tva = Math.round((ttc - ht) * 100) / 100
+
+      doc.setDrawColor(200, 200, 200)
+      doc.setFillColor(30, 64, 175)
+      doc.roundedRect(20, y, w - 40, 10, 2, 2, 'F')
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(10)
+      doc.setTextColor(255, 255, 255)
+      doc.text('Description', 26, y + 7)
+      doc.text('Montant', w - 26, y + 7, { align: 'right' })
+      y += 14
+
+      doc.setTextColor(60, 60, 60)
+      doc.setFont('helvetica', 'normal')
+      doc.text('Course taxi', 26, y)
+      doc.text(`${ht.toFixed(2)} €`, w - 26, y, { align: 'right' })
+      y += 8
+
+      doc.setDrawColor(220, 220, 220)
+      doc.line(20, y, w - 20, y)
+      y += 6
+
+      doc.text('TVA 10%', 26, y)
+      doc.text(`${tva.toFixed(2)} €`, w - 26, y, { align: 'right' })
+      y += 8
+
+      doc.setDrawColor(30, 64, 175)
+      doc.setLineWidth(0.8)
+      doc.line(20, y, w - 20, y)
+      y += 8
+
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(13)
+      doc.setTextColor(30, 64, 175)
+      doc.text('TOTAL TTC', 26, y)
+      doc.text(`${ttc.toFixed(2)} €`, w - 26, y, { align: 'right' })
+      y += 20
+
+      doc.setFont('helvetica', 'italic')
+      doc.setFontSize(9)
+      doc.setTextColor(150, 150, 150)
+      doc.text('Merci pour votre confiance — Taxi Bordeaux Solution', w / 2, 280, { align: 'center' })
+
+      doc.save(`Facture-FAC-${num}-${r.customer.name.replace(/\s+/g, '_')}.pdf`)
+    } catch (e: any) {
+      alert(`Erreur : ${e.message}`)
+    }
+  }
 
   const filtered = reservations.filter(r => {
     if (!search) return true
@@ -308,6 +447,11 @@ export default function AdminReservations() {
                           Remettre en attente
                         </button>
                       )}
+                      <button onClick={(e) => { e.stopPropagation(); generateInvoice(r) }}
+                        className="px-3 py-2 sm:py-1.5 bg-slate-700 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 flex items-center justify-center gap-1.5 col-span-2 sm:col-span-1 sm:ml-auto">
+                        <Receipt size={14} />
+                        Facture PDF
+                      </button>
                     </div>
                   </div>
                 )}

@@ -123,3 +123,12 @@ ReservationSchema.index({ createdAt: -1 })
 
 export const Reservation =
   mongoose.models.Reservation || mongoose.model('Reservation', ReservationSchema)
+
+// ── Modèle Counter (numéros de facture incrémentaux) ─────────────────────
+const CounterSchema = new mongoose.Schema({
+  _id:  { type: String, required: true },
+  seq:  { type: Number, default: 0 },
+})
+
+export const Counter =
+  mongoose.models.Counter || mongoose.model('Counter', CounterSchema)
