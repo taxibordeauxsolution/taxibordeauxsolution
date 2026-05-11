@@ -24,7 +24,9 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const from = searchParams.get('from')
     const to = searchParams.get('to')
-    const limit = Math.min(parseInt(searchParams.get('limit') || '500'), 2000)
+    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 2000)
+    const page = Math.max(parseInt(searchParams.get('page') || '1'), 1)
+    const skip = (page - 1) * limit
 
     const filter: any = {}
     if (from || to) {
@@ -34,7 +36,7 @@ export async function GET(req: NextRequest) {
     }
 
     const [estimations, total] = await Promise.all([
-      Estimation.find(filter).sort({ createdAt: -1 }).limit(limit).lean(),
+      Estimation.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
       Estimation.countDocuments(filter),
     ])
 
@@ -65,7 +67,7 @@ export async function GET(req: NextRequest) {
         .map(([route, count]) => ({ route, count }))
     }
 
-    return NextResponse.json({ success: true, data: estimations, stats })
+    return NextResponse.json({ success: true, data: estimations, stats, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } })
   } catch (e: any) {
     return NextResponse.json({ success: false, message: e.message }, { status: 500 })
   }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { ArrowClockwise, DownloadSimple, ChartBar, MapPin, CurrencyEur, Path, Trash } from '@phosphor-icons/react'
+import { ArrowClockwise, DownloadSimple, ChartBar, MapPin, CurrencyEur, Path, Trash, CaretLeft, CaretRight } from '@phosphor-icons/react'
 
 interface Estimation {
   _id: string
@@ -29,6 +29,8 @@ export default function AdminEstimations() {
   const [stats, setStats] = useState<Stats>({ total: 0, avgPrice: 0, topRoutes: [], forfaitCount: 0 })
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
 
   const today = new Date().toISOString().split('T')[0]
   const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().split('T')[0]
@@ -43,6 +45,8 @@ export default function AdminEstimations() {
       const params = new URLSearchParams()
       if (dateFrom) params.set('from', dateFrom)
       if (dateTo) params.set('to', dateTo)
+      params.set('page', String(page))
+      params.set('limit', '30')
       const res = await fetch(`/api/admin/estimations?${params}`, {
         headers: { Authorization: `Bearer ${token()}` }
       })
@@ -50,10 +54,11 @@ export default function AdminEstimations() {
       if (json.success) {
         setEstimations(json.data)
         setStats(json.stats)
+        setTotalPages(json.pagination?.totalPages || 1)
       }
     } catch { }
     setLoading(false)
-  }, [dateFrom, dateTo])
+  }, [dateFrom, dateTo, page])
 
   useEffect(() => { load() }, [load])
 
@@ -185,7 +190,7 @@ export default function AdminEstimations() {
           <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)}
             className="px-3 py-2 border border-slate-300 rounded-lg text-sm" />
         </div>
-        <button onClick={load}
+        <button onClick={() => { setPage(1); load() }}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors">
           Filtrer
         </button>
@@ -296,6 +301,29 @@ export default function AdminEstimations() {
             </table>
           </div>
         </>
+      )}
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2">
+          <button
+            onClick={() => setPage(p => Math.max(1, p - 1))}
+            disabled={page <= 1}
+            className="p-2 rounded-lg bg-white border border-slate-200 disabled:opacity-40 hover:bg-slate-50 transition-colors"
+          >
+            <CaretLeft size={16} />
+          </button>
+          <span className="text-sm text-slate-600 px-3">
+            Page {page} / {totalPages}
+          </span>
+          <button
+            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            disabled={page >= totalPages}
+            className="p-2 rounded-lg bg-white border border-slate-200 disabled:opacity-40 hover:bg-slate-50 transition-colors"
+          >
+            <CaretRight size={16} />
+          </button>
+        </div>
       )}
     </div>
   )

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { CurrencyEur, Path, SignOut, House, ChartBar, Taxi, List, X } from '@phosphor-icons/react'
+import { CurrencyEur, Path, SignOut, House, ChartBar, Taxi, List, X, SquaresFour } from '@phosphor-icons/react'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -40,6 +40,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (pathname === '/admin') return <>{children}</>
 
   const navLinks = [
+    { href: '/admin/dashboard', label: 'Dashboard', icon: <SquaresFour size={18} /> },
     { href: '/admin/prix', label: 'Prix', icon: <CurrencyEur size={18} /> },
     { href: '/admin/forfaits', label: 'Forfaits', icon: <Path size={18} /> },
     { href: '/admin/reservations', label: 'Résas', icon: <Taxi size={18} /> },

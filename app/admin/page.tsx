@@ -30,7 +30,7 @@ export default function AdminLogin() {
         return
       }
       sessionStorage.setItem('admin_token', data.token)
-      router.push('/admin/prix')
+      router.push('/admin/dashboard')
     } catch {
       setError('Erreur de connexion au serveur')
     } finally {

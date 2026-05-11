@@ -25,6 +25,10 @@ export async function GET(req: NextRequest) {
     const from = searchParams.get('from')
     const to = searchParams.get('to')
 
+    const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 500)
+    const page = Math.max(parseInt(searchParams.get('page') || '1'), 1)
+    const skip = (page - 1) * limit
+
     const filter: any = {}
     if (status && status !== 'all') filter.status = status
     if (from || to) {
@@ -33,17 +37,25 @@ export async function GET(req: NextRequest) {
       if (to) filter.pickupDate.$lte = new Date(to + 'T23:59:59.999Z')
     }
 
-    const reservations = await Reservation.find(filter).sort({ pickupDate: -1 }).limit(500).lean()
-
-    const stats = {
-      total: await Reservation.countDocuments(filter),
-      en_attente: await Reservation.countDocuments({ ...filter, status: 'en_attente' }),
-      confirmee: await Reservation.countDocuments({ ...filter, status: 'confirmee' }),
-      terminee: await Reservation.countDocuments({ ...filter, status: 'terminee' }),
-      annulee: await Reservation.countDocuments({ ...filter, status: 'annulee' }),
+    const baseFilter: any = {}
+    if (from || to) {
+      baseFilter.pickupDate = filter.pickupDate
     }
 
-    return NextResponse.json({ success: true, data: reservations, stats })
+    const [reservations, total] = await Promise.all([
+      Reservation.find(filter).sort({ pickupDate: -1 }).skip(skip).limit(limit).lean(),
+      Reservation.countDocuments(filter),
+    ])
+
+    const stats = {
+      total: await Reservation.countDocuments(baseFilter),
+      en_attente: await Reservation.countDocuments({ ...baseFilter, status: 'en_attente' }),
+      confirmee: await Reservation.countDocuments({ ...baseFilter, status: 'confirmee' }),
+      terminee: await Reservation.countDocuments({ ...baseFilter, status: 'terminee' }),
+      annulee: await Reservation.countDocuments({ ...baseFilter, status: 'annulee' }),
+    }
+
+    return NextResponse.json({ success: true, data: reservations, stats, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } })
   } catch (e: any) {
     return NextResponse.json({ success: false, message: e.message }, { status: 500 })
   }
