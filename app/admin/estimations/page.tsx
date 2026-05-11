@@ -203,32 +203,75 @@ export default function AdminEstimations() {
         )}
       </div>
 
-      {/* Tableau */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-4 py-3">
-                  <input type="checkbox" checked={estimations.length > 0 && selected.size === estimations.length}
-                    onChange={toggleAll} className="rounded border-slate-300" />
-                </th>
-                <th className="text-left px-4 py-3 text-slate-600 font-semibold">Date</th>
-                <th className="text-left px-4 py-3 text-slate-600 font-semibold">Départ</th>
-                <th className="text-left px-4 py-3 text-slate-600 font-semibold">Destination</th>
-                <th className="text-right px-4 py-3 text-slate-600 font-semibold">Dist.</th>
-                <th className="text-right px-4 py-3 text-slate-600 font-semibold">Prix</th>
-                <th className="text-right px-4 py-3 text-slate-600 font-semibold">Fourchette</th>
-                <th className="text-center px-4 py-3 text-slate-600 font-semibold">Tarif</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr><td colSpan={8} className="text-center py-8 text-slate-400">Chargement...</td></tr>
-              ) : estimations.length === 0 ? (
-                <tr><td colSpan={8} className="text-center py-8 text-slate-400">Aucune estimation sur cette période</td></tr>
-              ) : (
-                estimations.map(e => (
+      {/* Liste : cartes mobile / tableau desktop */}
+      {loading ? (
+        <div className="text-center py-8 text-slate-400">Chargement...</div>
+      ) : estimations.length === 0 ? (
+        <div className="text-center py-8 text-slate-400">Aucune estimation sur cette période</div>
+      ) : (
+        <>
+          {/* Cartes mobile */}
+          <div className="md:hidden space-y-3">
+            <div className="flex items-center gap-3 px-1">
+              <input type="checkbox" checked={estimations.length > 0 && selected.size === estimations.length}
+                onChange={toggleAll} className="rounded border-slate-300" />
+              <span className="text-xs text-slate-500">Tout sélectionner</span>
+            </div>
+            {estimations.map(e => (
+              <div key={e._id} className={`bg-white rounded-2xl p-4 shadow-sm border transition-colors ${selected.has(e._id) ? 'border-blue-400 bg-blue-50' : 'border-slate-200'}`}>
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <input type="checkbox" checked={selected.has(e._id)}
+                      onChange={() => toggleSelect(e._id)} className="rounded border-slate-300" />
+                    <span className="text-xs text-slate-400">{formatDate(e.createdAt)}</span>
+                  </div>
+                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${tariffColor(e.tariffType)}`}>
+                    {e.tariffType}
+                  </span>
+                </div>
+                <div className="space-y-1.5 text-sm">
+                  <div className="flex items-start gap-2">
+                    <MapPin size={14} className="text-green-600 mt-0.5 shrink-0" />
+                    <span className="text-slate-800">{e.from}</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <MapPin size={14} className="text-red-500 mt-0.5 shrink-0" />
+                    <span className="text-slate-800">{e.to}</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
+                  <span className="text-xs text-slate-500">{e.distance.toFixed(1)} km</span>
+                  <div className="text-right">
+                    <span className="font-bold text-green-700">{e.price.toFixed(2)}€</span>
+                    {e.fourchette && (
+                      <div className="text-xs text-slate-400">{e.fourchette.de.toFixed(2)}€ - {e.fourchette.a.toFixed(2)}€</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Tableau desktop */}
+          <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200">
+                  <th className="px-4 py-3">
+                    <input type="checkbox" checked={estimations.length > 0 && selected.size === estimations.length}
+                      onChange={toggleAll} className="rounded border-slate-300" />
+                  </th>
+                  <th className="text-left px-4 py-3 text-slate-600 font-semibold">Date</th>
+                  <th className="text-left px-4 py-3 text-slate-600 font-semibold">Départ</th>
+                  <th className="text-left px-4 py-3 text-slate-600 font-semibold">Destination</th>
+                  <th className="text-right px-4 py-3 text-slate-600 font-semibold">Dist.</th>
+                  <th className="text-right px-4 py-3 text-slate-600 font-semibold">Prix</th>
+                  <th className="text-right px-4 py-3 text-slate-600 font-semibold">Fourchette</th>
+                  <th className="text-center px-4 py-3 text-slate-600 font-semibold">Tarif</th>
+                </tr>
+              </thead>
+              <tbody>
+                {estimations.map(e => (
                   <tr key={e._id} className={`border-b border-slate-100 hover:bg-slate-50 transition-colors ${selected.has(e._id) ? 'bg-blue-50' : ''}`}>
                     <td className="px-4 py-3">
                       <input type="checkbox" checked={selected.has(e._id)}
@@ -248,12 +291,12 @@ export default function AdminEstimations() {
                       </span>
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
     </div>
   )
 }
