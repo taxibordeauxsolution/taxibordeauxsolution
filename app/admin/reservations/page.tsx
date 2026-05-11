@@ -35,6 +35,11 @@ export default function AdminReservations() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
 
+  const today = new Date().toISOString().split('T')[0]
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().split('T')[0]
+  const [dateFrom, setDateFrom] = useState(thirtyDaysAgo)
+  const [dateTo, setDateTo] = useState(today)
+
   const token = () => sessionStorage.getItem('admin_token') || ''
 
   const load = useCallback(async () => {
@@ -42,6 +47,8 @@ export default function AdminReservations() {
     try {
       const params = new URLSearchParams()
       if (statusFilter !== 'all') params.set('status', statusFilter)
+      if (dateFrom) params.set('from', dateFrom)
+      if (dateTo) params.set('to', dateTo)
       params.set('page', String(page))
       params.set('limit', '20')
       const res = await fetch(`/api/admin/reservations?${params}`, {
@@ -55,7 +62,7 @@ export default function AdminReservations() {
       }
     } catch { }
     setLoading(false)
-  }, [statusFilter, page])
+  }, [statusFilter, page, dateFrom, dateTo])
 
   useEffect(() => { load() }, [load])
 
@@ -157,6 +164,18 @@ export default function AdminReservations() {
             placeholder="Rechercher par nom, téléphone, n° résa..."
             className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none"
           />
+        </div>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2">
+            <label className="text-xs text-slate-500">Du</label>
+            <input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1) }}
+              className="px-2 py-1.5 border border-slate-200 rounded-lg text-xs sm:text-sm" />
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="text-xs text-slate-500">Au</label>
+            <input type="date" value={dateTo} onChange={e => { setDateTo(e.target.value); setPage(1) }}
+              className="px-2 py-1.5 border border-slate-200 rounded-lg text-xs sm:text-sm" />
+          </div>
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
         {['all', 'en_attente', 'confirmee', 'terminee', 'annulee'].map(s => (

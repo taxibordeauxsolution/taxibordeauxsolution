@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin } from '@phosphor-icons/react'
 
 interface Stats {
   reservations: { total: number; en_attente: number; confirmee: number; terminee: number; annulee: number }
   estimations: { total: number; avgPrice: number }
+  revenus: { aujourdhui: number; semaine: number; mois: number }
 }
 
 interface Reservation {
@@ -31,12 +32,34 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats>({
     reservations: { total: 0, en_attente: 0, confirmee: 0, terminee: 0, annulee: 0 },
     estimations: { total: 0, avgPrice: 0 },
+    revenus: { aujourdhui: 0, semaine: 0, mois: 0 },
   })
   const [recentResas, setRecentResas] = useState<Reservation[]>([])
   const [recentEstimations, setRecentEstimations] = useState<Estimation[]>([])
   const [loading, setLoading] = useState(true)
+  const [newResaAlert, setNewResaAlert] = useState(false)
+  const lastResaCountRef = useRef<number | null>(null)
 
   const token = () => sessionStorage.getItem('admin_token') || ''
+
+  const playNotificationSound = () => {
+    try {
+      const ctx = new AudioContext()
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.frequency.value = 800
+      gain.gain.value = 0.3
+      osc.start()
+      osc.frequency.setValueAtTime(800, ctx.currentTime)
+      osc.frequency.setValueAtTime(1000, ctx.currentTime + 0.15)
+      osc.frequency.setValueAtTime(800, ctx.currentTime + 0.3)
+      gain.gain.setValueAtTime(0.3, ctx.currentTime + 0.4)
+      gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5)
+      osc.stop(ctx.currentTime + 0.5)
+    } catch {}
+  }
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -49,8 +72,34 @@ export default function AdminDashboard() {
       const estJson = await estRes.json()
 
       if (resaJson.success) {
+        const newTotal = resaJson.stats.total
+        if (lastResaCountRef.current !== null && newTotal > lastResaCountRef.current) {
+          playNotificationSound()
+          setNewResaAlert(true)
+          setTimeout(() => setNewResaAlert(false), 5000)
+        }
+        lastResaCountRef.current = newTotal
+
         setStats(prev => ({ ...prev, reservations: resaJson.stats }))
         setRecentResas(resaJson.data.slice(0, 5))
+
+        const now = new Date()
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+        const weekStart = new Date(todayStart)
+        weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1)
+        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+
+        const terminees = (resaJson.data as Reservation[]).filter((r: Reservation) => r.status === 'terminee')
+        const sum = (list: Reservation[]) => list.reduce((s, r) => s + (r.pricing.totalPrice || 0), 0)
+
+        setStats(prev => ({
+          ...prev,
+          revenus: {
+            aujourdhui: sum(terminees.filter(r => new Date(r.pickupDate) >= todayStart)),
+            semaine: sum(terminees.filter(r => new Date(r.pickupDate) >= weekStart)),
+            mois: sum(terminees.filter(r => new Date(r.pickupDate) >= monthStart)),
+          }
+        }))
       }
       if (estJson.success) {
         setStats(prev => ({ ...prev, estimations: estJson.stats }))
@@ -61,6 +110,11 @@ export default function AdminDashboard() {
   }, [])
 
   useEffect(() => { load() }, [load])
+
+  useEffect(() => {
+    const interval = setInterval(load, 30000)
+    return () => clearInterval(interval)
+  }, [load])
 
   const formatDate = (d: string) => {
     const date = new Date(d)
@@ -99,6 +153,13 @@ export default function AdminDashboard() {
     <div className="space-y-6">
       <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Dashboard</h1>
 
+      {newResaAlert && (
+        <div className="bg-blue-600 text-white rounded-2xl p-4 shadow-lg flex items-center gap-3 animate-pulse">
+          <Taxi size={24} />
+          <span className="font-bold">Nouvelle réservation !</span>
+        </div>
+      )}
+
       {/* Stats principales */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
@@ -116,6 +177,22 @@ export default function AdminDashboard() {
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
           <div className="text-xs text-slate-500">Prix moyen</div>
           <div className="text-2xl font-bold text-green-700">{stats.estimations.avgPrice.toFixed(0)}€</div>
+        </div>
+      </div>
+
+      {/* Revenus */}
+      <div className="grid grid-cols-3 gap-3">
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
+          <div className="text-xs text-green-700">Aujourd'hui</div>
+          <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.aujourdhui.toFixed(0)}€</div>
+        </div>
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
+          <div className="text-xs text-green-700">Cette semaine</div>
+          <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.semaine.toFixed(0)}€</div>
+        </div>
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
+          <div className="text-xs text-green-700">Ce mois</div>
+          <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.mois.toFixed(0)}€</div>
         </div>
       </div>
 
