@@ -116,36 +116,56 @@ export default function AdminReservations() {
 
   const isPast = (d: string) => new Date(d) < new Date()
 
+  const loadLogoBase64 = (): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        canvas.width = img.width
+        canvas.height = img.height
+        const ctx = canvas.getContext('2d')
+        ctx?.drawImage(img, 0, 0)
+        resolve(canvas.toDataURL('image/png'))
+      }
+      img.onerror = () => resolve('')
+      img.src = '/images/logo/Logo Taxi Bordeaux Solution.png.png'
+    })
+  }
+
   const generateInvoice = async (r: Reservation) => {
     try {
-      const res = await fetch('/api/admin/invoice-number', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token()}` }
-      })
+      const [res, logoBase64] = await Promise.all([
+        fetch('/api/admin/invoice-number', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+          body: JSON.stringify({ reservationId: r._id })
+        }),
+        loadLogoBase64()
+      ])
       const json = await res.json()
       if (!json.success) { alert('Erreur génération numéro de facture'); return }
       const num = json.invoiceNumber
 
       const doc = new jsPDF()
       const w = doc.internal.pageSize.getWidth()
-      let y = 20
+      let y = 15
 
+      if (logoBase64) {
+        doc.addImage(logoBase64, 'PNG', 20, y, 30, 30)
+      }
+
+      const textX = logoBase64 ? 55 : 20
       doc.setFont('helvetica', 'bold')
-      doc.setFontSize(22)
+      doc.setFontSize(20)
       doc.setTextColor(30, 64, 175)
-      doc.text('TAXI BORDEAUX SOLUTION', 20, y)
-      y += 8
+      doc.text('TAXI BORDEAUX SOLUTION', textX, y + 8)
       doc.setFontSize(9)
       doc.setFont('helvetica', 'normal')
       doc.setTextColor(100, 100, 100)
-      doc.text('Sainte-Eulalie, 33560', 20, y)
-      y += 4.5
-      doc.text('Tél : 06 67 23 78 22', 20, y)
-      y += 4.5
-      doc.text('Email : contact@taxibordeauxsolution.fr', 20, y)
-      y += 4.5
-      doc.text('SIRET : 987 573 128 00012', 20, y)
-      y += 12
+      doc.text('Sainte-Eulalie, 33560  |  Tél : 06 67 23 78 22', textX, y + 15)
+      doc.text('Email : contact@taxibordeauxsolution.fr  |  SIRET : 987 573 128 00012', textX, y + 20)
+      y += 35
 
       doc.setDrawColor(30, 64, 175)
       doc.setLineWidth(0.8)
@@ -160,10 +180,14 @@ export default function AdminReservations() {
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(10)
       doc.text(`Date : ${dateFacture}`, w - 20, y, { align: 'right' })
-      y += 14
+      y += 7
+      doc.setFontSize(9)
+      doc.setTextColor(120, 120, 120)
+      doc.text(`Réservation : ${r.reservationId}`, 20, y)
+      y += 12
 
       doc.setFillColor(245, 247, 250)
-      doc.roundedRect(20, y, w - 40, 32, 3, 3, 'F')
+      doc.roundedRect(20, y, w - 40, r.customer.email ? 32 : 27, 3, 3, 'F')
       y += 7
       doc.setFont('helvetica', 'bold')
       doc.setFontSize(11)
@@ -173,7 +197,7 @@ export default function AdminReservations() {
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(10)
       doc.setTextColor(60, 60, 60)
-      doc.text(`${r.customer.name}`, 26, y)
+      doc.text(r.customer.name, 26, y)
       y += 5
       doc.text(`Tél : ${r.customer.phone}`, 26, y)
       if (r.customer.email) {
@@ -182,8 +206,14 @@ export default function AdminReservations() {
       }
       y += 14
 
+      const fromAddr = typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || ''
+      const toAddr = typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || ''
+      const fromLines = doc.splitTextToSize(`De : ${fromAddr}`, w - 52)
+      const toLines = doc.splitTextToSize(`À : ${toAddr}`, w - 52)
+      const trajetH = 15 + (fromLines.length + toLines.length) * 5
+
       doc.setFillColor(245, 247, 250)
-      doc.roundedRect(20, y, w - 40, 28, 3, 3, 'F')
+      doc.roundedRect(20, y, w - 40, trajetH, 3, 3, 'F')
       y += 7
       doc.setFont('helvetica', 'bold')
       doc.setFontSize(11)
@@ -193,21 +223,18 @@ export default function AdminReservations() {
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(10)
       doc.setTextColor(60, 60, 60)
-      const fromAddr = typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || ''
-      const toAddr = typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || ''
-      doc.text(`De : ${fromAddr}`, 26, y, { maxWidth: w - 52 })
-      y += 5
-      doc.text(`À : ${toAddr}`, 26, y, { maxWidth: w - 52 })
+      doc.text(fromLines, 26, y)
+      y += fromLines.length * 5
+      doc.text(toLines, 26, y)
+      y += toLines.length * 5
       const pickupDateStr = new Date(r.pickupDate).toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-      y += 5
       doc.text(`Date de prise en charge : ${pickupDateStr}`, 26, y)
-      y += 16
+      y += 14
 
       const ttc = r.pricing.totalPrice
       const ht = Math.round((ttc / 1.10) * 100) / 100
       const tva = Math.round((ttc - ht) * 100) / 100
 
-      doc.setDrawColor(200, 200, 200)
       doc.setFillColor(30, 64, 175)
       doc.roundedRect(20, y, w - 40, 10, 2, 2, 'F')
       doc.setFont('helvetica', 'bold')
@@ -224,6 +251,7 @@ export default function AdminReservations() {
       y += 8
 
       doc.setDrawColor(220, 220, 220)
+      doc.setLineWidth(0.3)
       doc.line(20, y, w - 20, y)
       y += 6
 
@@ -241,7 +269,6 @@ export default function AdminReservations() {
       doc.setTextColor(30, 64, 175)
       doc.text('TOTAL TTC', 26, y)
       doc.text(`${ttc.toFixed(2)} €`, w - 26, y, { align: 'right' })
-      y += 20
 
       doc.setFont('helvetica', 'italic')
       doc.setFontSize(9)
