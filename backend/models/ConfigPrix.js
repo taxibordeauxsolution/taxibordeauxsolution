@@ -18,6 +18,7 @@ const ConfigPrixSchema = new mongoose.Schema({
   tarifNuitDegressifActive: { type: Boolean, default: false },
   tarifNuitDegressifSeuilKm: { type: Number, default: 30 },
   tarifNuitDegressifPrixKm: { type: Number, default: 2.50 },
+  tarifNuitDegressifMode: { type: String, default: 'degressif' },
 }, { timestamps: true })
 
 export default mongoose.models?.ConfigPrix || mongoose.model('ConfigPrix', ConfigPrixSchema)

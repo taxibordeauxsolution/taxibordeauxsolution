@@ -35,6 +35,7 @@ const TaxiBookingHomePreview = () => {
     tarifNuitDegressifActive: false,
     tarifNuitDegressifSeuilKm: 30,
     tarifNuitDegressifPrixKm: 2.50,
+    tarifNuitDegressifMode: 'degressif',
   })
   const [maps, setMaps] = useState<any>(null)
   const [map, setMap] = useState<any>(null)
@@ -608,16 +609,19 @@ const TaxiBookingHomePreview = () => {
     const NIGHT_RATE = configPrix.tarifKmNuit
 
     let distanceFare: number
-    const useDegressif = configPrix.tarifNuitDegressifActive && tripData.distance > configPrix.tarifNuitDegressifSeuilKm
-    const degressifCalc = (dist: number, rate: number) => {
+    const useNuitReduit = configPrix.tarifNuitDegressifActive && tripData.distance > configPrix.tarifNuitDegressifSeuilKm
+    const nuitReduitCalc = (dist: number, rate: number) => {
+      if (configPrix.tarifNuitDegressifMode === 'retroactif') {
+        return dist * configPrix.tarifNuitDegressifPrixKm
+      }
       const seuil = configPrix.tarifNuitDegressifSeuilKm
       return seuil * rate + (dist - seuil) * configPrix.tarifNuitDegressifPrixKm
     }
     if (isHoliday || isSunday) {
-      distanceFare = useDegressif ? degressifCalc(tripData.distance, NIGHT_RATE) : tripData.distance * NIGHT_RATE
+      distanceFare = useNuitReduit ? nuitReduitCalc(tripData.distance, NIGHT_RATE) : tripData.distance * NIGHT_RATE
     } else if (departureDate) {
-      if (useDegressif && isNight) {
-        distanceFare = degressifCalc(tripData.distance, NIGHT_RATE)
+      if (useNuitReduit && isNight) {
+        distanceFare = nuitReduitCalc(tripData.distance, NIGHT_RATE)
       } else {
         distanceFare = calculateDistanceFare(departureDate, tripData.duration, tripData.distance, DAY_RATE, NIGHT_RATE)
       }
