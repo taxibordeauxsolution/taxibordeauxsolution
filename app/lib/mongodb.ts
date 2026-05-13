@@ -44,6 +44,9 @@ const ConfigPrixSchema = new mongoose.Schema({
   suppApprocheActive:  { type: Boolean, default: false },
   suppApprocheSeuilKm: { type: Number, default: 50 },
   itineraireCourt:     { type: Boolean, default: true },
+  tarifNuitDegressifActive: { type: Boolean, default: false },
+  tarifNuitDegressifSeuilKm: { type: Number, default: 30 },
+  tarifNuitDegressifPrixKm: { type: Number, default: 2.50 },
 }, { timestamps: true })
 
 export const ConfigPrix =

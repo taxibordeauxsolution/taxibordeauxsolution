@@ -230,10 +230,11 @@ export default function Header() {
                   setMobileMenuOpen(false)
                   if (pathname === '/') {
                     setTimeout(() => {
-                      document.getElementById('reservation')?.scrollIntoView({ behavior: 'smooth' })
-                    }, 100)
+                      const el = document.getElementById('reservation-mobile') || document.getElementById('reservation')
+                      el?.scrollIntoView({ behavior: 'smooth' })
+                    }, 150)
                   } else {
-                    window.location.href = '/#reservation'
+                    window.location.href = '/#reservation-mobile'
                   }
                 }}
                 className="text-base font-semibold text-center px-3 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"

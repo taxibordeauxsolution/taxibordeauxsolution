@@ -19,6 +19,9 @@ export default function AdminPrix() {
     suppApprocheActive: false,
     suppApprocheSeuilKm: 50,
     itineraireCourt: true,
+    tarifNuitDegressifActive: false,
+    tarifNuitDegressifSeuilKm: 30,
+    tarifNuitDegressifPrixKm: 2.50,
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -165,6 +168,53 @@ export default function AdminPrix() {
               className="w-full border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
           </div>
         </div>
+      </div>
+
+      {/* Tarif nuit dégressif */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+        <div className="flex items-center justify-between border-b pb-3">
+          <h2 className="font-bold text-gray-800 text-base sm:text-lg">Tarif nuit dégressif</h2>
+          <button
+            type="button"
+            onClick={() => setPrix(prev => ({ ...prev, tarifNuitDegressifActive: !prev.tarifNuitDegressifActive }))}
+            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
+              prix.tarifNuitDegressifActive ? 'bg-green-500' : 'bg-gray-300'
+            }`}
+          >
+            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+              prix.tarifNuitDegressifActive ? 'translate-x-6' : 'translate-x-1'
+            }`} />
+          </button>
+        </div>
+
+        {prix.tarifNuitDegressifActive ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            <div>
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">À partir de</label>
+              <div className="flex items-center gap-2">
+                <input type="number" step="1" min="5"
+                  value={prix.tarifNuitDegressifSeuilKm}
+                  onChange={e => setNum('tarifNuitDegressifSeuilKm', e.target.value)}
+                  className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                <span className="text-gray-500 text-sm w-10">km</span>
+              </div>
+              <p className="text-xs text-gray-400 mt-1">Au-delà de ce seuil, le tarif nuit réduit s{"'"}applique</p>
+            </div>
+            <div>
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Prix km nuit réduit</label>
+              <div className="flex items-center gap-2">
+                <input type="number" step="0.01" min="0"
+                  value={prix.tarifNuitDegressifPrixKm}
+                  onChange={e => setNum('tarifNuitDegressifPrixKm', e.target.value)}
+                  className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                <span className="text-gray-500 text-sm w-10">€/km</span>
+              </div>
+              <p className="text-xs text-gray-400 mt-1">Au lieu de {prix.tarifKmNuit}€/km normal</p>
+            </div>
+          </div>
+        ) : (
+          <p className="text-gray-400 text-sm">Activez pour appliquer un tarif nuit réduit au-delà d{"'"}un certain nombre de km.</p>
+        )}
       </div>
 
       {/* Remise courses longues */}
