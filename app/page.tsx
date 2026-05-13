@@ -22,7 +22,7 @@ export default function HomePage() {
         />
         <div className="absolute inset-0 bg-black/60"></div>
 
-        <div className="relative container mx-auto px-4 py-16 lg:py-24">
+        <div className="relative container mx-auto px-4 pt-28 pb-16 lg:pt-36 lg:pb-24">
           <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[70vh]">
 
             {/* Contenu principal */}
