@@ -26,6 +26,9 @@ const TaxiBookingHomePreview = () => {
     courseMiniDe: 20.00,
     heureDebutNuit: '19:00',
     heureFinNuit: '07:00',
+    remiseActive: false,
+    remiseSeuilKm: 50,
+    remisePourcentage: 10,
   })
   const [maps, setMaps] = useState<any>(null)
   const [map, setMap] = useState<any>(null)
@@ -53,6 +56,7 @@ const TaxiBookingHomePreview = () => {
     serviceAreaValidation: { valid: true }
   })
   const [tollCost, setTollCost] = useState(0)
+  const [prixAvantRemise, setPrixAvantRemise] = useState(0)
 
   const [bookingData, setBookingData] = useState<BookingData>(() => {
     const now = new Date()
@@ -651,6 +655,16 @@ const TaxiBookingHomePreview = () => {
       }
     }
 
+    // Remise courses longues
+    let remiseAppliquee = false
+    let prixSansRemise = finalPrice
+    if (configPrix.remiseActive && !isForfait && tripData.distance >= configPrix.remiseSeuilKm) {
+      prixSansRemise = finalPrice
+      finalPrice = Math.round(finalPrice * (1 - configPrix.remisePourcentage / 100) * 100) / 100
+      remiseAppliquee = true
+    }
+    setPrixAvantRemise(remiseAppliquee ? prixSansRemise : 0)
+
     let tariffType = 'Jour'
     if (isHoliday) tariffType = 'Férié'
     else if (isSunday) tariffType = 'Dimanche'
@@ -1051,6 +1065,12 @@ const TaxiBookingHomePreview = () => {
               
               <div className="pt-4 border-t border-green-200">
                 <span className="block text-center text-gray-900 sm:text-gray-600 text-sm mb-2">{t('estimatedPrice')} :</span>
+                {prixAvantRemise > 0 && (
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <span className="text-lg text-gray-400 line-through">{prixAvantRemise.toFixed(2)}€</span>
+                    <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
+                  </div>
+                )}
                 <div className="flex items-center justify-center gap-2">
                   {tripData.priceDetails?.isForfait
                     ? <span className="text-3xl font-extrabold tracking-tight text-green-700">{(tripData.price || 0).toFixed(2)}€</span>
@@ -1214,6 +1234,12 @@ const TaxiBookingHomePreview = () => {
             <div className="bg-green-50 rounded-lg p-4 mt-6">
               <div className="text-center">
                 <div className="text-sm text-green-800 sm:text-green-600 mb-1">{t('totalPriceLabel')}</div>
+                {prixAvantRemise > 0 && (
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <span className="text-base text-gray-400 line-through">{prixAvantRemise.toFixed(2)}€</span>
+                    <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
+                  </div>
+                )}
                 <div className="text-3xl font-bold text-green-700">
                   {tripData.priceDetails?.isForfait
                     ? `${(tripData.price || 0).toFixed(2)}€`
@@ -1370,14 +1396,22 @@ const TaxiBookingHomePreview = () => {
             <hr className="my-3" />
             <div className="flex justify-between text-lg font-bold">
               <span>{t('totalPrice')}:</span>
-              <span className="text-green-800 sm:text-green-600 font-semibold">
-                {tripData.priceDetails?.isForfait
-                  ? `${(tripData.price || 0).toFixed(2)}€`
-                  : tripData.price <= configPrix.courseMini
-                    ? `${(configPrix.courseMiniDe || 0).toFixed(2)}€ à ${(configPrix.courseMini || 0).toFixed(2)}€`
-                    : `${((tripData.price || 0) - (configPrix.fraisApproche || 0)).toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
-                }
-              </span>
+              <div className="text-right">
+                {prixAvantRemise > 0 && (
+                  <div className="flex items-center justify-end gap-1 mb-0.5">
+                    <span className="text-sm text-gray-400 line-through font-normal">{prixAvantRemise.toFixed(2)}€</span>
+                    <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
+                  </div>
+                )}
+                <span className="text-green-800 sm:text-green-600 font-semibold">
+                  {tripData.priceDetails?.isForfait
+                    ? `${(tripData.price || 0).toFixed(2)}€`
+                    : tripData.price <= configPrix.courseMini
+                      ? `${(configPrix.courseMiniDe || 0).toFixed(2)}€ à ${(configPrix.courseMini || 0).toFixed(2)}€`
+                      : `${((tripData.price || 0) - (configPrix.fraisApproche || 0)).toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
+                  }
+                </span>
+              </div>
             </div>
           </div>
         </div>

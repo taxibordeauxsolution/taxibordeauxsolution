@@ -38,6 +38,9 @@ const ConfigPrixSchema = new mongoose.Schema({
   courseMiniDe:   { type: Number, default: 20.00 },
   heureDebutNuit: { type: String, default: '19:00' },
   heureFinNuit:   { type: String, default: '07:00' },
+  remiseActive:       { type: Boolean, default: false },
+  remiseSeuilKm:      { type: Number, default: 50 },
+  remisePourcentage:  { type: Number, default: 10 },
 }, { timestamps: true })
 
 export const ConfigPrix =

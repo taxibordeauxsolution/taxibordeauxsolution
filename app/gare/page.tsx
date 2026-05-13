@@ -397,7 +397,7 @@ export default function TaxiGare() {
 
             <div className="border border-gray-200 rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-2">Quel est le tarif taxi Bordeaux gare vers l&apos;aéroport ?</h3>
-              <p className="text-gray-600">Le <strong>taxi Bordeaux</strong> gare Saint-Jean vers l&apos;aéroport de Mérignac est facturé selon le compteur officiel de la Préfecture de Gironde. Le trajet dure environ 210 minutes.</p>
+              <p className="text-gray-600">Le <strong>taxi Bordeaux</strong> gare Saint-Jean vers l&apos;aéroport de Mérignac est facturé selon le compteur officiel de la Préfecture de Gironde. Le trajet dure environ 30 minutes.</p>
             </div>
 
             <div className="border border-gray-200 rounded-2xl p-6">
