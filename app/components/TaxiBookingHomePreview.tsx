@@ -31,6 +31,7 @@ const TaxiBookingHomePreview = () => {
     remisePourcentage: 10,
     suppApprocheActive: false,
     suppApprocheSeuilKm: 50,
+    itineraireCourt: true,
   })
   const [maps, setMaps] = useState<any>(null)
   const [map, setMap] = useState<any>(null)
@@ -522,7 +523,7 @@ const TaxiBookingHomePreview = () => {
       origin: tripData.fromCoords,
       destination: tripData.toCoords,
       travelMode: (window as any).google.maps.TravelMode.DRIVING,
-      avoidHighways: false,
+      avoidHighways: configPrix.itineraireCourt,
       avoidTolls: false,
       unitSystem: (window as any).google.maps.UnitSystem.METRIC,
       optimizeWaypoints: true,
@@ -570,7 +571,7 @@ const TaxiBookingHomePreview = () => {
         setError('Impossible de calculer l&apos;itinéraire')
       }
     })
-  }, [directionsService, directionsRenderer, tripData.fromCoords, tripData.toCoords, map])
+  }, [directionsService, directionsRenderer, tripData.fromCoords, tripData.toCoords, map, configPrix.itineraireCourt])
 
   // Calcul automatique de l'itinéraire dès que les adresses sont disponibles
   useEffect(() => {
@@ -799,8 +800,9 @@ const TaxiBookingHomePreview = () => {
           notes: bookingData.notes
         },
         estimatedPickupTime: pickupTime.toLocaleString('fr-FR', {
+          timeZone: 'Europe/Paris',
           day: '2-digit',
-          month: '2-digit', 
+          month: '2-digit',
           year: 'numeric',
           hour: '2-digit',
           minute: '2-digit'

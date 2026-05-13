@@ -1,8 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 export default function WhatsAppButton() {
+  const pathname = usePathname()
+  if (pathname?.startsWith('/admin')) return null
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {

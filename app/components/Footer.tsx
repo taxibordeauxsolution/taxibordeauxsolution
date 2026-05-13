@@ -3,8 +3,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Phone, Mail, MapPin, Clock, Star, Shield } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 
 export default function Footer() {
+  const pathname = usePathname()
+  if (pathname?.startsWith('/admin')) return null
   const phoneNumber = "+33667237822"
   const phoneDisplay = "+33 6 67 23 78 22"
 

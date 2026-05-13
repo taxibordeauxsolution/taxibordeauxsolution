@@ -18,6 +18,7 @@ export default function AdminPrix() {
     remisePourcentage: 10,
     suppApprocheActive: false,
     suppApprocheSeuilKm: 50,
+    itineraireCourt: true,
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -259,6 +260,47 @@ export default function AdminPrix() {
         ) : (
           <p className="text-gray-400 text-sm">Activez pour supprimer les frais d{"'"}approche ({prix.fraisApproche}€) sur les longues distances.</p>
         )}
+      </div>
+
+      {/* Mode itinéraire */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-4">
+        <div className="flex items-center justify-between border-b pb-3">
+          <div>
+            <h2 className="font-bold text-gray-800 text-base sm:text-lg">Mode itinéraire</h2>
+            <p className="text-xs text-gray-400 mt-0.5">Détermine le calcul de distance pour les estimations</p>
+          </div>
+        </div>
+
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={() => setPrix(prev => ({ ...prev, itineraireCourt: true }))}
+            className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${
+              prix.itineraireCourt
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            <div className={`font-bold text-sm ${prix.itineraireCourt ? 'text-blue-700' : 'text-gray-700'}`}>
+              Plus court
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Évite les autoroutes, passe par la ville. Moins de km = prix plus bas.</p>
+          </button>
+          <button
+            type="button"
+            onClick={() => setPrix(prev => ({ ...prev, itineraireCourt: false }))}
+            className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${
+              !prix.itineraireCourt
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            <div className={`font-bold text-sm ${!prix.itineraireCourt ? 'text-blue-700' : 'text-gray-700'}`}>
+              Plus rapide
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Autoroutes et rocade incluses. Plus de km mais trajet plus rapide.</p>
+          </button>
+        </div>
       </div>
 
       {message && (

@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from 'react'
 
 export default function Header() {
   const pathname = usePathname()
+  const isAdmin = pathname?.startsWith('/admin')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false)
   const [visible, setVisible] = useState(true)
@@ -47,6 +48,8 @@ export default function Header() {
     setMobileMenuOpen(false)
   }, [pathname])
 
+  if (isAdmin) return null
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -75,11 +78,8 @@ export default function Header() {
                 />
               </div>
               <div className="hidden sm:block">
-                <div className="text-base lg:text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
+                <div className="text-lg lg:text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
                   Taxi Bordeaux
-                </div>
-                <div className="text-[11px] text-gray-400 font-medium">
-                  24h/24 — 7j/7
                 </div>
               </div>
             </Link>
@@ -90,7 +90,7 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-sm font-medium px-3 py-1.5 rounded-lg transition-all duration-200 ${
+                  className={`text-[15px] font-medium px-3 py-1.5 rounded-lg transition-all duration-200 ${
                     pathname === item.href
                       ? 'text-blue-600 bg-blue-50'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -107,7 +107,7 @@ export default function Header() {
                 onMouseLeave={() => setServicesDropdownOpen(false)}
               >
                 <button
-                  className={`text-sm font-medium px-3 py-1.5 rounded-lg transition-all duration-200 flex items-center gap-1 ${
+                  className={`text-[15px] font-medium px-3 py-1.5 rounded-lg transition-all duration-200 flex items-center gap-1 ${
                     pathname === '/aeroport' || pathname === '/gare'
                       ? 'text-blue-600 bg-blue-50'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -125,7 +125,7 @@ export default function Header() {
                       <Link
                         key={service.name}
                         href={service.href}
-                        className={`block px-4 py-2.5 text-sm transition-colors ${
+                        className={`block px-4 py-2.5 text-[15px] transition-colors ${
                           pathname === service.href
                             ? 'text-blue-600 bg-blue-50 font-medium'
                             : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
@@ -143,7 +143,7 @@ export default function Header() {
             <div className="hidden lg:flex items-center gap-2">
               <Link
                 href="/#reservation"
-                className="text-sm font-semibold px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md"
+                className="text-[15px] font-semibold px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md"
                 onClick={(e) => {
                   e.preventDefault()
                   if (pathname === '/') {
@@ -157,7 +157,7 @@ export default function Header() {
               </Link>
               <a
                 href={`tel:${phoneNumber}`}
-                className="text-sm font-semibold px-4 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md"
+                className="text-[15px] font-semibold px-4 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md"
               >
                 <Phone size={15} />
                 <span className="hidden xl:inline">{phoneDisplay}</span>
