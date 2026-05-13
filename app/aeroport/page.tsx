@@ -57,7 +57,7 @@ export default function TaxiAeroport() {
             <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
               <a
                 href="tel:+33667237822"
-                className="group bg-blue-600 hover:bg-blue-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 shadow-xl hover:shadow-blue-500/25 hover:scale-105 flex items-center justify-center gap-3"
+                className="group bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 shadow-xl hover:shadow-green-500/25 hover:scale-105 flex items-center justify-center gap-3"
               >
                 <Phone size={24} />
                 <span>+33 6 67 23 78 22</span>
@@ -67,7 +67,7 @@ export default function TaxiAeroport() {
 
             <a
               href="#reserver-en-ligne"
-              className="group bg-green-600 hover:bg-green-700 text-white px-10 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-green-500/25 hover:scale-105 flex items-center justify-center gap-3 w-full sm:w-auto"
+              className="group bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-blue-500/25 hover:scale-105 flex items-center justify-center gap-3 w-full sm:w-auto"
             >
               <Calendar size={22} />
               <span>Réserver en ligne</span>
@@ -299,7 +299,7 @@ export default function TaxiAeroport() {
               </p>
               <a
                 href="tel:+33667237822"
-                className="inline-flex items-center gap-3 bg-sky-600 hover:bg-sky-700 text-white px-8 py-4 rounded-2xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <Phone size={20} />
                 +33 6 67 23 78 22
@@ -448,9 +448,9 @@ export default function TaxiAeroport() {
           </div>
 
           <div className="text-center mt-10">
-            <a href="tel:+33667237822" className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg hover:shadow-xl">
+            <a href="tel:+33667237822" className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg hover:shadow-xl">
               <Phone size={22} />
-              Réserver votre transfert
+              Appeler maintenant
               <ArrowRight size={20} />
             </a>
           </div>
@@ -517,7 +517,7 @@ export default function TaxiAeroport() {
 
           <a
             href="tel:+33667237822"
-            className="group bg-white text-blue-600 px-12 py-6 rounded-2xl font-bold text-2xl hover:bg-gray-100 transition-all duration-300 shadow-2xl hover:scale-105 inline-flex items-center gap-3"
+            className="group bg-white text-green-600 px-12 py-6 rounded-2xl font-bold text-2xl hover:bg-gray-100 transition-all duration-300 shadow-2xl hover:scale-105 inline-flex items-center gap-3"
           >
             <Phone size={28} />
             <span>+33 6 67 23 78 22</span>

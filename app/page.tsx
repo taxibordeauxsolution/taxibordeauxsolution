@@ -403,15 +403,15 @@ export default function HomePage() {
           <AnimateOnScroll className="text-center mt-12 flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="tel:+33667237822"
-              className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+              className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
             >
               <Phone size={22} />
-              Réserver votre transfert
+              Appeler maintenant
               <ArrowRight size={20} />
             </a>
             <a
               href="#reservation"
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+              className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
             >
               Réserver en ligne
               <ArrowRight size={20} />
@@ -626,7 +626,7 @@ export default function HomePage() {
                 <Phone className="text-green-600" size={32} />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-4">Téléphone</h3>
-              <a href="tel:+33667237822" className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors mb-2 block">
+              <a href="tel:+33667237822" className="text-2xl font-bold text-green-600 hover:text-green-700 transition-colors mb-2 block">
                 +33 6 67 23 78 22
               </a>
               <p className="text-slate-600 text-sm font-medium">

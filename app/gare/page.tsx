@@ -375,7 +375,7 @@ export default function TaxiGare() {
           <div className="text-center mt-10">
             <a href="tel:+33667237822" className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg hover:shadow-xl">
               <Phone size={22} />
-              Réserver votre transfert
+              Appeler maintenant
               <ArrowRight size={20} />
             </a>
           </div>

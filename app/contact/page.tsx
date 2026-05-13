@@ -59,10 +59,10 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="bg-blue-600 rounded-2xl p-6 text-white">
+              <div className="bg-green-600 rounded-2xl p-6 text-white">
                 <p className="font-bold text-lg mb-1">Réservation urgente ?</p>
-                <p className="text-blue-100 text-sm mb-4">Appelez-nous directement pour une prise en charge immédiate.</p>
-                <a href="tel:+33667237822" className="inline-block bg-white text-blue-600 font-bold px-5 py-2.5 rounded-xl hover:bg-blue-50 transition-colors">
+                <p className="text-green-100 text-sm mb-4">Appelez-nous directement pour une prise en charge immédiate.</p>
+                <a href="tel:+33667237822" className="inline-block bg-white text-green-600 font-bold px-5 py-2.5 rounded-xl hover:bg-green-50 transition-colors">
                   +33 6 67 23 78 22
                 </a>
               </div>
