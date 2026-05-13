@@ -16,6 +16,8 @@ export default function AdminPrix() {
     remiseActive: false,
     remiseSeuilKm: 50,
     remisePourcentage: 10,
+    suppApprocheActive: false,
+    suppApprocheSeuilKm: 50,
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -222,6 +224,40 @@ export default function AdminPrix() {
 
         {!prix.remiseActive && (
           <p className="text-gray-400 text-sm">Activez la remise pour proposer un prix réduit sur les courses longues distance.</p>
+        )}
+      </div>
+
+      {/* Suppression frais d'approche */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+        <div className="flex items-center justify-between border-b pb-3">
+          <h2 className="font-bold text-gray-800 text-base sm:text-lg">Offrir les frais d{"'"}approche</h2>
+          <button
+            type="button"
+            onClick={() => setPrix(prev => ({ ...prev, suppApprocheActive: !prev.suppApprocheActive }))}
+            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
+              prix.suppApprocheActive ? 'bg-green-500' : 'bg-gray-300'
+            }`}
+          >
+            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+              prix.suppApprocheActive ? 'translate-x-6' : 'translate-x-1'
+            }`} />
+          </button>
+        </div>
+
+        {prix.suppApprocheActive ? (
+          <div>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">À partir de</label>
+            <div className="flex items-center gap-2 max-w-xs">
+              <input type="number" step="1" min="10"
+                value={prix.suppApprocheSeuilKm}
+                onChange={e => setNum('suppApprocheSeuilKm', e.target.value)}
+                className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-green-500 focus:outline-none font-medium text-gray-900" />
+              <span className="text-gray-500 text-sm w-10">km</span>
+            </div>
+            <p className="text-xs text-gray-400 mt-1">Les {prix.fraisApproche}€ de frais d{"'"}approche seront offerts au-delà de cette distance</p>
+          </div>
+        ) : (
+          <p className="text-gray-400 text-sm">Activez pour supprimer les frais d{"'"}approche ({prix.fraisApproche}€) sur les longues distances.</p>
         )}
       </div>
 

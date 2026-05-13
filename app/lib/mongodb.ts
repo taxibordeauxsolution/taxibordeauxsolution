@@ -41,6 +41,8 @@ const ConfigPrixSchema = new mongoose.Schema({
   remiseActive:       { type: Boolean, default: false },
   remiseSeuilKm:      { type: Number, default: 50 },
   remisePourcentage:  { type: Number, default: 10 },
+  suppApprocheActive:  { type: Boolean, default: false },
+  suppApprocheSeuilKm: { type: Number, default: 50 },
 }, { timestamps: true })
 
 export const ConfigPrix =

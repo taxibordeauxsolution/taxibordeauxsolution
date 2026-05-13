@@ -29,6 +29,8 @@ const TaxiBookingHomePreview = () => {
     remiseActive: false,
     remiseSeuilKm: 50,
     remisePourcentage: 10,
+    suppApprocheActive: false,
+    suppApprocheSeuilKm: 50,
   })
   const [maps, setMaps] = useState<any>(null)
   const [map, setMap] = useState<any>(null)
@@ -611,7 +613,7 @@ const TaxiBookingHomePreview = () => {
     }
 
     const basePrice = priseEnCharge + distanceFare
-    const approachFees = configPrix.fraisApproche
+    const approachFees = (configPrix.suppApprocheActive && tripData.distance >= configPrix.suppApprocheSeuilKm) ? 0 : configPrix.fraisApproche
     let finalPrice = Math.max(Math.round((basePrice + approachFees + tollCost) * 100) / 100, configPrix.courseMini)
 
     // ── Vérification forfaits (chargés depuis l'API) ─────────────────────

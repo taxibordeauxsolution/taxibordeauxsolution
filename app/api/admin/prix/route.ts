@@ -36,7 +36,7 @@ export async function PUT(req: NextRequest) {
   try {
     await connectDB()
     const body = await req.json()
-    const fields = ['priseEnCharge', 'tarifKmJour', 'tarifKmNuit', 'fraisApproche', 'courseMini', 'courseMiniDe', 'heureDebutNuit', 'heureFinNuit', 'remiseActive', 'remiseSeuilKm', 'remisePourcentage']
+    const fields = ['priseEnCharge', 'tarifKmJour', 'tarifKmNuit', 'fraisApproche', 'courseMini', 'courseMiniDe', 'heureDebutNuit', 'heureFinNuit', 'remiseActive', 'remiseSeuilKm', 'remisePourcentage', 'suppApprocheActive', 'suppApprocheSeuilKm']
     const update: Record<string, any> = {}
     for (const f of fields) {
       if (body[f] !== undefined && body[f] !== '') update[f] = body[f]
