@@ -3,20 +3,23 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Phone, Menu, X, MapPin, Car, Calendar, PhoneCall, ChevronDown } from 'lucide-react'
-import { useState } from 'react'
+import { Phone, Menu, X, Calendar, PhoneCall, ChevronDown } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
 
 export default function Header() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false)
+  const [visible, setVisible] = useState(true)
+  const [scrolled, setScrolled] = useState(false)
+  const lastScrollY = useRef(0)
 
   const phoneNumber = "+33667237822"
   const phoneDisplay = "+33 6 67 23 78 22"
 
   const navigation = [
-    { name: 'Accueil', href: '/', current: pathname === '/' },
-    { name: 'Contact', href: '/contact', current: pathname === '/contact' },
+    { name: 'Accueil', href: '/' },
+    { name: 'Contact', href: '/contact' },
   ]
 
   const servicesMenu = [
@@ -24,206 +27,235 @@ export default function Header() {
     { name: 'Taxi Gare', href: '/gare' },
   ]
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY
+      setScrolled(currentY > 20)
+      if (currentY > lastScrollY.current && currentY > 80) {
+        setVisible(false)
+        setServicesDropdownOpen(false)
+      } else {
+        setVisible(true)
+      }
+      lastScrollY.current = currentY
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [pathname])
+
   return (
-    <header className="sticky top-0 z-50 lg:pt-3 lg:px-6">
-      <div className="bg-white/95 backdrop-blur-md shadow-lg border border-gray-100 lg:max-w-6xl lg:mx-auto lg:rounded-2xl px-4 py-3">
-        <div className="flex justify-between items-center">
-          
-          {/* Logo et Nom */}
-          <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center space-x-3 group">
-            <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-200">
-              <Image 
-                src="/images/logo/Logo Taxi Bordeaux Solution.png.png" 
-                alt="Logo Taxi Bordeaux Solution" 
-                width={48}
-                height={48}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div>
-              <div className="text-xl lg:text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
-                Taxi Bordeaux Solution
-              </div>
-              <div className="flex items-center gap-2 text-xs lg:text-sm text-gray-600">
-                <MapPin size={14} className="text-blue-600" />
-                <span>Service 24h/24 - 7j/7</span>
-              </div>
-            </div>
-          </Link>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        visible ? 'translate-y-0' : '-translate-y-full'
+      } ${scrolled ? 'lg:pt-2 lg:px-8' : 'lg:pt-3 lg:px-12'}`}
+    >
+      <div
+        className={`transition-all duration-300 lg:max-w-5xl lg:mx-auto ${
+          scrolled
+            ? 'bg-white/80 backdrop-blur-xl shadow-lg lg:rounded-2xl border border-white/40'
+            : 'bg-white/95 backdrop-blur-md shadow-md lg:rounded-2xl border border-gray-100/50'
+        }`}
+      >
+        <div className="px-4 lg:px-6 py-2.5">
+          <div className="flex justify-between items-center">
 
-          {/* Menu Desktop */}
-          <nav className="hidden lg:flex items-center space-x-6">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`font-medium px-3 py-2 rounded-lg transition-all duration-200 ${
-                  item.current
-                    ? 'text-blue-600 bg-blue-50 font-semibold'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
-            
-            {/* Services Dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => setServicesDropdownOpen(true)}
-              onMouseLeave={() => setServicesDropdownOpen(false)}
-            >
-              <button
-                className={`font-medium px-3 py-2 rounded-lg transition-all duration-200 flex items-center gap-1 ${
-                  pathname === '/aeroport' || pathname === '/gare'
-                    ? 'text-blue-600 bg-blue-50 font-semibold'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
-                }`}
-              >
-                Services
-                <ChevronDown size={16} className={`transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
-
-              {/* Dropdown Menu */}
-              {servicesDropdownOpen && (
-                <div className="absolute top-full left-0 pt-2 w-48 z-50">
-                  <div className="bg-white rounded-lg shadow-xl border border-gray-100 py-1">
-                    {servicesMenu.map((service) => (
-                      <Link
-                        key={service.name}
-                        href={service.href}
-                        className="block px-4 py-2 hover:bg-gray-50 transition-colors group"
-                      >
-                        <div className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-                          {service.name}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
+            {/* Logo */}
+            <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2.5 group">
+              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md group-hover:shadow-lg transition-all duration-200">
+                <Image
+                  src="/images/logo/Logo Taxi Bordeaux Solution.png.png"
+                  alt="Logo Taxi Bordeaux Solution"
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="hidden sm:block">
+                <div className="text-base lg:text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
+                  Taxi Bordeaux
                 </div>
-              )}
-            </div>
-          </nav>
-
-          {/* Actions Desktop */}
-          <div className="hidden lg:flex items-center gap-3">
-            <Link
-              href="/#reservation"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
-              onClick={(e) => {
-                e.preventDefault();
-                if (pathname === '/') {
-                  document.getElementById('reservation')?.scrollIntoView({ behavior: 'smooth' });
-                } else {
-                  window.location.href = '/#reservation';
-                }
-              }}
-            >
-              Réserver
+                <div className="text-[11px] text-gray-400 font-medium">
+                  24h/24 — 7j/7
+                </div>
+              </div>
             </Link>
-            
-            <a
-              href={`tel:${phoneNumber}`}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
-            >
-              <Phone size={18} />
-              <span className="hidden xl:inline">{phoneDisplay}</span>
-              <span className="xl:hidden">Appeler</span>
-            </a>
-          </div>
 
-          {/* Menu Mobile */}
-          <div className="lg:hidden flex items-center gap-2">
-            <a
-              href={`tel:${phoneNumber}`}
-              className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition-colors"
-            >
-              <Phone size={20} />
-            </a>
-            
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-gray-700 hover:text-blue-600 p-2"
-              aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-              aria-expanded={mobileMenuOpen}
-            >
-              {mobileMenuOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Menu Mobile Dropdown */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden mt-4 pb-4 border-t border-gray-100 pt-4">
-            <nav className="space-y-3">
+            {/* Nav Desktop */}
+            <nav className="hidden lg:flex items-center gap-1">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`block font-medium px-4 py-3 rounded-lg transition-colors ${
-                    item.current
-                      ? 'text-blue-600 bg-blue-50 font-semibold'
-                      : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                  className={`text-sm font-medium px-3 py-1.5 rounded-lg transition-all duration-200 ${
+                    pathname === item.href
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+
+              {/* Services Dropdown */}
+              <div
+                className="relative"
+                onMouseEnter={() => setServicesDropdownOpen(true)}
+                onMouseLeave={() => setServicesDropdownOpen(false)}
+              >
+                <button
+                  className={`text-sm font-medium px-3 py-1.5 rounded-lg transition-all duration-200 flex items-center gap-1 ${
+                    pathname === '/aeroport' || pathname === '/gare'
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                >
+                  Services
+                  <ChevronDown size={14} className={`transition-transform duration-200 ${servicesDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                <div className={`absolute top-full left-0 pt-2 w-44 transition-all duration-200 ${
+                  servicesDropdownOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'
+                }`}>
+                  <div className="bg-white/90 backdrop-blur-xl rounded-xl shadow-xl border border-gray-100/50 py-1 overflow-hidden">
+                    {servicesMenu.map((service) => (
+                      <Link
+                        key={service.name}
+                        href={service.href}
+                        className={`block px-4 py-2.5 text-sm transition-colors ${
+                          pathname === service.href
+                            ? 'text-blue-600 bg-blue-50 font-medium'
+                            : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                        }`}
+                      >
+                        {service.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </nav>
+
+            {/* Actions Desktop */}
+            <div className="hidden lg:flex items-center gap-2">
+              <Link
+                href="/#reservation"
+                className="text-sm font-semibold px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md"
+                onClick={(e) => {
+                  e.preventDefault()
+                  if (pathname === '/') {
+                    document.getElementById('reservation')?.scrollIntoView({ behavior: 'smooth' })
+                  } else {
+                    window.location.href = '/#reservation'
+                  }
+                }}
+              >
+                Réserver
+              </Link>
+              <a
+                href={`tel:${phoneNumber}`}
+                className="text-sm font-semibold px-4 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md"
+              >
+                <Phone size={15} />
+                <span className="hidden xl:inline">{phoneDisplay}</span>
+                <span className="xl:hidden">Appeler</span>
+              </a>
+            </div>
+
+            {/* Mobile */}
+            <div className="lg:hidden flex items-center gap-2">
+              <a
+                href={`tel:${phoneNumber}`}
+                className="bg-green-600 text-white p-2 rounded-xl hover:bg-green-700 transition-colors"
+              >
+                <Phone size={18} />
+              </a>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="text-gray-700 hover:text-blue-600 p-2 rounded-xl hover:bg-gray-50 transition-colors"
+                aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+                aria-expanded={mobileMenuOpen}
+              >
+                {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Menu Mobile */}
+        <div className={`lg:hidden overflow-hidden transition-all duration-300 ${
+          mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        }`}>
+          <nav className="px-4 pb-4 pt-2 border-t border-gray-100/50">
+            <div className="space-y-1">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`block text-sm font-medium px-3 py-2.5 rounded-lg transition-colors ${
+                    pathname === item.href
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-700 hover:bg-gray-50'
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.name}
                 </Link>
               ))}
-              
-              {/* Services Mobile */}
-              <div className="space-y-2">
-                <div className="px-4 py-2 text-sm font-semibold text-gray-500 uppercase tracking-wide">
-                  Nos Services
-                </div>
-                {servicesMenu.map((service) => (
-                  <Link
-                    key={service.name}
-                    href={service.href}
-                    className={`block px-4 py-2 rounded-lg transition-colors ${
-                      pathname === service.href
-                        ? 'text-blue-600 bg-blue-50 font-semibold'
-                        : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <div className="font-medium">{service.name}</div>
-                  </Link>
-                ))}
+
+              <div className="px-3 pt-2 pb-1 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                Services
               </div>
-              
-              <div className="border-t border-gray-100 pt-4 space-y-3">
+              {servicesMenu.map((service) => (
                 <Link
-                  href="/#reservation"
-                  className="block w-full bg-blue-600 text-white text-center px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setMobileMenuOpen(false);
-                    if (pathname === '/') {
-                      setTimeout(() => {
-                        document.getElementById('reservation')?.scrollIntoView({ behavior: 'smooth' });
-                      }, 100);
-                    } else {
-                      window.location.href = '/#reservation';
-                    }
-                  }}
-                >
-                  <Calendar className="w-4 h-4" />
-                  Réserver en Ligne
-                </Link>
-                
-                <a
-                  href={`tel:${phoneNumber}`}
-                  className="block w-full bg-green-600 text-white text-center px-4 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                  key={service.name}
+                  href={service.href}
+                  className={`block text-sm font-medium px-3 py-2.5 rounded-lg transition-colors ${
+                    pathname === service.href
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <PhoneCall className="w-4 h-4" />
-                  Appeler {phoneDisplay}
-                </a>
-              </div>
-            </nav>
-          </div>
-        )}
+                  {service.name}
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-3 pt-3 border-t border-gray-100/50 grid grid-cols-2 gap-2">
+              <Link
+                href="/#reservation"
+                className="text-sm font-semibold text-center px-3 py-2.5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center justify-center gap-1.5"
+                onClick={(e) => {
+                  e.preventDefault()
+                  setMobileMenuOpen(false)
+                  if (pathname === '/') {
+                    setTimeout(() => {
+                      document.getElementById('reservation')?.scrollIntoView({ behavior: 'smooth' })
+                    }, 100)
+                  } else {
+                    window.location.href = '/#reservation'
+                  }
+                }}
+              >
+                <Calendar size={15} />
+                Réserver
+              </Link>
+              <a
+                href={`tel:${phoneNumber}`}
+                className="text-sm font-semibold text-center px-3 py-2.5 rounded-xl bg-green-600 text-white hover:bg-green-700 transition-colors flex items-center justify-center gap-1.5"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <PhoneCall size={15} />
+                Appeler
+              </a>
+            </div>
+          </nav>
+        </div>
       </div>
     </header>
   )
