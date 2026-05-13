@@ -194,7 +194,7 @@ export default function TaxiAeroport() {
               Prix Taxi Bordeaux — Tarif Mérignac Officiel
             </h2>
             <p className="text-xl text-gray-600">
-              Les tarifs sont réglementés par la <a href="https://www.gironde.gouv.fr/" target="_blank" rel="noopener" className="underline decoration-blue-300 hover:text-blue-600 transition-colors">Préfecture de Gironde</a>.
+              Les tarifs sont réglementés par la Préfecture de Gironde.
               Aucun supplément caché — le compteur fait foi.
             </p>
           </div>

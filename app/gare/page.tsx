@@ -310,7 +310,7 @@ export default function TaxiGare() {
                     <CheckCircle className="text-blue-500 mt-1 shrink-0" size={20} />
                     <div>
                       <h4 className="font-bold text-gray-900 mb-1">Chauffeurs certifiés</h4>
-                      <p className="text-gray-600 text-sm">Tous nos chauffeurs sont titulaires de la carte professionnelle Taxi délivrée par la <a href="https://www.gironde.gouv.fr" target="_blank" rel="noopener noreferrer" className="text-green-600 underline hover:text-green-800">Préfecture de Gironde</a>.</p>
+                      <p className="text-gray-600 text-sm">Tous nos chauffeurs sont titulaires de la carte professionnelle Taxi délivrée par la Préfecture de Gironde.</p>
                     </div>
                   </div>
 
