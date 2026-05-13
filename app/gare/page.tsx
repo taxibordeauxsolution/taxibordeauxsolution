@@ -50,7 +50,7 @@ export default function TaxiGare() {
           {/* Intro — keywords: taxi bordelais, réserver taxi bordeaux */}
           <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-4xl mx-auto leading-relaxed">
             Votre <strong>taxi bordelais</strong> disponible 24h/24 à la{' '}
-            <a href="https://www.garesetconnexions.sncf/fr/gare/frbod/bordeaux-saint-jean" target="_blank" rel="noopener noreferrer" className="text-green-600 underline hover:text-green-800">gare SNCF Bordeaux Saint-Jean</a>.
+            <a href="https://www.garesetconnexions.sncf/fr/gares-services/bordeaux-saint-jean" target="_blank" rel="noopener noreferrer" className="text-green-600 underline hover:text-green-800">gare SNCF Bordeaux Saint-Jean</a>.
             Prise en charge directe sur le parvis — sans attente, sans surprise sur la note.
           </p>
           <p className="text-lg text-gray-500 mb-12 max-w-3xl mx-auto">

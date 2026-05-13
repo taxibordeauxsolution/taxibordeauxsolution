@@ -252,7 +252,7 @@ export default function TaxiAeroport() {
             </h2>
             <p className="text-xl text-gray-600 mb-8">
               La liaison aéroport — <Link href="/gare" className="underline decoration-blue-300 hover:text-blue-600 transition-colors">gare Saint-Jean</Link> la plus directe.
-              Connectez votre vol à votre <a href="https://www.garesetconnexions.sncf/fr/gare/frbod/bordeaux-saint-jean" target="_blank" rel="noopener" className="underline decoration-blue-300 hover:text-blue-600 transition-colors">TGV</a> sans stress ni changement.
+              Connectez votre vol à votre <a href="https://www.garesetconnexions.sncf/fr/gares-services/bordeaux-saint-jean" target="_blank" rel="noopener" className="underline decoration-blue-300 hover:text-blue-600 transition-colors">TGV</a> sans stress ni changement.
             </p>
             <div className="inline-flex flex-col sm:flex-row gap-4 bg-white border border-sky-200 rounded-2xl px-8 py-5 shadow-md">
               <div className="text-center">
