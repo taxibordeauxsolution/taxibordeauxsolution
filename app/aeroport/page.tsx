@@ -256,13 +256,13 @@ export default function TaxiAeroport() {
             </p>
             <div className="inline-flex flex-col sm:flex-row gap-4 bg-white border border-sky-200 rounded-2xl px-8 py-5 shadow-md">
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600">65€</div>
+                <div className="text-3xl font-bold text-blue-600">60€</div>
                 <div className="text-sm text-gray-500 mt-1">Tarif jour</div>
                 <div className="text-xs text-gray-400">7h – 19h</div>
               </div>
               <div className="hidden sm:block w-px bg-gray-200 self-stretch"></div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-indigo-600">75€</div>
+                <div className="text-3xl font-bold text-indigo-600">70€</div>
                 <div className="text-sm text-gray-500 mt-1">Tarif nuit / week-end</div>
                 <div className="text-xs text-gray-400">19h – 7h • dim. & fériés</div>
               </div>
