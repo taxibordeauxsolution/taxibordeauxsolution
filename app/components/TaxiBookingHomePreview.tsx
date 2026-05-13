@@ -807,7 +807,7 @@ const TaxiBookingHomePreview = () => {
           "Votre réservation a été confirmée",
           "Un chauffeur sera assigné avant l'heure de prise en charge",
           "Vous recevrez un email avec les détails du véhicule",
-          "Pour toute modification, appelez le 06 67 23 78 22"
+          "Pour toute modification, appelez le +33 6 67 23 78 22"
         ]
       }
 

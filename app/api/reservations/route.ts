@@ -149,7 +149,7 @@ export async function POST(req: NextRequest) {
           </table>
           <p>Merci de votre confiance !<br><strong>Taxi Bordeaux Solution</strong></p>
           <hr style="border:none;border-top:1px solid #e2e8f0;margin:20px 0">
-          <p style="font-size:12px;color:#94a3b8">Besoin d'aide ? Contactez-nous au 06 67 23 78 22</p>
+          <p style="font-size:12px;color:#94a3b8">Besoin d'aide ? Contactez-nous au +33 6 67 23 78 22</p>
         </div>
       `
 

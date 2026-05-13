@@ -2,8 +2,8 @@ import Link from 'next/link'
 import { Phone, MapPin, Clock, Star, Shield, Zap, CheckCircle, ArrowRight, Users } from 'lucide-react'
 
 export default function HomePage() {
-  const phoneNumber = "0667237822"
-  const phoneDisplay = "06 67 23 78 22"
+  const phoneNumber = "+33667237822"
+  const phoneDisplay = "+33 6 67 23 78 22"
 
   return (
     <div className="min-h-screen">

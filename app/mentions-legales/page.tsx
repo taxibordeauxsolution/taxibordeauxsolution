@@ -19,7 +19,7 @@ export default function MentionsLegales() {
             <p><span className="font-medium text-gray-800">Raison sociale :</span> Taxi Bordeaux Solution</p>
             <p><span className="font-medium text-gray-800">SIRET :</span> 987 573 128 00012</p>
             <p><span className="font-medium text-gray-800">Adresse :</span> Sainte-Eulalie, 33560</p>
-            <p><span className="font-medium text-gray-800">Téléphone :</span> <a href="tel:0667237822" className="text-blue-600">06 67 23 78 22</a></p>
+            <p><span className="font-medium text-gray-800">Téléphone :</span> <a href="tel:+33667237822" className="text-blue-600">+33 6 67 23 78 22</a></p>
             <p><span className="font-medium text-gray-800">Email :</span> <a href="mailto:contact@taxibordeauxsolution.fr" className="text-blue-600">contact@taxibordeauxsolution.fr</a></p>
           </div>
         </section>

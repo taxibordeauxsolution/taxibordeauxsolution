@@ -320,7 +320,7 @@ export class EmailService {
       fr: {
         greeting: 'Bonjour',
         footer: 'Cordialement,<br>L\'équipe Taxi Bordeaux Solution',
-        contact: 'Besoin d\'aide ? Contactez-nous au 06 67 23 78 22'
+        contact: 'Besoin d\'aide ? Contactez-nous au +33 6 67 23 78 22'
       },
       en: {
         greeting: 'Hello',

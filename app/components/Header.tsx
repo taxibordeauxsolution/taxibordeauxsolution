@@ -11,8 +11,8 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false)
 
-  const phoneNumber = "0667237822"
-  const phoneDisplay = "06 67 23 78 22"
+  const phoneNumber = "+33667237822"
+  const phoneDisplay = "+33 6 67 23 78 22"
 
   const navigation = [
     { name: 'Accueil', href: '/', current: pathname === '/' },

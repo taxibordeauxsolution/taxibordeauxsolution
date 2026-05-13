@@ -104,7 +104,7 @@ async function sendReservationEmail(reservationData, reservationId) {
   
   <div class="footer">
     <p><strong>Taxi Bordeaux Solution</strong> - Service 24h/24 7j/7</p>
-    <p>📞 06 67 23 78 22 | 🌐 taxibordeauxsolution.fr</p>
+    <p>📞 +33 6 67 23 78 22 | 🌐 taxibordeauxsolution.fr</p>
     <p><em>⚡ Prise en charge estimée: rapide</em></p>
   </div>
 </body>

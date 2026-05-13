@@ -36,7 +36,7 @@ router.get('/config', asyncHandler(async (req, res) => {
       radius: 25 // km
     },
     contact: {
-      phone: '06 67 23 78 22',
+      phone: '+33 6 67 23 78 22',
       email: 'contact@taxibordeauxsolution.fr',
       website: 'https://taxibordeauxsolution.fr'
     },

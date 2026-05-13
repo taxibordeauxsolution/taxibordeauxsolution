@@ -57,11 +57,11 @@ export default function TaxiGare() {
           <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-16">
             <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
               <a
-                href="tel:0667237822"
+                href="tel:+33667237822"
                 className="group bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 shadow-xl hover:shadow-green-500/25 hover:scale-105 flex items-center justify-center gap-3"
               >
                 <Phone size={24} />
-                <span>06 67 23 78 22</span>
+                <span>+33 6 67 23 78 22</span>
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </a>
 
@@ -132,7 +132,7 @@ export default function TaxiGare() {
                   </div>
                   <div>
                     <h4 className="font-bold text-gray-900 mb-1">Appel direct</h4>
-                    <p className="text-gray-600">Appelez le <strong>06 67 23 78 22</strong> — réponse immédiate, prise en charge en moins de 10 minutes.</p>
+                    <p className="text-gray-600">Appelez le <strong>+33 6 67 23 78 22</strong> — réponse immédiate, prise en charge en moins de 10 minutes.</p>
                   </div>
                 </div>
 
@@ -163,11 +163,11 @@ export default function TaxiGare() {
                 </p>
 
                 <a
-                  href="tel:0667237822"
+                  href="tel:+33667237822"
                   className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   <Phone size={20} />
-                  06 67 23 78 22
+                  +33 6 67 23 78 22
                 </a>
               </div>
             </div>
@@ -373,7 +373,7 @@ export default function TaxiGare() {
           </div>
 
           <div className="text-center mt-10">
-            <a href="tel:0667237822" className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg hover:shadow-xl">
+            <a href="tel:+33667237822" className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg hover:shadow-xl">
               <Phone size={22} />
               Réserver votre transfert
               <ArrowRight size={20} />
@@ -392,7 +392,7 @@ export default function TaxiGare() {
           <div className="space-y-6">
             <div className="border border-gray-200 rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-2">Comment réserver un taxi Bordeaux depuis la gare Saint-Jean ?</h3>
-              <p className="text-gray-600">Appelez directement le <strong>06 67 23 78 22</strong> ou utilisez le formulaire en ligne. La <strong>réservation taxi Bordeaux</strong> prend moins d&apos;une minute. Vous pouvez aussi vous présenter directement à la station taxi sur le parvis de la gare.</p>
+              <p className="text-gray-600">Appelez directement le <strong>+33 6 67 23 78 22</strong> ou utilisez le formulaire en ligne. La <strong>réservation taxi Bordeaux</strong> prend moins d&apos;une minute. Vous pouvez aussi vous présenter directement à la station taxi sur le parvis de la gare.</p>
             </div>
 
             <div className="border border-gray-200 rounded-2xl p-6">
@@ -436,11 +436,11 @@ export default function TaxiGare() {
           </p>
 
           <a
-            href="tel:0667237822"
+            href="tel:+33667237822"
             className="group bg-white text-green-600 px-12 py-6 rounded-2xl font-bold text-2xl hover:bg-gray-100 transition-all duration-300 shadow-2xl hover:scale-105 inline-flex items-center gap-3"
           >
             <Phone size={28} />
-            <span>06 67 23 78 22</span>
+            <span>+33 6 67 23 78 22</span>
             <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
           </a>
 

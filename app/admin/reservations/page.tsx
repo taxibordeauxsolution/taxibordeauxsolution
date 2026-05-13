@@ -158,7 +158,7 @@ export default function AdminReservations() {
       doc.setFont('helvetica', 'normal')
       doc.setTextColor(100, 100, 100)
       doc.text('Sainte-Eulalie, 33560', textX, y + 12)
-      doc.text('Tél : 06 67 23 78 22', textX, y + 17)
+      doc.text('Tél : +33 6 67 23 78 22', textX, y + 17)
       doc.text('Email : contact@taxibordeauxsolution.fr', textX, y + 22)
       doc.text('SIRET : 987 573 128 00012', textX, y + 27)
       y += 45

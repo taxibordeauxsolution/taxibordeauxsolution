@@ -5,8 +5,8 @@ import Image from 'next/image'
 import { Phone, Mail, MapPin, Clock, Star, Shield } from 'lucide-react'
 
 export default function Footer() {
-  const phoneNumber = "0667237822"
-  const phoneDisplay = "06 67 23 78 22"
+  const phoneNumber = "+33667237822"
+  const phoneDisplay = "+33 6 67 23 78 22"
 
   const currentYear = new Date().getFullYear()
 
