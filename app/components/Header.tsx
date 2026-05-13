@@ -25,8 +25,8 @@ export default function Header() {
   ]
 
   return (
-    <header className="bg-white shadow-lg sticky top-0 z-50 border-b border-gray-100">
-      <div className="container mx-auto px-4 py-3">
+    <header className="sticky top-0 z-50 lg:pt-3 lg:px-6">
+      <div className="bg-white/95 backdrop-blur-md shadow-lg border border-gray-100 lg:max-w-6xl lg:mx-auto lg:rounded-2xl px-4 py-3">
         <div className="flex justify-between items-center">
           
           {/* Logo et Nom */}
