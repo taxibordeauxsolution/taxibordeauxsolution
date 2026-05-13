@@ -128,25 +128,7 @@ export default function Footer() {
               <li>
                 <Link href="/contact" className="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
                   <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
-                  Courses urbaines Bordeaux
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
-                  <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
-                  Transport longue distance
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
-                  <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
-                  Transport professionnel
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
-                  <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
-                  Événements & Mariages
+                  Contact
                 </Link>
               </li>
             </ul>

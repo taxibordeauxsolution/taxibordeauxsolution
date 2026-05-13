@@ -264,7 +264,7 @@ export default function HomePage() {
                 </h3>
                 <p className="text-slate-600 leading-relaxed">
                   Transport pour vos sorties à Bordeaux.{' '}
-                  Mariages, soirées, événements - service sur-mesure.
+                  Concerts, soirées, événements - service sur-mesure.
                 </p>
               </div>
             </div>
@@ -551,11 +551,11 @@ export default function HomePage() {
               <ul className="space-y-3 text-slate-600">
                 <li className="flex items-center gap-3">
                   <CheckCircle className="text-green-500 shrink-0" size={18} />
-                  <span>Taxi Aéroport Bordeaux-Mérignac</span>
+                  <Link href="/aeroport" className="text-blue-600 hover:underline">Taxi Aéroport Bordeaux-Mérignac</Link>
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="text-green-500 shrink-0" size={18} />
-                  <span>Taxi Gare Saint-Jean Bordeaux</span>
+                  <Link href="/gare" className="text-green-600 hover:underline">Taxi Gare Saint-Jean Bordeaux</Link>
                 </li>
                 <li className="flex items-center gap-3">
                   <CheckCircle className="text-green-500 shrink-0" size={18} />

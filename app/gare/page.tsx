@@ -1,8 +1,10 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { Phone, CheckCircle, ArrowRight, Calendar } from 'lucide-react'
 import BookingSection from '../components/BookingSection'
+import Breadcrumb from '../components/Breadcrumb'
 import {
   Train,
   ClockCounterClockwise,
@@ -14,7 +16,7 @@ import {
 
 // Distances réelles depuis la Gare Saint-Jean Bordeaux (Google Maps)
 const DESTINATIONS = [
-  { label: 'Aéroport Bordeaux-Mérignac', desc: 'Liaison directe gare → aéroport. Connexion vols internationaux sans stress.', km: 13.5, min: 23, color: 'blue',    Icon: 'AirplaneTakeoff' },
+  { label: 'Aéroport Bordeaux-Mérignac', desc: 'Liaison directe gare → aéroport. Connexion vols internationaux sans stress.', href: '/aeroport', km: 13.5, min: 23, color: 'blue',    Icon: 'AirplaneTakeoff' },
   { label: 'Bordeaux Centre-Ville',       desc: 'Chartrons, Quinconces, Triangle d\'Or, hôtels et restaurants du centre.',         km: 2.7,  min: 9,  color: 'green',   Icon: 'Buildings'      },
   { label: 'Pessac / Talence',            desc: 'Campus universitaires, zones résidentielles au sud de la métropole.',            km: 8.3,  min: 17, color: 'purple',  Icon: 'GraduationCap'  },
   { label: 'Bordeaux-Lac',               desc: 'Quartier d\'affaires, Palais des Congrès, centre commercial.',                    km: 9.1,  min: 19, color: 'orange',  Icon: 'Desk'           },
@@ -26,6 +28,10 @@ export default function TaxiGare() {
 
   return (
     <div className="min-h-screen bg-white">
+      <Breadcrumb items={[
+        { label: 'Accueil', href: '/' },
+        { label: 'Taxi Gare Saint-Jean' }
+      ]} />
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-100 py-24 relative overflow-hidden">
@@ -41,9 +47,10 @@ export default function TaxiGare() {
             <span className="block mt-2 text-4xl md:text-5xl text-gray-700">Gare Saint-Jean</span>
           </h1>
 
-          {/* Intro — keywords: taxi bordelais, réserver taxi bordeaux, bordeaux taxis transfers */}
+          {/* Intro — keywords: taxi bordelais, réserver taxi bordeaux */}
           <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-4xl mx-auto leading-relaxed">
-            Votre <strong>taxi bordelais</strong> disponible 24h/24 à la gare SNCF Bordeaux Saint-Jean.
+            Votre <strong>taxi bordelais</strong> disponible 24h/24 à la{' '}
+            <a href="https://www.garesetconnexions.sncf/fr/gare/frbod/bordeaux-saint-jean" target="_blank" rel="noopener noreferrer" className="text-green-600 underline hover:text-green-800">gare SNCF Bordeaux Saint-Jean</a>.
             Prise en charge directe sur le parvis — sans attente, sans surprise sur la note.
           </p>
           <p className="text-lg text-gray-500 mb-12 max-w-3xl mx-auto">
@@ -153,7 +160,7 @@ export default function TaxiGare() {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">Prise en Charge Immédiate</h3>
                 <p className="text-gray-700 mb-2">
-                  <strong>Taxi service in Bordeaux</strong> — professionnel, ponctuel, tarifs officiels.
+                  Service professionnel, ponctuel, tarifs officiels.
                 </p>
                 <p className="text-gray-600 mb-6 text-sm">
                   Aucun supplément caché. Tarifs officiels réglementés.
@@ -177,7 +184,7 @@ export default function TaxiGare() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Bordeaux Taxis Transfers — Toutes Destinations
+              Toutes les destinations depuis la Gare Saint-Jean
             </h2>
             <p className="text-xl text-gray-600">
               Depuis la <strong>gare Saint-Jean Bordeaux</strong>, votre taxi vous emmène partout dans la métropole.
@@ -190,7 +197,7 @@ export default function TaxiGare() {
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
               <div>
                 <div className="text-sm font-semibold text-blue-200 mb-1 uppercase tracking-wide">Liaison directe</div>
-                <h3 className="text-2xl font-bold mb-2">Gare Saint-Jean ↔ Aéroport Mérignac</h3>
+                <h3 className="text-2xl font-bold mb-2"><Link href="/aeroport" className="hover:underline">Gare Saint-Jean ↔ Aéroport Mérignac</Link></h3>
                 <p className="text-blue-100 text-sm">~25 min • Trajet direct sans escale</p>
               </div>
               <div className="flex gap-6 shrink-0">
@@ -209,12 +216,23 @@ export default function TaxiGare() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {DESTINATIONS.map(({ label, desc, km, min }) => (
-              <div key={label} className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{label}</h3>
-                <p className="text-gray-600 text-sm">{desc}</p>
-              </div>
-            ))}
+            {DESTINATIONS.map(({ label, desc, href }) => {
+              const content = (
+                <>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{label}</h3>
+                  <p className="text-gray-600 text-sm">{desc}</p>
+                </>
+              )
+              return href ? (
+                <Link key={label} href={href} className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300 block">
+                  {content}
+                </Link>
+              ) : (
+                <div key={label} className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
+                  {content}
+                </div>
+              )
+            })}
           </div>
 
         </div>
@@ -292,7 +310,7 @@ export default function TaxiGare() {
                     <CheckCircle className="text-blue-500 mt-1 shrink-0" size={20} />
                     <div>
                       <h4 className="font-bold text-gray-900 mb-1">Chauffeurs certifiés</h4>
-                      <p className="text-gray-600 text-sm">Tous nos chauffeurs sont titulaires de la carte professionnelle Taxi délivrée par la Préfecture de Gironde.</p>
+                      <p className="text-gray-600 text-sm">Tous nos chauffeurs sont titulaires de la carte professionnelle Taxi délivrée par la <a href="https://www.gironde.gouv.fr" target="_blank" rel="noopener noreferrer" className="text-green-600 underline hover:text-green-800">Préfecture de Gironde</a>.</p>
                     </div>
                   </div>
 
@@ -316,7 +334,7 @@ export default function TaxiGare() {
                 <div>
                   <div className="text-4xl font-bold text-green-600 mb-2">100%</div>
                   <div className="text-lg font-semibold text-gray-800 mb-1">Service Assuré</div>
-                  <div className="text-sm text-gray-500">Aucune annulation depuis 2 ans</div>
+                  <div className="text-sm text-gray-500">Service ponctuel et fiable</div>
                 </div>
                 <div>
                   <div className="text-4xl font-bold text-blue-600 mb-2">24/7</div>
@@ -389,22 +407,22 @@ export default function TaxiGare() {
           <div className="space-y-6">
             <div className="border border-gray-200 rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-2">Comment réserver un taxi Bordeaux depuis la gare Saint-Jean ?</h3>
-              <p className="text-gray-600">Appelez directement le <strong>+33 6 67 23 78 22</strong> ou utilisez le formulaire en ligne. La <strong>réservation taxi Bordeaux</strong> prend moins d&apos;une minute. Vous pouvez aussi vous présenter directement à la station taxi sur le parvis de la gare.</p>
+              <p className="text-gray-600">Appelez directement le <strong>+33 6 67 23 78 22</strong> ou utilisez le formulaire en ligne. La réservation prend moins d&apos;une minute. Vous pouvez aussi vous présenter directement à la station taxi sur le parvis de la gare.</p>
             </div>
 
             <div className="border border-gray-200 rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-2">Quel est le tarif taxi Bordeaux gare vers l&apos;aéroport ?</h3>
-              <p className="text-gray-600">Le <strong>taxi Bordeaux</strong> gare Saint-Jean vers l&apos;aéroport de Mérignac est facturé selon le compteur officiel de la Préfecture de Gironde. Le trajet dure environ 30 minutes.</p>
+              <p className="text-gray-600">Le trajet en taxi de la gare Saint-Jean vers l&apos;aéroport de Mérignac est facturé selon le compteur officiel de la Préfecture de Gironde. Comptez environ 30 minutes.</p>
             </div>
 
             <div className="border border-gray-200 rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-2">Les taxis bordelais sont-ils disponibles la nuit à la gare ?</h3>
-              <p className="text-gray-600">Oui. Notre <strong>taxi service in Bordeaux</strong> fonctionne 24h/24, 7j/7. Que votre train arrive à 23h ou à 5h du matin, un <strong>taxi bordelais</strong> sera disponible à la station parvis ou en quelques minutes sur appel.</p>
+              <p className="text-gray-600">Oui. Notre service de taxi à Bordeaux fonctionne 24h/24, 7j/7. Que votre train arrive à 23h ou à 5h du matin, un chauffeur sera disponible à la station parvis ou en quelques minutes sur appel.</p>
             </div>
 
             <div className="border border-gray-200 rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-2">Puis-je réserver un taxi Bordeaux à l&apos;avance pour la gare ?</h3>
-              <p className="text-gray-600">Absolument. La <strong>reservation taxi Bordeaux</strong> à l&apos;avance est recommandée pour les correspondances, les horaires matinaux et les groupes. Nous suivons les horaires SNCF en temps réel pour nous adapter aux retards éventuels.</p>
+              <p className="text-gray-600">Absolument. La réservation à l&apos;avance est recommandée pour les correspondances, les horaires matinaux et les groupes. Nous suivons les horaires SNCF en temps réel pour nous adapter aux retards éventuels.</p>
             </div>
           </div>
         </div>
@@ -429,7 +447,7 @@ export default function TaxiGare() {
             Votre <strong>taxi bordelais</strong> de confiance — réservez maintenant, voyagez sereinement.
           </p>
           <p className="text-green-200 mb-12 text-sm max-w-xl mx-auto">
-            Bordeaux taxis transfers • Tarifs réglementés • Chauffeurs certifiés • 24h/24
+            Transferts gare et aéroport • Tarifs réglementés • Chauffeurs certifiés • 24h/24
           </p>
 
           <a

@@ -1,8 +1,10 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { Phone, CheckCircle, ArrowRight, Calendar } from 'lucide-react'
 import BookingSection from '../components/BookingSection'
+import Breadcrumb from '../components/Breadcrumb'
 import {
   AirplaneTakeoff,
   AirplaneLanding,
@@ -17,7 +19,7 @@ import {
 
 const DESTINATIONS = [
   { label: 'Bordeaux Centre-Ville',  desc: 'Chartrons, Quinconces, Triangle d\'Or, hôtels du centre.',       km: 13.2, min: 22, color: 'blue'    },
-  { label: 'Gare Saint-Jean',        desc: 'Connexion directe TGV/trains, correspondances SNCF.',             km: 13.5, min: 23, color: 'green'   },
+  { label: 'Gare Saint-Jean',        desc: 'Connexion directe TGV/trains, correspondances SNCF.', href: '/gare', km: 13.5, min: 23, color: 'green'   },
   { label: 'Pessac / Talence',       desc: 'Campus universitaires, zones résidentielles sud.',                km: 9.0,  min: 18, color: 'purple'  },
   { label: 'Bordeaux-Lac',          desc: 'Palais des Congrès, quartier d\'affaires, centre commercial.',    km: 17.0, min: 27, color: 'orange'  },
   { label: 'Bordeaux Bastide',       desc: 'Rive droite, Darwin, quartiers est de Bordeaux.',                 km: 15.8, min: 26, color: 'cyan'    },
@@ -27,6 +29,10 @@ const DESTINATIONS = [
 export default function TaxiAeroport() {
   return (
     <div className="min-h-screen bg-white">
+      <Breadcrumb items={[
+        { label: 'Accueil', href: '/' },
+        { label: 'Taxi Aéroport Mérignac' }
+      ]} />
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100 py-24 relative overflow-hidden">
@@ -41,12 +47,12 @@ export default function TaxiAeroport() {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-4xl mx-auto leading-relaxed">
-            Votre <strong>taxi Mérignac</strong> disponible 24h/24 à l&apos;aéroport de Bordeaux-Mérignac.
+            Chauffeur disponible 24h/24 à l&apos;<a href="https://www.bordeaux.aeroport.fr/" target="_blank" rel="noopener" className="underline decoration-blue-300 hover:text-blue-600 transition-colors">aéroport de Bordeaux-Mérignac</a>.
             Prise en charge immédiate au Hall A — transferts vers tout Bordeaux et sa métropole.
           </p>
           <p className="text-lg text-gray-500 mb-12 max-w-3xl mx-auto">
-            <strong>Taxi Bordeaux to airport</strong> ou départ depuis l&apos;aéroport — réservez à l&apos;avance
-            ou sur le moment. Tarifs réglementés, chauffeurs certifiés.
+            Départ ou arrivée — réservez votre course à l&apos;avance
+            ou sur le moment. Tarifs réglementés, service professionnel.
           </p>
 
           <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-16">
@@ -108,7 +114,7 @@ export default function TaxiAeroport() {
               Taxi Mérignac — Départ et Arrivée
             </h2>
             <p className="text-xl text-gray-600">
-              Que vous partiez en voyage ou que vous arriviez à Bordeaux, votre <strong>taxi Mérignac aéroport</strong> est toujours là.
+              Que vous partiez en voyage ou que vous arriviez à Bordeaux, votre chauffeur est toujours là pour vous conduire.
             </p>
           </div>
 
@@ -119,7 +125,7 @@ export default function TaxiAeroport() {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">Bordeaux → Aéroport</h3>
               <p className="text-gray-700 mb-5">
-                <strong>Taxi Bordeaux to airport</strong> — prise en charge à domicile, hôtel, gare ou n&apos;importe où dans la métropole. Votre chauffeur est ponctuel même aux horaires matinaux.
+                Prise en charge à domicile, hôtel, gare ou n&apos;importe où dans la métropole. Votre chauffeur est ponctuel même aux horaires matinaux.
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-center gap-2"><CheckCircle size={16} className="text-blue-500 shrink-0" />Réservation à l&apos;avance recommandée</li>
@@ -134,7 +140,7 @@ export default function TaxiAeroport() {
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">Aéroport → Bordeaux</h3>
               <p className="text-gray-700 mb-5">
-                <strong>Taxi Mérignac aéroport</strong> — station officielle au Hall A. Votre chauffeur suit les horaires de vol en temps réel et s&apos;adapte aux retards.
+                Station officielle au Hall A. Votre chauffeur suit les horaires de vol en temps réel et s&apos;adapte aux retards éventuels.
               </p>
               <ul className="space-y-2 text-sm text-gray-600">
                 <li className="flex items-center gap-2"><CheckCircle size={16} className="text-green-500 shrink-0" />Suivi des vols en temps réel</li>
@@ -154,17 +160,28 @@ export default function TaxiAeroport() {
               Taxi Mérignac vers Toute la Métropole
             </h2>
             <p className="text-xl text-gray-600">
-              Depuis l&apos;aéroport Bordeaux-Mérignac, votre <strong>taxi bordeaux aéroport</strong> vous emmène partout dans la région bordelaise.
+              Depuis l&apos;aéroport Bordeaux-Mérignac, votre chauffeur vous emmène partout dans la région bordelaise.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {DESTINATIONS.map(({ label, desc }) => (
-              <div key={label} className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{label}</h3>
-                <p className="text-gray-600 text-sm">{desc}</p>
-              </div>
-            ))}
+            {DESTINATIONS.map(({ label, desc, href }) => {
+              const content = (
+                <>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{label}</h3>
+                  <p className="text-gray-600 text-sm">{desc}</p>
+                </>
+              )
+              return href ? (
+                <Link key={label} href={href} className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300 block">
+                  {content}
+                </Link>
+              ) : (
+                <div key={label} className="bg-white p-8 rounded-3xl shadow-lg border border-gray-200 text-center hover:shadow-xl transition-shadow hover:-translate-y-1 duration-300">
+                  {content}
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -177,7 +194,7 @@ export default function TaxiAeroport() {
               Prix Taxi Bordeaux — Tarif Mérignac Officiel
             </h2>
             <p className="text-xl text-gray-600">
-              Le <strong>taxi Mérignac tarif</strong> est réglementé par la Préfecture de Gironde.
+              Les tarifs sont réglementés par la <a href="https://www.gironde.gouv.fr/" target="_blank" rel="noopener" className="underline decoration-blue-300 hover:text-blue-600 transition-colors">Préfecture de Gironde</a>.
               Aucun supplément caché — le compteur fait foi.
             </p>
           </div>
@@ -234,8 +251,8 @@ export default function TaxiAeroport() {
               Taxi Aéroport ↔ Gare Saint-Jean
             </h2>
             <p className="text-xl text-gray-600 mb-8">
-              La liaison <strong>taxi aéroport gare</strong> Bordeaux la plus directe.
-              Connectez votre vol à votre TGV sans stress ni changement.
+              La liaison aéroport — <Link href="/gare" className="underline decoration-blue-300 hover:text-blue-600 transition-colors">gare Saint-Jean</Link> la plus directe.
+              Connectez votre vol à votre <a href="https://www.garesetconnexions.sncf/fr/gare/frbod/bordeaux-saint-jean" target="_blank" rel="noopener" className="underline decoration-blue-300 hover:text-blue-600 transition-colors">TGV</a> sans stress ni changement.
             </p>
             <div className="inline-flex flex-col sm:flex-row gap-4 bg-white border border-sky-200 rounded-2xl px-8 py-5 shadow-md">
               <div className="text-center">
@@ -313,7 +330,7 @@ export default function TaxiAeroport() {
               Pourquoi choisir notre Taxi Bordeaux Aéroport
             </h2>
             <p className="text-xl text-gray-600">
-              Parmi tous les <strong>taxis Bordeaux</strong>, Taxi Bordeaux Solution est le partenaire de confiance
+              Taxi Bordeaux Solution est le partenaire de confiance
               des voyageurs à l&apos;aéroport de Mérignac.
             </p>
           </div>
@@ -337,7 +354,7 @@ export default function TaxiAeroport() {
                 <div className="flex items-start gap-4">
                   <CheckCircle className="text-blue-500 mt-1 shrink-0" size={20} />
                   <div>
-                    <h4 className="font-bold text-gray-900 mb-1">Réservation taxi Bordeaux aéroport à l&apos;avance</h4>
+                    <h4 className="font-bold text-gray-900 mb-1">Réservation à l&apos;avance</h4>
                     <p className="text-gray-600 text-sm">Planifiez votre départ ou arrivée — idéal pour les vols tôt le matin ou tard le soir.</p>
                   </div>
                 </div>
@@ -362,8 +379,8 @@ export default function TaxiAeroport() {
                 <div className="flex items-start gap-4">
                   <CheckCircle className="text-green-500 mt-1 shrink-0" size={20} />
                   <div>
-                    <h4 className="font-bold text-gray-900 mb-1">Taxi Mérignac disponible 24h/24</h4>
-                    <p className="text-gray-600 text-sm">Premiers vols du matin, derniers vols de nuit — votre taxi aéroport Bordeaux est toujours disponible.</p>
+                    <h4 className="font-bold text-gray-900 mb-1">Disponible 24h/24</h4>
+                    <p className="text-gray-600 text-sm">Premiers vols du matin, derniers vols de nuit — votre chauffeur est toujours disponible.</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -386,12 +403,12 @@ export default function TaxiAeroport() {
 
           <div className="mt-12 bg-gray-50 rounded-3xl p-8 shadow max-w-6xl mx-auto text-center">
             <h4 className="text-2xl font-bold text-gray-900 mb-2">Taxi Bordeaux Solution en chiffres</h4>
-            <p className="text-gray-500 mb-8 text-sm">Le taxi Mérignac qui a la confiance des voyageurs</p>
+            <p className="text-gray-500 mb-8 text-sm">La confiance des voyageurs à l&apos;aéroport de Bordeaux</p>
             <div className="grid md:grid-cols-3 gap-8">
               <div>
                 <div className="text-4xl font-bold text-blue-600 mb-2">100%</div>
                 <div className="text-lg font-semibold text-gray-800 mb-1">Service Assuré</div>
-                <div className="text-sm text-gray-500">Aucune annulation depuis 2 ans</div>
+                <div className="text-sm text-gray-500">Service ponctuel et fiable</div>
               </div>
               <div>
                 <div className="text-4xl font-bold text-green-600 mb-2">24/7</div>
@@ -463,7 +480,7 @@ export default function TaxiAeroport() {
           <div className="space-y-6">
             <div className="border border-gray-200 bg-white rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-2">Quel est le tarif taxi Mérignac vers Bordeaux centre ?</h3>
-              <p className="text-gray-600">Le <strong>taxi Mérignac tarif</strong> est calculé selon le compteur officiel réglementé par la Préfecture de Gironde. Le montant varie selon l&apos;heure (jour ou nuit) et la destination. Aucun supplément n&apos;est appliqué sans annonce préalable.</p>
+              <p className="text-gray-600">Le tarif est calculé selon le compteur officiel réglementé par la Préfecture de Gironde. Le montant varie selon l&apos;heure (jour ou nuit) et la destination. Aucun supplément n&apos;est appliqué sans annonce préalable.</p>
             </div>
 
             <div className="border border-gray-200 bg-white rounded-2xl p-6">
@@ -478,7 +495,7 @@ export default function TaxiAeroport() {
 
             <div className="border border-gray-200 bg-white rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-2">Quelle est la différence entre taxi et navette aéroport Bordeaux ?</h3>
-              <p className="text-gray-600">La navette est partagée et suit un horaire fixe avec plusieurs arrêts. Le <strong>taxi bordeaux aéroport</strong> est privatif, direct, disponible 24h/24 et s&apos;adapte à votre heure d&apos;arrivée. Pour les familles ou les voyageurs avec bagages, le taxi est souvent plus pratique et rapide.</p>
+              <p className="text-gray-600">La navette est partagée et suit un horaire fixe avec plusieurs arrêts. Le taxi est privatif, direct, disponible 24h/24 et s&apos;adapte à votre heure d&apos;arrivée. Pour les familles ou les voyageurs avec bagages, c&apos;est souvent plus pratique et rapide.</p>
             </div>
 
             <div className="border border-gray-200 bg-white rounded-2xl p-6">
@@ -505,10 +522,10 @@ export default function TaxiAeroport() {
             Taxi Bordeaux Aéroport Mérignac
           </h2>
           <p className="text-xl text-blue-100 mb-4 max-w-2xl mx-auto">
-            Votre <strong>taxi Mérignac</strong> de confiance — réservez maintenant, voyagez sereinement.
+            Votre chauffeur de confiance — réservez maintenant, voyagez sereinement.
           </p>
           <p className="text-blue-200 mb-12 text-sm max-w-xl mx-auto">
-            Taxi bordeaux aéroport • Tarifs réglementés • Chauffeurs certifiés • 24h/24
+            Tarifs réglementés • Chauffeurs certifiés • Disponible 24h/24
           </p>
 
           <a
@@ -523,7 +540,7 @@ export default function TaxiAeroport() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12 text-blue-100 text-sm">
             <div className="flex items-center justify-center gap-2">
               <CheckCircle size={16} />
-              <span>Taxi Mérignac 24h/24</span>
+              <span>Aéroport 24h/24</span>
             </div>
             <div className="flex items-center justify-center gap-2">
               <CheckCircle size={16} />

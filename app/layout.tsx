@@ -57,8 +57,8 @@ export const metadata: Metadata = {
   other: {
     'geo.region': 'FR-33',
     'geo.placename': 'Bordeaux',
-    'geo.position': '44.8378;-0.5792',
-    'ICBM': '44.8378, -0.5792',
+    'geo.position': '44.9050;-0.4886',
+    'ICBM': '44.9050, -0.4886',
   },
 
   // Données structurées (Schema.org)
@@ -99,24 +99,36 @@ export default function RootLayout({
               "email": "contact@taxibordeauxsolution.fr",
               "address": {
                 "@type": "PostalAddress",
-                "addressLocality": "Bordeaux",
+                "addressLocality": "Sainte-Eulalie",
                 "addressRegion": "Nouvelle-Aquitaine",
-                "postalCode": "33000",
+                "postalCode": "33560",
                 "addressCountry": "FR"
               },
               "geo": {
                 "@type": "GeoCoordinates",
-                "latitude": 44.8378,
-                "longitude": -0.5792
+                "latitude": 44.9050,
+                "longitude": -0.4886
               },
               "areaServed": [
                 { "@type": "City", "name": "Bordeaux" },
                 { "@type": "City", "name": "Mérignac" },
+                { "@type": "City", "name": "Sainte-Eulalie" },
                 { "@type": "City", "name": "Pessac" },
                 { "@type": "City", "name": "Talence" },
                 { "@type": "City", "name": "Le Bouscat" },
-                { "@type": "City", "name": "Eysines" }
+                { "@type": "City", "name": "Eysines" },
+                { "@type": "City", "name": "Blanquefort" },
+                { "@type": "City", "name": "Saint-Médard-en-Jalles" },
+                { "@type": "City", "name": "Ambarès-et-Lagrave" },
+                { "@type": "City", "name": "Saint-Loubès" },
+                { "@type": "City", "name": "Carbon-Blanc" },
+                { "@type": "City", "name": "Léognan" },
+                { "@type": "City", "name": "Créon" },
+                { "@type": "City", "name": "Libourne" },
+                { "@type": "City", "name": "Lormont" },
+                { "@type": "City", "name": "Cenon" }
               ],
+              "serviceType": ["Transfert aéroport", "Transfert gare", "Longue distance", "Transport entreprise"],
               "priceRange": "€€",
               "openingHoursSpecification": {
                 "@type": "OpeningHoursSpecification",
