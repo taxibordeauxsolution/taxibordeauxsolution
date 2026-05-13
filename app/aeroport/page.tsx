@@ -34,10 +34,6 @@ export default function TaxiAeroport() {
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-sky-300/15 rounded-full blur-3xl"></div>
 
         <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="inline-flex items-center gap-3 bg-blue-600/10 backdrop-blur-sm border border-blue-200 rounded-full px-6 py-3 text-blue-700 font-semibold mb-8">
-            <AirplaneTakeoff size={20} />
-            <span>Station Officielle — Aéroport Bordeaux-Mérignac Hall A</span>
-          </div>
 
           <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
             <span className="text-blue-600">Taxi Bordeaux</span>

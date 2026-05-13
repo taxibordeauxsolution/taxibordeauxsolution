@@ -33,10 +33,7 @@ export default function TaxiGare() {
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-300/15 rounded-full blur-3xl"></div>
 
         <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="inline-flex items-center gap-3 bg-green-600/10 backdrop-blur-sm border border-green-200 rounded-full px-6 py-3 text-green-700 font-semibold mb-8">
-            <Train size={20} />
-            <span>Station Taxi Officielle — Gare Saint-Jean Bordeaux</span>
-          </div>
+
 
           {/* H1 — keyword: taxi bordeaux gare + taxi bordeaux saint jean */}
           <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
