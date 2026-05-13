@@ -23,6 +23,10 @@ export default function AdminPrix() {
     tarifNuitDegressifSeuilKm: 30,
     tarifNuitDegressifPrixKm: 2.50,
     tarifNuitDegressifMode: 'degressif' as string,
+    tarifJourDegressifActive: false,
+    tarifJourDegressifSeuilKm: 30,
+    tarifJourDegressifPrixKm: 1.80,
+    tarifJourDegressifMode: 'degressif' as string,
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -250,6 +254,88 @@ export default function AdminPrix() {
           </div>
         ) : (
           <p className="text-gray-400 text-sm">Activez pour appliquer un tarif nuit réduit au-delà d{"'"}un certain nombre de km.</p>
+        )}
+      </div>
+
+      {/* Tarif jour dégressif */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+        <div className="flex items-center justify-between border-b pb-3">
+          <h2 className="font-bold text-gray-800 text-base sm:text-lg">Tarif jour dégressif</h2>
+          <button
+            type="button"
+            onClick={() => setPrix(prev => ({ ...prev, tarifJourDegressifActive: !prev.tarifJourDegressifActive }))}
+            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
+              prix.tarifJourDegressifActive ? 'bg-green-500' : 'bg-gray-300'
+            }`}
+          >
+            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+              prix.tarifJourDegressifActive ? 'translate-x-6' : 'translate-x-1'
+            }`} />
+          </button>
+        </div>
+
+        {prix.tarifJourDegressifActive ? (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">Mode de calcul</label>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setPrix(prev => ({ ...prev, tarifJourDegressifMode: 'degressif' }))}
+                  className={`flex-1 p-3 rounded-xl border-2 text-left transition-all ${
+                    prix.tarifJourDegressifMode === 'degressif'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className={`font-bold text-sm ${prix.tarifJourDegressifMode === 'degressif' ? 'text-blue-700' : 'text-gray-700'}`}>
+                    Dégressif
+                  </div>
+                  <p className="text-xs text-gray-500 mt-0.5">Seuls les km au-delà du seuil passent au tarif réduit</p>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPrix(prev => ({ ...prev, tarifJourDegressifMode: 'retroactif' }))}
+                  className={`flex-1 p-3 rounded-xl border-2 text-left transition-all ${
+                    prix.tarifJourDegressifMode === 'retroactif'
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className={`font-bold text-sm ${prix.tarifJourDegressifMode === 'retroactif' ? 'text-blue-700' : 'text-gray-700'}`}>
+                    Rétroactif
+                  </div>
+                  <p className="text-xs text-gray-500 mt-0.5">Toute la course passe au tarif réduit dès le seuil dépassé</p>
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">À partir de</label>
+                <div className="flex items-center gap-2">
+                  <input type="number" step="1" min="5"
+                    value={prix.tarifJourDegressifSeuilKm}
+                    onChange={e => setNum('tarifJourDegressifSeuilKm', e.target.value)}
+                    className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                  <span className="text-gray-500 text-sm w-10">km</span>
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Prix km jour réduit</label>
+                <div className="flex items-center gap-2">
+                  <input type="number" step="0.01" min="0"
+                    value={prix.tarifJourDegressifPrixKm}
+                    onChange={e => setNum('tarifJourDegressifPrixKm', e.target.value)}
+                    className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                  <span className="text-gray-500 text-sm w-10">€/km</span>
+                </div>
+                <p className="text-xs text-gray-400 mt-1">Au lieu de {prix.tarifKmJour}€/km normal</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <p className="text-gray-400 text-sm">Activez pour appliquer un tarif jour réduit au-delà d{"'"}un certain nombre de km.</p>
         )}
       </div>
 

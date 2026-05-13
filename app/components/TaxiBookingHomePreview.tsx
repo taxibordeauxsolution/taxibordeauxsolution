@@ -36,6 +36,10 @@ const TaxiBookingHomePreview = () => {
     tarifNuitDegressifSeuilKm: 30,
     tarifNuitDegressifPrixKm: 2.50,
     tarifNuitDegressifMode: 'degressif',
+    tarifJourDegressifActive: false,
+    tarifJourDegressifSeuilKm: 30,
+    tarifJourDegressifPrixKm: 1.80,
+    tarifJourDegressifMode: 'degressif',
   })
   const [maps, setMaps] = useState<any>(null)
   const [map, setMap] = useState<any>(null)
@@ -64,6 +68,7 @@ const TaxiBookingHomePreview = () => {
   })
   const [tollCost, setTollCost] = useState(0)
   const [prixAvantRemise, setPrixAvantRemise] = useState(0)
+  const [prixSansDegressif, setPrixSansDegressif] = useState(0)
 
   const [bookingData, setBookingData] = useState<BookingData>(() => {
     const now = new Date()
@@ -609,6 +614,7 @@ const TaxiBookingHomePreview = () => {
     const NIGHT_RATE = configPrix.tarifKmNuit
 
     let distanceFare: number
+    let jourDegressifApplique = false
     const useNuitReduit = configPrix.tarifNuitDegressifActive && tripData.distance > configPrix.tarifNuitDegressifSeuilKm
     const nuitReduitCalc = (dist: number, rate: number) => {
       if (configPrix.tarifNuitDegressifMode === 'retroactif') {
@@ -617,21 +623,44 @@ const TaxiBookingHomePreview = () => {
       const seuil = configPrix.tarifNuitDegressifSeuilKm
       return seuil * rate + (dist - seuil) * configPrix.tarifNuitDegressifPrixKm
     }
+    const useJourReduit = configPrix.tarifJourDegressifActive && tripData.distance > configPrix.tarifJourDegressifSeuilKm
+    const jourReduitCalc = (dist: number, rate: number) => {
+      if (configPrix.tarifJourDegressifMode === 'retroactif') {
+        return dist * configPrix.tarifJourDegressifPrixKm
+      }
+      const seuil = configPrix.tarifJourDegressifSeuilKm
+      return seuil * rate + (dist - seuil) * configPrix.tarifJourDegressifPrixKm
+    }
     if (isHoliday || isSunday) {
       distanceFare = useNuitReduit ? nuitReduitCalc(tripData.distance, NIGHT_RATE) : tripData.distance * NIGHT_RATE
     } else if (departureDate) {
       if (useNuitReduit && isNight) {
         distanceFare = nuitReduitCalc(tripData.distance, NIGHT_RATE)
+      } else if (useJourReduit && !isNight) {
+        distanceFare = jourReduitCalc(tripData.distance, DAY_RATE)
+        jourDegressifApplique = true
       } else {
         distanceFare = calculateDistanceFare(departureDate, tripData.duration, tripData.distance, DAY_RATE, NIGHT_RATE)
       }
     } else {
-      distanceFare = tripData.distance * DAY_RATE
+      if (useJourReduit) {
+        distanceFare = jourReduitCalc(tripData.distance, DAY_RATE)
+        jourDegressifApplique = true
+      } else {
+        distanceFare = tripData.distance * DAY_RATE
+      }
     }
 
     const basePrice = priseEnCharge + distanceFare
     const approachFees = (configPrix.suppApprocheActive && tripData.distance >= configPrix.suppApprocheSeuilKm) ? 0 : configPrix.fraisApproche
     let finalPrice = Math.max(Math.round((basePrice + approachFees + tollCost) * 100) / 100, configPrix.courseMini)
+
+    let prixNormalSansDegressif = 0
+    if (jourDegressifApplique) {
+      const distanceFareNormale = tripData.distance * DAY_RATE
+      const basePriceNormal = priseEnCharge + distanceFareNormale
+      prixNormalSansDegressif = Math.max(Math.round((basePriceNormal + approachFees + tollCost) * 100) / 100, configPrix.courseMini)
+    }
 
     // ── Vérification forfaits (chargés depuis l'API) ─────────────────────
     const distM = (a: {lat: number, lng: number}, b: {lat: number, lng: number}) => {
@@ -683,6 +712,15 @@ const TaxiBookingHomePreview = () => {
       remiseAppliquee = true
     }
     setPrixAvantRemise(remiseAppliquee ? prixSansRemise : 0)
+    if (jourDegressifApplique && !isForfait && prixNormalSansDegressif > finalPrice) {
+      let prixBarreDegressif = prixNormalSansDegressif
+      if (remiseAppliquee) {
+        prixBarreDegressif = Math.round(prixNormalSansDegressif * (1 - configPrix.remisePourcentage / 100) * 100) / 100
+      }
+      setPrixSansDegressif(prixBarreDegressif)
+    } else {
+      setPrixSansDegressif(0)
+    }
 
     let tariffType = 'Jour'
     if (isHoliday) tariffType = 'Férié'
@@ -1085,12 +1123,20 @@ const TaxiBookingHomePreview = () => {
               
               <div className="pt-4 border-t border-green-200">
                 <span className="block text-center text-gray-900 sm:text-gray-600 text-sm mb-2">{t('estimatedPrice')} :</span>
+                {prixSansDegressif > 0 && (
+                  <div className="flex items-center justify-center gap-1.5 mb-1">
+                    <span className="text-sm text-gray-400 line-through">{prixSansDegressif.toFixed(0)}€</span>
+                    <span className="bg-orange-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">Tarif réduit</span>
+                  </div>
+                )}
                 {prixAvantRemise > 0 ? (
                   <>
-                    <div className="flex items-center justify-center gap-1.5 mb-1">
-                      <span className="text-sm text-gray-400 line-through">{prixAvantRemise.toFixed(0)}€</span>
-                      <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
-                    </div>
+                    {prixSansDegressif === 0 && (
+                      <div className="flex items-center justify-center gap-1.5 mb-1">
+                        <span className="text-sm text-gray-400 line-through">{prixAvantRemise.toFixed(0)}€</span>
+                        <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
+                      </div>
+                    )}
                     <div className="flex items-center justify-center">
                       <span className="text-3xl font-extrabold tracking-tight text-green-700">{(tripData.price || 0).toFixed(2)}€</span>
                     </div>
@@ -1260,12 +1306,20 @@ const TaxiBookingHomePreview = () => {
             <div className="bg-green-50 rounded-lg p-4 mt-6">
               <div className="text-center">
                 <div className="text-sm text-green-800 sm:text-green-600 mb-1">{t('totalPriceLabel')}</div>
+                {prixSansDegressif > 0 && (
+                  <div className="flex items-center justify-center gap-1.5 mb-1">
+                    <span className="text-sm text-gray-400 line-through">{prixSansDegressif.toFixed(0)}€</span>
+                    <span className="bg-orange-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">Tarif réduit</span>
+                  </div>
+                )}
                 {prixAvantRemise > 0 ? (
                   <>
-                    <div className="flex items-center justify-center gap-1.5 mb-1">
-                      <span className="text-sm text-gray-400 line-through">{prixAvantRemise.toFixed(0)}€</span>
-                      <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
-                    </div>
+                    {prixSansDegressif === 0 && (
+                      <div className="flex items-center justify-center gap-1.5 mb-1">
+                        <span className="text-sm text-gray-400 line-through">{prixAvantRemise.toFixed(0)}€</span>
+                        <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
+                      </div>
+                    )}
                     <div className="text-3xl font-bold text-green-700">
                       {(tripData.price || 0).toFixed(2)}€
                     </div>
@@ -1429,12 +1483,20 @@ const TaxiBookingHomePreview = () => {
             <div className="flex justify-between text-lg font-bold">
               <span>{t('totalPrice')}:</span>
               <div className="text-right">
+                {prixSansDegressif > 0 && (
+                  <div className="flex items-center justify-end gap-1 mb-0.5">
+                    <span className="text-xs text-gray-400 line-through font-normal">{prixSansDegressif.toFixed(0)}€</span>
+                    <span className="bg-orange-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">Tarif réduit</span>
+                  </div>
+                )}
                 {prixAvantRemise > 0 ? (
                   <>
-                    <div className="flex items-center justify-end gap-1 mb-0.5">
-                      <span className="text-xs text-gray-400 line-through font-normal">{prixAvantRemise.toFixed(0)}€</span>
-                      <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
-                    </div>
+                    {prixSansDegressif === 0 && (
+                      <div className="flex items-center justify-end gap-1 mb-0.5">
+                        <span className="text-xs text-gray-400 line-through font-normal">{prixAvantRemise.toFixed(0)}€</span>
+                        <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
+                      </div>
+                    )}
                     <span className="text-green-800 sm:text-green-600 font-semibold">
                       {(tripData.price || 0).toFixed(2)}€
                     </span>

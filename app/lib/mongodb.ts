@@ -48,6 +48,10 @@ const ConfigPrixSchema = new mongoose.Schema({
   tarifNuitDegressifSeuilKm: { type: Number, default: 30 },
   tarifNuitDegressifPrixKm: { type: Number, default: 2.50 },
   tarifNuitDegressifMode: { type: String, default: 'degressif' },
+  tarifJourDegressifActive: { type: Boolean, default: false },
+  tarifJourDegressifSeuilKm: { type: Number, default: 30 },
+  tarifJourDegressifPrixKm: { type: Number, default: 1.80 },
+  tarifJourDegressifMode: { type: String, default: 'degressif' },
 }, { timestamps: true })
 
 export const ConfigPrix =
