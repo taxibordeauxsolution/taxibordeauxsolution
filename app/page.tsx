@@ -646,7 +646,7 @@ export default function HomePage() {
                 contact@taxibordeauxsolution.fr
               </a>
               <p className="text-slate-600 text-sm font-medium">
-                Réponse sous 24h
+                Réponse rapide
               </p>
             </div>
 

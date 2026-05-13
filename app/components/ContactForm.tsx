@@ -55,7 +55,7 @@ export default function ContactForm() {
     <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
       <div className="mb-6">
         <h3 className="text-2xl font-bold text-gray-900 mb-1">Nous contacter</h3>
-        <p className="text-gray-500 text-sm">Réponse garantie sous 2h</p>
+        <p className="text-gray-500 text-sm">Réponse rapide garantie</p>
       </div>
 
       {status === 'success' && (

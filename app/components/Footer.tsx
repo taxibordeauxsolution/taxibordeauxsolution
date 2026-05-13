@@ -79,7 +79,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="font-medium">contact@taxibordeauxsolution.fr</p>
-                  <p className="text-gray-400 text-sm">Réponse sous 2h</p>
+                  <p className="text-gray-400 text-sm">Réponse rapide</p>
                 </div>
               </a>
 
