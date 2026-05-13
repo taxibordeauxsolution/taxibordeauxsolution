@@ -60,7 +60,7 @@ export default function HomePage() {
                   className="lg:hidden group relative bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-5 rounded-2xl font-bold text-lg transition-all duration-300 text-center shadow-2xl hover:shadow-blue-500/25 hover:scale-105 hover:-translate-y-0.5 active:scale-[0.98]"
                 >
                   <span className="flex items-center justify-center gap-3">
-                    Estimez votre trajet en ligne
+                    Estimez et réservez votre trajet
                     <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                   </span>
                 </a>
@@ -413,7 +413,7 @@ export default function HomePage() {
               href="#reservation"
               className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
             >
-              Réserver en ligne
+              Estimez et réservez votre trajet
               <ArrowRight size={20} />
             </a>
           </AnimateOnScroll>

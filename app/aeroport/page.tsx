@@ -72,7 +72,7 @@ export default function TaxiAeroport() {
               className="group bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-blue-500/25 hover:scale-105 flex items-center justify-center gap-3 w-full sm:w-auto"
             >
               <Calendar size={22} />
-              <span>Réserver en ligne</span>
+              <span>Estimez et réservez votre trajet</span>
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
