@@ -1065,12 +1065,17 @@ const TaxiBookingHomePreview = () => {
               
               <div className="pt-4 border-t border-green-200">
                 <span className="block text-center text-gray-900 sm:text-gray-600 text-sm mb-2">{t('estimatedPrice')} :</span>
-                {prixAvantRemise > 0 && (
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <span className="text-lg text-gray-400 line-through">{prixAvantRemise.toFixed(2)}€</span>
-                    <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
-                  </div>
-                )}
+                {prixAvantRemise > 0 ? (
+                  <>
+                    <div className="flex items-center justify-center gap-1.5 mb-1">
+                      <span className="text-sm text-gray-400 line-through">{prixAvantRemise.toFixed(0)}€</span>
+                      <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
+                    </div>
+                    <div className="flex items-center justify-center">
+                      <span className="text-3xl font-extrabold tracking-tight text-green-700">{(tripData.price || 0).toFixed(2)}€</span>
+                    </div>
+                  </>
+                ) : (
                 <div className="flex items-center justify-center gap-2">
                   {tripData.priceDetails?.isForfait
                     ? <span className="text-3xl font-extrabold tracking-tight text-green-700">{(tripData.price || 0).toFixed(2)}€</span>
@@ -1087,6 +1092,7 @@ const TaxiBookingHomePreview = () => {
                         </>
                   }
                 </div>
+                )}
                 {tripData.priceDetails && tripData.priceDetails.tariffType !== 'Jour' && (
                   <div className="flex items-center justify-center mt-2">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
@@ -1234,12 +1240,17 @@ const TaxiBookingHomePreview = () => {
             <div className="bg-green-50 rounded-lg p-4 mt-6">
               <div className="text-center">
                 <div className="text-sm text-green-800 sm:text-green-600 mb-1">{t('totalPriceLabel')}</div>
-                {prixAvantRemise > 0 && (
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <span className="text-base text-gray-400 line-through">{prixAvantRemise.toFixed(2)}€</span>
-                    <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
-                  </div>
-                )}
+                {prixAvantRemise > 0 ? (
+                  <>
+                    <div className="flex items-center justify-center gap-1.5 mb-1">
+                      <span className="text-sm text-gray-400 line-through">{prixAvantRemise.toFixed(0)}€</span>
+                      <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
+                    </div>
+                    <div className="text-3xl font-bold text-green-700">
+                      {(tripData.price || 0).toFixed(2)}€
+                    </div>
+                  </>
+                ) : (
                 <div className="text-3xl font-bold text-green-700">
                   {tripData.priceDetails?.isForfait
                     ? `${(tripData.price || 0).toFixed(2)}€`
@@ -1248,6 +1259,7 @@ const TaxiBookingHomePreview = () => {
                       : `${((tripData.price || 0) - (configPrix.fraisApproche || 0)).toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
                   }
                 </div>
+                )}
                 {tripData.priceDetails && tripData.priceDetails.tariffType && tripData.priceDetails.tariffType !== 'Jour' && (
                   <div className="text-xs text-blue-800 sm:text-blue-600 mt-2 font-medium">
                     ✓ {t('tariffLabel')} {getTariffLabel(tripData.priceDetails.tariffType ?? '')} {t('tariffApplied')}
@@ -1397,12 +1409,17 @@ const TaxiBookingHomePreview = () => {
             <div className="flex justify-between text-lg font-bold">
               <span>{t('totalPrice')}:</span>
               <div className="text-right">
-                {prixAvantRemise > 0 && (
-                  <div className="flex items-center justify-end gap-1 mb-0.5">
-                    <span className="text-sm text-gray-400 line-through font-normal">{prixAvantRemise.toFixed(2)}€</span>
-                    <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
-                  </div>
-                )}
+                {prixAvantRemise > 0 ? (
+                  <>
+                    <div className="flex items-center justify-end gap-1 mb-0.5">
+                      <span className="text-xs text-gray-400 line-through font-normal">{prixAvantRemise.toFixed(0)}€</span>
+                      <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">-{configPrix.remisePourcentage}%</span>
+                    </div>
+                    <span className="text-green-800 sm:text-green-600 font-semibold">
+                      {(tripData.price || 0).toFixed(2)}€
+                    </span>
+                  </>
+                ) : (
                 <span className="text-green-800 sm:text-green-600 font-semibold">
                   {tripData.priceDetails?.isForfait
                     ? `${(tripData.price || 0).toFixed(2)}€`
@@ -1411,6 +1428,7 @@ const TaxiBookingHomePreview = () => {
                       : `${((tripData.price || 0) - (configPrix.fraisApproche || 0)).toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
                   }
                 </span>
+                )}
               </div>
             </div>
           </div>
