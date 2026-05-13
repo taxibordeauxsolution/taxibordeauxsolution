@@ -63,12 +63,12 @@ export default function Header() {
             : 'bg-white/95 backdrop-blur-md shadow-md lg:rounded-2xl border border-gray-100/50'
         }`}
       >
-        <div className="px-4 lg:px-6 py-2.5">
+        <div className="px-4 lg:px-6 py-3 lg:py-2.5">
           <div className="flex justify-between items-center">
 
             {/* Logo */}
             <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md group-hover:shadow-lg transition-all duration-200">
+              <div className="w-11 h-11 lg:w-10 lg:h-10 rounded-xl overflow-hidden shadow-md group-hover:shadow-lg transition-all duration-200">
                 <Image
                   src="/images/logo/Logo Taxi Bordeaux Solution.png.png"
                   alt="Logo Taxi Bordeaux Solution"
@@ -141,20 +141,18 @@ export default function Header() {
 
             {/* Actions Desktop */}
             <div className="hidden lg:flex items-center gap-2">
-              <Link
-                href="/#reservation"
-                className="text-[15px] font-semibold px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md"
-                onClick={(e) => {
-                  e.preventDefault()
+              <button
+                onClick={() => {
                   if (pathname === '/') {
                     document.getElementById('reservation')?.scrollIntoView({ behavior: 'smooth' })
                   } else {
                     window.location.href = '/#reservation'
                   }
                 }}
+                className="text-[15px] font-semibold px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
               >
                 Réserver
-              </Link>
+              </button>
               <a
                 href={`tel:${phoneNumber}`}
                 className="text-[15px] font-semibold px-4 py-2 rounded-xl bg-green-600 text-white hover:bg-green-700 transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md"
@@ -166,20 +164,20 @@ export default function Header() {
             </div>
 
             {/* Mobile */}
-            <div className="lg:hidden flex items-center gap-2">
+            <div className="lg:hidden flex items-center gap-2.5">
               <a
                 href={`tel:${phoneNumber}`}
-                className="bg-green-600 text-white p-2 rounded-xl hover:bg-green-700 transition-colors"
+                className="bg-green-600 text-white p-2.5 rounded-xl hover:bg-green-700 transition-colors"
               >
-                <Phone size={18} />
+                <Phone size={20} />
               </a>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-gray-700 hover:text-blue-600 p-2 rounded-xl hover:bg-gray-50 transition-colors"
+                className="text-gray-700 hover:text-blue-600 p-2.5 rounded-xl hover:bg-gray-50 transition-colors"
                 aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
                 aria-expanded={mobileMenuOpen}
               >
-                {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
 
@@ -196,7 +194,7 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`block text-sm font-medium px-3 py-2.5 rounded-lg transition-colors ${
+                  className={`block text-base font-medium px-3 py-3 rounded-lg transition-colors ${
                     pathname === item.href
                       ? 'text-blue-600 bg-blue-50'
                       : 'text-gray-700 hover:bg-gray-50'
@@ -207,14 +205,14 @@ export default function Header() {
                 </Link>
               ))}
 
-              <div className="px-3 pt-2 pb-1 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+              <div className="px-3 pt-2 pb-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                 Services
               </div>
               {servicesMenu.map((service) => (
                 <Link
                   key={service.name}
                   href={service.href}
-                  className={`block text-sm font-medium px-3 py-2.5 rounded-lg transition-colors ${
+                  className={`block text-base font-medium px-3 py-3 rounded-lg transition-colors ${
                     pathname === service.href
                       ? 'text-blue-600 bg-blue-50'
                       : 'text-gray-700 hover:bg-gray-50'
@@ -226,12 +224,9 @@ export default function Header() {
               ))}
             </div>
 
-            <div className="mt-3 pt-3 border-t border-gray-100/50 grid grid-cols-2 gap-2">
-              <Link
-                href="/#reservation"
-                className="text-sm font-semibold text-center px-3 py-2.5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center justify-center gap-1.5"
-                onClick={(e) => {
-                  e.preventDefault()
+            <div className="mt-3 pt-3 border-t border-gray-100/50 grid grid-cols-2 gap-2.5">
+              <button
+                onClick={() => {
                   setMobileMenuOpen(false)
                   if (pathname === '/') {
                     setTimeout(() => {
@@ -241,16 +236,17 @@ export default function Header() {
                     window.location.href = '/#reservation'
                   }
                 }}
+                className="text-base font-semibold text-center px-3 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <Calendar size={15} />
+                <Calendar size={17} />
                 Réserver
-              </Link>
+              </button>
               <a
                 href={`tel:${phoneNumber}`}
-                className="text-sm font-semibold text-center px-3 py-2.5 rounded-xl bg-green-600 text-white hover:bg-green-700 transition-colors flex items-center justify-center gap-1.5"
+                className="text-base font-semibold text-center px-3 py-3 rounded-xl bg-green-600 text-white hover:bg-green-700 transition-colors flex items-center justify-center gap-1.5"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <PhoneCall size={15} />
+                <PhoneCall size={17} />
                 Appeler
               </a>
             </div>
