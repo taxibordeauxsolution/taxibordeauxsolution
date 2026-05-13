@@ -109,7 +109,7 @@ export default function Header() {
           <div className="hidden lg:flex items-center gap-3">
             <Link
               href="/#reservation"
-              className="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-all duration-200 shadow-md hover:shadow-lg"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
               onClick={(e) => {
                 e.preventDefault();
                 if (pathname === '/') {
@@ -124,7 +124,7 @@ export default function Header() {
             
             <a
               href={`tel:${phoneNumber}`}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
+              className="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
             >
               <Phone size={18} />
               <span className="hidden xl:inline">{phoneDisplay}</span>
@@ -136,7 +136,7 @@ export default function Header() {
           <div className="lg:hidden flex items-center gap-2">
             <a
               href={`tel:${phoneNumber}`}
-              className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
+              className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700 transition-colors"
             >
               <Phone size={20} />
             </a>
@@ -195,7 +195,7 @@ export default function Header() {
               <div className="border-t border-gray-100 pt-4 space-y-3">
                 <Link
                   href="/#reservation"
-                  className="block w-full bg-green-600 text-white text-center px-4 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                  className="block w-full bg-blue-600 text-white text-center px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                   onClick={(e) => {
                     e.preventDefault();
                     setMobileMenuOpen(false);
@@ -214,7 +214,7 @@ export default function Header() {
                 
                 <a
                   href={`tel:${phoneNumber}`}
-                  className="block w-full bg-blue-600 text-white text-center px-4 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                  className="block w-full bg-green-600 text-white text-center px-4 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <PhoneCall className="w-4 h-4" />
