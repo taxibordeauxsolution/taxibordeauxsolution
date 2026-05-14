@@ -434,9 +434,25 @@ const TaxiBookingHomePreview = () => {
         if (place.geometry) {
           setTripData(prev => ({
             ...prev,
-            from: place.formatted_address,
+            from: place.formatted_address || place.name || prev.from,
             fromCoords: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }
           }))
+        } else {
+          const query = place.name || fromInputRef.current?.value || ''
+          if (query) {
+            const geocoder = new google.maps.Geocoder()
+            geocoder.geocode({ address: query, region: 'FR' }, (results: any, status: string) => {
+              if (status === 'OK' && results[0]) {
+                const loc = results[0].geometry.location
+                setTripData(prev => ({
+                  ...prev,
+                  from: results[0].formatted_address,
+                  fromCoords: { lat: loc.lat(), lng: loc.lng() }
+                }))
+                if (fromInputRef.current) fromInputRef.current.value = results[0].formatted_address
+              }
+            })
+          }
         }
       })
     }
@@ -460,9 +476,25 @@ const TaxiBookingHomePreview = () => {
         if (place.geometry) {
           setTripData(prev => ({
             ...prev,
-            to: place.formatted_address,
+            to: place.formatted_address || place.name || prev.to,
             toCoords: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }
           }))
+        } else {
+          const query = place.name || toInputRef.current?.value || ''
+          if (query) {
+            const geocoder = new google.maps.Geocoder()
+            geocoder.geocode({ address: query, region: 'FR' }, (results: any, status: string) => {
+              if (status === 'OK' && results[0]) {
+                const loc = results[0].geometry.location
+                setTripData(prev => ({
+                  ...prev,
+                  to: results[0].formatted_address,
+                  toCoords: { lat: loc.lat(), lng: loc.lng() }
+                }))
+                if (toInputRef.current) toInputRef.current.value = results[0].formatted_address
+              }
+            })
+          }
         }
       })
     }
