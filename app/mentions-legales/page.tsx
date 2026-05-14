@@ -49,11 +49,15 @@ export default function MentionsLegales() {
           </div>
         </section>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-800 mb-3">Données personnelles</h2>
+        <section className="mb-8" id="donnees-personnelles">
+          <h2 className="text-xl font-semibold text-gray-800 mb-3">Données personnelles et politique de confidentialité</h2>
           <div className="bg-white rounded-xl border border-gray-100 p-6 text-gray-600 space-y-2">
-            <p>Les données collectées via le formulaire de contact (nom, téléphone, email) sont utilisées uniquement pour répondre à vos demandes et ne sont pas transmises à des tiers.</p>
-            <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour exercer ce droit : <a href="mailto:contact@taxibordeauxsolution.fr" className="text-blue-600">contact@taxibordeauxsolution.fr</a></p>
+            <p>Les données collectées via le formulaire de contact (nom, téléphone, email) et le formulaire de demande de devis (email, téléphone, date souhaitée) sont utilisées uniquement pour répondre à vos demandes de transport et ne sont pas transmises à des tiers.</p>
+            <p><span className="font-medium text-gray-800">Finalité :</span> traitement de vos demandes de course et envoi du devis estimatif par email.</p>
+            <p><span className="font-medium text-gray-800">Base légale :</span> consentement (case à cocher lors de la demande de devis) et intérêt légitime pour le traitement des demandes de contact.</p>
+            <p><span className="font-medium text-gray-800">Durée de conservation :</span> 3 ans à compter de la collecte.</p>
+            <p><span className="font-medium text-gray-800">Vos droits :</span> conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement, de portabilité et d'opposition concernant vos données personnelles.</p>
+            <p>Pour exercer ces droits : <a href="mailto:contact@taxibordeauxsolution.fr" className="text-blue-600">contact@taxibordeauxsolution.fr</a></p>
           </div>
         </section>
 
