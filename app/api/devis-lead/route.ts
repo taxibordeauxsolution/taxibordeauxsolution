@@ -105,15 +105,16 @@ body{font-family:Arial,sans-serif;line-height:1.6;color:#333;margin:0;padding:0;
 .header h1{margin:0 0 4px;font-size:20px}
 .header p{margin:0;opacity:.9;font-size:14px}
 .body{background:#fff;padding:28px 24px;border:1px solid #e2e8f0;border-top:none}
-.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f1f5f9}
-.row b{color:#334155}
-.price-box{background:#f0fdf4;border:2px solid #16a34a;border-radius:8px;padding:20px;text-align:center;margin:20px 0}
+.row{padding:12px 0;border-bottom:1px solid #f1f5f9}
+.row b{color:#334155;display:block;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
+.row span{color:#1e293b;font-size:15px}
+.price-box{background:#f0fdf4;border:2px solid #16a34a;border-radius:8px;padding:24px;text-align:center;margin:24px 0}
 .price-box .amount{font-size:2em;font-weight:bold;color:#16a34a}
-.price-box .mention{font-size:.85em;color:#475569;margin-top:6px}
 .cta{display:inline-block;padding:14px 28px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:15px;margin:6px}
+.cta-site{background:#1e40af;color:#fff}
+.cta-tel{background:#334155;color:#fff}
 .cta-wa{background:#25D366;color:#fff}
-.cta-tel{background:#2563eb;color:#fff}
-.footer{background:#f8fafc;padding:18px;text-align:center;color:#64748b;font-size:12px;border-radius:0 0 10px 10px;border:1px solid #e2e8f0;border-top:none}
+.footer{background:#f8fafc;padding:18px;text-align:center;color:#94a3b8;font-size:11px;border-radius:0 0 10px 10px;border:1px solid #e2e8f0;border-top:none}
 </style></head><body>
 <div class="wrap">
 <div class="header">
@@ -122,50 +123,45 @@ body{font-family:Arial,sans-serif;line-height:1.6;color:#333;margin:0;padding:0;
 </div>
 <div class="body">
   <p>Bonjour,</p>
-  <p>Voici le récapitulatif de votre estimation de trajet :</p>
+  <p>Voici le récapitulatif de votre estimation :</p>
 
-  <div class="row"><span><b>Départ</b></span><span>${safeFrom}</span></div>
-  <div class="row"><span><b>Destination</b></span><span>${safeTo}</span></div>
-  <div class="row"><span><b>Distance</b></span><span>${distanceAffiche} km</span></div>
-  <div class="row"><span><b>Durée estimée</b></span><span>${dureeAffiche} min</span></div>
-  <div class="row"><span><b>Tarif</b></span><span>${tarif}</span></div>
-  ${dateSouhaiteeAffiche ? `<div class="row"><span><b>Date et heure</b></span><span>${dateSouhaiteeAffiche}</span></div>` : ''}
+  <div class="row"><b>Départ :</b><span>${safeFrom}</span></div>
+  <div class="row"><b>Destination :</b><span>${safeTo}</span></div>
+  <div class="row"><b>Distance :</b><span>${distanceAffiche} km</span></div>
+  <div class="row"><b>Durée estimée :</b><span>${dureeAffiche} min</span></div>
+  <div class="row"><b>Tarif :</b><span>${tarif}</span></div>
+  ${dateSouhaiteeAffiche ? `<div class="row"><b>Date et heure :</b><span>${dateSouhaiteeAffiche}</span></div>` : ''}
 
   <div class="price-box">
     <div class="amount">${prixAffiche}€</div>
   </div>
 
-
-  <div style="text-align:center;margin:24px 0">
-    <a href="https://wa.me/33667237822?text=${whatsappMsg}" class="cta cta-wa">💬 Réserver par WhatsApp</a><br>
-    <a href="tel:+33667237822" class="cta cta-tel">📞 Appeler le +33 6 67 23 78 22</a>
+  <div style="text-align:center;margin:28px 0">
+    <a href="https://www.taxibordeauxsolution.fr/#reservation" class="cta cta-site">Réserver en ligne</a><br>
+    <a href="tel:+33667237822" class="cta cta-tel">Appeler le +33 6 67 23 78 22</a><br>
+    <a href="https://wa.me/33667237822?text=${whatsappMsg}" class="cta cta-wa">WhatsApp</a>
   </div>
 </div>
 <div class="footer">
-  Taxi Bordeaux Solution<br>
-  taxibordeauxsolution.fr<br><br>
   Vos données sont utilisées uniquement pour traiter votre demande de transport.<br>
-  Conservation 3 ans. Suppression : contact@taxibordeauxsolution.fr
+  Conservation 3 ans · <a href="mailto:contact@taxibordeauxsolution.fr" style="color:#94a3b8">contact@taxibordeauxsolution.fr</a>
 </div>
 </div></body></html>`
 
-    const clientText = `Votre estimation Taxi Bordeaux Solution
+    const clientText = `Votre estimation — Taxi Bordeaux Solution
 
 Départ : ${estimation.from}
 Destination : ${estimation.to}
-Distance : ${distanceAffiche} km | Durée : ${dureeAffiche} min
+Distance : ${distanceAffiche} km
+Durée estimée : ${dureeAffiche} min
 Tarif : ${tarif}
 ${dateSouhaiteeAffiche ? `Date et heure : ${dateSouhaiteeAffiche}` : ''}
 
 Prix estimé : ${prixAffiche}€
 
-
-Réservez maintenant :
-WhatsApp : https://wa.me/33667237822
-Téléphone : +33 6 67 23 78 22
-
-Taxi Bordeaux Solution
-taxibordeauxsolution.fr`
+Réserver en ligne : https://www.taxibordeauxsolution.fr/#reservation
+Appeler : +33 6 67 23 78 22
+WhatsApp : https://wa.me/33667237822`
 
     // ── Email alerte Yassine ──
     const adminHtml = `<h2>🚕 Nouveau lead</h2>
