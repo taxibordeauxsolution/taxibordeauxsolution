@@ -77,7 +77,10 @@ export async function POST(req: NextRequest) {
     const safeTo = sanitize(estimation.to)
     const safeTel = telephone ? sanitize(telephone) : null
     const safeEmail = sanitize(email)
-    const prixAffiche = estimation.price.toFixed(2)
+    const hasFourchette = estimation.fourchette && estimation.fourchette.de != null && estimation.fourchette.a != null
+    const prixAffiche = hasFourchette
+      ? `${estimation.fourchette.de.toFixed(2)}€ à ${estimation.fourchette.a.toFixed(2)}`
+      : estimation.price.toFixed(2)
     const distanceAffiche = estimation.distance.toFixed(1)
     const dureeAffiche = Math.round(estimation.duration)
     const tarif = sanitize(estimation.tariffType)
@@ -89,7 +92,7 @@ export async function POST(req: NextRequest) {
       : null
 
     const whatsappMsg = encodeURIComponent(
-      `Bonjour, je souhaite réserver ce trajet :\n${estimation.from} → ${estimation.to}\nTarif estimé : ${prixAffiche}€ (${tarif})\nDate souhaitée : ${dateSouhaiteeAffiche || 'à définir'}`
+      `Bonjour, je souhaite réserver ce trajet :\n${estimation.from} → ${estimation.to}\nTarif estimé : ${prixAffiche}€ (${tarif})\nDate : ${dateSouhaiteeAffiche || 'à définir'}`
     )
 
     // ── Email client : récap devis ──
@@ -132,6 +135,7 @@ body{font-family:Arial,sans-serif;line-height:1.6;color:#333;margin:0;padding:0;
     <div class="amount">${prixAffiche}€</div>
   </div>
 
+
   <div style="text-align:center;margin:24px 0">
     <a href="https://wa.me/33667237822?text=${whatsappMsg}" class="cta cta-wa">💬 Réserver par WhatsApp</a><br>
     <a href="tel:+33667237822" class="cta cta-tel">📞 Appeler le +33 6 67 23 78 22</a>
@@ -154,6 +158,7 @@ Tarif : ${tarif}
 ${dateSouhaiteeAffiche ? `Date et heure : ${dateSouhaiteeAffiche}` : ''}
 
 Prix estimé : ${prixAffiche}€
+
 
 Réservez maintenant :
 WhatsApp : https://wa.me/33667237822
