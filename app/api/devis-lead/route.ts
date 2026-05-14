@@ -99,80 +99,96 @@ export async function POST(req: NextRequest) {
 
     // ── Email client : récap devis ──
     const clientHtml = `<!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<style>
-body{font-family:Arial,sans-serif;line-height:1.6;color:#333;margin:0;padding:0;background:#f8fafc}
-.wrap{max-width:600px;margin:0 auto;padding:16px}
-.header{background:linear-gradient(135deg,#1e40af,#059669);color:#fff;padding:28px 24px;border-radius:10px 10px 0 0;text-align:center}
-.header h1{margin:0 0 4px;font-size:20px}
-.header p{margin:0;opacity:.9;font-size:14px}
-.body{background:#fff;padding:28px 24px;border:1px solid #e2e8f0;border-top:none}
-.trajet{background:#f8fafc;border-radius:8px;padding:20px;margin:16px 0}
-.trajet-point{display:flex;align-items:flex-start;gap:10px;padding:8px 0}
-.trajet-dot{width:12px;height:12px;border-radius:50%;margin-top:4px;flex-shrink:0}
-.trajet-dot-from{background:#16a34a}
-.trajet-dot-to{background:#dc2626}
-.trajet-line{width:2px;height:20px;background:#cbd5e1;margin:0 5px}
-.trajet-addr{font-size:15px;color:#1e293b}
-.details{display:flex;flex-wrap:wrap;gap:0;margin:16px 0}
-.detail-item{flex:1;min-width:45%;padding:12px 0;border-bottom:1px solid #f1f5f9}
-.detail-label{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px}
-.detail-value{font-size:15px;color:#1e293b;font-weight:500}
-.price-box{background:#f0fdf4;border:2px solid #16a34a;border-radius:8px;padding:24px;text-align:center;margin:24px 0}
-.price-box .amount{font-size:2em;font-weight:bold;color:#16a34a}
-.price-box .note{font-size:12px;color:#64748b;margin-top:8px}
-.btn-main{display:block;padding:16px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:16px;text-align:center;margin:8px 0;color:#fff;background:#1e40af}
-.btn-row{display:flex;gap:8px;margin:8px 0}
-.btn-row a{flex:1;display:block;padding:12px;border-radius:8px;font-weight:600;text-decoration:none;font-size:14px;text-align:center;color:#fff}
-.btn-tel{background:#334155}
-.btn-wa{background:#25D366}
-.footer{background:#f8fafc;padding:18px;text-align:center;color:#94a3b8;font-size:11px;border-radius:0 0 10px 10px;border:1px solid #e2e8f0;border-top:none}
-</style></head><body>
-<div class="wrap">
-<div class="header">
-  <h1>Taxi Bordeaux Solution</h1>
-  <p>Votre estimation de course</p>
-</div>
-<div class="body">
-  <p>Bonjour,</p>
-  <p>Voici le récapitulatif de votre estimation :</p>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="font-family:Arial,sans-serif;margin:0;padding:0;background:#f4f4f5;color:#1e293b">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:24px 0">
+<tr><td align="center">
+<table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden">
 
-  <div class="trajet">
-    <div class="trajet-point">
-      <div class="trajet-dot trajet-dot-from"></div>
-      <div class="trajet-addr">${safeFrom}</div>
-    </div>
-    <div style="padding-left:5px"><div class="trajet-line"></div></div>
-    <div class="trajet-point">
-      <div class="trajet-dot trajet-dot-to"></div>
-      <div class="trajet-addr">${safeTo}</div>
-    </div>
-  </div>
+  <!-- Header -->
+  <tr><td style="background:#1e293b;padding:24px 32px;text-align:center">
+    <h1 style="margin:0;font-size:18px;color:#ffffff;font-weight:600">Taxi Bordeaux Solution</h1>
+    <p style="margin:6px 0 0;font-size:13px;color:#94a3b8">Estimation de course</p>
+  </td></tr>
 
-  <div class="details">
-    ${dateSouhaiteeAffiche ? `<div class="detail-item" style="min-width:100%"><div class="detail-label">Date et heure</div><div class="detail-value">${dateSouhaiteeAffiche}</div></div>` : ''}
-    <div class="detail-item"><div class="detail-label">Distance</div><div class="detail-value">${distanceAffiche} km</div></div>
-    <div class="detail-item"><div class="detail-label">Durée estimée</div><div class="detail-value">${dureeAffiche} min</div></div>
-    <div class="detail-item"><div class="detail-label">Passagers</div><div class="detail-value">${nbPassagers}</div></div>
-    <div class="detail-item"><div class="detail-label">Tarif</div><div class="detail-value">${tarif}${forfait ? ' · Forfait' : ''}</div></div>
-  </div>
+  <!-- Body -->
+  <tr><td style="padding:32px">
 
-  <div class="price-box">
-    <div class="amount">${prixAffiche}€</div>
-    <div class="note">Paiement CB accepté à bord</div>
-  </div>
+    <p style="margin:0 0 24px;font-size:14px;color:#475569">Bonjour,<br>Voici le récapitulatif de votre estimation.</p>
 
-  <a href="https://www.taxibordeauxsolution.fr/#reservation" class="btn-main">Réserver en ligne</a>
-  <div class="btn-row">
-    <a href="tel:+33667237822" class="btn-tel">Appeler</a>
-    <a href="https://wa.me/33667237822?text=${whatsappMsg}" class="btn-wa">WhatsApp</a>
-  </div>
-</div>
-<div class="footer">
-  Vos données sont utilisées uniquement pour traiter votre demande de transport.<br>
-  Conservation 3 ans · <a href="mailto:contact@taxibordeauxsolution.fr" style="color:#94a3b8">contact@taxibordeauxsolution.fr</a>
-</div>
-</div></body></html>`
+    <!-- Trajet -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
+      <tr>
+        <td width="24" valign="top" style="padding-top:2px"><div style="width:10px;height:10px;border-radius:50%;background:#16a34a"></div></td>
+        <td style="padding-bottom:6px;font-size:14px;color:#1e293b">${safeFrom}</td>
+      </tr>
+      <tr>
+        <td width="24" style="padding:0 0 0 4px"><div style="width:2px;height:16px;background:#cbd5e1"></div></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td width="24" valign="top" style="padding-top:2px"><div style="width:10px;height:10px;border-radius:50%;background:#dc2626"></div></td>
+        <td style="font-size:14px;color:#1e293b">${safeTo}</td>
+      </tr>
+    </table>
+
+    <!-- Détails -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #f1f5f9;margin-bottom:24px">
+      ${dateSouhaiteeAffiche ? `<tr>
+        <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:13px;color:#64748b;width:40%">Date et heure</td>
+        <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#1e293b;font-weight:500;text-align:right">${dateSouhaiteeAffiche}</td>
+      </tr>` : ''}
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:13px;color:#64748b">Distance</td>
+        <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#1e293b;font-weight:500;text-align:right">${distanceAffiche} km</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:13px;color:#64748b">Durée estimée</td>
+        <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#1e293b;font-weight:500;text-align:right">${dureeAffiche} min</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:13px;color:#64748b">Passagers</td>
+        <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#1e293b;font-weight:500;text-align:right">${nbPassagers}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:13px;color:#64748b">Tarif</td>
+        <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#1e293b;font-weight:500;text-align:right">${tarif}${forfait ? ' — Forfait' : ''}</td>
+      </tr>
+    </table>
+
+    <!-- Prix -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8faf9;border:1px solid #e2e8f0;border-radius:6px;margin-bottom:24px">
+      <tr><td style="padding:20px;text-align:center">
+        <div style="font-size:28px;font-weight:700;color:#1e293b">${prixAffiche}€</div>
+        <div style="font-size:12px;color:#64748b;margin-top:6px">Paiement CB accepté à bord</div>
+      </td></tr>
+    </table>
+
+    <!-- CTA -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px">
+      <tr><td align="center">
+        <a href="https://www.taxibordeauxsolution.fr/#reservation" style="display:inline-block;padding:14px 32px;background:#1e293b;color:#ffffff;text-decoration:none;border-radius:6px;font-size:14px;font-weight:600">Réserver en ligne</a>
+      </td></tr>
+    </table>
+
+    <p style="text-align:center;font-size:13px;color:#64748b;margin:0">
+      <a href="tel:+33667237822" style="color:#475569;text-decoration:none">+33 6 67 23 78 22</a>
+      &nbsp;&nbsp;·&nbsp;&nbsp;
+      <a href="https://wa.me/33667237822?text=${whatsappMsg}" style="color:#475569;text-decoration:none">WhatsApp</a>
+    </p>
+
+  </td></tr>
+
+  <!-- Footer -->
+  <tr><td style="padding:16px 32px;border-top:1px solid #f1f5f9;text-align:center;font-size:11px;color:#94a3b8">
+    Vos données sont utilisées uniquement pour traiter votre demande de transport.<br>
+    Conservation 3 ans · <a href="mailto:contact@taxibordeauxsolution.fr" style="color:#94a3b8">contact@taxibordeauxsolution.fr</a>
+  </td></tr>
+
+</table>
+</td></tr>
+</table>
+</body></html>`
 
     const clientText = `Votre estimation — Taxi Bordeaux Solution
 
