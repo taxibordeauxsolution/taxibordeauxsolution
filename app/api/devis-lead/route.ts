@@ -81,8 +81,11 @@ export async function POST(req: NextRequest) {
     const distanceAffiche = estimation.distance.toFixed(1)
     const dureeAffiche = Math.round(estimation.duration)
     const tarif = sanitize(estimation.tariffType)
-    const dateSouhaiteeAffiche = dateSouhaitee
-      ? new Date(dateSouhaitee).toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
+    const dateSouhaiteeObj = dateSouhaitee ? new Date(dateSouhaitee) : null
+    const dateSouhaiteeAffiche = dateSouhaiteeObj
+      ? dateSouhaiteeObj.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
+        + ' à '
+        + dateSouhaiteeObj.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })
       : null
 
     const whatsappMsg = encodeURIComponent(
@@ -123,11 +126,10 @@ body{font-family:Arial,sans-serif;line-height:1.6;color:#333;margin:0;padding:0;
   <div class="row"><span><b>Distance</b></span><span>${distanceAffiche} km</span></div>
   <div class="row"><span><b>Durée estimée</b></span><span>${dureeAffiche} min</span></div>
   <div class="row"><span><b>Tarif</b></span><span>${tarif}</span></div>
-  ${dateSouhaiteeAffiche ? `<div class="row"><span><b>Date souhaitée</b></span><span>${dateSouhaiteeAffiche}</span></div>` : ''}
+  ${dateSouhaiteeAffiche ? `<div class="row"><span><b>Date et heure</b></span><span>${dateSouhaiteeAffiche}</span></div>` : ''}
 
   <div class="price-box">
     <div class="amount">${prixAffiche}€</div>
-    <div class="mention">Tarif maximum garanti — tarif réglementé préfecture de la Gironde</div>
   </div>
 
   <div style="text-align:center;margin:24px 0">
@@ -136,7 +138,7 @@ body{font-family:Arial,sans-serif;line-height:1.6;color:#333;margin:0;padding:0;
   </div>
 </div>
 <div class="footer">
-  Yassine — Taxi Bordeaux Solution, licence n°344<br>
+  Taxi Bordeaux Solution<br>
   taxibordeauxsolution.fr<br><br>
   Vos données sont utilisées uniquement pour traiter votre demande de transport.<br>
   Conservation 3 ans. Suppression : contact@taxibordeauxsolution.fr
@@ -149,16 +151,15 @@ Départ : ${estimation.from}
 Destination : ${estimation.to}
 Distance : ${distanceAffiche} km | Durée : ${dureeAffiche} min
 Tarif : ${tarif}
-${dateSouhaiteeAffiche ? `Date souhaitée : ${dateSouhaiteeAffiche}` : ''}
+${dateSouhaiteeAffiche ? `Date et heure : ${dateSouhaiteeAffiche}` : ''}
 
 Prix estimé : ${prixAffiche}€
-Tarif maximum garanti — tarif réglementé préfecture de la Gironde
 
 Réservez maintenant :
 WhatsApp : https://wa.me/33667237822
 Téléphone : +33 6 67 23 78 22
 
-Yassine — Taxi Bordeaux Solution, licence n°344
+Taxi Bordeaux Solution
 taxibordeauxsolution.fr`
 
     // ── Email alerte Yassine ──
