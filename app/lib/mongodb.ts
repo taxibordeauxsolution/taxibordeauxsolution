@@ -92,6 +92,14 @@ const EstimationSchema = new mongoose.Schema({
   isForfait:     { type: Boolean, default: false },
   departureDate: { type: Date },
   createdAt:     { type: Date, default: Date.now },
+  // ── Champs lead (ajoutés feat/capture-lead-email) ──
+  email:         { type: String, default: null },
+  telephone:     { type: String, default: null },
+  dateSouhaitee: { type: Date, default: null },
+  rgpdConsent:   { type: Boolean, default: false },
+  leadCreatedAt: { type: Date, default: null },
+  statut:        { type: String, enum: ['estimation_seule', 'lead', 'contacte', 'converti', 'perdu'], default: 'estimation_seule' },
+  notes:         { type: String, default: null },
 })
 
 EstimationSchema.index({ createdAt: -1 })

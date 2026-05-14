@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false }, { status: 400 })
     }
 
-    await Estimation.create({
+    const estimation = await Estimation.create({
       from,
       to,
       distance,
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       departureDate: body.departureDate || null,
     })
 
-    return NextResponse.json({ success: true }, { status: 201 })
+    return NextResponse.json({ success: true, id: estimation._id }, { status: 201 })
   } catch {
     return NextResponse.json({ success: false }, { status: 500 })
   }
