@@ -1234,20 +1234,6 @@ const TaxiBookingHomePreview = () => {
             </div>
           )}
 
-          {/* ── Capture lead email (après le prix) ── */}
-          {tripData.distance > 0 && tripData.price > 0 && bookingData.departureDate && bookingData.departureTime && (
-            <EmailCaptureForm
-              estimationId={estimationId}
-              tripFrom={tripData.from}
-              tripTo={tripData.to}
-              price={tripData.price}
-              tariffType={tripData.priceDetails?.tariffType ?? 'Jour'}
-              distance={tripData.distance}
-              duration={tripData.duration}
-              departureDate={bookingData.departureDate}
-              departureTime={bookingData.departureTime}
-            />
-          )}
         </div>
 
         {/* Colonne droite - Carte (cachée, gardée pour initialisation Google Maps) */}
@@ -1304,6 +1290,21 @@ const TaxiBookingHomePreview = () => {
          !tripData.price ? t('calculatingPrice') :
          t('bookNowBtn')}
       </button>
+
+      {/* ── Lien devis discret sous le CTA ── */}
+      {tripData.distance > 0 && tripData.price > 0 && bookingData.departureDate && bookingData.departureTime && (
+        <EmailCaptureForm
+          estimationId={estimationId}
+          tripFrom={tripData.from}
+          tripTo={tripData.to}
+          price={tripData.price}
+          tariffType={tripData.priceDetails?.tariffType ?? 'Jour'}
+          distance={tripData.distance}
+          duration={tripData.duration}
+          departureDate={bookingData.departureDate}
+          departureTime={bookingData.departureTime}
+        />
+      )}
     </div>
   )
 
