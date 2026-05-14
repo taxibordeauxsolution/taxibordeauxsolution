@@ -285,6 +285,9 @@ export default function AdminEstimations() {
                     <input type="checkbox" checked={selected.has(e._id)}
                       onChange={() => toggleSelect(e._id)} className="rounded border-slate-300" />
                     <span className="text-xs text-slate-400">{formatDate(e.createdAt)}</span>
+                    {e.departureDate && (
+                      <span className="text-[10px] text-blue-500 ml-1">Dep: {formatDate(e.departureDate)}</span>
+                    )}
                   </div>
                   <span className={`px-2 py-1 rounded-full text-xs font-semibold ${tariffColor(e.tariffType)}`}>
                     {e.tariffType}
@@ -352,7 +355,8 @@ export default function AdminEstimations() {
                     <input type="checkbox" checked={estimations.length > 0 && selected.size === estimations.length}
                       onChange={toggleAll} className="rounded border-slate-300" />
                   </th>
-                  <th className="text-left px-4 py-3 text-slate-600 font-semibold">Date</th>
+                  <th className="text-left px-4 py-3 text-slate-600 font-semibold">Estimation</th>
+                  <th className="text-left px-4 py-3 text-slate-600 font-semibold">Départ prévu</th>
                   <th className="text-left px-4 py-3 text-slate-600 font-semibold">Départ</th>
                   <th className="text-left px-4 py-3 text-slate-600 font-semibold">Destination</th>
                   <th className="text-right px-4 py-3 text-slate-600 font-semibold">Dist.</th>
@@ -371,6 +375,9 @@ export default function AdminEstimations() {
                         onChange={() => toggleSelect(e._id)} className="rounded border-slate-300" />
                     </td>
                     <td className="px-4 py-3 text-slate-500 whitespace-nowrap">{formatDate(e.createdAt)}</td>
+                    <td className="px-4 py-3 text-slate-500 whitespace-nowrap text-xs">
+                      {e.departureDate ? formatDate(e.departureDate) : <span className="text-slate-300">—</span>}
+                    </td>
                     <td className="px-4 py-3 text-slate-800" title={e.from}>{truncate(e.from)}</td>
                     <td className="px-4 py-3 text-slate-800" title={e.to}>{truncate(e.to)}</td>
                     <td className="px-4 py-3 text-right text-slate-600">{e.distance.toFixed(1)} km</td>
