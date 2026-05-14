@@ -28,11 +28,16 @@ export async function GET(req: NextRequest) {
     const page = Math.max(parseInt(searchParams.get('page') || '1'), 1)
     const skip = (page - 1) * limit
 
+    const leadsOnly = searchParams.get('leadsOnly') === 'true'
+
     const filter: any = {}
     if (from || to) {
       filter.createdAt = {}
       if (from) filter.createdAt.$gte = new Date(from)
       if (to) filter.createdAt.$lte = new Date(to + 'T23:59:59.999Z')
+    }
+    if (leadsOnly) {
+      filter.email = { $ne: null, $exists: true }
     }
 
     const [estimations, total] = await Promise.all([
@@ -40,11 +45,15 @@ export async function GET(req: NextRequest) {
       Estimation.countDocuments(filter),
     ])
 
+    const leadFilter: any = { ...filter, email: { $ne: null, $exists: true } }
+    const leadCount = await Estimation.countDocuments(leadFilter)
+
     const stats = {
       total,
       avgPrice: 0,
       topRoutes: [] as { route: string; count: number }[],
       forfaitCount: 0,
+      leadCount,
     }
 
     if (estimations.length > 0) {
@@ -87,6 +96,33 @@ export async function DELETE(req: NextRequest) {
 
     const result = await Estimation.deleteMany({ _id: { $in: ids } })
     return NextResponse.json({ success: true, deleted: result.deletedCount })
+  } catch (e: any) {
+    return NextResponse.json({ success: false, message: e.message }, { status: 500 })
+  }
+}
+
+export async function PATCH(req: NextRequest) {
+  if (!verifyAdmin(req))
+    return NextResponse.json({ success: false, message: 'Non autorisé' }, { status: 401 })
+
+  try {
+    await connectDB()
+    const { id, statut, notes } = await req.json()
+
+    if (!id) {
+      return NextResponse.json({ success: false, message: 'ID manquant' }, { status: 400 })
+    }
+
+    const update: any = {}
+    if (statut !== undefined) update.statut = statut
+    if (notes !== undefined) update.notes = notes
+
+    const result = await Estimation.findByIdAndUpdate(id, update, { new: true })
+    if (!result) {
+      return NextResponse.json({ success: false, message: 'Estimation introuvable' }, { status: 404 })
+    }
+
+    return NextResponse.json({ success: true, data: result })
   } catch (e: any) {
     return NextResponse.json({ success: false, message: e.message }, { status: 500 })
   }

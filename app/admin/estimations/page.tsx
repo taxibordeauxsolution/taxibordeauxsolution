@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { ArrowClockwise, DownloadSimple, ChartBar, MapPin, CurrencyEur, Path, Trash, CaretLeft, CaretRight } from '@phosphor-icons/react'
+import { ArrowClockwise, DownloadSimple, ChartBar, MapPin, CurrencyEur, Path, Trash, CaretLeft, CaretRight, EnvelopeSimple, ChatCircleDots, WhatsappLogo } from '@phosphor-icons/react'
 
 interface Estimation {
   _id: string
@@ -15,6 +15,12 @@ interface Estimation {
   isForfait: boolean
   departureDate?: string
   createdAt: string
+  email?: string | null
+  telephone?: string | null
+  dateSouhaitee?: string | null
+  statut?: string
+  notes?: string | null
+  leadCreatedAt?: string | null
 }
 
 interface Stats {
@@ -22,15 +28,19 @@ interface Stats {
   avgPrice: number
   topRoutes: { route: string; count: number }[]
   forfaitCount: number
+  leadCount: number
 }
 
 export default function AdminEstimations() {
   const [estimations, setEstimations] = useState<Estimation[]>([])
-  const [stats, setStats] = useState<Stats>({ total: 0, avgPrice: 0, topRoutes: [], forfaitCount: 0 })
+  const [stats, setStats] = useState<Stats>({ total: 0, avgPrice: 0, topRoutes: [], forfaitCount: 0, leadCount: 0 })
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [leadsOnly, setLeadsOnly] = useState(false)
+  const [editingNotes, setEditingNotes] = useState<string | null>(null)
+  const [notesValue, setNotesValue] = useState('')
 
   const today = new Date().toISOString().split('T')[0]
   const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().split('T')[0]
@@ -47,6 +57,7 @@ export default function AdminEstimations() {
       if (dateTo) params.set('to', dateTo)
       params.set('page', String(page))
       params.set('limit', '30')
+      if (leadsOnly) params.set('leadsOnly', 'true')
       const res = await fetch(`/api/admin/estimations?${params}`, {
         headers: { Authorization: `Bearer ${token()}` }
       })
@@ -58,7 +69,7 @@ export default function AdminEstimations() {
       }
     } catch { }
     setLoading(false)
-  }, [dateFrom, dateTo, page])
+  }, [dateFrom, dateTo, page, leadsOnly])
 
   useEffect(() => { load() }, [load])
 
@@ -110,11 +121,42 @@ export default function AdminEstimations() {
     } catch { }
   }
 
+  const updateStatut = async (id: string, statut: string) => {
+    try {
+      await fetch('/api/admin/estimations', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        body: JSON.stringify({ id, statut })
+      })
+      setEstimations(prev => prev.map(e => e._id === id ? { ...e, statut } : e))
+    } catch { }
+  }
+
+  const saveNotes = async (id: string) => {
+    try {
+      await fetch('/api/admin/estimations', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        body: JSON.stringify({ id, notes: notesValue })
+      })
+      setEstimations(prev => prev.map(e => e._id === id ? { ...e, notes: notesValue } : e))
+      setEditingNotes(null)
+    } catch { }
+  }
+
+  const statutLabels: Record<string, { label: string; color: string }> = {
+    estimation_seule: { label: 'Estimation', color: 'bg-gray-100 text-gray-600' },
+    lead: { label: 'Lead', color: 'bg-green-100 text-green-700' },
+    contacte: { label: 'Contacté', color: 'bg-blue-100 text-blue-700' },
+    converti: { label: 'Converti', color: 'bg-emerald-100 text-emerald-700' },
+    perdu: { label: 'Perdu', color: 'bg-red-100 text-red-700' },
+  }
+
   const exportCSV = () => {
-    const header = 'Date,Départ,Destination,Distance (km),Durée (min),Prix,Fourchette,Tarif,Forfait\n'
+    const header = 'Date,Départ,Destination,Distance (km),Durée (min),Prix,Fourchette,Tarif,Forfait,Email,Téléphone,Statut\n'
     const rows = estimations.map(e => {
       const fourchette = e.fourchette ? `${e.fourchette.de.toFixed(2)} - ${e.fourchette.a.toFixed(2)}` : '-'
-      return `"${formatDate(e.createdAt)}","${e.from}","${e.to}",${e.distance.toFixed(1)},${e.duration},"${e.price.toFixed(2)}€","${fourchette}",${e.tariffType},${e.isForfait ? 'Oui' : 'Non'}`
+      return `"${formatDate(e.createdAt)}","${e.from}","${e.to}",${e.distance.toFixed(1)},${e.duration},"${e.price.toFixed(2)}€","${fourchette}",${e.tariffType},${e.isForfait ? 'Oui' : 'Non'},"${e.email || ''}","${e.telephone || ''}","${e.statut || 'estimation_seule'}"`
     }).join('\n')
     const blob = new Blob(['﻿' + header + rows], { type: 'text/csv;charset=utf-8;' })
     const url = URL.createObjectURL(blob)
@@ -139,7 +181,7 @@ export default function AdminEstimations() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
           <div className="text-sm text-slate-500">Total estimations</div>
           <div className="text-2xl font-bold text-slate-900">{stats.total}</div>
@@ -156,6 +198,15 @@ export default function AdminEstimations() {
           <div className="text-sm text-slate-500">Taux forfait</div>
           <div className="text-2xl font-bold text-slate-900">
             {stats.total > 0 ? ((stats.forfaitCount / stats.total) * 100).toFixed(0) : 0}%
+          </div>
+        </div>
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200">
+          <div className="text-sm text-slate-500 flex items-center gap-1">
+            <EnvelopeSimple size={14} className="text-green-600" />
+            Leads avec email
+          </div>
+          <div className="text-2xl font-bold text-green-700">
+            {stats.leadCount} <span className="text-sm font-normal text-slate-400">/ {stats.total}</span>
           </div>
         </div>
       </div>
@@ -193,6 +244,11 @@ export default function AdminEstimations() {
         <button onClick={() => { setPage(1); load() }}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors">
           Filtrer
+        </button>
+        <button onClick={() => { setLeadsOnly(!leadsOnly); setPage(1) }}
+          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${leadsOnly ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+          <EnvelopeSimple size={16} />
+          {leadsOnly ? 'Leads uniquement ✓' : 'Leads uniquement'}
         </button>
         <button onClick={exportCSV}
           className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors flex items-center gap-2">
@@ -253,6 +309,36 @@ export default function AdminEstimations() {
                     )}
                   </div>
                 </div>
+                {e.email && (
+                  <div className="mt-3 pt-3 border-t border-slate-100 space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <EnvelopeSimple size={12} className="text-green-600" />
+                      <a href={`mailto:${e.email}`} className="text-blue-600 hover:underline text-xs truncate">{e.email}</a>
+                    </div>
+                    {e.telephone && (
+                      <div className="flex items-center gap-2">
+                        <a href={`tel:${e.telephone}`} className="text-blue-600 hover:underline text-xs">{e.telephone}</a>
+                        <a
+                          href={`https://wa.me/${e.telephone.replace(/\D/g, '').replace(/^0/, '33')}?text=${encodeURIComponent(`Bonjour, suite à votre estimation ${e.from.split(',')[0]} → ${e.to.split(',')[0]} (${e.price.toFixed(2)}€), je reviens vers vous.`)}`}
+                          target="_blank" rel="noopener noreferrer"
+                          className="text-green-600"
+                        >
+                          <WhatsappLogo size={14} weight="fill" />
+                        </a>
+                      </div>
+                    )}
+                    <select
+                      value={e.statut || 'lead'}
+                      onChange={ev => updateStatut(e._id, ev.target.value)}
+                      className={`text-xs font-semibold rounded-full px-2 py-1 border-0 ${statutLabels[e.statut || 'lead']?.color || 'bg-gray-100 text-gray-600'}`}
+                    >
+                      <option value="lead">Lead</option>
+                      <option value="contacte">Contacté</option>
+                      <option value="converti">Converti</option>
+                      <option value="perdu">Perdu</option>
+                    </select>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -273,6 +359,8 @@ export default function AdminEstimations() {
                   <th className="text-right px-4 py-3 text-slate-600 font-semibold">Prix</th>
                   <th className="text-right px-4 py-3 text-slate-600 font-semibold">Fourchette</th>
                   <th className="text-center px-4 py-3 text-slate-600 font-semibold">Tarif</th>
+                  <th className="text-left px-4 py-3 text-slate-600 font-semibold">Email / Tél</th>
+                  <th className="text-center px-4 py-3 text-slate-600 font-semibold">Statut</th>
                 </tr>
               </thead>
               <tbody>
@@ -294,6 +382,67 @@ export default function AdminEstimations() {
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold ${tariffColor(e.tariffType)}`}>
                         {e.tariffType}
                       </span>
+                    </td>
+                    <td className="px-4 py-3 text-left">
+                      {e.email ? (
+                        <div className="space-y-1">
+                          <a href={`mailto:${e.email}`} className="text-blue-600 hover:underline text-xs block truncate max-w-[160px]" title={e.email}>{e.email}</a>
+                          {e.telephone && (
+                            <div className="flex items-center gap-1">
+                              <a href={`tel:${e.telephone}`} className="text-blue-600 hover:underline text-xs">{e.telephone}</a>
+                              <a
+                                href={`https://wa.me/${e.telephone.replace(/\D/g, '').replace(/^0/, '33')}?text=${encodeURIComponent(`Bonjour, suite à votre estimation ${e.from.split(',')[0]} → ${e.to.split(',')[0]} (${e.price.toFixed(2)}€), je reviens vers vous.`)}`}
+                                target="_blank" rel="noopener noreferrer"
+                                className="text-green-600 hover:text-green-700" title="Répondre par WhatsApp"
+                              >
+                                <WhatsappLogo size={14} weight="fill" />
+                              </a>
+                            </div>
+                          )}
+                          {e.dateSouhaitee && (
+                            <div className="text-[10px] text-slate-400">Souhaité : {new Date(e.dateSouhaitee).toLocaleDateString('fr-FR')}</div>
+                          )}
+                          {/* Notes */}
+                          {editingNotes === e._id ? (
+                            <div className="flex gap-1">
+                              <input
+                                type="text" value={notesValue}
+                                onChange={ev => setNotesValue(ev.target.value)}
+                                onKeyDown={ev => ev.key === 'Enter' && saveNotes(e._id)}
+                                className="text-xs px-1.5 py-0.5 border border-slate-300 rounded w-full"
+                                autoFocus
+                              />
+                              <button onClick={() => saveNotes(e._id)} className="text-xs text-blue-600 font-semibold whitespace-nowrap">OK</button>
+                            </div>
+                          ) : (
+                            <button
+                              onClick={() => { setEditingNotes(e._id); setNotesValue(e.notes || '') }}
+                              className="text-[10px] text-slate-400 hover:text-slate-600 flex items-center gap-0.5"
+                            >
+                              <ChatCircleDots size={10} />
+                              {e.notes ? truncate(e.notes, 20) : 'Ajouter note'}
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-slate-300 text-xs">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      {e.email ? (
+                        <select
+                          value={e.statut || 'lead'}
+                          onChange={ev => updateStatut(e._id, ev.target.value)}
+                          className={`text-xs font-semibold rounded-full px-2 py-1 border-0 cursor-pointer ${statutLabels[e.statut || 'lead']?.color || 'bg-gray-100 text-gray-600'}`}
+                        >
+                          <option value="lead">Lead</option>
+                          <option value="contacte">Contacté</option>
+                          <option value="converti">Converti</option>
+                          <option value="perdu">Perdu</option>
+                        </select>
+                      ) : (
+                        <span className="text-slate-300 text-xs">—</span>
+                      )}
                     </td>
                   </tr>
                 ))}
