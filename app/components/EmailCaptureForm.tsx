@@ -13,6 +13,8 @@ interface EmailCaptureFormProps {
   duration: number
   departureDate: string
   departureTime: string
+  passengers: number
+  isForfait: boolean
 }
 
 export default function EmailCaptureForm({
@@ -25,6 +27,8 @@ export default function EmailCaptureForm({
   duration,
   departureDate,
   departureTime,
+  passengers,
+  isForfait,
 }: EmailCaptureFormProps) {
   const [email, setEmail] = useState('')
   const [telephone, setTelephone] = useState('')
@@ -52,6 +56,8 @@ export default function EmailCaptureForm({
           telephone: telephone || null,
           dateSouhaitee: departureDate && departureTime ? `${departureDate}T${departureTime}` : null,
           estimationId,
+          passengers,
+          isForfait,
           rgpdConsent,
           honeypot,
         }),

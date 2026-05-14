@@ -14,7 +14,7 @@ function sanitize(s: string) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { email, telephone, dateSouhaitee, estimationId, rgpdConsent, honeypot } = body
+    const { email, telephone, dateSouhaitee, estimationId, passengers, isForfait: isForfaitBody, rgpdConsent, honeypot } = body
 
     // Honeypot anti-spam
     if (honeypot) {
@@ -84,9 +84,11 @@ export async function POST(req: NextRequest) {
     const distanceAffiche = estimation.distance.toFixed(1)
     const dureeAffiche = Math.round(estimation.duration)
     const tarif = sanitize(estimation.tariffType)
+    const nbPassagers = passengers || 1
+    const forfait = isForfaitBody || estimation.isForfait
     const dateSouhaiteeObj = dateSouhaitee ? new Date(dateSouhaitee) : null
     const dateSouhaiteeAffiche = dateSouhaiteeObj
-      ? dateSouhaiteeObj.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
+      ? dateSouhaiteeObj.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Europe/Paris' })
         + ' à '
         + dateSouhaiteeObj.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })
       : null
@@ -105,15 +107,25 @@ body{font-family:Arial,sans-serif;line-height:1.6;color:#333;margin:0;padding:0;
 .header h1{margin:0 0 4px;font-size:20px}
 .header p{margin:0;opacity:.9;font-size:14px}
 .body{background:#fff;padding:28px 24px;border:1px solid #e2e8f0;border-top:none}
-.row{padding:12px 0;border-bottom:1px solid #f1f5f9}
-.row b{color:#334155;display:block;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
-.row span{color:#1e293b;font-size:15px}
+.trajet{background:#f8fafc;border-radius:8px;padding:20px;margin:16px 0}
+.trajet-point{display:flex;align-items:flex-start;gap:10px;padding:8px 0}
+.trajet-dot{width:12px;height:12px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.trajet-dot-from{background:#16a34a}
+.trajet-dot-to{background:#dc2626}
+.trajet-line{width:2px;height:20px;background:#cbd5e1;margin:0 5px}
+.trajet-addr{font-size:15px;color:#1e293b}
+.details{display:flex;flex-wrap:wrap;gap:0;margin:16px 0}
+.detail-item{flex:1;min-width:45%;padding:12px 0;border-bottom:1px solid #f1f5f9}
+.detail-label{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px}
+.detail-value{font-size:15px;color:#1e293b;font-weight:500}
 .price-box{background:#f0fdf4;border:2px solid #16a34a;border-radius:8px;padding:24px;text-align:center;margin:24px 0}
 .price-box .amount{font-size:2em;font-weight:bold;color:#16a34a}
-.cta{display:inline-block;padding:14px 28px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:15px;margin:6px}
-.cta-site{background:#1e40af;color:#fff}
-.cta-tel{background:#334155;color:#fff}
-.cta-wa{background:#25D366;color:#fff}
+.price-box .note{font-size:12px;color:#64748b;margin-top:8px}
+.btn-main{display:block;padding:16px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:16px;text-align:center;margin:8px 0;color:#fff;background:#1e40af}
+.btn-row{display:flex;gap:8px;margin:8px 0}
+.btn-row a{flex:1;display:block;padding:12px;border-radius:8px;font-weight:600;text-decoration:none;font-size:14px;text-align:center;color:#fff}
+.btn-tel{background:#334155}
+.btn-wa{background:#25D366}
 .footer{background:#f8fafc;padding:18px;text-align:center;color:#94a3b8;font-size:11px;border-radius:0 0 10px 10px;border:1px solid #e2e8f0;border-top:none}
 </style></head><body>
 <div class="wrap">
@@ -125,21 +137,35 @@ body{font-family:Arial,sans-serif;line-height:1.6;color:#333;margin:0;padding:0;
   <p>Bonjour,</p>
   <p>Voici le récapitulatif de votre estimation :</p>
 
-  <div class="row"><b>Départ :</b><span>${safeFrom}</span></div>
-  <div class="row"><b>Destination :</b><span>${safeTo}</span></div>
-  <div class="row"><b>Distance :</b><span>${distanceAffiche} km</span></div>
-  <div class="row"><b>Durée estimée :</b><span>${dureeAffiche} min</span></div>
-  <div class="row"><b>Tarif :</b><span>${tarif}</span></div>
-  ${dateSouhaiteeAffiche ? `<div class="row"><b>Date et heure :</b><span>${dateSouhaiteeAffiche}</span></div>` : ''}
+  <div class="trajet">
+    <div class="trajet-point">
+      <div class="trajet-dot trajet-dot-from"></div>
+      <div class="trajet-addr">${safeFrom}</div>
+    </div>
+    <div style="padding-left:5px"><div class="trajet-line"></div></div>
+    <div class="trajet-point">
+      <div class="trajet-dot trajet-dot-to"></div>
+      <div class="trajet-addr">${safeTo}</div>
+    </div>
+  </div>
+
+  <div class="details">
+    ${dateSouhaiteeAffiche ? `<div class="detail-item" style="min-width:100%"><div class="detail-label">Date et heure</div><div class="detail-value">${dateSouhaiteeAffiche}</div></div>` : ''}
+    <div class="detail-item"><div class="detail-label">Distance</div><div class="detail-value">${distanceAffiche} km</div></div>
+    <div class="detail-item"><div class="detail-label">Durée estimée</div><div class="detail-value">${dureeAffiche} min</div></div>
+    <div class="detail-item"><div class="detail-label">Passagers</div><div class="detail-value">${nbPassagers}</div></div>
+    <div class="detail-item"><div class="detail-label">Tarif</div><div class="detail-value">${tarif}${forfait ? ' · Forfait' : ''}</div></div>
+  </div>
 
   <div class="price-box">
     <div class="amount">${prixAffiche}€</div>
+    <div class="note">Paiement CB accepté à bord</div>
   </div>
 
-  <div style="text-align:center;margin:28px 0">
-    <a href="https://www.taxibordeauxsolution.fr/#reservation" class="cta cta-site">Réserver en ligne</a><br>
-    <a href="tel:+33667237822" class="cta cta-tel">Appeler le +33 6 67 23 78 22</a><br>
-    <a href="https://wa.me/33667237822?text=${whatsappMsg}" class="cta cta-wa">WhatsApp</a>
+  <a href="https://www.taxibordeauxsolution.fr/#reservation" class="btn-main">Réserver en ligne</a>
+  <div class="btn-row">
+    <a href="tel:+33667237822" class="btn-tel">Appeler</a>
+    <a href="https://wa.me/33667237822?text=${whatsappMsg}" class="btn-wa">WhatsApp</a>
   </div>
 </div>
 <div class="footer">
@@ -150,14 +176,13 @@ body{font-family:Arial,sans-serif;line-height:1.6;color:#333;margin:0;padding:0;
 
     const clientText = `Votre estimation — Taxi Bordeaux Solution
 
-Départ : ${estimation.from}
-Destination : ${estimation.to}
-Distance : ${distanceAffiche} km
-Durée estimée : ${dureeAffiche} min
-Tarif : ${tarif}
+${estimation.from} → ${estimation.to}
 ${dateSouhaiteeAffiche ? `Date et heure : ${dateSouhaiteeAffiche}` : ''}
+Distance : ${distanceAffiche} km · Durée : ${dureeAffiche} min
+Passagers : ${nbPassagers} · Tarif : ${tarif}${forfait ? ' (forfait)' : ''}
 
 Prix estimé : ${prixAffiche}€
+Paiement CB accepté à bord
 
 Réserver en ligne : https://www.taxibordeauxsolution.fr/#reservation
 Appeler : +33 6 67 23 78 22

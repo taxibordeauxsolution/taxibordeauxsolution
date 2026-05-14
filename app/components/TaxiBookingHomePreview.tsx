@@ -1303,6 +1303,8 @@ const TaxiBookingHomePreview = () => {
           duration={tripData.duration}
           departureDate={bookingData.departureDate}
           departureTime={bookingData.departureTime}
+          passengers={bookingData.passengers}
+          isForfait={tripData.priceDetails?.isForfait ?? false}
         />
       )}
     </div>
