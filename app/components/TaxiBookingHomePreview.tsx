@@ -1241,6 +1241,8 @@ const TaxiBookingHomePreview = () => {
               tariffType={tripData.priceDetails?.tariffType ?? 'Jour'}
               distance={tripData.distance}
               duration={tripData.duration}
+              departureDate={bookingData.departureDate}
+              departureTime={bookingData.departureTime}
             />
           )}
         </div>

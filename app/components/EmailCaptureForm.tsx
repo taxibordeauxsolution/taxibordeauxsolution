@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Mail, Phone, Calendar, CheckCircle, Loader2, Send } from 'lucide-react'
+import { Mail, Phone, CheckCircle, Loader2, Send } from 'lucide-react'
 
 interface EmailCaptureFormProps {
   estimationId: string | null
@@ -11,6 +11,8 @@ interface EmailCaptureFormProps {
   tariffType: string
   distance: number
   duration: number
+  departureDate: string
+  departureTime: string
 }
 
 export default function EmailCaptureForm({
@@ -21,10 +23,11 @@ export default function EmailCaptureForm({
   tariffType,
   distance,
   duration,
+  departureDate,
+  departureTime,
 }: EmailCaptureFormProps) {
   const [email, setEmail] = useState('')
   const [telephone, setTelephone] = useState('')
-  const [dateSouhaitee, setDateSouhaitee] = useState('')
   const [rgpdConsent, setRgpdConsent] = useState(false)
   const [honeypot, setHoneypot] = useState('')
   const [expanded, setExpanded] = useState(false)
@@ -47,7 +50,7 @@ export default function EmailCaptureForm({
         body: JSON.stringify({
           email,
           telephone: telephone || null,
-          dateSouhaitee: dateSouhaitee || null,
+          dateSouhaitee: departureDate && departureTime ? `${departureDate}T${departureTime}` : null,
           estimationId,
           rgpdConsent,
           honeypot,
@@ -139,19 +142,6 @@ export default function EmailCaptureForm({
               onChange={(e) => setTelephone(e.target.value)}
               className="w-full pl-9 pr-3 py-2.5 border border-blue-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-400"
             />
-          </div>
-
-          {/* Date souhaitée optionnelle */}
-          <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-400" />
-            <input
-              type="date"
-              value={dateSouhaitee}
-              onChange={(e) => setDateSouhaitee(e.target.value)}
-              min={new Date().toISOString().split('T')[0]}
-              className="w-full pl-9 pr-3 py-2.5 border border-blue-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 text-gray-900"
-            />
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">Date souhaitée</span>
           </div>
 
           {/* Honeypot (caché) */}
