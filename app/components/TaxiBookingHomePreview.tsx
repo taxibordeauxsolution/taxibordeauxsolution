@@ -185,6 +185,7 @@ const TaxiBookingHomePreview = () => {
       tariffMixed: "Mixte",
       tariffHoliday: "Férié",
       tariffSunday: "Dimanche",
+      bookNowBtn: "Réserver maintenant",
     },
     en: {
       title: "Taxi Bordeaux Solution",
@@ -270,6 +271,7 @@ const TaxiBookingHomePreview = () => {
       tariffMixed: "Mixed",
       tariffHoliday: "Holiday",
       tariffSunday: "Sunday",
+      bookNowBtn: "Book now",
     },
     es: {
       title: "Taxi Bordeaux Solution",
@@ -355,6 +357,7 @@ const TaxiBookingHomePreview = () => {
       tariffMixed: "Mixta",
       tariffHoliday: "Festivo",
       tariffSunday: "Domingo",
+      bookNowBtn: "Reservar ahora",
     }
   }
 
@@ -1299,7 +1302,7 @@ const TaxiBookingHomePreview = () => {
         {!tripData.fromCoords || !tripData.toCoords ? t('selectAddresses') :
          !bookingData.departureDate || !bookingData.departureTime ? t('dateTimeRequired') :
          !tripData.price ? t('calculatingPrice') :
-         t('continue')}
+         t('bookNowBtn')}
       </button>
     </div>
   )
