@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Mail, Phone, CheckCircle, Loader2, Send } from 'lucide-react'
+import { Mail, Phone, CheckCircle, Loader2, Send, ChevronUp } from 'lucide-react'
 
 interface EmailCaptureFormProps {
   estimationId: string | null
@@ -83,120 +83,112 @@ export default function EmailCaptureForm({
 
   if (sent) {
     return (
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-        <div className="flex items-center justify-center gap-2 text-green-700 font-semibold mb-1">
-          <CheckCircle className="w-5 h-5" />
-          Devis envoyé !
-        </div>
-        <p className="text-sm text-green-600">
-          Vérifiez votre boîte mail (et vos spams).
-          Vous pouvez aussi nous joindre directement sur WhatsApp ou par téléphone pour réserver tout de suite.
-        </p>
-      </div>
+      <p className="text-center text-sm text-green-600 py-1">
+        <CheckCircle className="w-4 h-4 inline mr-1" />
+        Devis envoyé — vérifiez votre boîte mail
+      </p>
+    )
+  }
+
+  if (!expanded) {
+    return (
+      <button
+        onClick={() => {
+          setExpanded(true)
+          if (typeof window !== 'undefined' && (window as any).gtag) {
+            (window as any).gtag('event', 'email_devis_form_opened', {
+              event_category: 'lead',
+            })
+          }
+        }}
+        className="w-full text-center text-sm text-gray-400 hover:text-blue-600 transition-colors py-1"
+      >
+        <Mail className="w-3.5 h-3.5 inline mr-1" />
+        Recevoir ce devis par email
+      </button>
     )
   }
 
   return (
-    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-      <div className="flex flex-col sm:flex-row gap-2">
-        <div className="relative flex-1">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-400" />
+    <div className="border border-gray-200 rounded-lg p-3 bg-gray-50/50">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs text-gray-500 font-medium">Recevoir ce devis par email</span>
+        <button
+          onClick={() => setExpanded(false)}
+          className="text-gray-300 hover:text-gray-500 transition-colors"
+        >
+          <ChevronUp className="w-4 h-4" />
+        </button>
+      </div>
+
+      <div className="space-y-2">
+        <div className="relative">
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
           <input
             type="email"
             placeholder="votre@email.fr"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            onFocus={() => {
-              if (!expanded) {
-                setExpanded(true)
-                if (typeof window !== 'undefined' && (window as any).gtag) {
-                  (window as any).gtag('event', 'email_devis_form_opened', {
-                    event_category: 'lead',
-                  })
-                }
-              }
-            }}
-            className="w-full pl-9 pr-3 py-2.5 border border-blue-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400"
+            className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-blue-400 focus:border-blue-400 text-gray-900 placeholder-gray-300"
+            autoFocus
           />
         </div>
-        {!expanded && (
-          <button
-            onClick={() => setExpanded(true)}
-            className="px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors whitespace-nowrap flex items-center gap-2"
-          >
-            <Send className="w-4 h-4" />
-            Recevoir ce devis par email
-          </button>
-        )}
-      </div>
 
-      {expanded && (
-        <div className="mt-3 space-y-3">
-          {/* Téléphone optionnel */}
-          <div className="relative">
-            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-400" />
-            <input
-              type="tel"
-              placeholder="Téléphone (optionnel)"
-              value={telephone}
-              onChange={(e) => setTelephone(e.target.value)}
-              className="w-full pl-9 pr-3 py-2.5 border border-blue-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-400"
-            />
-          </div>
-
-          {/* Honeypot (caché) */}
+        <div className="relative">
+          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
           <input
-            type="text"
-            value={honeypot}
-            onChange={(e) => setHoneypot(e.target.value)}
-            tabIndex={-1}
-            autoComplete="off"
-            aria-hidden="true"
-            style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0 }}
+            type="tel"
+            placeholder="Téléphone (optionnel)"
+            value={telephone}
+            onChange={(e) => setTelephone(e.target.value)}
+            className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-blue-400 text-gray-900 placeholder-gray-300"
           />
-
-          {/* RGPD */}
-          <label className="flex items-start gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={rgpdConsent}
-              onChange={(e) => setRgpdConsent(e.target.checked)}
-              className="mt-0.5 rounded border-blue-300 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="text-xs text-gray-600">
-              J'accepte d'être recontacté par Taxi Bordeaux Solution concernant ma demande
-            </span>
-          </label>
-
-          {error && (
-            <p className="text-xs text-red-600 font-medium">{error}</p>
-          )}
-
-          <button
-            onClick={handleSubmit}
-            disabled={!emailValid || !rgpdConsent || loading || !estimationId}
-            className="w-full py-2.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Envoi en cours...
-              </>
-            ) : (
-              <>
-                <Send className="w-4 h-4" />
-                Envoyer le devis
-              </>
-            )}
-          </button>
-
-          <p className="text-[10px] text-gray-400 leading-tight">
-            Vos données sont utilisées uniquement pour traiter votre demande de transport.
-            Conservation 3 ans. Vous pouvez demander leur suppression à contact@taxibordeauxsolution.fr.{' '}
-            <a href="/mentions-legales" className="underline hover:text-gray-500">Mentions légales</a>
-          </p>
         </div>
-      )}
+
+        {/* Honeypot */}
+        <input
+          type="text"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0 }}
+        />
+
+        <label className="flex items-start gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={rgpdConsent}
+            onChange={(e) => setRgpdConsent(e.target.checked)}
+            className="mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          />
+          <span className="text-[11px] text-gray-400 leading-tight">
+            J'accepte d'être recontacté par Taxi Bordeaux Solution concernant ma demande.{' '}
+            <a href="/mentions-legales" className="underline hover:text-gray-500">Mentions légales</a>
+          </span>
+        </label>
+
+        {error && <p className="text-xs text-red-600">{error}</p>}
+
+        <button
+          onClick={handleSubmit}
+          disabled={!emailValid || !rgpdConsent || loading || !estimationId}
+          className="w-full py-2 bg-gray-700 text-white rounded-lg text-sm font-medium hover:bg-gray-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Envoi...
+            </>
+          ) : (
+            <>
+              <Send className="w-3.5 h-3.5" />
+              Envoyer
+            </>
+          )}
+        </button>
+      </div>
     </div>
   )
 }
