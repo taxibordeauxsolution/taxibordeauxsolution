@@ -77,6 +77,11 @@ export async function POST(request) {
 
                 <div class="price-box">
                     <h3>💰 Prix estimé</h3>
+                    ${reservationData.pricing.prixBarreDegressif
+                      ? `<div style="font-size: 0.9em; margin-bottom: 4px;">
+                            <span style="text-decoration: line-through; color: #9ca3af;">${reservationData.pricing.prixBarreDegressif.toFixed(0)}€</span>
+                            <span style="background: #f97316; color: white; font-size: 0.7em; font-weight: bold; padding: 2px 8px; border-radius: 12px; margin-left: 6px;">Tarif réduit</span>
+                         </div>` : ''}
                     <div style="font-size: 2em; font-weight: bold; color: #16a34a;">
                         ${reservationData.pricing.fourchette
                           ? `${reservationData.pricing.fourchette.de.toFixed(2)}€ à ${reservationData.pricing.fourchette.a.toFixed(2)}€`
@@ -138,7 +143,9 @@ export async function POST(request) {
         <li><strong>Départ :</strong> ${reservationData.trip.from.address}</li>
         <li><strong>Destination :</strong> ${reservationData.trip.to.address}</li>
         <li><strong>Distance :</strong> ${reservationData.trip.distance.toFixed(1)} km</li>
-        <li><strong>Prix :</strong> ${reservationData.pricing.fourchette
+        <li><strong>Prix :</strong> ${reservationData.pricing.prixBarreDegressif
+              ? `<span style="text-decoration:line-through;color:#9ca3af;">${reservationData.pricing.prixBarreDegressif.toFixed(0)}€</span> <span style="background:#f97316;color:white;font-size:0.8em;font-weight:bold;padding:1px 6px;border-radius:10px;">Tarif réduit</span> `
+              : ''}${reservationData.pricing.fourchette
               ? `${reservationData.pricing.fourchette.de.toFixed(2)}€ à ${reservationData.pricing.fourchette.a.toFixed(2)}€`
               : `${reservationData.pricing.totalPrice.toFixed(2)}€`}</li>
     </ul>
@@ -162,9 +169,11 @@ export async function POST(request) {
     const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
     const telegramChatId = process.env.TELEGRAM_CHAT_ID;
     if (telegramToken && telegramChatId) {
-      const prix = reservationData.pricing.fourchette
+      const prixBarreStr = reservationData.pricing.prixBarreDegressif
+        ? `~${reservationData.pricing.prixBarreDegressif.toFixed(0)}€~ Tarif réduit → ` : '';
+      const prix = prixBarreStr + (reservationData.pricing.fourchette
         ? `${reservationData.pricing.fourchette.de.toFixed(2)}€ à ${reservationData.pricing.fourchette.a.toFixed(2)}€`
-        : `${reservationData.pricing.totalPrice.toFixed(2)}€`;
+        : `${reservationData.pricing.totalPrice.toFixed(2)}€`);
       const telegramText = `🚖 Nouvelle réservation N°${reservationData.reservationId}\n\n👤 ${reservationData.customer.name}\n📞 ${reservationData.customer.phone}\n📧 ${reservationData.customer.email}\n\n📍 ${reservationData.trip.from.address}\n➡️ ${reservationData.trip.to.address}\n📏 ${reservationData.trip.distance.toFixed(1)} km\n\n📅 ${reservationData.estimatedPickupTime}\n👥 ${reservationData.bookingDetails.passengers} passager(s)\n🧳 ${reservationData.bookingDetails.luggage} bagage(s)\n\n💰 ${prix}`;
       fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
         method: 'POST',

@@ -884,7 +884,8 @@ const TaxiBookingHomePreview = () => {
         pricing: {
           totalPrice: tripData.price,
           priceDetails: tripData.priceDetails,
-          fourchette: tripData.priceDetails?.isForfait
+          prixBarreDegressif: prixSansDegressif > 0 ? prixSansDegressif : null,
+          fourchette: (tripData.priceDetails?.isForfait || prixSansDegressif > 0)
             ? null
             : tripData.price <= configPrix.courseMini
               ? { de: configPrix.courseMiniDe || 0, a: configPrix.courseMini || 0 }
