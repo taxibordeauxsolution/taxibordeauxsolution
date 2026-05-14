@@ -101,7 +101,7 @@ export default function EmailCaptureForm({
             })
           }
         }}
-        className="w-full text-center text-sm text-gray-400 hover:text-blue-600 transition-colors py-1"
+        className="w-full text-center text-sm text-gray-500 hover:text-blue-600 transition-colors py-2"
       >
         <Mail className="w-3.5 h-3.5 inline mr-1" />
         Recevoir ce devis par email
