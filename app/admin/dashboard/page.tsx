@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
-import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin, FunnelSimple } from '@phosphor-icons/react'
+import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin, FunnelSimple, Globe } from '@phosphor-icons/react'
 
 interface Funnel {
   estimations: number
@@ -14,7 +14,7 @@ interface Funnel {
 
 interface Stats {
   reservations: { total: number; en_attente: number; confirmee: number; terminee: number; annulee: number }
-  estimations: { total: number; avgPrice: number; funnel: Funnel }
+  estimations: { total: number; avgPrice: number; funnel: Funnel; topSources: { source: string; count: number }[] }
   revenus: { aujourdhui: number; semaine: number; mois: number; semainePrecedente: number; moisPrecedent: number }
 }
 
@@ -39,7 +39,7 @@ interface Estimation {
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats>({
     reservations: { total: 0, en_attente: 0, confirmee: 0, terminee: 0, annulee: 0 },
-    estimations: { total: 0, avgPrice: 0, funnel: { estimations: 0, leads: 0, contactes: 0, convertis: 0, perdus: 0 } },
+    estimations: { total: 0, avgPrice: 0, funnel: { estimations: 0, leads: 0, contactes: 0, convertis: 0, perdus: 0 }, topSources: [] },
     revenus: { aujourdhui: 0, semaine: 0, mois: 0, semainePrecedente: 0, moisPrecedent: 0 },
   })
   const [recentResas, setRecentResas] = useState<Reservation[]>([])
@@ -118,7 +118,7 @@ export default function AdminDashboard() {
         }))
       }
       if (estJson.success) {
-        setStats(prev => ({ ...prev, estimations: { ...estJson.stats, funnel: estJson.stats.funnel || prev.estimations.funnel } }))
+        setStats(prev => ({ ...prev, estimations: { ...estJson.stats, funnel: estJson.stats.funnel || prev.estimations.funnel, topSources: estJson.stats.topSources || prev.estimations.topSources } }))
         setRecentEstimations(estJson.data.slice(0, 5))
       }
     } catch {}
@@ -297,6 +297,32 @@ export default function AdminDashboard() {
           </div>
         )
       })()}
+
+      {/* Top sources trafic */}
+      {stats.estimations.topSources.length > 0 && stats.estimations.topSources.some(s => s.source !== 'direct') && (
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+          <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2 mb-3">
+            <Globe size={16} />
+            Sources de trafic
+          </h2>
+          <div className="space-y-2">
+            {stats.estimations.topSources.map((s, i) => {
+              const pct = stats.estimations.total > 0 ? Math.round((s.count / stats.estimations.total) * 100) : 0
+              const colors: Record<string, string> = { google: 'bg-blue-500', facebook: 'bg-indigo-500', instagram: 'bg-pink-500', direct: 'bg-slate-400' }
+              const color = colors[s.source.toLowerCase()] || 'bg-purple-500'
+              return (
+                <div key={i} className="flex items-center gap-3">
+                  <span className="text-sm text-slate-700 w-24 truncate font-medium">{s.source}</span>
+                  <div className="flex-1 h-4 bg-slate-100 rounded-full overflow-hidden">
+                    <div className={`h-full ${color} rounded-full`} style={{ width: `${Math.max(4, pct)}%` }} />
+                  </div>
+                  <span className="text-sm text-slate-600 font-semibold w-16 text-right">{s.count} <span className="text-slate-400 font-normal text-xs">({pct}%)</span></span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Courses du jour */}
       {todayResas.length > 0 && (

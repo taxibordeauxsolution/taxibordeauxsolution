@@ -153,6 +153,24 @@ export default function AdminEstimations() {
     perdu: { label: 'Perdu', color: 'bg-red-100 text-red-700' },
   }
 
+  const whatsappMsg = (e: Estimation) => {
+    const trajet = `${e.from.split(',')[0]} → ${e.to.split(',')[0]}`
+    const prix = `${e.price.toFixed(2)}€`
+    switch (e.statut) {
+      case 'contacte':
+        return `Bonjour, c'est Taxi Bordeaux Solution. Pour confirmer votre course ${trajet} (${prix}), merci de me répondre ici.`
+      case 'converti':
+        return `Bonjour, votre course ${trajet} est confirmée. N'hésitez pas si vous avez des questions.`
+      case 'perdu':
+        return `Bonjour, votre estimation ${trajet} (${prix}) est toujours valable. Souhaitez-vous réserver ?`
+      default:
+        return `Bonjour, suite à votre estimation ${trajet} (${prix}), je reviens vers vous.`
+    }
+  }
+
+  const whatsappUrl = (e: Estimation) =>
+    `https://wa.me/${e.telephone!.replace(/\D/g, '').replace(/^0/, '33')}?text=${encodeURIComponent(whatsappMsg(e))}`
+
   const exportCSV = () => {
     const header = 'Date,Départ,Destination,Distance (km),Durée (min),Prix,Fourchette,Tarif,Forfait,Email,Téléphone,Statut\n'
     const rows = estimations.map(e => {
@@ -329,7 +347,7 @@ export default function AdminEstimations() {
                       <div className="flex items-center gap-2">
                         <a href={`tel:${e.telephone}`} className="text-blue-600 hover:underline text-xs">{e.telephone}</a>
                         <a
-                          href={`https://wa.me/${e.telephone.replace(/\D/g, '').replace(/^0/, '33')}?text=${encodeURIComponent(`Bonjour, suite à votre estimation ${e.from.split(',')[0]} → ${e.to.split(',')[0]} (${e.price.toFixed(2)}€), je reviens vers vous.`)}`}
+                          href={whatsappUrl(e)}
                           target="_blank" rel="noopener noreferrer"
                           className="text-green-600"
                         >
@@ -408,7 +426,7 @@ export default function AdminEstimations() {
                             <div className="flex items-center gap-1">
                               <a href={`tel:${e.telephone}`} className="text-blue-600 hover:underline text-xs">{e.telephone}</a>
                               <a
-                                href={`https://wa.me/${e.telephone.replace(/\D/g, '').replace(/^0/, '33')}?text=${encodeURIComponent(`Bonjour, suite à votre estimation ${e.from.split(',')[0]} → ${e.to.split(',')[0]} (${e.price.toFixed(2)}€), je reviens vers vous.`)}`}
+                                href={whatsappUrl(e)}
                                 target="_blank" rel="noopener noreferrer"
                                 className="text-green-600 hover:text-green-700" title="Répondre par WhatsApp"
                               >
