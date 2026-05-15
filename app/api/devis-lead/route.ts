@@ -86,12 +86,20 @@ export async function POST(req: NextRequest) {
     const tarif = sanitize(estimation.tariffType)
     const nbPassagers = passengers || 1
     const forfait = isForfaitBody || estimation.isForfait
-    const dateSouhaiteeObj = dateSouhaitee ? new Date(dateSouhaitee) : null
-    const dateSouhaiteeAffiche = dateSouhaiteeObj
-      ? dateSouhaiteeObj.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Europe/Paris' })
-        + ' à '
-        + dateSouhaiteeObj.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })
-      : null
+    let dateSouhaiteeAffiche: string | null = null
+    if (dateSouhaitee) {
+      const match = String(dateSouhaitee).match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/)
+      if (match) {
+        const [, yyyy, mm, dd, hh, min] = match
+        const moisFR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre']
+        dateSouhaiteeAffiche = `${dd} ${moisFR[parseInt(mm, 10) - 1]} ${yyyy} à ${hh}:${min}`
+      } else {
+        const obj = new Date(dateSouhaitee + 'Z')
+        dateSouhaiteeAffiche = obj.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Europe/Paris' })
+          + ' à '
+          + obj.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })
+      }
+    }
 
     const whatsappMsg = encodeURIComponent(
       `Bonjour, je souhaite réserver ce trajet :\n${estimation.from} → ${estimation.to}\nTarif estimé : ${prixAffiche}€ (${tarif})\nDate : ${dateSouhaiteeAffiche || 'à définir'}`
