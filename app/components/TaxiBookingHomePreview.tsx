@@ -1238,6 +1238,9 @@ const TaxiBookingHomePreview = () => {
                 {!bookingData.departureDate || !bookingData.departureTime ? (
                   <div className="text-center text-orange-600 font-medium text-xs mt-2">{t('priceFineWithDateTime')}</div>
                 ) : null}
+                <div className="flex items-center justify-center mt-3 opacity-60">
+                  <img src="/images/cb-logos.png" alt="Visa, CB, Mastercard, American Express" className="h-5" />
+                </div>
               </div>
             </div>
           )}
