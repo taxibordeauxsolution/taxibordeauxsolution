@@ -113,7 +113,8 @@ export const Estimation =
 // ── Modèle Reservation ───────────────────────────────────────────────────
 const ReservationSchema = new mongoose.Schema({
   reservationId:  { type: String, required: true, unique: true },
-  status:         { type: String, default: 'en_attente', enum: ['en_attente', 'confirmee', 'terminee', 'annulee'] },
+  status:         { type: String, default: 'en_attente', enum: ['en_attente', 'confirmee', 'en_route', 'terminee', 'annulee'] },
+  enRouteAt:      { type: Date, default: null },
   customer: {
     name:  { type: String, required: true },
     phone: { type: String, required: true },

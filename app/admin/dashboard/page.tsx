@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
-import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin, FunnelSimple, Globe } from '@phosphor-icons/react'
+import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin, FunnelSimple, Globe, NavigationArrow } from '@phosphor-icons/react'
 
 interface Funnel {
   estimations: number
@@ -149,6 +149,7 @@ export default function AdminDashboard() {
     switch (s) {
       case 'en_attente': return <HourglassSimple size={14} className="text-yellow-600" />
       case 'confirmee': return <CheckCircle size={14} className="text-blue-600" />
+      case 'en_route': return <NavigationArrow size={14} className="text-orange-600" />
       case 'terminee': return <CheckCircle size={14} className="text-green-600" />
       case 'annulee': return <XCircle size={14} className="text-red-600" />
       default: return <Clock size={14} className="text-slate-400" />
@@ -345,6 +346,9 @@ export default function AdminDashboard() {
                     <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200 transition-colors">Confirmer</button>
                   )}
                   {(r.status === 'en_attente' || r.status === 'confirmee') && (
+                    <button onClick={() => updateResaStatus(r._id, 'en_route')} className="px-2 py-1 bg-orange-100 text-orange-700 rounded-lg text-xs font-semibold hover:bg-orange-200 transition-colors">En route</button>
+                  )}
+                  {(r.status === 'en_attente' || r.status === 'confirmee' || r.status === 'en_route') && (
                     <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-2 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-semibold hover:bg-green-200 transition-colors">Terminer</button>
                   )}
                   <span className="font-bold text-green-700">{formatPrix(r)}</span>
