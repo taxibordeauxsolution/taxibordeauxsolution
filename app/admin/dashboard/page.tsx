@@ -2,11 +2,19 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
-import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin } from '@phosphor-icons/react'
+import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin, FunnelSimple } from '@phosphor-icons/react'
+
+interface Funnel {
+  estimations: number
+  leads: number
+  contactes: number
+  convertis: number
+  perdus: number
+}
 
 interface Stats {
   reservations: { total: number; en_attente: number; confirmee: number; terminee: number; annulee: number }
-  estimations: { total: number; avgPrice: number }
+  estimations: { total: number; avgPrice: number; funnel: Funnel }
   revenus: { aujourdhui: number; semaine: number; mois: number }
 }
 
@@ -31,7 +39,7 @@ interface Estimation {
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats>({
     reservations: { total: 0, en_attente: 0, confirmee: 0, terminee: 0, annulee: 0 },
-    estimations: { total: 0, avgPrice: 0 },
+    estimations: { total: 0, avgPrice: 0, funnel: { estimations: 0, leads: 0, contactes: 0, convertis: 0, perdus: 0 } },
     revenus: { aujourdhui: 0, semaine: 0, mois: 0 },
   })
   const [recentResas, setRecentResas] = useState<Reservation[]>([])
@@ -102,7 +110,7 @@ export default function AdminDashboard() {
         }))
       }
       if (estJson.success) {
-        setStats(prev => ({ ...prev, estimations: estJson.stats }))
+        setStats(prev => ({ ...prev, estimations: { ...estJson.stats, funnel: estJson.stats.funnel || prev.estimations.funnel } }))
         setRecentEstimations(estJson.data.slice(0, 5))
       }
     } catch {}
@@ -195,6 +203,57 @@ export default function AdminDashboard() {
           <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.mois.toFixed(0)}€</div>
         </div>
       </div>
+
+      {/* Funnel de conversion */}
+      {stats.estimations.funnel.estimations > 0 && (() => {
+        const f = stats.estimations.funnel
+        const pctLead = f.estimations > 0 ? Math.round((f.leads / f.estimations) * 100) : 0
+        const pctContacte = f.leads > 0 ? Math.round((f.contactes / f.leads) * 100) : 0
+        const pctConverti = f.leads > 0 ? Math.round((f.convertis / f.leads) * 100) : 0
+        const pctPerdu = f.leads > 0 ? Math.round((f.perdus / f.leads) * 100) : 0
+        const steps = [
+          { label: 'Estimations', count: f.estimations, pct: 100, color: 'bg-slate-500', width: 'w-full' },
+          { label: 'Leads (email)', count: f.leads, pct: pctLead, color: 'bg-blue-500', width: '' },
+          { label: 'Contactés', count: f.contactes, pct: pctContacte, color: 'bg-amber-500', width: '' },
+          { label: 'Convertis', count: f.convertis, pct: pctConverti, color: 'bg-green-500', width: '' },
+        ]
+        return (
+          <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200">
+            <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4">
+              <FunnelSimple size={16} />
+              Funnel de conversion
+            </h2>
+            <div className="space-y-3">
+              {steps.map((s, i) => {
+                const barWidth = i === 0 ? 100 : Math.max(8, (s.count / steps[0].count) * 100)
+                return (
+                  <div key={s.label}>
+                    <div className="flex items-center justify-between text-sm mb-1">
+                      <span className="text-slate-600">{s.label}</span>
+                      <span className="font-semibold text-slate-900">
+                        {s.count}
+                        {i > 0 && <span className="text-slate-400 font-normal ml-1">({s.pct}%{i === 1 ? ' des estim.' : ' des leads'})</span>}
+                      </span>
+                    </div>
+                    <div className="h-5 bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full ${s.color} rounded-full transition-all duration-500`}
+                        style={{ width: `${barWidth}%` }}
+                      />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            {f.perdus > 0 && (
+              <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-sm">
+                <span className="text-red-600">Perdus</span>
+                <span className="font-semibold text-red-600">{f.perdus} <span className="font-normal text-slate-400">({pctPerdu}% des leads)</span></span>
+              </div>
+            )}
+          </div>
+        )
+      })()}
 
       {/* Courses du jour */}
       {todayResas.length > 0 && (

@@ -117,7 +117,7 @@ const TaxiBookingHomePreview = () => {
       distance: "Distance",
       duration: "Durée estimée",
       minutes: "minutes",
-      continue: "Continuer",
+      continue: "Réserver",
       step2Title: "Détails de votre réservation",
       passengers: "Passagers",
       luggage: "Bagages",
@@ -203,7 +203,7 @@ const TaxiBookingHomePreview = () => {
       distance: "Distance",
       duration: "Estimated time",
       minutes: "minutes",
-      continue: "Continue",
+      continue: "Book now",
       step2Title: "Your booking details",
       passengers: "Passengers",
       luggage: "Luggage",
@@ -289,7 +289,7 @@ const TaxiBookingHomePreview = () => {
       distance: "Distancia",
       duration: "Tiempo estimado",
       minutes: "minutos",
-      continue: "Continuar",
+      continue: "Reservar",
       step2Title: "Detalles de su reserva",
       passengers: "Pasajeros",
       luggage: "Equipaje",
@@ -959,11 +959,15 @@ const TaxiBookingHomePreview = () => {
       }
 
       setReservation({...reservationData, emailSent})
-      const successMessage = bookingData.customerEmail && emailSent 
+      const successMessage = bookingData.customerEmail && emailSent
         ? `Réservation confirmée ! Numéro : ${reservationId}. Email de confirmation envoyé.`
         : `Réservation confirmée ! Numéro : ${reservationId}`
       setSuccess(successMessage)
       setStep(4)
+
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: 'step3_to_step4_confirmed', price: tripData.price, from: tripData.from?.split(',')[0], to: tripData.to?.split(',')[0] })
+      }
       
       // Solution robuste pour le scroll après confirmation (fix problème navigateurs Chrome/Chromium)
       setTimeout(() => {
@@ -1277,7 +1281,9 @@ const TaxiBookingHomePreview = () => {
           
           if (allFieldsValid) {
             setStep(2)
-            // Petit délai pour laisser le DOM se mettre à jour
+            if (typeof window !== 'undefined' && (window as any).gtag) {
+              (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: 'step1_to_step2', from: tripData.from?.split(',')[0], to: tripData.to?.split(',')[0], price: tripData.price })
+            }
             setTimeout(scrollToModule, 150)
           }
         }}
@@ -1418,6 +1424,9 @@ const TaxiBookingHomePreview = () => {
         <button
           onClick={() => {
             setStep(1)
+            if (typeof window !== 'undefined' && (window as any).gtag) {
+              (window as any).gtag('event', 'funnel_abandon', { event_category: 'funnel', step: 'step2_back_to_step1' })
+            }
             setTimeout(scrollToModule, 150)
           }}
           className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors"
@@ -1427,6 +1436,9 @@ const TaxiBookingHomePreview = () => {
         <button
           onClick={() => {
             setStep(3)
+            if (typeof window !== 'undefined' && (window as any).gtag) {
+              (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: 'step2_to_step3' })
+            }
             setTimeout(scrollToModule, 150)
           }}
           className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
@@ -1590,6 +1602,9 @@ const TaxiBookingHomePreview = () => {
         <button
           onClick={() => {
             setStep(2)
+            if (typeof window !== 'undefined' && (window as any).gtag) {
+              (window as any).gtag('event', 'funnel_abandon', { event_category: 'funnel', step: 'step3_back_to_step2' })
+            }
             setTimeout(scrollToModule, 150)
           }}
           className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors"
@@ -1598,7 +1613,6 @@ const TaxiBookingHomePreview = () => {
         </button>
         <button
           onClick={() => {
-            // Marquer qu'une tentative de validation a eu lieu
             setStep3ValidationAttempted(true)
             
             // Vérifier si tous les champs requis sont remplis

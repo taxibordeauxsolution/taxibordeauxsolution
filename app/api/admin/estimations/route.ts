@@ -46,7 +46,12 @@ export async function GET(req: NextRequest) {
     ])
 
     const leadFilter: any = { ...filter, email: { $ne: null, $exists: true } }
-    const leadCount = await Estimation.countDocuments(leadFilter)
+    const [leadCount, contacteCount, convertiCount, perduCount] = await Promise.all([
+      Estimation.countDocuments(leadFilter),
+      Estimation.countDocuments({ ...filter, statut: 'contacte' }),
+      Estimation.countDocuments({ ...filter, statut: 'converti' }),
+      Estimation.countDocuments({ ...filter, statut: 'perdu' }),
+    ])
 
     const stats = {
       total,
@@ -54,6 +59,7 @@ export async function GET(req: NextRequest) {
       topRoutes: [] as { route: string; count: number }[],
       forfaitCount: 0,
       leadCount,
+      funnel: { estimations: total, leads: leadCount, contactes: contacteCount, convertis: convertiCount, perdus: perduCount },
     }
 
     if (estimations.length > 0) {
