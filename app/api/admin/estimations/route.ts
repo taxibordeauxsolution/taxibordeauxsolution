@@ -60,6 +60,7 @@ export async function GET(req: NextRequest) {
       forfaitCount: 0,
       leadCount,
       funnel: { estimations: total, leads: leadCount, contactes: contacteCount, convertis: convertiCount, perdus: perduCount },
+      topSources: [] as { source: string; count: number }[],
     }
 
     if (estimations.length > 0) {
@@ -68,6 +69,16 @@ export async function GET(req: NextRequest) {
       ) / 100
 
       stats.forfaitCount = estimations.filter((e: any) => e.isForfait).length
+
+      const sourceMap = new Map<string, number>()
+      for (const e of estimations as any[]) {
+        const src = e.utmSource || 'direct'
+        sourceMap.set(src, (sourceMap.get(src) || 0) + 1)
+      }
+      stats.topSources = [...sourceMap.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5)
+        .map(([source, count]) => ({ source, count }))
 
       const routeMap = new Map<string, number>()
       for (const e of estimations as any[]) {

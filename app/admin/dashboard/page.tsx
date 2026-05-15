@@ -15,7 +15,7 @@ interface Funnel {
 interface Stats {
   reservations: { total: number; en_attente: number; confirmee: number; terminee: number; annulee: number }
   estimations: { total: number; avgPrice: number; funnel: Funnel }
-  revenus: { aujourdhui: number; semaine: number; mois: number }
+  revenus: { aujourdhui: number; semaine: number; mois: number; semainePrecedente: number; moisPrecedent: number }
 }
 
 interface Reservation {
@@ -40,7 +40,7 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats>({
     reservations: { total: 0, en_attente: 0, confirmee: 0, terminee: 0, annulee: 0 },
     estimations: { total: 0, avgPrice: 0, funnel: { estimations: 0, leads: 0, contactes: 0, convertis: 0, perdus: 0 } },
-    revenus: { aujourdhui: 0, semaine: 0, mois: 0 },
+    revenus: { aujourdhui: 0, semaine: 0, mois: 0, semainePrecedente: 0, moisPrecedent: 0 },
   })
   const [recentResas, setRecentResas] = useState<Reservation[]>([])
   const [recentEstimations, setRecentEstimations] = useState<Estimation[]>([])
@@ -72,12 +72,15 @@ export default function AdminDashboard() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const [resaRes, estRes] = await Promise.all([
+      const [resaRes, estRes, allTermRes] = await Promise.all([
         fetch('/api/admin/reservations', { headers: { Authorization: `Bearer ${token()}` } }),
         fetch('/api/admin/estimations', { headers: { Authorization: `Bearer ${token()}` } }),
+        fetch('/api/admin/reservations?status=terminee&limit=500', { headers: { Authorization: `Bearer ${token()}` } }),
       ])
       const resaJson = await resaRes.json()
       const estJson = await estRes.json()
+
+      const allTermJson = await allTermRes.json()
 
       if (resaJson.success) {
         const newTotal = resaJson.stats.total
@@ -91,21 +94,26 @@ export default function AdminDashboard() {
         setStats(prev => ({ ...prev, reservations: resaJson.stats }))
         setRecentResas(resaJson.data.slice(0, 5))
 
+        const allTerminees = allTermJson.success ? (allTermJson.data as Reservation[]) : []
         const now = new Date()
         const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
         const weekStart = new Date(todayStart)
         weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1)
+        const prevWeekStart = new Date(weekStart)
+        prevWeekStart.setDate(prevWeekStart.getDate() - 7)
         const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+        const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
 
-        const terminees = (resaJson.data as Reservation[]).filter((r: Reservation) => r.status === 'terminee')
         const sum = (list: Reservation[]) => list.reduce((s, r) => s + (r.pricing.totalPrice || 0), 0)
 
         setStats(prev => ({
           ...prev,
           revenus: {
-            aujourdhui: sum(terminees.filter(r => new Date(r.pickupDate) >= todayStart)),
-            semaine: sum(terminees.filter(r => new Date(r.pickupDate) >= weekStart)),
-            mois: sum(terminees.filter(r => new Date(r.pickupDate) >= monthStart)),
+            aujourdhui: sum(allTerminees.filter(r => new Date(r.pickupDate) >= todayStart)),
+            semaine: sum(allTerminees.filter(r => new Date(r.pickupDate) >= weekStart)),
+            mois: sum(allTerminees.filter(r => new Date(r.pickupDate) >= monthStart)),
+            semainePrecedente: sum(allTerminees.filter(r => { const d = new Date(r.pickupDate); return d >= prevWeekStart && d < weekStart })),
+            moisPrecedent: sum(allTerminees.filter(r => { const d = new Date(r.pickupDate); return d >= prevMonthStart && d < monthStart })),
           }
         }))
       }
@@ -145,6 +153,15 @@ export default function AdminDashboard() {
       case 'annulee': return <XCircle size={14} className="text-red-600" />
       default: return <Clock size={14} className="text-slate-400" />
     }
+  }
+
+  const updateResaStatus = async (id: string, status: string) => {
+    await fetch('/api/admin/reservations', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+      body: JSON.stringify({ id, status })
+    })
+    load()
   }
 
   if (loading) {
@@ -189,20 +206,46 @@ export default function AdminDashboard() {
       </div>
 
       {/* Revenus */}
-      <div className="grid grid-cols-3 gap-3">
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
-          <div className="text-xs text-green-700">Aujourd'hui</div>
-          <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.aujourdhui.toFixed(0)}€</div>
-        </div>
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
-          <div className="text-xs text-green-700">Cette semaine</div>
-          <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.semaine.toFixed(0)}€</div>
-        </div>
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
-          <div className="text-xs text-green-700">Ce mois</div>
-          <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.mois.toFixed(0)}€</div>
-        </div>
-      </div>
+      {(() => {
+        const diffSem = stats.revenus.semainePrecedente > 0
+          ? Math.round(((stats.revenus.semaine - stats.revenus.semainePrecedente) / stats.revenus.semainePrecedente) * 100)
+          : null
+        const diffMois = stats.revenus.moisPrecedent > 0
+          ? Math.round(((stats.revenus.mois - stats.revenus.moisPrecedent) / stats.revenus.moisPrecedent) * 100)
+          : null
+        return (
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
+              <div className="text-xs text-green-700">Aujourd'hui</div>
+              <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.aujourdhui.toFixed(0)}€</div>
+            </div>
+            <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
+              <div className="text-xs text-green-700">Cette semaine</div>
+              <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.semaine.toFixed(0)}€</div>
+              {diffSem !== null && (
+                <div className={`text-xs font-semibold mt-1 ${diffSem >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {diffSem >= 0 ? '+' : ''}{diffSem}% vs sem. préc.
+                </div>
+              )}
+              {stats.revenus.semainePrecedente > 0 && (
+                <div className="text-[10px] text-slate-400">{stats.revenus.semainePrecedente.toFixed(0)}€ sem. préc.</div>
+              )}
+            </div>
+            <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
+              <div className="text-xs text-green-700">Ce mois</div>
+              <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.mois.toFixed(0)}€</div>
+              {diffMois !== null && (
+                <div className={`text-xs font-semibold mt-1 ${diffMois >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {diffMois >= 0 ? '+' : ''}{diffMois}% vs mois préc.
+                </div>
+              )}
+              {stats.revenus.moisPrecedent > 0 && (
+                <div className="text-[10px] text-slate-400">{stats.revenus.moisPrecedent.toFixed(0)}€ mois préc.</div>
+              )}
+            </div>
+          </div>
+        )
+      })()}
 
       {/* Funnel de conversion */}
       {stats.estimations.funnel.estimations > 0 && (() => {
@@ -271,12 +314,65 @@ export default function AdminDashboard() {
                   <span className="text-slate-400 mx-1.5">·</span>
                   <span className="text-slate-500">{formatDate(r.pickupDate)}</span>
                 </div>
-                <span className="font-bold text-green-700 shrink-0">{formatPrix(r)}</span>
+                <div className="flex items-center gap-2 shrink-0">
+                  {r.status === 'en_attente' && (
+                    <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200 transition-colors">Confirmer</button>
+                  )}
+                  {(r.status === 'en_attente' || r.status === 'confirmee') && (
+                    <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-2 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-semibold hover:bg-green-200 transition-colors">Terminer</button>
+                  )}
+                  <span className="font-bold text-green-700">{formatPrix(r)}</span>
+                </div>
               </div>
             ))}
           </div>
         </div>
       )}
+
+      {/* Calendrier semaine */}
+      {(() => {
+        const now = new Date()
+        const weekStartCal = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+        weekStartCal.setDate(weekStartCal.getDate() - weekStartCal.getDay() + 1)
+        const days = Array.from({ length: 7 }, (_, i) => {
+          const d = new Date(weekStartCal)
+          d.setDate(d.getDate() + i)
+          return d
+        })
+        const joursFR = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
+        return (
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+            <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2 mb-3">
+              <CalendarBlank size={16} />
+              Semaine en cours
+            </h2>
+            <div className="grid grid-cols-7 gap-1.5">
+              {days.map((day, i) => {
+                const isToday = day.toDateString() === now.toDateString()
+                const dayResas = recentResas.filter(r => new Date(r.pickupDate).toDateString() === day.toDateString())
+                return (
+                  <div key={i} className={`rounded-xl p-2 text-center ${isToday ? 'bg-blue-50 border-2 border-blue-400' : 'bg-slate-50 border border-slate-200'}`}>
+                    <div className={`text-[10px] font-semibold ${isToday ? 'text-blue-700' : 'text-slate-500'}`}>{joursFR[i]}</div>
+                    <div className={`text-sm font-bold ${isToday ? 'text-blue-800' : 'text-slate-700'}`}>{day.getDate()}</div>
+                    {dayResas.length > 0 ? (
+                      <div className="mt-1 space-y-0.5">
+                        {dayResas.slice(0, 3).map(r => (
+                          <div key={r._id} className="text-[9px] bg-white rounded px-1 py-0.5 truncate text-slate-700 border border-slate-100">
+                            {r.customer.name.split(' ')[0]} {formatPrix(r)}
+                          </div>
+                        ))}
+                        {dayResas.length > 3 && <div className="text-[9px] text-slate-400">+{dayResas.length - 3}</div>}
+                      </div>
+                    ) : (
+                      <div className="text-[9px] text-slate-300 mt-1">—</div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })()}
 
       {/* Deux colonnes : dernières résas + dernières estimations */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -306,9 +402,17 @@ export default function AdminDashboard() {
                       {(typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || '').split(',')[0]}
                     </div>
                   </div>
-                  <div className="text-right shrink-0">
-                    <div className="font-bold text-green-700 text-xs">{formatPrix(r)}</div>
-                    <div className="text-xs text-slate-400">{formatDate(r.pickupDate)}</div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {r.status === 'en_attente' && (
+                      <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-semibold hover:bg-blue-200">Conf.</button>
+                    )}
+                    {(r.status === 'en_attente' || r.status === 'confirmee') && (
+                      <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-semibold hover:bg-green-200">Term.</button>
+                    )}
+                    <div className="text-right">
+                      <div className="font-bold text-green-700 text-xs">{formatPrix(r)}</div>
+                      <div className="text-xs text-slate-400">{formatDate(r.pickupDate)}</div>
+                    </div>
                   </div>
                 </div>
               ))}

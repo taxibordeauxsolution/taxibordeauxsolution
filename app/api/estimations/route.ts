@@ -21,6 +21,9 @@ export async function POST(req: NextRequest) {
       tariffType,
       isForfait: body.isForfait || false,
       departureDate: body.departureDate || null,
+      utmSource: body.utmSource || null,
+      utmMedium: body.utmMedium || null,
+      utmCampaign: body.utmCampaign || null,
     })
 
     return NextResponse.json({ success: true, id: estimation._id }, { status: 201 })

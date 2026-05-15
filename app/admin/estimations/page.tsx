@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { ArrowClockwise, DownloadSimple, ChartBar, MapPin, CurrencyEur, Path, Trash, CaretLeft, CaretRight, EnvelopeSimple, ChatCircleDots, WhatsappLogo } from '@phosphor-icons/react'
+import { ArrowClockwise, DownloadSimple, ChartBar, MapPin, CurrencyEur, Path, Trash, CaretLeft, CaretRight, EnvelopeSimple, ChatCircleDots, WhatsappLogo, CalendarBlank } from '@phosphor-icons/react'
 
 interface Estimation {
   _id: string
@@ -21,6 +21,7 @@ interface Estimation {
   statut?: string
   notes?: string | null
   leadCreatedAt?: string | null
+  utmSource?: string | null
 }
 
 interface Stats {
@@ -245,6 +246,11 @@ export default function AdminEstimations() {
           className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors">
           Filtrer
         </button>
+        <button onClick={() => { const t = new Date().toISOString().split('T')[0]; setDateFrom(t); setDateTo(t); setPage(1) }}
+          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${dateFrom === dateTo && dateFrom === new Date().toISOString().split('T')[0] ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+          <CalendarBlank size={16} />
+          Aujourd'hui
+        </button>
         <button onClick={() => { setLeadsOnly(!leadsOnly); setPage(1) }}
           className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${leadsOnly ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
           <EnvelopeSimple size={16} />
@@ -285,6 +291,7 @@ export default function AdminEstimations() {
                     <input type="checkbox" checked={selected.has(e._id)}
                       onChange={() => toggleSelect(e._id)} className="rounded border-slate-300" />
                     <span className="text-xs text-slate-400">{formatDate(e.createdAt)}</span>
+                    {e.utmSource && <span className="text-[10px] text-indigo-500 font-medium">{e.utmSource}</span>}
                     {e.departureDate && (
                       <span className="text-[10px] text-blue-500 ml-1">Dep: {formatDate(e.departureDate)}</span>
                     )}
@@ -374,7 +381,10 @@ export default function AdminEstimations() {
                       <input type="checkbox" checked={selected.has(e._id)}
                         onChange={() => toggleSelect(e._id)} className="rounded border-slate-300" />
                     </td>
-                    <td className="px-4 py-3 text-slate-500 whitespace-nowrap">{formatDate(e.createdAt)}</td>
+                    <td className="px-4 py-3 text-slate-500 whitespace-nowrap">
+                      {formatDate(e.createdAt)}
+                      {e.utmSource && <div className="text-[10px] text-indigo-500 font-medium">{e.utmSource}</div>}
+                    </td>
                     <td className="px-4 py-3 text-slate-500 whitespace-nowrap text-xs">
                       {e.departureDate ? formatDate(e.departureDate) : <span className="text-slate-300">—</span>}
                     </td>

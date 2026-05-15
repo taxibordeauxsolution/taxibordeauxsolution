@@ -100,6 +100,9 @@ const EstimationSchema = new mongoose.Schema({
   leadCreatedAt: { type: Date, default: null },
   statut:        { type: String, enum: ['estimation_seule', 'lead', 'contacte', 'converti', 'perdu'], default: 'estimation_seule' },
   notes:         { type: String, default: null },
+  utmSource:     { type: String, default: null },
+  utmMedium:     { type: String, default: null },
+  utmCampaign:   { type: String, default: null },
 })
 
 EstimationSchema.index({ createdAt: -1 })

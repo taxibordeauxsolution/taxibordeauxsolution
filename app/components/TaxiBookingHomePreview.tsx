@@ -816,6 +816,7 @@ const TaxiBookingHomePreview = () => {
       })
     }
 
+    const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
     fetch('/api/estimations', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -829,6 +830,9 @@ const TaxiBookingHomePreview = () => {
         tariffType,
         isForfait,
         departureDate: departureDate ? departureDate.toISOString() : null,
+        utmSource: urlParams?.get('utm_source') || null,
+        utmMedium: urlParams?.get('utm_medium') || null,
+        utmCampaign: urlParams?.get('utm_campaign') || null,
       }),
     })
       .then(r => r.json())
