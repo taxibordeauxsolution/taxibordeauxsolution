@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Phone, MapPin, Clock, Star, Shield, Zap, CheckCircle, ArrowRight, Users } from 'lucide-react'
+import { Phone, MapPin, Clock, Star, Shield, Zap, CheckCircle, Users } from 'lucide-react'
 
 export default function HomePage() {
   const phoneNumber = "+33667237822"
@@ -44,7 +44,6 @@ export default function HomePage() {
                 >
                   <span className="flex items-center justify-center gap-3">
                     📱 Réserver un Taxi
-                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                   </span>
                 </Link>
                 
@@ -449,7 +448,6 @@ export default function HomePage() {
               >
                 <span className="flex items-center justify-center gap-3">
                   📱 Réserver Taxi Bordeaux
-                  <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
                 </span>
               </Link>
               

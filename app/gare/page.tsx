@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Phone, CheckCircle, ArrowRight, Calendar } from 'lucide-react'
+import { Phone, CheckCircle, Calendar } from 'lucide-react'
 import BookingSection from '../components/BookingSection'
 import Breadcrumb from '../components/Breadcrumb'
 import {
@@ -16,7 +16,7 @@ import {
 
 // Distances réelles depuis la Gare Saint-Jean Bordeaux (Google Maps)
 const DESTINATIONS = [
-  { label: 'Aéroport Bordeaux-Mérignac', desc: 'Liaison directe gare → aéroport. Connexion vols internationaux sans stress.', href: '/aeroport', km: 13.5, min: 23, color: 'blue',    Icon: 'AirplaneTakeoff' },
+  { label: 'Aéroport Bordeaux-Mérignac', desc: 'Liaison directe gare – aéroport. Connexion vols internationaux sans stress.', href: '/aeroport', km: 13.5, min: 23, color: 'blue',    Icon: 'AirplaneTakeoff' },
   { label: 'Bordeaux Centre-Ville',       desc: 'Chartrons, Quinconces, Triangle d\'Or, hôtels et restaurants du centre.',         km: 2.7,  min: 9,  color: 'green',   Icon: 'Buildings'      },
   { label: 'Pessac / Talence',            desc: 'Campus universitaires, zones résidentielles au sud de la métropole.',            km: 8.3,  min: 17, color: 'purple',  Icon: 'GraduationCap'  },
   { label: 'Bordeaux-Lac',               desc: 'Quartier d\'affaires, Palais des Congrès, centre commercial.',                    km: 9.1,  min: 19, color: 'orange',  Icon: 'Desk'           },
@@ -66,7 +66,6 @@ export default function TaxiGare() {
               >
                 <Phone size={24} />
                 <span>+33 6 67 23 78 22</span>
-                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </a>
 
             </div>
@@ -77,7 +76,6 @@ export default function TaxiGare() {
             >
               <Calendar size={22} />
               <span>Estimez et réservez votre trajet</span>
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
 
@@ -197,7 +195,7 @@ export default function TaxiGare() {
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
               <div>
                 <div className="text-sm font-semibold text-blue-200 mb-1 uppercase tracking-wide">Liaison directe</div>
-                <h3 className="text-2xl font-bold mb-2"><Link href="/aeroport" className="hover:underline">Gare Saint-Jean ↔ Aéroport Mérignac</Link></h3>
+                <h3 className="text-2xl font-bold mb-2"><Link href="/aeroport" className="hover:underline">Gare Saint-Jean – Aéroport Mérignac</Link></h3>
                 <p className="text-blue-100 text-sm">~25 min • Trajet direct sans escale</p>
               </div>
               <div className="flex gap-6 shrink-0">
@@ -380,7 +378,7 @@ export default function TaxiGare() {
                   <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-semibold px-3 py-1 rounded-full">{d.time}</div>
                 </div>
                 <div className="p-5">
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">Gare Saint-Jean → {d.name}</h3>
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">Gare Saint-Jean – {d.name}</h3>
                   <p className="text-gray-600 text-sm">{d.desc}</p>
                 </div>
               </div>
@@ -391,7 +389,6 @@ export default function TaxiGare() {
             <a href="tel:+33667237822" className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg hover:shadow-xl">
               <Phone size={22} />
               Appeler maintenant
-              <ArrowRight size={20} />
             </a>
           </div>
         </div>
@@ -456,7 +453,6 @@ export default function TaxiGare() {
           >
             <Phone size={28} />
             <span>+33 6 67 23 78 22</span>
-            <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
           </a>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12 text-green-100 text-sm">

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Phone, MapPin, Clock, Star, Shield, Zap, CheckCircle, ArrowRight } from 'lucide-react'
+import { Phone, MapPin, Clock, Star, Shield, Zap, CheckCircle } from 'lucide-react'
 import BookingSection from './components/BookingSection'
 import AnimateOnScroll from './components/AnimateOnScroll'
 
@@ -61,7 +61,6 @@ export default function HomePage() {
                 >
                   <span className="flex items-center justify-center gap-3">
                     Estimez et réservez votre trajet
-                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                   </span>
                 </a>
 
@@ -81,7 +80,6 @@ export default function HomePage() {
                 >
                   <span className="flex items-center justify-center gap-3">
                     Nous contacter
-                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                   </span>
                 </a>
               </div>
@@ -322,7 +320,7 @@ export default function HomePage() {
                   <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold px-3 py-1 rounded-full">~50 min</div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux → Arcachon</h3>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux – Arcachon</h3>
                   <p className="text-slate-600 text-sm">Bassin d&apos;Arcachon, plages de sable fin, restaurants de fruits de mer et cabanes ostréicoles.</p>
                 </div>
               </div>
@@ -336,7 +334,7 @@ export default function HomePage() {
                   <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold px-3 py-1 rounded-full">~1h</div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux → Cap Ferret</h3>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux – Cap Ferret</h3>
                   <p className="text-slate-600 text-sm">Le &quot;Saint-Tropez de l&apos;Atlantique&quot;. Villages ostréicoles, phare, plages océanes et ambiance unique.</p>
                 </div>
               </div>
@@ -350,7 +348,7 @@ export default function HomePage() {
                   <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold px-3 py-1 rounded-full">~50 min</div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux → Dune du Pilat</h3>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux – Dune du Pilat</h3>
                   <p className="text-slate-600 text-sm">La plus haute dune d&apos;Europe. Vue panoramique sur l&apos;océan, le banc d&apos;Arguin et la forêt des Landes.</p>
                 </div>
               </div>
@@ -364,7 +362,7 @@ export default function HomePage() {
                   <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold px-3 py-1 rounded-full">~45 min</div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux → Saint-Émilion</h3>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux – Saint-Émilion</h3>
                   <p className="text-slate-600 text-sm">Village classé UNESCO. Vignobles prestigieux, cité médiévale et dégustations de grands crus.</p>
                 </div>
               </div>
@@ -378,7 +376,7 @@ export default function HomePage() {
                   <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold px-3 py-1 rounded-full">~1h</div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux → Lacanau</h3>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux – Lacanau</h3>
                   <p className="text-slate-600 text-sm">Spot de surf réputé, lac et océan. Station balnéaire familiale très prisée en été.</p>
                 </div>
               </div>
@@ -392,7 +390,7 @@ export default function HomePage() {
                   <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-slate-700 text-xs font-semibold px-3 py-1 rounded-full">~50 min</div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux → Bassin d&apos;Arcachon</h3>
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">Taxi Bordeaux – Bassin d&apos;Arcachon</h3>
                   <p className="text-slate-600 text-sm">Andernos, Gujan-Mestras, La Teste-de-Buch. Tour du Bassin, parcs à huîtres et nature préservée.</p>
                 </div>
               </div>
@@ -407,14 +405,12 @@ export default function HomePage() {
             >
               <Phone size={22} />
               Appeler maintenant
-              <ArrowRight size={20} />
             </a>
             <a
               href="#reservation"
               className="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
             >
               Estimez et réservez votre trajet
-              <ArrowRight size={20} />
             </a>
           </AnimateOnScroll>
         </div>
@@ -692,7 +688,6 @@ export default function HomePage() {
               >
                 <span className="flex items-center justify-center gap-3">
                   📱 Réserver Taxi Bordeaux
-                  <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
                 </span>
               </a>
 

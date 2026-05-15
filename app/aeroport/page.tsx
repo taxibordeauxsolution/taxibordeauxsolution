@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { Phone, CheckCircle, ArrowRight, Calendar } from 'lucide-react'
+import { Phone, CheckCircle, Calendar } from 'lucide-react'
 import BookingSection from '../components/BookingSection'
 import Breadcrumb from '../components/Breadcrumb'
 import {
@@ -63,7 +63,6 @@ export default function TaxiAeroport() {
               >
                 <Phone size={24} />
                 <span>+33 6 67 23 78 22</span>
-                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </a>
             </div>
 
@@ -73,7 +72,6 @@ export default function TaxiAeroport() {
             >
               <Calendar size={22} />
               <span>Estimez et réservez votre trajet</span>
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
 
@@ -123,7 +121,7 @@ export default function TaxiAeroport() {
               <div className="w-16 h-16 bg-blue-200 rounded-2xl flex items-center justify-center mb-6 shadow">
                 <AirplaneTakeoff size={36} className="text-blue-700" weight="duotone" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Bordeaux → Aéroport</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Bordeaux – Aéroport</h3>
               <p className="text-gray-700 mb-5">
                 Prise en charge à domicile, hôtel, gare ou n&apos;importe où dans la métropole. Votre chauffeur est ponctuel même aux horaires matinaux.
               </p>
@@ -138,7 +136,7 @@ export default function TaxiAeroport() {
               <div className="w-16 h-16 bg-green-200 rounded-2xl flex items-center justify-center mb-6 shadow">
                 <AirplaneLanding size={36} className="text-green-700" weight="duotone" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Aéroport → Bordeaux</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Aéroport – Bordeaux</h3>
               <p className="text-gray-700 mb-5">
                 Station officielle au Hall A. Votre chauffeur suit les horaires de vol en temps réel et s&apos;adapte aux retards éventuels.
               </p>
@@ -218,7 +216,7 @@ export default function TaxiAeroport() {
                 <ClockCounterClockwise size={32} className="text-indigo-600" weight="duotone" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Tarif Nuit & Week-end</h3>
-              <p className="text-gray-600 mb-4 text-sm">19h00 → 7h00, dimanches et jours fériés</p>
+              <p className="text-gray-600 mb-4 text-sm">19h00 – 7h00, dimanches et jours fériés</p>
               <ul className="space-y-2 text-sm text-gray-700">
                 <li className="flex items-center gap-2"><CheckCircle size={15} className="text-indigo-500 shrink-0" />Tarif nuit réglementé Préfecture</li>
                 <li className="flex items-center gap-2"><CheckCircle size={15} className="text-indigo-500 shrink-0" />Applicable dimanches et fériés</li>
@@ -248,7 +246,7 @@ export default function TaxiAeroport() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Taxi Aéroport ↔ Gare Saint-Jean
+              Taxi Aéroport – Gare Saint-Jean
             </h2>
             <p className="text-xl text-gray-600 mb-8">
               La liaison aéroport — <Link href="/gare" className="underline decoration-blue-300 hover:text-blue-600 transition-colors">gare Saint-Jean</Link> la plus directe.
@@ -276,7 +274,7 @@ export default function TaxiAeroport() {
                   <AirplaneLanding size={24} className="text-sky-600" weight="duotone" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900 mb-1">Aéroport → Gare Saint-Jean</h4>
+                  <h4 className="font-bold text-gray-900 mb-1">Aéroport – Gare Saint-Jean</h4>
                   <p className="text-gray-600 text-sm">Votre chauffeur suit votre vol en temps réel. Il sera là à l&apos;atterrissage — même si votre avion a du retard.</p>
                 </div>
               </div>
@@ -286,7 +284,7 @@ export default function TaxiAeroport() {
                   <Train size={24} className="text-green-600" weight="duotone" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900 mb-1">Gare Saint-Jean → Aéroport</h4>
+                  <h4 className="font-bold text-gray-900 mb-1">Gare Saint-Jean – Aéroport</h4>
                   <p className="text-gray-600 text-sm">Partez de la gare à l&apos;heure exacte. Pas d&apos;attente, trajet direct ~23 min vers l&apos;aéroport.</p>
                 </div>
               </div>
@@ -453,7 +451,7 @@ export default function TaxiAeroport() {
                   <div className="absolute bottom-3 left-4 bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-semibold px-3 py-1 rounded-full">{d.time}</div>
                 </div>
                 <div className="p-5">
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">Aéroport → {d.name}</h3>
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">Aéroport – {d.name}</h3>
                   <p className="text-gray-600 text-sm">{d.desc}</p>
                 </div>
               </div>
@@ -464,7 +462,6 @@ export default function TaxiAeroport() {
             <a href="tel:+33667237822" className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg hover:shadow-xl">
               <Phone size={22} />
               Appeler maintenant
-              <ArrowRight size={20} />
             </a>
           </div>
         </div>
@@ -534,7 +531,6 @@ export default function TaxiAeroport() {
           >
             <Phone size={28} />
             <span>+33 6 67 23 78 22</span>
-            <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
           </a>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12 text-blue-100 text-sm">
