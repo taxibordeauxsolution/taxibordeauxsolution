@@ -1166,7 +1166,7 @@ const TaxiBookingHomePreview = () => {
                 <Route className="w-5 h-5 mr-2" />
                 {t('routeEstimate')}
               </h3>
-              <div className="grid grid-cols-3 gap-2 text-sm">
+              <div className="grid grid-cols-4 gap-2 text-sm">
                 <div className="text-center">
                   <span className="text-gray-900 sm:text-gray-600 block">{t('distance')}</span>
                   <div className="font-semibold text-lg text-gray-900">{(tripData.distance || 0).toFixed(1)} km</div>
@@ -1178,6 +1178,10 @@ const TaxiBookingHomePreview = () => {
                 <div className="text-center">
                   <span className="text-gray-900 sm:text-gray-600 block">{t('passengers')}</span>
                   <div className="font-semibold text-lg text-gray-900">{bookingData.passengers}</div>
+                </div>
+                <div className="text-center">
+                  <span className="text-gray-900 sm:text-gray-600 block">{t('luggage')}</span>
+                  <div className="font-semibold text-lg text-gray-900">{bookingData.luggage}</div>
                 </div>
               </div>
             </div>
@@ -1189,7 +1193,7 @@ const TaxiBookingHomePreview = () => {
                 <Route className="w-5 h-5 mr-2" />
                 {t('routeEstimate')}
               </h3>
-              <div className="grid grid-cols-3 gap-2 text-sm mb-4">
+              <div className="grid grid-cols-4 gap-2 text-sm mb-4">
                 <div className="text-center">
                   <span className="text-gray-900 sm:text-gray-600 block">{t('distance')}</span>
                   <div className="font-semibold text-lg text-gray-900">{(tripData.distance || 0).toFixed(1)} km</div>
@@ -1201,6 +1205,10 @@ const TaxiBookingHomePreview = () => {
                 <div className="text-center">
                   <span className="text-gray-900 sm:text-gray-600 block">{t('passengers')}</span>
                   <div className="font-semibold text-lg text-gray-900">{bookingData.passengers}</div>
+                </div>
+                <div className="text-center">
+                  <span className="text-gray-900 sm:text-gray-600 block">{t('luggage')}</span>
+                  <div className="font-semibold text-lg text-gray-900">{bookingData.luggage}</div>
                 </div>
               </div>
               
