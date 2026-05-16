@@ -41,6 +41,7 @@ const TaxiBookingHomePreview = () => {
     tarifJourDegressifSeuilKm: 30,
     tarifJourDegressifPrixKm: 1.80,
     tarifJourDegressifMode: 'degressif',
+    seuilKmCaptureLead: 25,
   })
   const [maps, setMaps] = useState<any>(null)
   const [map, setMap] = useState<any>(null)
@@ -53,6 +54,10 @@ const TaxiBookingHomePreview = () => {
   const [success, setSuccess] = useState('')
   const [validationAttempted, setValidationAttempted] = useState(false)
   const [step3ValidationAttempted, setStep3ValidationAttempted] = useState(false)
+  const [leadFirstname, setLeadFirstname] = useState('')
+  const [leadPhone, setLeadPhone] = useState('')
+  const [leadEmail, setLeadEmail] = useState('')
+  const [leadCaptureValidationAttempted, setLeadCaptureValidationAttempted] = useState(false)
 
   // Données du trajet
   const [tripData, setTripData] = useState<TripData>({
@@ -360,6 +365,9 @@ const TaxiBookingHomePreview = () => {
       bookNowBtn: "Reservar ahora",
     }
   }
+
+  const needsCapture = tripData.distance >= configPrix.seuilKmCaptureLead && configPrix.seuilKmCaptureLead > 0
+  const totalSteps = needsCapture ? 5 : 4
 
   const t = (key: string) => translations[language as keyof typeof translations]?.[key as keyof typeof translations.fr] || key
 
@@ -967,10 +975,10 @@ const TaxiBookingHomePreview = () => {
         ? `Réservation confirmée ! Numéro : ${reservationId}. Email de confirmation envoyé.`
         : `Réservation confirmée ! Numéro : ${reservationId}`
       setSuccess(successMessage)
-      setStep(4)
+      setStep(totalSteps)
 
       if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: 'step3_to_step4_confirmed', price: tripData.price, from: tripData.from?.split(',')[0], to: tripData.to?.split(',')[0] })
+        (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: 'confirmed', price: tripData.price, from: tripData.from?.split(',')[0], to: tripData.to?.split(',')[0] })
       }
       
       // Solution robuste pour le scroll après confirmation (fix problème navigateurs Chrome/Chromium)
@@ -1159,7 +1167,30 @@ const TaxiBookingHomePreview = () => {
             </div>
           )}
 
-          {tripData.distance > 0 && tripData.price > 0 && bookingData.departureDate && bookingData.departureTime && (
+          {tripData.distance > 0 && bookingData.departureDate && bookingData.departureTime && needsCapture && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h3 className="font-semibold text-blue-800 mb-3 flex items-center">
+                <Route className="w-5 h-5 mr-2" />
+                {t('routeEstimate')}
+              </h3>
+              <div className="grid grid-cols-3 gap-2 text-sm">
+                <div className="text-center">
+                  <span className="text-gray-900 sm:text-gray-600 block">{t('distance')}</span>
+                  <div className="font-semibold text-lg text-gray-900">{(tripData.distance || 0).toFixed(1)} km</div>
+                </div>
+                <div className="text-center">
+                  <span className="text-gray-900 sm:text-gray-600 block">{t('duration')}</span>
+                  <div className="font-semibold text-lg text-gray-900">{Math.round(tripData.duration || 0)} min</div>
+                </div>
+                <div className="text-center">
+                  <span className="text-gray-900 sm:text-gray-600 block">{t('passengers')}</span>
+                  <div className="font-semibold text-lg text-gray-900">{bookingData.passengers}</div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {tripData.distance > 0 && tripData.price > 0 && bookingData.departureDate && bookingData.departureTime && !needsCapture && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
               <h3 className="font-semibold text-green-800 mb-3 flex items-center">
                 <Route className="w-5 h-5 mr-2" />
@@ -1278,18 +1309,16 @@ const TaxiBookingHomePreview = () => {
 
       <button
         onClick={() => {
-          // Marquer qu'une tentative de validation a eu lieu
           setValidationAttempted(true)
-          
-          // Vérifier si tous les champs requis sont remplis
-          const allFieldsValid = tripData.fromCoords && tripData.toCoords && 
-                                bookingData.departureDate && bookingData.departureTime && 
+
+          const allFieldsValid = tripData.fromCoords && tripData.toCoords &&
+                                bookingData.departureDate && bookingData.departureTime &&
                                 bookingData.passengers && tripData.price
-          
+
           if (allFieldsValid) {
             setStep(2)
             if (typeof window !== 'undefined' && (window as any).gtag) {
-              (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: 'step1_to_step2', from: tripData.from?.split(',')[0], to: tripData.to?.split(',')[0], price: tripData.price })
+              (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: needsCapture ? 'step1_to_capture' : 'step1_to_step2', from: tripData.from?.split(',')[0], to: tripData.to?.split(',')[0], price: tripData.price })
             }
             setTimeout(scrollToModule, 150)
           }
@@ -1301,11 +1330,12 @@ const TaxiBookingHomePreview = () => {
         {!tripData.fromCoords || !tripData.toCoords ? t('selectAddresses') :
          !bookingData.departureDate || !bookingData.departureTime ? t('dateTimeRequired') :
          !tripData.price ? t('calculatingPrice') :
+         needsCapture ? 'Continuer' :
          t('bookNowBtn')}
       </button>
 
       {/* ── Lien devis discret sous le CTA ── */}
-      {tripData.distance > 0 && tripData.price > 0 && bookingData.departureDate && bookingData.departureTime && (
+      {tripData.distance > 0 && tripData.price > 0 && bookingData.departureDate && bookingData.departureTime && !needsCapture && (
         <EmailCaptureForm
           estimationId={estimationId}
           tripFrom={tripData.from}
@@ -1320,6 +1350,184 @@ const TaxiBookingHomePreview = () => {
           isForfait={tripData.priceDetails?.isForfait ?? false}
         />
       )}
+    </div>
+  )
+
+  // Soumission lead capture
+  const submitLeadCapture = async () => {
+    setLoading(true)
+    setError('')
+    try {
+      const reservationId = 'TBS-' + Date.now().toString().slice(-6)
+      const pickupTime = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
+
+      await fetch('/api/reservations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reservationId,
+          status: 'lead_capture',
+          customer: {
+            name: leadFirstname,
+            phone: leadPhone,
+            email: leadEmail || '',
+          },
+          trip: {
+            from: { address: tripData.from },
+            to: { address: tripData.to },
+            distance: tripData.distance,
+          },
+          pricing: {
+            totalPrice: tripData.price,
+            priceDetails: tripData.priceDetails,
+            fourchette: (tripData.priceDetails?.isForfait || prixSansDegressif > 0)
+              ? null
+              : tripData.price <= configPrix.courseMini
+                ? { de: configPrix.courseMiniDe || 0, a: configPrix.courseMini || 0 }
+                : { de: (tripData.price || 0) - (configPrix.fraisApproche || 0), a: tripData.price || 0 }
+          },
+          bookingDetails: {
+            passengers: bookingData.passengers,
+            luggage: bookingData.luggage,
+          },
+          pickupDate: pickupTime.toISOString(),
+        })
+      })
+
+      setBookingData(prev => ({
+        ...prev,
+        customerName: leadFirstname,
+        customerPhone: leadPhone,
+        customerEmail: leadEmail,
+      }))
+
+      setStep(3)
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: 'capture_to_price', from: tripData.from?.split(',')[0], to: tripData.to?.split(',')[0], price: tripData.price })
+      }
+      setTimeout(scrollToModule, 150)
+    } catch {
+      setError('Erreur lors de l\'envoi. Veuillez réessayer.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Interface étape capture lead (longue distance)
+  const renderLeadCapture = () => (
+    <div className="space-y-6">
+      <div className="text-center mb-4">
+        <div className="mx-auto w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-3">
+          <Phone className="w-7 h-7 text-blue-600" />
+        </div>
+        <h3 className="text-2xl font-bold text-gray-800 mb-2">Plus qu{"'"}une étape pour votre devis</h3>
+        <p className="text-gray-600 text-sm">
+          {tripData.from?.split(',')[0]} → {tripData.to?.split(',')[0]} · {(tripData.distance || 0).toFixed(1)} km
+        </p>
+      </div>
+
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3">
+          <AlertCircle className="text-red-600 shrink-0" size={20} />
+          <p className="text-red-800">{error}</p>
+        </div>
+      )}
+
+      <div className="max-w-md mx-auto space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-900 mb-2">
+            <Users className="inline w-4 h-4 mr-1" />
+            Prénom *
+            {leadCaptureValidationAttempted && leadFirstname.trim().length < 2 && <span className="text-red-500 ml-1">*</span>}
+          </label>
+          <input
+            type="text"
+            placeholder="Votre prénom"
+            value={leadFirstname}
+            onChange={(e) => setLeadFirstname(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+            required
+          />
+          {leadCaptureValidationAttempted && leadFirstname.trim().length < 2 && (
+            <p className="text-red-500 text-xs mt-1">Le prénom doit contenir au moins 2 caractères</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-900 mb-2">
+            <Phone className="inline w-4 h-4 mr-1" />
+            Téléphone *
+            {leadCaptureValidationAttempted && !leadPhone.replace(/[\s.-]/g, '').match(/^(?:\+33|0)[1-9][0-9]{8}$/) && <span className="text-red-500 ml-1">*</span>}
+          </label>
+          <input
+            type="tel"
+            placeholder="06 12 34 56 78"
+            value={leadPhone}
+            onChange={(e) => setLeadPhone(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+            required
+          />
+          {leadCaptureValidationAttempted && !leadPhone.replace(/[\s.-]/g, '').match(/^(?:\+33|0)[1-9][0-9]{8}$/) && (
+            <p className="text-red-500 text-xs mt-1">Numéro de téléphone français invalide</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-900 mb-2">
+            <Mail className="inline w-4 h-4 mr-1" />
+            Email (optionnel)
+          </label>
+          <input
+            type="email"
+            placeholder="votre@email.fr"
+            value={leadEmail}
+            onChange={(e) => setLeadEmail(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
+          />
+          {leadCaptureValidationAttempted && leadEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leadEmail) && (
+            <p className="text-red-500 text-xs mt-1">Format d{"'"}email invalide</p>
+          )}
+        </div>
+      </div>
+
+      <div className="flex gap-4 max-w-md mx-auto">
+        <button
+          onClick={() => {
+            setStep(1)
+            setTimeout(scrollToModule, 150)
+          }}
+          className="flex-1 bg-gray-200 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+        >
+          {t('back')}
+        </button>
+        <button
+          onClick={() => {
+            setLeadCaptureValidationAttempted(true)
+
+            const firstnameValid = leadFirstname.trim().length >= 2
+            const phoneValid = /^(?:\+33|0)[1-9][0-9]{8}$/.test(leadPhone.replace(/[\s.-]/g, ''))
+            const emailValid = !leadEmail || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(leadEmail)
+
+            if (firstnameValid && phoneValid && emailValid && !loading) {
+              submitLeadCapture()
+            }
+          }}
+          disabled={loading}
+          className="flex-1 bg-green-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="animate-spin w-5 h-5 mr-2" />
+              Envoi...
+            </>
+          ) : (
+            <>
+              <Euro className="w-5 h-5 mr-2" />
+              Voir mon prix
+            </>
+          )}
+        </button>
+      </div>
     </div>
   )
 
@@ -1430,9 +1638,9 @@ const TaxiBookingHomePreview = () => {
       <div className="flex gap-4 max-w-2xl mx-auto">
         <button
           onClick={() => {
-            setStep(1)
+            setStep(needsCapture ? 2 : 1)
             if (typeof window !== 'undefined' && (window as any).gtag) {
-              (window as any).gtag('event', 'funnel_abandon', { event_category: 'funnel', step: 'step2_back_to_step1' })
+              (window as any).gtag('event', 'funnel_abandon', { event_category: 'funnel', step: 'summary_back' })
             }
             setTimeout(scrollToModule, 150)
           }}
@@ -1442,9 +1650,9 @@ const TaxiBookingHomePreview = () => {
         </button>
         <button
           onClick={() => {
-            setStep(3)
+            setStep(needsCapture ? 4 : 3)
             if (typeof window !== 'undefined' && (window as any).gtag) {
-              (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: 'step2_to_step3' })
+              (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: 'summary_to_details' })
             }
             setTimeout(scrollToModule, 150)
           }}
@@ -1608,9 +1816,9 @@ const TaxiBookingHomePreview = () => {
       <div className="flex gap-4">
         <button
           onClick={() => {
-            setStep(2)
+            setStep(needsCapture ? 3 : 2)
             if (typeof window !== 'undefined' && (window as any).gtag) {
-              (window as any).gtag('event', 'funnel_abandon', { event_category: 'funnel', step: 'step3_back_to_step2' })
+              (window as any).gtag('event', 'funnel_abandon', { event_category: 'funnel', step: 'details_back_to_summary' })
             }
             setTimeout(scrollToModule, 150)
           }}
@@ -1621,10 +1829,9 @@ const TaxiBookingHomePreview = () => {
         <button
           onClick={() => {
             setStep3ValidationAttempted(true)
-            
-            // Vérifier si tous les champs requis sont remplis
+
             const allFieldsValid = bookingData.customerName && bookingData.customerPhone
-            
+
             if (allFieldsValid && !loading) {
               submitReservation()
             }
@@ -1725,6 +1932,10 @@ const TaxiBookingHomePreview = () => {
           setError('')
           setValidationAttempted(false)
           setStep3ValidationAttempted(false)
+          setLeadFirstname('')
+          setLeadPhone('')
+          setLeadEmail('')
+          setLeadCaptureValidationAttempted(false)
         }}
         className="bg-blue-600 text-white py-3 px-8 rounded-lg font-medium hover:bg-blue-700 transition-colors"
       >
@@ -1754,14 +1965,14 @@ const TaxiBookingHomePreview = () => {
       {step > 1 && (
       <div className="flex justify-center mb-4">
         <div className="flex items-center space-x-3">
-          {[1, 2, 3, 4].map((stepNum) => (
+          {Array.from({ length: totalSteps }, (_, i) => i + 1).map((stepNum) => (
             <div key={stepNum} className="flex items-center">
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium transition-colors ${
                 step >= stepNum ? 'bg-blue-600 text-white' : 'bg-gray-300 sm:bg-gray-200 text-gray-900 sm:text-gray-600'
               }`}>
                 {stepNum}
               </div>
-              {stepNum < 4 && <div className={`w-6 h-0.5 transition-colors ${step > stepNum ? 'bg-blue-600' : 'bg-gray-200'}`} />}
+              {stepNum < totalSteps && <div className={`w-6 h-0.5 transition-colors ${step > stepNum ? 'bg-blue-600' : 'bg-gray-200'}`} />}
             </div>
           ))}
         </div>
@@ -1771,13 +1982,14 @@ const TaxiBookingHomePreview = () => {
       {/* Contenu principal */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-3 sm:p-4 lg:p-5 w-full">
         {step === 1 && renderStep1()}
-        {step === 2 && renderStep2()}
-        {step === 3 && renderStep3()}
-        {step === 4 && renderStep4()}
+        {step === 2 && (needsCapture ? renderLeadCapture() : renderStep2())}
+        {step === 3 && (needsCapture ? renderStep2() : renderStep3())}
+        {step === 4 && (needsCapture ? renderStep3() : renderStep4())}
+        {step === 5 && renderStep4()}
       </div>
 
       {/* Note d'information */}
-      {step < 4 && (
+      {step < totalSteps && (
         <div className="mt-2 text-center text-xs text-gray-800 sm:text-gray-500">
           <p className="text-blue-600 font-medium">{t('requiredFields')}</p>
         </div>

@@ -27,6 +27,7 @@ export default function AdminPrix() {
     tarifJourDegressifSeuilKm: 30,
     tarifJourDegressifPrixKm: 1.80,
     tarifJourDegressifMode: 'degressif' as string,
+    seuilKmCaptureLead: 25,
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -472,6 +473,29 @@ export default function AdminPrix() {
             </div>
             <p className="text-xs text-gray-500 mt-1">Autoroutes et rocade incluses. Plus de km mais trajet plus rapide.</p>
           </button>
+        </div>
+      </div>
+
+      {/* Capture lead longue distance */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+        <div className="border-b pb-3">
+          <h2 className="font-bold text-gray-800 text-base sm:text-lg flex items-center gap-2">
+            <Tag size={20} className="text-purple-600" />
+            Capture lead longue distance
+          </h2>
+          <p className="text-xs text-gray-400 mt-1">Au-delà de cette distance, le client doit laisser ses coordonnées avant de voir le prix exact</p>
+        </div>
+
+        <div className="max-w-xs">
+          <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Seuil km capture lead</label>
+          <div className="flex items-center gap-2">
+            <input type="number" step="1" min="0"
+              value={prix.seuilKmCaptureLead}
+              onChange={e => setNum('seuilKmCaptureLead', e.target.value)}
+              className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-purple-500 focus:outline-none font-medium text-gray-900" />
+            <span className="text-gray-500 text-sm w-10">km</span>
+          </div>
+          <p className="text-xs text-gray-400 mt-1">Mettre 0 pour désactiver la capture lead</p>
         </div>
       </div>
 

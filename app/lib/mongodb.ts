@@ -52,6 +52,7 @@ const ConfigPrixSchema = new mongoose.Schema({
   tarifJourDegressifSeuilKm: { type: Number, default: 30 },
   tarifJourDegressifPrixKm: { type: Number, default: 1.80 },
   tarifJourDegressifMode: { type: String, default: 'degressif' },
+  seuilKmCaptureLead: { type: Number, default: 25 },
 }, { timestamps: true })
 
 export const ConfigPrix =
@@ -113,7 +114,7 @@ export const Estimation =
 // ── Modèle Reservation ───────────────────────────────────────────────────
 const ReservationSchema = new mongoose.Schema({
   reservationId:  { type: String, required: true, unique: true },
-  status:         { type: String, default: 'en_attente', enum: ['en_attente', 'confirmee', 'en_route', 'terminee', 'annulee'] },
+  status:         { type: String, default: 'en_attente', enum: ['en_attente', 'confirmee', 'en_route', 'terminee', 'annulee', 'lead_capture'] },
   enRouteAt:      { type: Date, default: null },
   customer: {
     name:  { type: String, required: true },

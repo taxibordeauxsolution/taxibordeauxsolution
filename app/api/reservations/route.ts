@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Resend } from 'resend'
 import { connectDB, Reservation } from '@/app/lib/mongodb'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(req: NextRequest) {
   try {
     await connectDB()
     const body = await req.json()
 
-    const { reservationId, customer, trip, pricing, bookingDetails, pickupDate } = body
+    const { reservationId, customer, trip, pricing, bookingDetails, pickupDate, status } = body
     const tripFrom = typeof trip?.from === 'object' ? trip.from.address : trip?.from
     const tripTo = typeof trip?.to === 'object' ? trip.to.address : trip?.to
 
@@ -14,13 +17,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: 'Champs requis manquants' }, { status: 400 })
     }
 
-    // Ne pas enregistrer les tests
     if (customer.name.toLowerCase().includes('testprice')) {
       return NextResponse.json({ success: true, test: true }, { status: 200 })
     }
 
+    const isLeadCapture = status === 'lead_capture'
+
     const reservation = await Reservation.create({
       reservationId,
+      status: isLeadCapture ? 'lead_capture' : 'en_attente',
       customer: {
         name: customer.name,
         phone: customer.phone,
@@ -42,6 +47,49 @@ export async function POST(req: NextRequest) {
       notes: bookingDetails?.notes || '',
       pickupDate: new Date(pickupDate),
     })
+
+    if (isLeadCapture) {
+      const pickupDateObj = new Date(pickupDate)
+      const dateStr = pickupDateObj.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Europe/Paris' })
+      const heureStr = pickupDateObj.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })
+      const prix = pricing?.totalPrice ? `${pricing.totalPrice.toFixed(2)}€` : 'Non calculé'
+      const adminUrl = `https://taxibordeauxsolution.fr/admin/reservations`
+
+      const fromEmail = process.env.RESEND_FROM_EMAIL || 'contact@taxibordeauxsolution.fr'
+      resend.emails.send({
+        from: fromEmail,
+        to: ['contact@taxibordeauxsolution.fr'],
+        replyTo: 'contact@taxibordeauxsolution.fr',
+        subject: `Nouveau lead à rappeler — ${tripFrom.split(',')[0]} → ${tripTo.split(',')[0]}`,
+        html: `<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head>
+<body style="font-family:Arial,sans-serif;margin:0;padding:0;background:#f4f4f5;color:#1e293b">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:24px 0">
+<tr><td align="center">
+<table width="520" cellpadding="0" cellspacing="0" style="max-width:520px;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden">
+  <tr><td style="background:#7c3aed;padding:20px 32px;text-align:center">
+    <h1 style="margin:0;font-size:18px;color:#fff;font-weight:600">Nouveau lead à rappeler</h1>
+  </td></tr>
+  <tr><td style="padding:32px">
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px">
+      <tr><td style="padding:8px 0;border-bottom:1px solid #f1f5f9"><strong>Prénom :</strong> ${customer.name}</td></tr>
+      <tr><td style="padding:8px 0;border-bottom:1px solid #f1f5f9"><strong>Téléphone :</strong> <a href="tel:${customer.phone}" style="color:#2563eb">${customer.phone}</a></td></tr>
+      ${customer.email ? `<tr><td style="padding:8px 0;border-bottom:1px solid #f1f5f9"><strong>Email :</strong> <a href="mailto:${customer.email}" style="color:#2563eb">${customer.email}</a></td></tr>` : ''}
+      <tr><td style="padding:8px 0;border-bottom:1px solid #f1f5f9"><strong>Trajet :</strong> ${tripFrom.split(',')[0]} → ${tripTo.split(',')[0]}</td></tr>
+      <tr><td style="padding:8px 0;border-bottom:1px solid #f1f5f9"><strong>Distance :</strong> ${(trip.distance || 0).toFixed(1)} km</td></tr>
+      <tr><td style="padding:8px 0;border-bottom:1px solid #f1f5f9"><strong>Date souhaitée :</strong> ${dateStr} à ${heureStr}</td></tr>
+      <tr><td style="padding:8px 0"><strong>Prix estimé :</strong> ${prix}</td></tr>
+    </table>
+    <div style="text-align:center;margin-top:24px">
+      <a href="${adminUrl}" style="display:inline-block;background:#7c3aed;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:600">Voir dans l'admin</a>
+    </div>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+</body></html>`,
+      }).catch(() => {})
+    }
 
     // Google Calendar
     let googleEventId = ''

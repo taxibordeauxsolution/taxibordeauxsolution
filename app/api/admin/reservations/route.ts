@@ -57,6 +57,7 @@ export async function GET(req: NextRequest) {
       en_route: await Reservation.countDocuments({ ...baseFilter, status: 'en_route' }),
       terminee: await Reservation.countDocuments({ ...baseFilter, status: 'terminee' }),
       annulee: await Reservation.countDocuments({ ...baseFilter, status: 'annulee' }),
+      lead_capture: await Reservation.countDocuments({ ...baseFilter, status: 'lead_capture' }),
     }
 
     return NextResponse.json({ success: true, data: reservations, stats, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } })

@@ -453,7 +453,8 @@ const ReservationSchema = new Schema({
       'in_progress',    // Trajet en cours
       'completed',      // Trajet terminé
       'cancelled',      // Annulée
-      'refunded'        // Remboursée
+      'refunded',       // Remboursée
+      'lead_capture'    // Lead longue distance à rappeler
     ],
     default: 'pending',
     index: true
