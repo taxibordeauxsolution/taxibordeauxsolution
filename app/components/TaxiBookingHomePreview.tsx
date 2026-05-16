@@ -1082,29 +1082,30 @@ const TaxiBookingHomePreview = () => {
                 onClick={async () => {
                   if (!navigator.geolocation) return
                   setLoading(true)
-                  navigator.geolocation.getCurrentPosition(
-                    async (pos) => {
-                      try {
-                        await loadGoogleMapsLazy()
-                        const geocoder = new (window as any).google.maps.Geocoder()
-                        const result = await geocoder.geocode({ location: { lat: pos.coords.latitude, lng: pos.coords.longitude } })
-                        if (result.results[0]) {
-                          const addr = result.results[0].formatted_address
-                          setTripData(prev => ({ ...prev, from: addr, fromCoords: { lat: pos.coords.latitude, lng: pos.coords.longitude } }))
-                          if (fromInputRef.current) fromInputRef.current.value = addr
-                        }
-                      } catch { }
-                      setLoading(false)
-                    },
-                    () => { setLoading(false) },
-                    { enableHighAccuracy: true, timeout: 10000 }
-                  )
+                  const onSuccess = async (pos: GeolocationPosition) => {
+                    try {
+                      await loadGoogleMapsLazy()
+                      const geocoder = new (window as any).google.maps.Geocoder()
+                      const result = await geocoder.geocode({ location: { lat: pos.coords.latitude, lng: pos.coords.longitude } })
+                      if (result.results[0]) {
+                        const addr = result.results[0].formatted_address
+                        setTripData(prev => ({ ...prev, from: addr, fromCoords: { lat: pos.coords.latitude, lng: pos.coords.longitude } }))
+                        if (fromInputRef.current) fromInputRef.current.value = addr
+                      }
+                    } catch { }
+                    setLoading(false)
+                  }
+                  const onError = () => {
+                    setLoading(false)
+                    alert('Impossible de vous localiser. Vérifiez que la localisation est activée dans les paramètres de votre navigateur.')
+                  }
+                  navigator.geolocation.getCurrentPosition(onSuccess, onError, { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 })
                 }}
                 disabled={loading}
                 className="px-3 py-3 bg-gray-200 text-gray-500 rounded-lg hover:bg-gray-300 transition-colors disabled:opacity-50 shrink-0"
                 title={t('geolocate') || 'Me localiser'}
               >
-                <Crosshair size={20} />
+                <Crosshair size={20} className={loading ? 'animate-spin' : ''} />
               </button>
             </div>
           </div>
