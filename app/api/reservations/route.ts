@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
       }).catch(() => {})
     }
 
-    // Google Calendar
+    // Google Calendar — pas pour les leads, seulement les vraies réservations
     let googleEventId = ''
     const gcalRefreshToken = process.env.GOOGLE_CALENDAR_REFRESH_TOKEN
     const gcalClientId = process.env.GOOGLE_CLIENT_ID
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
     const gcalCalendarId = process.env.GOOGLE_CALENDAR_ID || 'primary'
 
 
-    if (gcalRefreshToken && gcalClientId && gcalClientSecret) {
+    if (!isLeadCapture && gcalRefreshToken && gcalClientId && gcalClientSecret) {
       try {
         // Get access token from refresh token
         const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
