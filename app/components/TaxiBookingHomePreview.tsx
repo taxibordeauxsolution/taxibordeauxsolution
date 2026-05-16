@@ -942,7 +942,14 @@ const TaxiBookingHomePreview = () => {
         })
       }).catch(() => {})
 
-      // Envoi de l'email de confirmation (inclut la notification Telegram)
+      // Notification Telegram
+      fetch('/api/notify-telegram', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'reservation', payload: reservationData })
+      }).catch(() => {})
+
+      // Envoi de l'email de confirmation
       let emailSent = false
       if (bookingData.customerEmail) {
         try {
