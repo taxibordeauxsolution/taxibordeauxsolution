@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
-import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin, FunnelSimple, Globe, NavigationArrow } from '@phosphor-icons/react'
+import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin, FunnelSimple, Globe, NavigationArrow, Phone } from '@phosphor-icons/react'
 
 interface Funnel {
   estimations: number
@@ -46,7 +46,9 @@ export default function AdminDashboard() {
   const [recentEstimations, setRecentEstimations] = useState<Estimation[]>([])
   const [loading, setLoading] = useState(true)
   const [newResaAlert, setNewResaAlert] = useState(false)
+  const [newLeadAlert, setNewLeadAlert] = useState(false)
   const lastResaCountRef = useRef<number | null>(null)
+  const lastLeadCountRef = useRef<number | null>(null)
 
   const token = () => sessionStorage.getItem('admin_token') || ''
 
@@ -83,13 +85,20 @@ export default function AdminDashboard() {
       const allTermJson = await allTermRes.json()
 
       if (resaJson.success) {
-        const newTotal = resaJson.stats.total
-        if (lastResaCountRef.current !== null && newTotal > lastResaCountRef.current) {
+        const leadCount = resaJson.stats.lead_capture || 0
+        const resaCount = resaJson.stats.total - leadCount
+        if (lastResaCountRef.current !== null && resaCount > lastResaCountRef.current) {
           playNotificationSound()
           setNewResaAlert(true)
           setTimeout(() => setNewResaAlert(false), 5000)
         }
-        lastResaCountRef.current = newTotal
+        if (lastLeadCountRef.current !== null && leadCount > lastLeadCountRef.current) {
+          playNotificationSound()
+          setNewLeadAlert(true)
+          setTimeout(() => setNewLeadAlert(false), 5000)
+        }
+        lastResaCountRef.current = resaCount
+        lastLeadCountRef.current = leadCount
 
         setStats(prev => ({ ...prev, reservations: resaJson.stats }))
         setRecentResas(resaJson.data.slice(0, 5))
@@ -183,6 +192,13 @@ export default function AdminDashboard() {
         <div className="bg-blue-600 text-white rounded-2xl p-4 shadow-lg flex items-center gap-3 animate-pulse">
           <Taxi size={24} />
           <span className="font-bold">Nouvelle réservation !</span>
+        </div>
+      )}
+
+      {newLeadAlert && (
+        <div className="bg-purple-600 text-white rounded-2xl p-4 shadow-lg flex items-center gap-3 animate-pulse">
+          <Phone size={24} />
+          <span className="font-bold">Nouveau lead à rappeler !</span>
         </div>
       )}
 
