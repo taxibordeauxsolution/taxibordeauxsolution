@@ -334,25 +334,29 @@ export default function AdminDashboard() {
           </h2>
           <div className="space-y-2">
             {todayResas.map(r => (
-              <div key={r._id} className="bg-white rounded-xl p-3 flex items-center gap-3 text-sm">
-                {statusIcon(r.status)}
-                <div className="flex-1 min-w-0">
-                  <span className="font-semibold text-slate-900">{r.customer.name}</span>
-                  <span className="text-slate-400 mx-1.5">·</span>
-                  <span className="text-slate-500">{formatDate(r.pickupDate)}</span>
+              <div key={r._id} className="bg-white rounded-xl p-3 text-sm space-y-2">
+                <div className="flex items-center gap-3">
+                  {statusIcon(r.status)}
+                  <div className="flex-1 min-w-0">
+                    <span className="font-semibold text-slate-900">{r.customer.name}</span>
+                    <span className="text-slate-400 mx-1.5">·</span>
+                    <span className="text-slate-500">{formatDate(r.pickupDate)}</span>
+                  </div>
+                  <span className="font-bold text-green-700 shrink-0">{formatPrix(r)}</span>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  {r.status === 'en_attente' && (
-                    <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200 transition-colors">Confirmer</button>
-                  )}
-                  {(r.status === 'en_attente' || r.status === 'confirmee') && (
-                    <button onClick={() => updateResaStatus(r._id, 'en_route')} className="px-2 py-1 bg-orange-100 text-orange-700 rounded-lg text-xs font-semibold hover:bg-orange-200 transition-colors">En route</button>
-                  )}
-                  {(r.status === 'en_attente' || r.status === 'confirmee' || r.status === 'en_route') && (
-                    <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-2 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-semibold hover:bg-green-200 transition-colors">Terminer</button>
-                  )}
-                  <span className="font-bold text-green-700">{formatPrix(r)}</span>
-                </div>
+                {(r.status === 'en_attente' || r.status === 'confirmee' || r.status === 'en_route') && (
+                  <div className="flex items-center gap-2 pl-5">
+                    {r.status === 'en_attente' && (
+                      <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200 transition-colors">Confirmer</button>
+                    )}
+                    {(r.status === 'en_attente' || r.status === 'confirmee') && (
+                      <button onClick={() => updateResaStatus(r._id, 'en_route')} className="px-2.5 py-1 bg-orange-100 text-orange-700 rounded-lg text-xs font-semibold hover:bg-orange-200 transition-colors">En route</button>
+                    )}
+                    {(r.status === 'en_attente' || r.status === 'confirmee' || r.status === 'en_route') && (
+                      <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-2.5 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-semibold hover:bg-green-200 transition-colors">Terminer</button>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -422,28 +426,30 @@ export default function AdminDashboard() {
           ) : (
             <div className="space-y-2">
               {recentResas.map(r => (
-                <div key={r._id} className="flex items-center gap-2 text-sm py-1.5 border-b border-slate-50 last:border-0">
-                  {statusIcon(r.status)}
-                  <div className="flex-1 min-w-0">
-                    <span className="font-medium text-slate-800">{r.customer.name}</span>
-                    <div className="text-xs text-slate-400 truncate">
-                      <MapPin size={10} className="inline" /> {(typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || '').split(',')[0]}
-                      {' → '}
-                      {(typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || '').split(',')[0]}
+                <div key={r._id} className="text-sm py-1.5 border-b border-slate-50 last:border-0 space-y-1">
+                  <div className="flex items-center gap-2">
+                    {statusIcon(r.status)}
+                    <div className="flex-1 min-w-0">
+                      <span className="font-medium text-slate-800">{r.customer.name}</span>
+                      <div className="text-xs text-slate-400 truncate">
+                        <MapPin size={10} className="inline" /> {(typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || '').split(',')[0]}
+                        {' → '}
+                        {(typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || '').split(',')[0]}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    {r.status === 'en_attente' && (
-                      <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-semibold hover:bg-blue-200">Conf.</button>
-                    )}
-                    {(r.status === 'en_attente' || r.status === 'confirmee') && (
-                      <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-semibold hover:bg-green-200">Term.</button>
-                    )}
-                    <div className="text-right">
+                    <div className="text-right shrink-0">
                       <div className="font-bold text-green-700 text-xs">{formatPrix(r)}</div>
                       <div className="text-xs text-slate-400">{formatDate(r.pickupDate)}</div>
                     </div>
                   </div>
+                  {(r.status === 'en_attente' || r.status === 'confirmee') && (
+                    <div className="flex items-center gap-1.5 pl-5">
+                      {r.status === 'en_attente' && (
+                        <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-semibold hover:bg-blue-200">Conf.</button>
+                      )}
+                      <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-semibold hover:bg-green-200">Term.</button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
