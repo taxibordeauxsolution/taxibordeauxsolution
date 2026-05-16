@@ -2,12 +2,13 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Lock, Eye, EyeSlash } from '@phosphor-icons/react'
+import { Lock, Eye, EyeSlash, EnvelopeSimple } from '@phosphor-icons/react'
 
 const API = '/api'
 
 export default function AdminLogin() {
   const router = useRouter()
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -21,11 +22,11 @@ export default function AdminLogin() {
       const res = await fetch(`${API}/admin/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
+        body: JSON.stringify({ email: email || undefined, password })
       })
       const data = await res.json()
       if (!data.success) {
-        setError('Mot de passe incorrect')
+        setError(data.message || 'Identifiants incorrects')
         setLoading(false)
         return
       }
@@ -51,6 +52,21 @@ export default function AdminLogin() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+            <div className="relative">
+              <EnvelopeSimple size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="votre@email.fr"
+                className="w-full border-2 border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm focus:border-blue-500 focus:outline-none text-gray-900"
+                autoFocus
+              />
+            </div>
+          </div>
+
+          <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Mot de passe</label>
             <div className="relative">
               <input
@@ -59,7 +75,6 @@ export default function AdminLogin() {
                 onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-lg font-bold text-center focus:border-blue-500 focus:outline-none"
-                autoFocus
               />
               <button
                 type="button"

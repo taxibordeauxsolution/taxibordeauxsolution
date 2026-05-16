@@ -152,6 +152,16 @@ ReservationSchema.index({ createdAt: -1 })
 export const Reservation =
   mongoose.models.Reservation || mongoose.model('Reservation', ReservationSchema)
 
+// ── Modèle AdminUser ─────────────────────────────────────────────────────
+const AdminUserSchema = new mongoose.Schema({
+  email:        { type: String, required: true, unique: true, lowercase: true, trim: true },
+  passwordHash: { type: String, required: true },
+  name:         { type: String, required: true, trim: true },
+}, { timestamps: true })
+
+export const AdminUser =
+  mongoose.models.AdminUser || mongoose.model('AdminUser', AdminUserSchema)
+
 // ── Modèle Counter (numéros de facture incrémentaux) ─────────────────────
 const CounterSchema = new mongoose.Schema({
   _id:  { type: String, required: true },
