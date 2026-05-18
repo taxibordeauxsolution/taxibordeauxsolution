@@ -53,44 +53,39 @@ export async function GET(req: NextRequest) {
       Estimation.countDocuments({ ...filter, statut: 'perdu' }),
     ])
 
+    const [statsAgg] = await Estimation.aggregate([
+      { $match: filter },
+      { $group: {
+        _id: null,
+        avgPrice: { $avg: '$price' },
+        forfaitCount: { $sum: { $cond: ['$isForfait', 1, 0] } }
+      }}
+    ])
+
+    const [topRoutesAgg, topSourcesAgg] = await Promise.all([
+      Estimation.aggregate([
+        { $match: filter },
+        { $project: { route: { $concat: [{ $arrayElemAt: [{ $split: ['$from', ','] }, 0] }, ' → ', { $arrayElemAt: [{ $split: ['$to', ','] }, 0] }] } } },
+        { $group: { _id: '$route', count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+        { $limit: 5 }
+      ]),
+      Estimation.aggregate([
+        { $match: filter },
+        { $group: { _id: { $ifNull: ['$utmSource', 'direct'] }, count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+        { $limit: 5 }
+      ])
+    ])
+
     const stats = {
       total,
-      avgPrice: 0,
-      topRoutes: [] as { route: string; count: number }[],
-      forfaitCount: 0,
+      avgPrice: statsAgg ? Math.round(statsAgg.avgPrice * 100) / 100 : 0,
+      topRoutes: topRoutesAgg.map((r: any) => ({ route: r._id, count: r.count })),
+      forfaitCount: statsAgg?.forfaitCount || 0,
       leadCount,
       funnel: { estimations: total, leads: leadCount, contactes: contacteCount, convertis: convertiCount, perdus: perduCount },
-      topSources: [] as { source: string; count: number }[],
-    }
-
-    if (estimations.length > 0) {
-      stats.avgPrice = Math.round(
-        (estimations.reduce((s: number, e: any) => s + e.price, 0) / estimations.length) * 100
-      ) / 100
-
-      stats.forfaitCount = estimations.filter((e: any) => e.isForfait).length
-
-      const sourceMap = new Map<string, number>()
-      for (const e of estimations as any[]) {
-        const src = e.utmSource || 'direct'
-        sourceMap.set(src, (sourceMap.get(src) || 0) + 1)
-      }
-      stats.topSources = [...sourceMap.entries()]
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5)
-        .map(([source, count]) => ({ source, count }))
-
-      const routeMap = new Map<string, number>()
-      for (const e of estimations as any[]) {
-        const fromShort = e.from?.split(',')[0] || e.from
-        const toShort = e.to?.split(',')[0] || e.to
-        const key = `${fromShort} → ${toShort}`
-        routeMap.set(key, (routeMap.get(key) || 0) + 1)
-      }
-      stats.topRoutes = [...routeMap.entries()]
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5)
-        .map(([route, count]) => ({ route, count }))
+      topSources: topSourcesAgg.map((r: any) => ({ source: r._id, count: r.count })),
     }
 
     return NextResponse.json({ success: true, data: estimations, stats, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } })

@@ -28,6 +28,7 @@ export default function AdminPrix() {
     tarifJourDegressifPrixKm: 1.80,
     tarifJourDegressifMode: 'degressif' as string,
     seuilKmCaptureLead: 25,
+    captureLeadActive: true,
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -478,25 +479,46 @@ export default function AdminPrix() {
 
       {/* Capture lead longue distance */}
       <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
-        <div className="border-b pb-3">
-          <h2 className="font-bold text-gray-800 text-base sm:text-lg flex items-center gap-2">
-            <Tag size={20} className="text-purple-600" />
-            Capture lead longue distance
-          </h2>
-          <p className="text-xs text-gray-400 mt-1">Au-delà de cette distance, le client doit laisser ses coordonnées avant de voir le prix exact</p>
+        <div className="flex items-center justify-between border-b pb-3">
+          <div>
+            <h2 className="font-bold text-gray-800 text-base sm:text-lg flex items-center gap-2">
+              <Tag size={20} className="text-purple-600" />
+              Capture lead longue distance
+            </h2>
+            <p className="text-xs text-gray-400 mt-1">
+              {prix.captureLeadActive
+                ? 'Module 5 étapes : le client laisse ses coordonnées avant de voir le prix'
+                : 'Module 4 étapes classique : le client voit le prix directement'}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setPrix(prev => ({ ...prev, captureLeadActive: !prev.captureLeadActive }))}
+            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
+              prix.captureLeadActive ? 'bg-purple-500' : 'bg-gray-300'
+            }`}
+          >
+            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+              prix.captureLeadActive ? 'translate-x-6' : 'translate-x-1'
+            }`} />
+          </button>
         </div>
 
-        <div className="max-w-xs">
-          <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Seuil km capture lead</label>
-          <div className="flex items-center gap-2">
-            <input type="number" step="1" min="0"
-              value={prix.seuilKmCaptureLead}
-              onChange={e => setNum('seuilKmCaptureLead', e.target.value)}
-              className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-purple-500 focus:outline-none font-medium text-gray-900" />
-            <span className="text-gray-500 text-sm w-10">km</span>
+        {prix.captureLeadActive ? (
+          <div className="max-w-xs">
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Seuil km capture lead</label>
+            <div className="flex items-center gap-2">
+              <input type="number" step="1" min="1"
+                value={prix.seuilKmCaptureLead}
+                onChange={e => setNum('seuilKmCaptureLead', e.target.value)}
+                className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-purple-500 focus:outline-none font-medium text-gray-900" />
+              <span className="text-gray-500 text-sm w-10">km</span>
+            </div>
+            <p className="text-xs text-gray-400 mt-1">Au-delà de cette distance, le client doit laisser ses coordonnées avant de voir le prix</p>
           </div>
-          <p className="text-xs text-gray-400 mt-1">Mettre 0 pour désactiver la capture lead</p>
-        </div>
+        ) : (
+          <p className="text-gray-400 text-sm">Désactivé — le client voit directement le prix et peut réserver en 4 étapes sans laisser ses coordonnées au préalable.</p>
+        )}
       </div>
 
       {message && (

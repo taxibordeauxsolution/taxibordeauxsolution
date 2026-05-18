@@ -34,6 +34,7 @@ export async function GET(req: NextRequest) {
 
     const filter: any = {}
     if (status && status !== 'all') filter.status = status
+    else filter.status = { $ne: 'lead_capture' }
     if (from || to) {
       filter.pickupDate = {}
       if (from) filter.pickupDate.$gte = new Date(from)
@@ -51,7 +52,7 @@ export async function GET(req: NextRequest) {
     ])
 
     const stats = {
-      total: await Reservation.countDocuments(baseFilter),
+      total: await Reservation.countDocuments({ ...baseFilter, status: { $ne: 'lead_capture' } }),
       en_attente: await Reservation.countDocuments({ ...baseFilter, status: 'en_attente' }),
       confirmee: await Reservation.countDocuments({ ...baseFilter, status: 'confirmee' }),
       en_route: await Reservation.countDocuments({ ...baseFilter, status: 'en_route' }),

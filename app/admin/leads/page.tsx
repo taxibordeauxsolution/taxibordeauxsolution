@@ -71,6 +71,16 @@ export default function AdminLeads() {
     load()
   }
 
+  const deleteSingle = async (id: string) => {
+    if (!confirm('Supprimer ce lead ?')) return
+    await fetch('/api/admin/reservations', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+      body: JSON.stringify({ ids: [id] })
+    })
+    load()
+  }
+
   const toggleSelect = (id: string) => {
     setSelected(prev => {
       const next = new Set(prev)
@@ -229,7 +239,7 @@ export default function AdminLeads() {
                         <CheckCircle size={14} />
                         Convertir en réservation
                       </button>
-                      <button onClick={() => { setSelected(new Set([r._id])); deleteSelected() }}
+                      <button onClick={() => deleteSingle(r._id)}
                         className="px-4 py-2 bg-red-100 text-red-700 rounded-lg text-xs font-semibold hover:bg-red-200">
                         Supprimer
                       </button>

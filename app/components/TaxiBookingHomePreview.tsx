@@ -42,6 +42,7 @@ const TaxiBookingHomePreview = () => {
     tarifJourDegressifPrixKm: 1.80,
     tarifJourDegressifMode: 'degressif',
     seuilKmCaptureLead: 25,
+    captureLeadActive: true,
   })
   const [maps, setMaps] = useState<any>(null)
   const [map, setMap] = useState<any>(null)
@@ -366,7 +367,7 @@ const TaxiBookingHomePreview = () => {
     }
   }
 
-  const needsCapture = tripData.distance >= configPrix.seuilKmCaptureLead && configPrix.seuilKmCaptureLead > 0
+  const needsCapture = configPrix.captureLeadActive && tripData.distance >= configPrix.seuilKmCaptureLead && configPrix.seuilKmCaptureLead > 0
   const totalSteps = needsCapture ? 5 : 4
 
   const t = (key: string) => translations[language as keyof typeof translations]?.[key as keyof typeof translations.fr] || key

@@ -43,8 +43,9 @@ export default function AdminEstimations() {
   const [editingNotes, setEditingNotes] = useState<string | null>(null)
   const [notesValue, setNotesValue] = useState('')
 
-  const today = new Date().toISOString().split('T')[0]
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString().split('T')[0]
+  const toLocalDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+  const today = toLocalDate(new Date())
+  const thirtyDaysAgo = toLocalDate(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 30))
   const [dateFrom, setDateFrom] = useState(thirtyDaysAgo)
   const [dateTo, setDateTo] = useState(today)
 
@@ -264,8 +265,8 @@ export default function AdminEstimations() {
           className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors">
           Filtrer
         </button>
-        <button onClick={() => { const t = new Date().toISOString().split('T')[0]; setDateFrom(t); setDateTo(t); setPage(1) }}
-          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${dateFrom === dateTo && dateFrom === new Date().toISOString().split('T')[0] ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+        <button onClick={() => { const t = toLocalDate(new Date()); setDateFrom(t); setDateTo(t); setPage(1) }}
+          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${dateFrom === dateTo && dateFrom === toLocalDate(new Date()) ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
           <CalendarBlank size={16} />
           Aujourd'hui
         </button>

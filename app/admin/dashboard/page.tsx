@@ -75,7 +75,7 @@ export default function AdminDashboard() {
     setLoading(true)
     try {
       const [resaRes, estRes, allTermRes] = await Promise.all([
-        fetch('/api/admin/reservations', { headers: { Authorization: `Bearer ${token()}` } }),
+        fetch('/api/admin/reservations?limit=100', { headers: { Authorization: `Bearer ${token()}` } }),
         fetch('/api/admin/estimations', { headers: { Authorization: `Bearer ${token()}` } }),
         fetch('/api/admin/reservations?status=terminee&limit=500', { headers: { Authorization: `Bearer ${token()}` } }),
       ])
@@ -86,7 +86,7 @@ export default function AdminDashboard() {
 
       if (resaJson.success) {
         const leadCount = resaJson.stats.lead_capture || 0
-        const resaCount = resaJson.stats.total - leadCount
+        const resaCount = resaJson.stats.total
         if (lastResaCountRef.current !== null && resaCount > lastResaCountRef.current) {
           playNotificationSound()
           setNewResaAlert(true)
