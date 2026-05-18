@@ -98,8 +98,12 @@ export async function POST(req: NextRequest) {
     const gcalClientSecret = process.env.GOOGLE_CLIENT_SECRET
     const gcalCalendarId = process.env.GOOGLE_CALENDAR_ID || 'primary'
 
-
-    console.log('[GCal] isLeadCapture:', isLeadCapture, 'hasRefresh:', !!gcalRefreshToken, 'hasClientId:', !!gcalClientId, 'hasSecret:', !!gcalClientSecret)
+    const gcalDebug: any = {
+      isLeadCapture,
+      hasRefresh: !!gcalRefreshToken,
+      hasClientId: !!gcalClientId,
+      hasSecret: !!gcalClientSecret,
+    }
 
     if (!isLeadCapture && gcalRefreshToken && gcalClientId && gcalClientSecret) {
       try {
@@ -114,7 +118,8 @@ export async function POST(req: NextRequest) {
           }),
         })
         const tokenData = await tokenRes.json()
-        console.log('[GCal] token response:', tokenData.access_token ? 'OK' : 'FAIL', tokenData.error || '')
+        gcalDebug.tokenOk = !!tokenData.access_token
+        gcalDebug.tokenError = tokenData.error || null
 
         if (tokenData.access_token) {
           const pickup = new Date(pickupDate)
@@ -157,18 +162,19 @@ export async function POST(req: NextRequest) {
             }
           )
           const calData = await calRes.json()
-          console.log('[GCal] calendar response:', calData.id ? 'EVENT_CREATED' : 'FAIL', calData.error?.message || '')
+          gcalDebug.eventCreated = !!calData.id
+          gcalDebug.calError = calData.error?.message || null
           if (calData.id) {
             googleEventId = calData.id
             await Reservation.findByIdAndUpdate(reservation._id, { googleEventId })
           }
         }
       } catch (gcalErr: any) {
-        console.error('[GCal] ERROR:', gcalErr.message)
+        gcalDebug.exception = gcalErr.message
       }
     }
 
-    return NextResponse.json({ success: true, id: reservation._id, googleEventId }, { status: 201 })
+    return NextResponse.json({ success: true, id: reservation._id, googleEventId, gcalDebug }, { status: 201 })
   } catch (e: any) {
     if (e.code === 11000) {
       return NextResponse.json({ success: false, message: 'Réservation déjà existante' }, { status: 409 })
