@@ -99,9 +99,10 @@ export async function POST(req: NextRequest) {
     const gcalCalendarId = process.env.GOOGLE_CALENDAR_ID || 'primary'
 
 
+    console.log('[GCal] isLeadCapture:', isLeadCapture, 'hasRefresh:', !!gcalRefreshToken, 'hasClientId:', !!gcalClientId, 'hasSecret:', !!gcalClientSecret)
+
     if (!isLeadCapture && gcalRefreshToken && gcalClientId && gcalClientSecret) {
       try {
-        // Get access token from refresh token
         const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -113,6 +114,7 @@ export async function POST(req: NextRequest) {
           }),
         })
         const tokenData = await tokenRes.json()
+        console.log('[GCal] token response:', tokenData.access_token ? 'OK' : 'FAIL', tokenData.error || '')
 
         if (tokenData.access_token) {
           const pickup = new Date(pickupDate)
@@ -155,12 +157,15 @@ export async function POST(req: NextRequest) {
             }
           )
           const calData = await calRes.json()
+          console.log('[GCal] calendar response:', calData.id ? 'EVENT_CREATED' : 'FAIL', calData.error?.message || '')
           if (calData.id) {
             googleEventId = calData.id
             await Reservation.findByIdAndUpdate(reservation._id, { googleEventId })
           }
         }
-      } catch { }
+      } catch (gcalErr: any) {
+        console.error('[GCal] ERROR:', gcalErr.message)
+      }
     }
 
     return NextResponse.json({ success: true, id: reservation._id, googleEventId }, { status: 201 })
