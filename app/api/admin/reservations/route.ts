@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
     const status = searchParams.get('status')
     const from = searchParams.get('from')
     const to = searchParams.get('to')
+    const search = searchParams.get('search')
 
     const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 500)
     const page = Math.max(parseInt(searchParams.get('page') || '1'), 1)
@@ -39,6 +40,15 @@ export async function GET(req: NextRequest) {
       filter.pickupDate = {}
       if (from) filter.pickupDate.$gte = new Date(from)
       if (to) filter.pickupDate.$lte = new Date(to + 'T23:59:59.999Z')
+    }
+    if (search) {
+      const regex = { $regex: search, $options: 'i' }
+      filter.$or = [
+        { 'customer.name': regex },
+        { 'customer.phone': regex },
+        { 'customer.email': regex },
+        { reservationId: regex },
+      ]
     }
 
     const baseFilter: any = {}

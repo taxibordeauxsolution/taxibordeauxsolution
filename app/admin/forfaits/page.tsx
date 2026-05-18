@@ -52,7 +52,8 @@ export default function AdminForfaits() {
     load()
   }
 
-  const deleteForfait = async (id: string) => {
+  const deleteForfait = async (id: string, nom: string) => {
+    if (!confirm(`Supprimer le forfait "${nom}" ?`)) return
     setDeleting(id)
     await fetch(`${API}/admin/forfaits/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token()}` } })
     setDeleting(null)
@@ -128,7 +129,7 @@ export default function AdminForfaits() {
                     <PencilSimple size={18} />
                   </button>
                   <button
-                    onClick={() => deleteForfait(f._id!)}
+                    onClick={() => deleteForfait(f._id!, f.nom)}
                     disabled={deleting === f._id}
                     className="p-1.5 sm:p-2 rounded-xl hover:bg-red-50 text-red-500 transition-colors"
                     title="Supprimer"

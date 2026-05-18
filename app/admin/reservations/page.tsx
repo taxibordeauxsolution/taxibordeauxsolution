@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { ArrowClockwise, Trash, Taxi, Phone, Envelope, MapPin, Clock, CheckCircle, XCircle, HourglassSimple, CaretDown, CaretLeft, CaretRight, MagnifyingGlass, Receipt, NavigationArrow } from '@phosphor-icons/react'
 import jsPDF from 'jspdf'
 
@@ -33,6 +33,8 @@ export default function AdminReservations() {
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [statusFilter, setStatusFilter] = useState('all')
   const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -42,6 +44,15 @@ export default function AdminReservations() {
 
   const token = () => sessionStorage.getItem('admin_token') || ''
 
+  useEffect(() => {
+    clearTimeout(searchTimerRef.current)
+    searchTimerRef.current = setTimeout(() => {
+      setDebouncedSearch(search)
+      setPage(1)
+    }, 400)
+    return () => clearTimeout(searchTimerRef.current)
+  }, [search])
+
   const load = useCallback(async () => {
     setLoading(true)
     try {
@@ -49,6 +60,7 @@ export default function AdminReservations() {
       if (statusFilter !== 'all') params.set('status', statusFilter)
       if (dateFrom) params.set('from', dateFrom)
       if (dateTo) params.set('to', dateTo)
+      if (debouncedSearch) params.set('search', debouncedSearch)
       params.set('page', String(page))
       params.set('limit', '20')
       const res = await fetch(`/api/admin/reservations?${params}`, {
@@ -62,7 +74,7 @@ export default function AdminReservations() {
       }
     } catch { }
     setLoading(false)
-  }, [statusFilter, page, dateFrom, dateTo])
+  }, [statusFilter, page, dateFrom, dateTo, debouncedSearch])
 
   useEffect(() => { load() }, [load])
 
@@ -278,14 +290,7 @@ export default function AdminReservations() {
     }
   }
 
-  const filtered = reservations.filter(r => {
-    if (!search) return true
-    const q = search.toLowerCase()
-    return r.customer.name.toLowerCase().includes(q) ||
-      r.customer.phone.includes(q) ||
-      r.reservationId.toLowerCase().includes(q) ||
-      (r.customer.email && r.customer.email.toLowerCase().includes(q))
-  })
+  const filtered = reservations
 
   return (
     <div className="space-y-6">

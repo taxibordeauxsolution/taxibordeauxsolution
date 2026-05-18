@@ -13,7 +13,7 @@ interface Funnel {
 }
 
 interface Stats {
-  reservations: { total: number; en_attente: number; confirmee: number; terminee: number; annulee: number }
+  reservations: { total: number; en_attente: number; confirmee: number; en_route: number; terminee: number; annulee: number }
   estimations: { total: number; avgPrice: number; funnel: Funnel; topSources: { source: string; count: number }[] }
   revenus: { aujourdhui: number; semaine: number; mois: number; semainePrecedente: number; moisPrecedent: number }
 }
@@ -38,7 +38,7 @@ interface Estimation {
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats>({
-    reservations: { total: 0, en_attente: 0, confirmee: 0, terminee: 0, annulee: 0 },
+    reservations: { total: 0, en_attente: 0, confirmee: 0, en_route: 0, terminee: 0, annulee: 0 },
     estimations: { total: 0, avgPrice: 0, funnel: { estimations: 0, leads: 0, contactes: 0, convertis: 0, perdus: 0 }, topSources: [] },
     revenus: { aujourdhui: 0, semaine: 0, mois: 0, semainePrecedente: 0, moisPrecedent: 0 },
   })
@@ -203,7 +203,7 @@ export default function AdminDashboard() {
       )}
 
       {/* Stats principales */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
           <div className="text-xs text-slate-500">Réservations</div>
           <div className="text-2xl font-bold text-slate-900">{stats.reservations.total}</div>
@@ -212,6 +212,12 @@ export default function AdminDashboard() {
           <div className="text-xs text-yellow-700">En attente</div>
           <div className="text-2xl font-bold text-yellow-700">{stats.reservations.en_attente}</div>
         </div>
+        {stats.reservations.en_route > 0 && (
+          <div className="bg-orange-50 rounded-2xl p-4 shadow-sm border border-orange-200">
+            <div className="text-xs text-orange-700">En route</div>
+            <div className="text-2xl font-bold text-orange-700">{stats.reservations.en_route}</div>
+          </div>
+        )}
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
           <div className="text-xs text-slate-500">Estimations</div>
           <div className="text-2xl font-bold text-slate-900">{stats.estimations.total}</div>

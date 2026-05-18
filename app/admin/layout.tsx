@@ -12,7 +12,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    // Page login elle-même : pas de vérification
     if (pathname === '/admin') {
       setReady(true)
       return
@@ -20,9 +19,37 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const token = sessionStorage.getItem('admin_token')
     if (!token) {
       router.replace('/admin')
-    } else {
-      setReady(true)
+      return
     }
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]))
+      if (payload.exp && payload.exp * 1000 < Date.now()) {
+        sessionStorage.removeItem('admin_token')
+        router.replace('/admin')
+        return
+      }
+    } catch {
+      sessionStorage.removeItem('admin_token')
+      router.replace('/admin')
+      return
+    }
+    setReady(true)
+  }, [pathname, router])
+
+  useEffect(() => {
+    if (pathname === '/admin') return
+    const origFetch = window.fetch
+    const interceptor = (...args: Parameters<typeof fetch>) => {
+      return origFetch(...args).then(res => {
+        if (res.status === 401 && args[0]?.toString().includes('/api/admin/')) {
+          sessionStorage.removeItem('admin_token')
+          router.replace('/admin')
+        }
+        return res
+      })
+    }
+    window.fetch = interceptor as typeof fetch
+    return () => { window.fetch = origFetch }
   }, [pathname, router])
 
   const logout = () => {
