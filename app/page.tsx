@@ -90,8 +90,8 @@ export default function HomePage() {
                 style={{ animation: 'slideUp 0.5s ease 0.35s both' }}
               >
                 <div className="text-center hover:scale-105 transition-transform duration-300 cursor-default">
-                  <div className="text-3xl lg:text-4xl font-bold text-yellow-400 mb-1">Rapide</div>
-                  <div className="text-sm text-slate-400 font-medium">Prise en charge</div>
+                  <div className="text-3xl lg:text-4xl font-bold text-yellow-400 mb-1">CB</div>
+                  <div className="text-sm text-slate-400 font-medium">Acceptée</div>
                 </div>
                 <div className="text-center hover:scale-105 transition-transform duration-300 cursor-default">
                   <div className="text-3xl lg:text-4xl font-bold text-yellow-400 mb-1">24/7</div>
