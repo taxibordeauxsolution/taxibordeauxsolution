@@ -45,7 +45,7 @@ export default function HomePage() {
                   style={{ animation: 'slideUp 0.5s ease 0.15s both' }}
                 >
                   Un service fiable et régulier pour tous vos trajets : aéroport Mérignac, Gare Saint-Jean et longues distances.{' '}
-                  <strong className="text-white font-semibold">Réservation directe avec votre chauffeur</strong>, 24h/24.{' '}
+                  <strong className="text-white font-semibold">Réservez en quelques clics ou par téléphone</strong>, 24h/24.{' '}
                   Paiement à bord en espèces ou par carte bancaire.
                 </p>
               </div>
