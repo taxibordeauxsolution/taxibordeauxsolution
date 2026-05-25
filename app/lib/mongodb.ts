@@ -54,6 +54,7 @@ const ConfigPrixSchema = new mongoose.Schema({
   tarifJourDegressifMode: { type: String, default: 'degressif' },
   seuilKmCaptureLead: { type: Number, default: 25 },
   captureLeadActive:  { type: Boolean, default: true },
+  joursOff:           { type: [String], default: [] },
 }, { timestamps: true })
 
 export const ConfigPrix =
@@ -171,3 +172,18 @@ const CounterSchema = new mongoose.Schema({
 
 export const Counter =
   mongoose.models.Counter || mongoose.model('Counter', CounterSchema)
+
+// ── Modèle Client ────────────────────────────────────────────────────────
+const ClientSchema = new mongoose.Schema({
+  nom:       { type: String, required: true, trim: true },
+  telephone: { type: String, required: true, trim: true },
+  email:     { type: String, default: '', trim: true, lowercase: true },
+  adresse:   { type: String, default: '', trim: true },
+  notes:     { type: String, default: '' },
+}, { timestamps: true })
+
+ClientSchema.index({ telephone: 1 })
+ClientSchema.index({ nom: 'text', email: 'text', telephone: 'text' })
+
+export const Client =
+  mongoose.models.Client || mongoose.model('Client', ClientSchema)

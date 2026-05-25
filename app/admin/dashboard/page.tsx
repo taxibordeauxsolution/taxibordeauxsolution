@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
-import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin, FunnelSimple, Globe, NavigationArrow, Phone } from '@phosphor-icons/react'
+import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin, FunnelSimple, Globe, NavigationArrow, Phone, PhoneCall } from '@phosphor-icons/react'
 
 interface Funnel {
   estimations: number
@@ -13,7 +13,7 @@ interface Funnel {
 }
 
 interface Stats {
-  reservations: { total: number; en_attente: number; confirmee: number; en_route: number; terminee: number; annulee: number }
+  reservations: { total: number; en_attente: number; confirmee: number; en_route: number; terminee: number; annulee: number; lead_capture?: number }
   estimations: { total: number; avgPrice: number; funnel: Funnel; topSources: { source: string; count: number }[] }
   revenus: { aujourdhui: number; semaine: number; mois: number; semainePrecedente: number; moisPrecedent: number }
 }
@@ -43,6 +43,7 @@ export default function AdminDashboard() {
     revenus: { aujourdhui: 0, semaine: 0, mois: 0, semainePrecedente: 0, moisPrecedent: 0 },
   })
   const [recentResas, setRecentResas] = useState<Reservation[]>([])
+  const [recentLeads, setRecentLeads] = useState<Reservation[]>([])
   const [recentEstimations, setRecentEstimations] = useState<Estimation[]>([])
   const [loading, setLoading] = useState(true)
   const [newResaAlert, setNewResaAlert] = useState(false)
@@ -74,15 +75,18 @@ export default function AdminDashboard() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const [resaRes, estRes, allTermRes] = await Promise.all([
+      const [resaRes, estRes, allTermRes, leadsRes] = await Promise.all([
         fetch('/api/admin/reservations?limit=100', { headers: { Authorization: `Bearer ${token()}` } }),
         fetch('/api/admin/estimations', { headers: { Authorization: `Bearer ${token()}` } }),
         fetch('/api/admin/reservations?status=terminee&limit=500', { headers: { Authorization: `Bearer ${token()}` } }),
+        fetch('/api/admin/reservations?status=lead_capture&limit=5', { headers: { Authorization: `Bearer ${token()}` } }),
       ])
       const resaJson = await resaRes.json()
       const estJson = await estRes.json()
 
       const allTermJson = await allTermRes.json()
+      const leadsJson = await leadsRes.json()
+      if (leadsJson.success) setRecentLeads(leadsJson.data)
 
       if (resaJson.success) {
         const leadCount = resaJson.stats.lead_capture || 0
@@ -199,6 +203,48 @@ export default function AdminDashboard() {
         <div className="bg-purple-600 text-white rounded-2xl p-4 shadow-lg flex items-center gap-3 animate-pulse">
           <Phone size={24} />
           <span className="font-bold">Nouveau lead à rappeler !</span>
+        </div>
+      )}
+
+      {/* Leads récents */}
+      {recentLeads.length > 0 && (
+        <div className="bg-purple-50 rounded-2xl p-4 border border-purple-200">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-bold text-purple-800 flex items-center gap-2">
+              <PhoneCall size={16} />
+              Leads à rappeler ({stats.reservations.lead_capture || recentLeads.length})
+            </h2>
+            <Link href="/admin/leads" className="text-xs text-purple-600 font-semibold flex items-center gap-1 hover:underline">
+              Tout voir <ArrowRight size={12} />
+            </Link>
+          </div>
+          <div className="space-y-2">
+            {recentLeads.map(r => (
+              <div key={r._id} className="bg-white rounded-xl p-3 text-sm flex items-center gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-semibold text-slate-900">{r.customer.name}</span>
+                    <a href={`tel:${r.customer.phone}`} className="text-purple-600 font-medium text-xs flex items-center gap-1">
+                      <Phone size={12} /> {r.customer.phone}
+                    </a>
+                  </div>
+                  <div className="text-xs text-slate-400 mt-0.5 truncate">
+                    <MapPin size={10} className="inline" /> {(typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || '').split(',')[0]}
+                    {' → '}
+                    {(typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || '').split(',')[0]}
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="font-bold text-green-700 text-xs">{formatPrix(r)}</div>
+                  <div className="text-xs text-slate-400">{formatDate(r.pickupDate)}</div>
+                </div>
+                <button onClick={() => updateResaStatus(r._id, 'en_attente')}
+                  className="px-2.5 py-1.5 bg-blue-600 text-white rounded-lg text-[10px] font-semibold hover:bg-blue-700 transition-colors shrink-0">
+                  Convertir
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

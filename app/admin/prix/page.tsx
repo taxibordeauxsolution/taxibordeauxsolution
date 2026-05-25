@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { FloppyDisk, ArrowClockwise, Tag } from '@phosphor-icons/react'
+import { FloppyDisk, ArrowClockwise, Tag, CalendarX, Trash, Plus } from '@phosphor-icons/react'
 
 export default function AdminPrix() {
   const [prix, setPrix] = useState({
@@ -29,7 +29,9 @@ export default function AdminPrix() {
     tarifJourDegressifMode: 'degressif' as string,
     seuilKmCaptureLead: 25,
     captureLeadActive: true,
+    joursOff: [] as string[],
   })
+  const [newJourOff, setNewJourOff] = useState('')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
@@ -518,6 +520,68 @@ export default function AdminPrix() {
           </div>
         ) : (
           <p className="text-gray-400 text-sm">Désactivé — le client voit directement le prix et peut réserver en 4 étapes sans laisser ses coordonnées au préalable.</p>
+        )}
+      </div>
+
+      {/* Jours de repos */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+        <div className="border-b pb-3">
+          <h2 className="font-bold text-gray-800 text-base sm:text-lg flex items-center gap-2">
+            <CalendarX size={20} className="text-red-500" />
+            Jours de repos
+          </h2>
+          <p className="text-xs text-gray-400 mt-1">Bloquez les jours où vous ne travaillez pas. Les clients ne pourront pas réserver ces dates.</p>
+        </div>
+
+        <div className="flex gap-2 items-end">
+          <div className="flex-1">
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Ajouter une date</label>
+            <input
+              type="date"
+              value={newJourOff}
+              onChange={e => setNewJourOff(e.target.value)}
+              min={new Date().toISOString().split('T')[0]}
+              className="w-full border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-red-500 focus:outline-none font-medium text-gray-900"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              if (newJourOff && !prix.joursOff.includes(newJourOff)) {
+                setPrix(prev => ({ ...prev, joursOff: [...prev.joursOff, newJourOff].sort() }))
+                setNewJourOff('')
+              }
+            }}
+            disabled={!newJourOff}
+            className="flex items-center gap-1.5 px-4 py-2.5 bg-red-500 text-white rounded-xl text-sm font-semibold hover:bg-red-600 disabled:bg-gray-300 transition-colors"
+          >
+            <Plus size={16} />
+            Bloquer
+          </button>
+        </div>
+
+        {prix.joursOff.length > 0 ? (
+          <div className="space-y-2">
+            {prix.joursOff.map(jour => {
+              const d = new Date(jour + 'T12:00:00')
+              const label = d.toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })
+              const isPast = jour < new Date().toISOString().split('T')[0]
+              return (
+                <div key={jour} className={`flex items-center justify-between px-4 py-2.5 rounded-xl border ${isPast ? 'bg-gray-50 border-gray-200 opacity-60' : 'bg-red-50 border-red-200'}`}>
+                  <span className={`text-sm font-medium capitalize ${isPast ? 'text-gray-500' : 'text-red-800'}`}>{label}</span>
+                  <button
+                    type="button"
+                    onClick={() => setPrix(prev => ({ ...prev, joursOff: prev.joursOff.filter(j => j !== jour) }))}
+                    className="p-1.5 hover:bg-red-100 rounded-lg transition-colors text-red-400 hover:text-red-600"
+                  >
+                    <Trash size={16} />
+                  </button>
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          <p className="text-gray-400 text-sm">Aucun jour bloqué — les clients peuvent réserver tous les jours.</p>
         )}
       </div>
 

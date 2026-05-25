@@ -32,11 +32,11 @@ export default function HomePage() {
                 {/* H1 : pas de masquage opacity → LCP immédiat */}
                 <h1 className="text-5xl lg:text-7xl font-bold leading-tight tracking-tight">
                   <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
-                    LA Solution
+                    Votre taxi
                   </span>
                   <br />
                   <span className="text-yellow-400">
-                    Taxi Bordeaux
+                    à Bordeaux
                   </span>
                 </h1>
 
@@ -44,9 +44,9 @@ export default function HomePage() {
                   className="text-xl lg:text-2xl text-slate-300 leading-relaxed max-w-2xl font-light"
                   style={{ animation: 'slideUp 0.5s ease 0.15s both' }}
                 >
-                  Service fiable et régulier disponible 24h/24.{' '}
-                  <strong className="text-white font-semibold">Réservation instantanée</strong>,{' '}
-                  prise en charge rapide dans toute la métropole bordelaise.
+                  Un service fiable et régulier pour tous vos trajets : aéroport Mérignac, Gare Saint-Jean et longues distances.{' '}
+                  <strong className="text-white font-semibold">Réservation directe avec votre chauffeur</strong>, 24h/24.{' '}
+                  Paiement à bord en espèces ou par carte bancaire.
                 </p>
               </div>
 

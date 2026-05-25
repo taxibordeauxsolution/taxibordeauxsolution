@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
-import { connectDB, Reservation } from '@/app/lib/mongodb'
+import { connectDB, Reservation, ConfigPrix } from '@/app/lib/mongodb'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -15,6 +15,14 @@ export async function POST(req: NextRequest) {
 
     if (!reservationId || !customer?.name || !customer?.phone || !tripFrom || !tripTo || !pickupDate) {
       return NextResponse.json({ success: false, message: 'Champs requis manquants' }, { status: 400 })
+    }
+
+    const config = await ConfigPrix.findOne().lean() as any
+    if (config?.joursOff?.length) {
+      const pickupLocal = new Date(pickupDate).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' })
+      if (config.joursOff.includes(pickupLocal)) {
+        return NextResponse.json({ success: false, message: 'Nous sommes indisponibles ce jour-là. Merci de choisir une autre date ou de nous appeler au 06 67 23 78 22.' }, { status: 400 })
+      }
     }
 
     if (customer.name.toLowerCase().includes('testprice')) {

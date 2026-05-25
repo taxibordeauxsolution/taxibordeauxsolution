@@ -41,6 +41,7 @@ export async function PUT(req: NextRequest) {
     for (const f of fields) {
       if (body[f] !== undefined && body[f] !== '') update[f] = body[f]
     }
+    if (Array.isArray(body.joursOff)) update.joursOff = body.joursOff
     const config = await ConfigPrix.findOneAndUpdate({}, { $set: update }, { upsert: true, new: true })
     return NextResponse.json({ success: true, data: config })
   } catch (e: any) {

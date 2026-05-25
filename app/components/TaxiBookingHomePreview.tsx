@@ -43,6 +43,7 @@ const TaxiBookingHomePreview = () => {
     tarifJourDegressifMode: 'degressif',
     seuilKmCaptureLead: 25,
     captureLeadActive: true,
+    joursOff: [] as string[],
   })
   const [maps, setMaps] = useState<any>(null)
   const [map, setMap] = useState<any>(null)
@@ -850,7 +851,14 @@ const TaxiBookingHomePreview = () => {
   }, [tripData.distance, tripData.duration, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, forfaits, configPrix, tollCost])
 
 
+  const [jourOffError, setJourOffError] = useState('')
+
   const handleBookingChange = (field: keyof BookingData, value: any) => {
+    if (field === 'departureDate' && configPrix.joursOff.includes(value)) {
+      setJourOffError('Nous sommes indisponibles ce jour-là. Merci de choisir une autre date ou de nous appeler au 06 67 23 78 22.')
+      return
+    }
+    if (field === 'departureDate') setJourOffError('')
     setBookingData(prev => ({ ...prev, [field]: value }))
   }
 
@@ -1038,9 +1046,10 @@ const TaxiBookingHomePreview = () => {
                 value={bookingData.departureDate}
                 onChange={(e) => handleBookingChange('departureDate', e.target.value)}
                 min={new Date().toISOString().split('T')[0]}
-                className="w-full min-w-0 p-2 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-xs sm:text-base text-gray-900"
+                className={`w-full min-w-0 p-2 sm:p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 text-xs sm:text-base text-gray-900 ${jourOffError ? 'border-red-500' : 'border-gray-300'}`}
                 required
               />
+              {jourOffError && <p className="text-red-500 text-xs mt-1">{jourOffError}</p>}
             </div>
 
             <div className="min-w-0 overflow-hidden">
@@ -1323,7 +1332,7 @@ const TaxiBookingHomePreview = () => {
 
           const allFieldsValid = tripData.fromCoords && tripData.toCoords &&
                                 bookingData.departureDate && bookingData.departureTime &&
-                                bookingData.passengers && tripData.price
+                                bookingData.passengers && tripData.price && !jourOffError
 
           if (allFieldsValid) {
             setStep(2)
@@ -1339,6 +1348,7 @@ const TaxiBookingHomePreview = () => {
         <Navigation className="w-5 h-5 mr-2" />
         {!tripData.fromCoords || !tripData.toCoords ? t('selectAddresses') :
          !bookingData.departureDate || !bookingData.departureTime ? t('dateTimeRequired') :
+         jourOffError ? 'Date indisponible' :
          !tripData.price ? t('calculatingPrice') :
          needsCapture ? 'Continuer' :
          t('bookNowBtn')}

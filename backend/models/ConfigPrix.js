@@ -25,6 +25,7 @@ const ConfigPrixSchema = new mongoose.Schema({
   tarifJourDegressifMode: { type: String, default: 'degressif' },
   seuilKmCaptureLead: { type: Number, default: 25 },
   captureLeadActive:  { type: Boolean, default: true },
+  joursOff:           { type: [String], default: [] },
 }, { timestamps: true })
 
 export default mongoose.models?.ConfigPrix || mongoose.model('ConfigPrix', ConfigPrixSchema)
