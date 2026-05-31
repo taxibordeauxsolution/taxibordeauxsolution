@@ -663,6 +663,29 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Moyens de paiement */}
+      <section className="py-12 bg-slate-50 border-y border-slate-200">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto text-center space-y-5">
+            <p className="text-slate-500 text-sm font-semibold uppercase tracking-widest">Paiement à bord</p>
+            <h2 className="text-2xl lg:text-3xl font-bold text-slate-900">
+              Espèces ou carte bancaire — au choix
+            </h2>
+            <p className="text-slate-600">
+              Pas de paiement en ligne. Vous réglez directement à l'arrivée, en espèces ou par carte sans contact.
+            </p>
+            <div className="flex items-center justify-center pt-2">
+              <img
+                src="/images/cb-logos.png"
+                alt="Visa, CB, Mastercard, American Express acceptés"
+                className="h-12"
+              />
+            </div>
+            <p className="text-slate-400 text-xs">Visa · Mastercard · CB · American Express · Sans contact</p>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Final */}
       <section className="py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400/10 via-transparent to-transparent"></div>

@@ -1289,9 +1289,6 @@ const TaxiBookingHomePreview = () => {
                     Dont {tollCost.toFixed(2)}€ de péage inclus
                   </div>
                 )}
-                <div className="flex items-center justify-center mt-3 opacity-60">
-                  <img src="/images/cb-logos.png" alt="Visa, CB, Mastercard, American Express" className="h-5" />
-                </div>
               </div>
             </div>
           )}
@@ -1314,7 +1311,7 @@ const TaxiBookingHomePreview = () => {
 
               if (allFieldsValid) {
                 const pickupDt = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
-                if (!isNaN(pickupDt.getTime()) && pickupDt < new Date()) {
+                if (!isNaN(pickupDt.getTime()) && pickupDt < new Date(Date.now() - 10 * 60 * 1000)) {
                   setError('La date et heure de prise en charge sont déjà passées.')
                   return
                 }

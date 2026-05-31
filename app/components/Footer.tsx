@@ -190,9 +190,9 @@ export default function Footer() {
           <p className="text-gray-400 text-sm text-center sm:text-left">
             © {currentYear} Taxi Bordeaux Solution. Tous droits réservés.
           </p>
-          <div className="flex items-center gap-2">
-            <span className="text-gray-500 text-xs">Paiement CB accepté à bord</span>
-            <img src="/images/cb-logos.png" alt="Visa, CB, Mastercard, American Express" className="h-5 opacity-70" />
+          <div className="flex items-center gap-3">
+            <span className="text-gray-400 text-sm">Paiement à bord :</span>
+            <img src="/images/cb-logos.png" alt="Visa, CB, Mastercard, American Express" className="h-8 opacity-80" />
           </div>
         </div>
       </div>
