@@ -70,6 +70,7 @@ export default function AdminDashboard() {
       gain.gain.setValueAtTime(0.3, ctx.currentTime + 0.4)
       gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5)
       osc.stop(ctx.currentTime + 0.5)
+      osc.onended = () => ctx.close()
     } catch {}
   }
 

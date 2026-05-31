@@ -569,7 +569,7 @@ export default function AdminPrix() {
               type="date"
               value={newJourOff}
               onChange={e => setNewJourOff(e.target.value)}
-              min={new Date().toISOString().split('T')[0]}
+              min={new Date().toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' })}
               className="w-full border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-red-500 focus:outline-none font-medium text-gray-900"
             />
           </div>

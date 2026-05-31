@@ -1,18 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
 import { connectDB, ConfigPrix } from '@/app/lib/mongodb'
-
-const JWT_SECRET = process.env.JWT_SECRET || 'taxi_bordeaux_jwt_secret_2025_very_secure_key_minimum_64_chars_long'
-
-function verifyAdmin(req: NextRequest) {
-  const auth = req.headers.get('authorization') || ''
-  const token = auth.replace('Bearer ', '')
-  if (!token) return false
-  try {
-    const p = jwt.verify(token, JWT_SECRET) as any
-    return p.role === 'admin'
-  } catch { return false }
-}
+import { verifyAdmin } from '@/app/lib/auth'
 
 const getConfig = async () => {
   let config = await ConfigPrix.findOne()
@@ -36,12 +24,36 @@ export async function PUT(req: NextRequest) {
   try {
     await connectDB()
     const body = await req.json()
-    const fields = ['priseEnCharge', 'tarifKmJour', 'tarifKmNuit', 'fraisApproche', 'courseMini', 'courseMiniDe', 'heureDebutNuit', 'heureFinNuit', 'remiseActive', 'remiseSeuilKm', 'remisePourcentage', 'suppApprocheActive', 'suppApprocheSeuilKm', 'itineraireCourt', 'tarifNuitDegressifActive', 'tarifNuitDegressifSeuilKm', 'tarifNuitDegressifPrixKm', 'tarifNuitDegressifMode', 'tarifJourDegressifActive', 'tarifJourDegressifSeuilKm', 'tarifJourDegressifPrixKm', 'tarifJourDegressifMode', 'seuilKmCaptureLead', 'captureLeadActive', 'affichagePrixUnique']
+
+    // Validation des champs numériques (min 0, max raisonnable)
+    const numFields = ['priseEnCharge', 'tarifKmJour', 'tarifKmNuit', 'fraisApproche', 'courseMini', 'courseMiniDe',
+      'remiseSeuilKm', 'remisePourcentage', 'suppApprocheSeuilKm',
+      'tarifNuitDegressifSeuilKm', 'tarifNuitDegressifPrixKm',
+      'tarifJourDegressifSeuilKm', 'tarifJourDegressifPrixKm', 'seuilKmCaptureLead']
+    for (const f of numFields) {
+      if (body[f] !== undefined && body[f] !== '') {
+        const v = Number(body[f])
+        if (isNaN(v) || v < 0 || v > 9999) {
+          return NextResponse.json({ success: false, message: `Valeur invalide pour ${f} (0–9999)` }, { status: 400 })
+        }
+      }
+    }
+    if (body.remisePourcentage !== undefined && (body.remisePourcentage < 0 || body.remisePourcentage > 50)) {
+      return NextResponse.json({ success: false, message: 'Remise doit être entre 0 et 50%' }, { status: 400 })
+    }
+
+    const fields = ['priseEnCharge', 'tarifKmJour', 'tarifKmNuit', 'fraisApproche', 'courseMini', 'courseMiniDe',
+      'heureDebutNuit', 'heureFinNuit', 'remiseActive', 'remiseSeuilKm', 'remisePourcentage',
+      'suppApprocheActive', 'suppApprocheSeuilKm', 'itineraireCourt',
+      'tarifNuitDegressifActive', 'tarifNuitDegressifSeuilKm', 'tarifNuitDegressifPrixKm', 'tarifNuitDegressifMode',
+      'tarifJourDegressifActive', 'tarifJourDegressifSeuilKm', 'tarifJourDegressifPrixKm', 'tarifJourDegressifMode',
+      'seuilKmCaptureLead', 'captureLeadActive', 'affichagePrixUnique']
     const update: Record<string, any> = {}
     for (const f of fields) {
       if (body[f] !== undefined && body[f] !== '') update[f] = body[f]
     }
     if (Array.isArray(body.joursOff)) update.joursOff = body.joursOff
+
     const config = await ConfigPrix.findOneAndUpdate({}, { $set: update }, { upsert: true, new: true })
     return NextResponse.json({ success: true, data: config })
   } catch (e: any) {

@@ -1,18 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
 import { connectDB, Reservation } from '@/app/lib/mongodb'
-
-const JWT_SECRET = process.env.JWT_SECRET || 'taxi_bordeaux_jwt_secret_2025_very_secure_key_minimum_64_chars_long'
-
-function verifyAdmin(req: NextRequest) {
-  const auth = req.headers.get('authorization') || ''
-  const token = auth.replace('Bearer ', '')
-  if (!token) return false
-  try {
-    const p = jwt.verify(token, JWT_SECRET) as any
-    return p.role === 'admin'
-  } catch { return false }
-}
+import { verifyAdmin, parisMidnight } from '@/app/lib/auth'
 
 export async function GET(req: NextRequest) {
   if (!verifyAdmin(req))
@@ -22,53 +10,46 @@ export async function GET(req: NextRequest) {
     await connectDB()
 
     const now = new Date()
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    const weekStart = new Date(todayStart)
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1)
-    const prevWeekStart = new Date(weekStart)
-    prevWeekStart.setDate(prevWeekStart.getDate() - 7)
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
-    const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+    // Composantes Paris (pour jour de semaine et mois courant)
+    const parisLocal = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Paris' }))
+    const parisDoW = parisLocal.getDay() // 0=Dim..6=Sam
+    const parisY = parisLocal.getFullYear()
+    const parisM = parisLocal.getMonth()
 
-    // 1 seule query : $facet avec 5 buckets de date
+    const todayStart = parisMidnight(now)
+
+    // Lundi de cette semaine
+    const dowFromMon = parisDoW === 0 ? 6 : parisDoW - 1
+    const weekStart = parisMidnight(new Date(now.getTime() - dowFromMon * 86400000))
+    const prevWeekStart = parisMidnight(new Date(weekStart.getTime() - 7 * 86400000))
+
+    // 1er du mois courant et du mois précédent en heure Paris
+    const monthStart = parisMidnight(new Date(Date.UTC(parisY, parisM, 1)))
+    const prevMonthStart = parisMidnight(new Date(Date.UTC(parisY, parisM - 1, 1)))
+
     const [result] = await Reservation.aggregate([
       { $match: { status: 'terminee', pickupDate: { $gte: prevMonthStart } } },
       {
         $facet: {
-          aujourdhui: [
-            { $match: { pickupDate: { $gte: todayStart } } },
-            { $group: { _id: null, total: { $sum: '$pricing.totalPrice' } } },
-          ],
-          semaine: [
-            { $match: { pickupDate: { $gte: weekStart } } },
-            { $group: { _id: null, total: { $sum: '$pricing.totalPrice' } } },
-          ],
-          mois: [
-            { $match: { pickupDate: { $gte: monthStart } } },
-            { $group: { _id: null, total: { $sum: '$pricing.totalPrice' } } },
-          ],
-          semainePrecedente: [
-            { $match: { pickupDate: { $gte: prevWeekStart, $lt: weekStart } } },
-            { $group: { _id: null, total: { $sum: '$pricing.totalPrice' } } },
-          ],
-          moisPrecedent: [
-            { $match: { pickupDate: { $gte: prevMonthStart, $lt: monthStart } } },
-            { $group: { _id: null, total: { $sum: '$pricing.totalPrice' } } },
-          ],
+          aujourdhui:       [{ $match: { pickupDate: { $gte: todayStart } } },                         { $group: { _id: null, total: { $sum: '$pricing.totalPrice' } } }],
+          semaine:          [{ $match: { pickupDate: { $gte: weekStart } } },                           { $group: { _id: null, total: { $sum: '$pricing.totalPrice' } } }],
+          mois:             [{ $match: { pickupDate: { $gte: monthStart } } },                          { $group: { _id: null, total: { $sum: '$pricing.totalPrice' } } }],
+          semainePrecedente:[{ $match: { pickupDate: { $gte: prevWeekStart, $lt: weekStart } } },       { $group: { _id: null, total: { $sum: '$pricing.totalPrice' } } }],
+          moisPrecedent:    [{ $match: { pickupDate: { $gte: prevMonthStart, $lt: monthStart } } },     { $group: { _id: null, total: { $sum: '$pricing.totalPrice' } } }],
         },
       },
     ])
 
-    const extract = (arr: Array<{ total: number }>) => (arr?.[0]?.total || 0)
+    const extract = (arr: Array<{ total: number }>) => arr?.[0]?.total || 0
 
     return NextResponse.json({
       success: true,
       data: {
-        aujourdhui: extract(result.aujourdhui),
-        semaine: extract(result.semaine),
-        mois: extract(result.mois),
+        aujourdhui:        extract(result.aujourdhui),
+        semaine:           extract(result.semaine),
+        mois:              extract(result.mois),
         semainePrecedente: extract(result.semainePrecedente),
-        moisPrecedent: extract(result.moisPrecedent),
+        moisPrecedent:     extract(result.moisPrecedent),
       },
     })
   } catch (e: any) {

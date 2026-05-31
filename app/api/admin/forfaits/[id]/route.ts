@@ -1,25 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
 import { connectDB, Forfait } from '@/app/lib/mongodb'
+import { verifyAdmin } from '@/app/lib/auth'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'taxi_bordeaux_jwt_secret_2025_very_secure_key_minimum_64_chars_long'
-
-function verifyAdmin(req: NextRequest) {
-  const auth = req.headers.get('authorization') || ''
-  const token = auth.replace('Bearer ', '')
-  if (!token) return false
-  try {
-    const p = jwt.verify(token, JWT_SECRET) as any
-    return p.role === 'admin'
-  } catch { return false }
-}
+const ALLOWED = ['nom', 'pointA', 'pointB', 'prixJour', 'prixNuit', 'actif']
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   if (!verifyAdmin(req)) return NextResponse.json({ success: false }, { status: 401 })
   await connectDB()
   const { id } = await params
   const body = await req.json()
-  const forfait = await Forfait.findByIdAndUpdate(id, body, { new: true })
+
+  const update: Record<string, any> = {}
+  for (const k of ALLOWED) {
+    if (body[k] !== undefined) update[k] = body[k]
+  }
+
+  if ((update.prixJour !== undefined && (typeof update.prixJour !== 'number' || update.prixJour < 0)) ||
+      (update.prixNuit !== undefined && (typeof update.prixNuit !== 'number' || update.prixNuit < 0))) {
+    return NextResponse.json({ success: false, message: 'Prix invalides' }, { status: 400 })
+  }
+
+  const forfait = await Forfait.findByIdAndUpdate(id, update, { new: true })
   if (!forfait) return NextResponse.json({ success: false, message: 'Introuvable' }, { status: 404 })
   return NextResponse.json({ success: true, data: forfait })
 }

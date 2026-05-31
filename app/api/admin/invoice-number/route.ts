@@ -1,18 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
 import { connectDB, Counter, Reservation } from '@/app/lib/mongodb'
-
-const JWT_SECRET = process.env.JWT_SECRET || 'taxi_bordeaux_jwt_secret_2025_very_secure_key_minimum_64_chars_long'
-
-function verifyAdmin(req: NextRequest) {
-  const auth = req.headers.get('authorization') || ''
-  const token = auth.replace('Bearer ', '')
-  if (!token) return false
-  try {
-    const p = jwt.verify(token, JWT_SECRET) as any
-    return p.role === 'admin'
-  } catch { return false }
-}
+import { verifyAdmin } from '@/app/lib/auth'
 
 export async function POST(req: NextRequest) {
   if (!verifyAdmin(req))
@@ -22,6 +10,7 @@ export async function POST(req: NextRequest) {
 
   const { reservationId } = await req.json().catch(() => ({ reservationId: null }))
 
+  // Si la réservation a déjà un numéro, le retourner directement
   if (reservationId) {
     const resa = await Reservation.findById(reservationId)
     if (resa?.invoiceNumber) {
@@ -29,17 +18,24 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Incrément atomique avec garantie de minimum 1100 en une seule opération
+  // Utilise un pipeline d'agrégation (MongoDB 4.2+) pour être vraiment atomique
   const counter = await Counter.findByIdAndUpdate(
     'invoice',
-    { $inc: { seq: 1 } },
+    [{
+      $set: {
+        seq: {
+          $add: [
+            { $max: [{ $ifNull: ['$seq', 1099] }, 1099] },
+            1,
+          ],
+        },
+      },
+    }],
     { new: true, upsert: true }
   )
 
-  let num = counter.seq
-  if (num < 1100) {
-    await Counter.findByIdAndUpdate('invoice', { $set: { seq: 1100 } })
-    num = 1100
-  }
+  const num = counter.seq
 
   if (reservationId) {
     await Reservation.findByIdAndUpdate(reservationId, { $set: { invoiceNumber: num } })
