@@ -96,11 +96,21 @@ const TaxiBookingHomePreview = () => {
   const [prixAvantRemise, setPrixAvantRemise] = useState(0)
   const [prixSansDegressif, setPrixSansDegressif] = useState(0)
   const [estimationId, setEstimationId] = useState<string | null>(null)
+  const [leadMongoId, setLeadMongoId] = useState('')
+  const [leadReservationId, setLeadReservationId] = useState('')
+  const [frozenCapture, setFrozenCapture] = useState(false)
+
+  const localNow = () => {
+    const now = new Date()
+    const pad = (n: number) => String(n).padStart(2, '0')
+    return {
+      date: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`,
+      time: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
+    }
+  }
 
   const [bookingData, setBookingData] = useState<BookingData>(() => {
-    const now = new Date()
-    const date = now.toISOString().split('T')[0]
-    const time = now.toTimeString().slice(0, 5)
+    const { date, time } = localNow()
     return {
       passengers: 1,
       luggage: 0,
@@ -387,7 +397,7 @@ const TaxiBookingHomePreview = () => {
   }
 
   const needsCapture = configPrix.captureLeadActive && tripData.distance >= configPrix.seuilKmCaptureLead && configPrix.seuilKmCaptureLead > 0
-  const totalSteps = needsCapture ? 5 : 4
+  const totalSteps = (step > 1 ? frozenCapture : needsCapture) ? 5 : 4
 
   const t = (key: string) => translations[language as keyof typeof translations]?.[key as keyof typeof translations.fr] || key
 
@@ -475,25 +485,34 @@ const TaxiBookingHomePreview = () => {
   }, [])
 
   // Chargement lazy : déclenché au premier focus sur un champ d'adresse
-  const loadGoogleMapsLazy = useCallback(() => {
-    if (mapsLoadedRef.current) return
-    mapsLoadedRef.current = true
-
+  const loadGoogleMapsLazy = useCallback((): Promise<void> => {
     if ((window as any).google?.maps) {
-      initializeMaps()
-      return
+      if (!mapsLoadedRef.current) { mapsLoadedRef.current = true; initializeMaps() }
+      return Promise.resolve()
     }
-
-    const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&language=${language}&region=FR`
-    script.async = true
-    script.defer = true
-    script.onload = initializeMaps
-    script.onerror = () => {
-      mapsLoadedRef.current = false
-      setError('Impossible de charger l\'autocomplétion d\'adresses. Vérifiez votre connexion.')
+    if (mapsLoadedRef.current) {
+      // Script déjà en cours de chargement — attendre
+      return new Promise((resolve, reject) => {
+        const check = setInterval(() => {
+          if ((window as any).google?.maps) { clearInterval(check); resolve() }
+        }, 100)
+        setTimeout(() => { clearInterval(check); reject(new Error('timeout')) }, 10000)
+      })
     }
-    document.head.appendChild(script)
+    mapsLoadedRef.current = true
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&language=${language}&region=FR`
+      script.async = true
+      script.defer = true
+      script.onload = () => { initializeMaps(); resolve() }
+      script.onerror = () => {
+        mapsLoadedRef.current = false
+        setError('Impossible de charger l\'autocomplétion d\'adresses. Vérifiez votre connexion.')
+        reject(new Error('load failed'))
+      }
+      document.head.appendChild(script)
+    })
   }, [language, initializeMaps])
 
   // Cleanup du debounce estimation à l'unmount
@@ -861,9 +880,9 @@ const TaxiBookingHomePreview = () => {
     setError('')
 
     try {
-      // ID unique : timestamp + suffixe aléatoire pour éviter collision
       const rand = Math.random().toString(36).substring(2, 6).toUpperCase()
-      const reservationId = 'TBS-' + Date.now().toString().slice(-6) + '-' + rand
+      // Si lead déjà créé (longue distance), réutiliser son ID pour éviter le doublon en base
+      const reservationId = leadReservationId || ('TBS-' + Date.now().toString().slice(-6) + '-' + rand)
       const pickupTime = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
       
       const reservationData = {
@@ -944,16 +963,11 @@ const TaxiBookingHomePreview = () => {
       try {
         const emailResponse = await fetch('/api/send-confirmation', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(reservationData)
         })
-
-        emailSent = emailResponse.ok && !!bookingData.customerEmail
-        if (!emailResponse.ok) {
-          console.warn('Email de confirmation non envoyé')
-        }
+        const emailJson = await emailResponse.json().catch(() => ({}))
+        emailSent = emailResponse.ok && !!emailJson.clientEmailId
       } catch (emailError) {
         console.warn('Erreur envoi email:', emailError)
       }
@@ -1300,6 +1314,13 @@ const TaxiBookingHomePreview = () => {
                                     bookingData.passengers && tripData.price && !jourOffError
 
               if (allFieldsValid) {
+                const pickupDt = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
+                if (!isNaN(pickupDt.getTime()) && pickupDt < new Date()) {
+                  setError('La date et heure de prise en charge sont déjà passées.')
+                  return
+                }
+                setError('')
+                setFrozenCapture(needsCapture)
                 setStep(2)
                 if (typeof window !== 'undefined' && (window as any).gtag) {
                   (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: needsCapture ? 'step1_to_capture' : 'step1_to_step2', from: tripData.from?.split(',')[0], to: tripData.to?.split(',')[0], price: tripData.price })
@@ -1392,6 +1413,10 @@ const TaxiBookingHomePreview = () => {
         setLoading(false)
         return
       }
+
+      const resData = await res.json().catch(() => ({}))
+      setLeadMongoId(resData.id || '')
+      setLeadReservationId(reservationId)
 
       setBookingData(prev => ({
         ...prev,
@@ -1644,7 +1669,7 @@ const TaxiBookingHomePreview = () => {
       <div className="flex gap-4 max-w-2xl mx-auto">
         <button
           onClick={() => {
-            setStep(needsCapture ? 2 : 1)
+            setStep(frozenCapture ? 2 : 1)
             if (typeof window !== 'undefined' && (window as any).gtag) {
               (window as any).gtag('event', 'funnel_abandon', { event_category: 'funnel', step: 'summary_back' })
             }
@@ -1656,7 +1681,7 @@ const TaxiBookingHomePreview = () => {
         </button>
         <button
           onClick={() => {
-            setStep(needsCapture ? 4 : 3)
+            setStep(frozenCapture ? 4 : 3)
             if (typeof window !== 'undefined' && (window as any).gtag) {
               (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: 'summary_to_details' })
             }
@@ -1828,7 +1853,7 @@ const TaxiBookingHomePreview = () => {
       <div className="flex gap-4">
         <button
           onClick={() => {
-            setStep(needsCapture ? 3 : 2)
+            setStep(frozenCapture ? 3 : 2)
             if (typeof window !== 'undefined' && (window as any).gtag) {
               (window as any).gtag('event', 'funnel_abandon', { event_category: 'funnel', step: 'details_back_to_summary' })
             }
@@ -1929,12 +1954,12 @@ const TaxiBookingHomePreview = () => {
             serviceAreaValidation: { valid: true }
           })
           setTollCost(0)
-          const now = new Date()
+          const { date: nd, time: nt } = localNow()
           setBookingData({
             passengers: 1,
             luggage: 0,
-            departureDate: now.toISOString().split('T')[0],
-            departureTime: now.toTimeString().slice(0, 5),
+            departureDate: nd,
+            departureTime: nt,
             customerName: '',
             customerPhone: '',
             customerEmail: '',
@@ -1951,6 +1976,9 @@ const TaxiBookingHomePreview = () => {
           setLeadPhone('')
           setLeadEmail('')
           setLeadCaptureValidationAttempted(false)
+          setLeadMongoId('')
+          setLeadReservationId('')
+          setFrozenCapture(false)
         }}
         className="bg-blue-600 text-white py-3 px-8 rounded-lg font-medium hover:bg-blue-700 transition-colors"
       >
@@ -1997,9 +2025,9 @@ const TaxiBookingHomePreview = () => {
       {/* Contenu principal */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-3 sm:p-4 lg:p-5 w-full">
         {step === 1 && renderStep1()}
-        {step === 2 && (needsCapture ? renderLeadCapture() : renderStep2())}
-        {step === 3 && (needsCapture ? renderStep2() : renderStep3())}
-        {step === 4 && (needsCapture ? renderStep3() : renderStep4())}
+        {step === 2 && (frozenCapture ? renderLeadCapture() : renderStep2())}
+        {step === 3 && (frozenCapture ? renderStep2() : renderStep3())}
+        {step === 4 && (frozenCapture ? renderStep3() : renderStep4())}
         {step === 5 && renderStep4()}
       </div>
 

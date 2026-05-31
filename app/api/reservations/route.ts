@@ -1,15 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { z } from 'zod'
 import { connectDB, Reservation, ConfigPrix } from '@/app/lib/mongodb'
+
+const ReservationBodySchema = z.object({
+  reservationId: z.string().min(1),
+  customer: z.object({
+    name: z.string().min(1),
+    phone: z.string().min(8),
+    email: z.string().optional(),
+  }),
+  trip: z.object({
+    from: z.union([z.string(), z.object({ address: z.string() })]),
+    to: z.union([z.string(), z.object({ address: z.string() })]),
+    distance: z.number().min(0),
+  }),
+  pickupDate: z.string().min(1),
+  leadMongoId: z.string().optional(),
+  status: z.string().optional(),
+})
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(req: NextRequest) {
   try {
     await connectDB()
-    const body = await req.json()
-
-    const { reservationId, customer, trip, pricing, bookingDetails, pickupDate, status } = body
+    const raw = await req.json()
+    const parsed = ReservationBodySchema.safeParse(raw)
+    if (!parsed.success) {
+      return NextResponse.json({ success: false, message: 'Données invalides', errors: parsed.error.flatten() }, { status: 400 })
+    }
+    const body = raw
+    const { reservationId, customer, trip, pricing, bookingDetails, pickupDate, status, leadMongoId } = body
     const tripFrom = typeof trip?.from === 'object' ? trip.from.address : trip?.from
     const tripTo = typeof trip?.to === 'object' ? trip.to.address : trip?.to
 
@@ -31,7 +53,29 @@ export async function POST(req: NextRequest) {
 
     const isLeadCapture = status === 'lead_capture'
 
-    const reservation = await Reservation.create({
+    // Si un lead_capture existe déjà pour ce trajet (longue distance), le mettre à jour
+    // au lieu de créer un doublon en base
+    let reservation: any
+    if (!isLeadCapture && leadMongoId) {
+      reservation = await Reservation.findByIdAndUpdate(leadMongoId, {
+        status: 'en_attente',
+        'customer.name': customer.name,
+        'customer.phone': customer.phone,
+        'customer.email': customer.email || '',
+        'trip.distance': trip.distance || 0,
+        'pricing.totalPrice': pricing?.totalPrice || 0,
+        'pricing.fourchette': pricing?.fourchette || null,
+        'pricing.tariffType': pricing?.priceDetails?.tariffType || 'Jour',
+        'pricing.isForfait': pricing?.priceDetails?.isForfait || false,
+        passengers: bookingDetails?.passengers || 1,
+        luggage: bookingDetails?.luggage || 0,
+        notes: bookingDetails?.notes || '',
+        pickupDate: new Date(pickupDate),
+      }, { new: true })
+    }
+
+    if (!reservation) {
+      reservation = await Reservation.create({
       reservationId,
       status: isLeadCapture ? 'lead_capture' : 'en_attente',
       customer: {
@@ -54,7 +98,8 @@ export async function POST(req: NextRequest) {
       luggage: bookingDetails?.luggage || 0,
       notes: bookingDetails?.notes || '',
       pickupDate: new Date(pickupDate),
-    })
+      })
+    }
 
     if (isLeadCapture) {
       const pickupDateObj = new Date(pickupDate)
