@@ -1310,7 +1310,7 @@ const TaxiBookingHomePreview = () => {
             disabled={loading}
             className={`w-full text-white rounded-xl flex items-center justify-center transition-all disabled:bg-gray-400 disabled:cursor-not-allowed ${
               isReadyToBook
-                ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 py-5 px-6 font-extrabold text-xl shadow-2xl hover:shadow-green-500/40 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] ring-4 ring-green-200'
+                ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 py-5 px-6 font-bold text-xl shadow-lg shadow-green-600/20 hover:shadow-xl hover:shadow-green-600/30 hover:-translate-y-0.5 active:scale-[0.98]'
                 : 'bg-blue-600 hover:bg-blue-700 py-3 px-6 font-medium'
             }`}
           >
