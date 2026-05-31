@@ -110,11 +110,13 @@ export async function PUT(req: NextRequest) {
     const reservation = await Reservation.findByIdAndUpdate(id, update, { new: true })
     if (!reservation) return NextResponse.json({ success: false, message: 'Non trouvée' }, { status: 404 })
 
+    let cancelEmailSent = false
+
     if (status === 'annulee') {
       // Suppression de l'événement Google Calendar
-      const gcalRefreshToken = process.env.GOOGLE_CALENDAR_REFRESH_TOKEN
-      const gcalClientId = process.env.GOOGLE_CLIENT_ID
-      const gcalClientSecret = process.env.GOOGLE_CLIENT_SECRET
+      const gcalRefreshToken = process.env.GOOGLE_CALENDAR_REFRESH_TOKEN?.replace(/^﻿/, '').trim()
+      const gcalClientId = process.env.GOOGLE_CLIENT_ID?.replace(/^﻿/, '').trim()
+      const gcalClientSecret = process.env.GOOGLE_CLIENT_SECRET?.replace(/^﻿/, '').trim()
       const gcalCalendarId = process.env.GOOGLE_CALENDAR_ID || 'primary'
 
       if (reservation.googleEventId && gcalRefreshToken && gcalClientId && gcalClientSecret) {
@@ -191,13 +193,14 @@ export async function PUT(req: NextRequest) {
 </body></html>`
 
         const fromEmail = process.env.RESEND_FROM_EMAIL || 'contact@taxibordeauxsolution.fr'
-        resend.emails.send({
+        const emailRes = await resend.emails.send({
           from: fromEmail,
           to: [reservation.customer.email],
           replyTo: 'contact@taxibordeauxsolution.fr',
           subject: `Annulation de votre réservation N° ${reservation.reservationId} — Taxi Bordeaux Solution`,
           html,
-        }).catch(() => {})
+        }).catch(() => null)
+        cancelEmailSent = !!(emailRes as any)?.data?.id
       }
     }
 
@@ -256,7 +259,14 @@ export async function PUT(req: NextRequest) {
       }).catch(() => {})
     }
 
-    return NextResponse.json({ success: true, data: reservation, emailSent: status === 'en_route' && !!reservation.customer.email })
+    return NextResponse.json({
+      success: true,
+      data: reservation,
+      emailSent: status === 'en_route' && !!reservation.customer.email,
+      cancelEmailSent: status === 'annulee' ? cancelEmailSent : undefined,
+      customerPhone: reservation.customer.phone,
+      customerEmail: reservation.customer.email || '',
+    })
   } catch (e: any) {
     return NextResponse.json({ success: false, message: e.message }, { status: 500 })
   }

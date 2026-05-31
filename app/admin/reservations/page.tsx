@@ -38,6 +38,7 @@ export default function AdminReservations() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [notification, setNotification] = useState<{ type: 'success' | 'info' | 'warning'; msg: string } | null>(null)
 
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
@@ -78,17 +79,31 @@ export default function AdminReservations() {
 
   useEffect(() => { load() }, [load])
 
-  const updateStatus = async (id: string, status: string) => {
-    // Update optimiste — l'UI se met à jour instantanément sans refetch complet
-    setReservations(prev => prev.map(r => r._id === id ? { ...r, status } : r))
+  const showNotif = (type: 'success' | 'info' | 'warning', msg: string) => {
+    setNotification({ type, msg })
+    setTimeout(() => setNotification(null), 6000)
+  }
 
+  const updateStatus = async (id: string, status: string) => {
+    setReservations(prev => prev.map(r => r._id === id ? { ...r, status } : r))
     try {
       const res = await fetch('/api/admin/reservations', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
         body: JSON.stringify({ id, status })
       })
-      if (!res.ok) load()  // rollback si erreur
+      const json = await res.json()
+      if (!res.ok) { load(); return }
+
+      if (status === 'annulee') {
+        if (json.cancelEmailSent) {
+          showNotif('success', `Email d'annulation envoyé à ${json.customerEmail}`)
+        } else if (json.customerEmail) {
+          showNotif('warning', `Échec envoi email à ${json.customerEmail} — Appelez le ${json.customerPhone}`)
+        } else {
+          showNotif('info', `Aucun email client — Appelez le ${json.customerPhone} pour prévenir`)
+        }
+      }
     } catch {
       load()
     }
@@ -315,6 +330,40 @@ export default function AdminReservations() {
       doc.text('Merci pour votre confiance — Taxi Bordeaux Solution', w / 2, 280, { align: 'center' })
 
       doc.save(`Facture-FAC-${num}-${r.customer.name.replace(/\s+/g, '_')}.pdf`)
+
+      // Proposition d'envoi par email
+      const defaultEmail = r.customer.email || ''
+      const emailDest = window.prompt(
+        `Envoyer la facture FAC-${num} par email ?\n\n` +
+        (r.customer.email ? `Email du client : ${r.customer.email}` : `⚠️ Pas d'email client — saisissez une adresse (ou Annuler pour ignorer)`) +
+        `\nTéléphone : ${r.customer.phone}`,
+        defaultEmail
+      )
+
+      if (emailDest && emailDest.includes('@')) {
+        try {
+          const pdfBase64 = doc.output('datauristring').split(',')[1]
+          const sendRes = await fetch('/api/admin/send-invoice', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+            body: JSON.stringify({
+              email: emailDest,
+              pdfBase64,
+              invoiceNumber: num,
+              reservationId: r.reservationId,
+              customerName: r.customer.name,
+            }),
+          })
+          const sendJson = await sendRes.json()
+          if (sendJson.success) {
+            showNotif('success', `Facture FAC-${num} envoyée à ${emailDest}`)
+          } else {
+            showNotif('warning', `Erreur envoi email : ${sendJson.message}`)
+          }
+        } catch {
+          showNotif('warning', 'Erreur lors de l\'envoi de la facture')
+        }
+      }
     } catch (e: any) {
       alert(`Erreur : ${e.message}`)
     }
@@ -324,6 +373,19 @@ export default function AdminReservations() {
 
   return (
     <div className="space-y-6">
+      {notification && (
+        <div className={`flex items-start gap-3 p-4 rounded-xl border text-sm font-medium ${
+          notification.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' :
+          notification.type === 'warning' ? 'bg-orange-50 border-orange-200 text-orange-800' :
+          'bg-blue-50 border-blue-200 text-blue-800'
+        }`}>
+          <span className="text-lg shrink-0">
+            {notification.type === 'success' ? '✅' : notification.type === 'warning' ? '⚠️' : 'ℹ️'}
+          </span>
+          <span className="flex-1">{notification.msg}</span>
+          <button onClick={() => setNotification(null)} className="shrink-0 opacity-60 hover:opacity-100 text-lg leading-none">×</button>
+        </div>
+      )}
       <div className="flex items-center justify-between gap-2">
         <h1 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
           <Taxi size={24} weight="bold" className="shrink-0" />
