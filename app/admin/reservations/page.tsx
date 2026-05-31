@@ -79,12 +79,19 @@ export default function AdminReservations() {
   useEffect(() => { load() }, [load])
 
   const updateStatus = async (id: string, status: string) => {
-    await fetch('/api/admin/reservations', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
-      body: JSON.stringify({ id, status })
-    })
-    load()
+    // Update optimiste — l'UI se met à jour instantanément sans refetch complet
+    setReservations(prev => prev.map(r => r._id === id ? { ...r, status } : r))
+
+    try {
+      const res = await fetch('/api/admin/reservations', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        body: JSON.stringify({ id, status })
+      })
+      if (!res.ok) load()  // rollback si erreur
+    } catch {
+      load()
+    }
   }
 
   const deleteSelected = async () => {

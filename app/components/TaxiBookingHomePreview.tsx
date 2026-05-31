@@ -1082,6 +1082,12 @@ const TaxiBookingHomePreview = () => {
                 placeholder={t('fromPlaceholder')}
                 value={tripData.from}
                 onFocus={loadGoogleMapsLazy}
+                onClick={() => {
+                  if (tripData.from) {
+                    setTripData(prev => ({ ...prev, from: '', fromCoords: null, distance: 0, duration: 0, price: 0 }))
+                    if (fromInputRef.current) fromInputRef.current.value = ''
+                  }
+                }}
                 onChange={(e) => setTripData(prev => ({ ...prev, from: e.target.value }))}
                 className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 text-gray-900"
                 disabled={loading}
@@ -1132,6 +1138,12 @@ const TaxiBookingHomePreview = () => {
               placeholder={t('toPlaceholder')}
               value={tripData.to}
               onFocus={loadGoogleMapsLazy}
+              onClick={() => {
+                if (tripData.to) {
+                  setTripData(prev => ({ ...prev, to: '', toCoords: null, distance: 0, duration: 0, price: 0 }))
+                  if (toInputRef.current) toInputRef.current.value = ''
+                }
+              }}
               onChange={(e) => setTripData(prev => ({ ...prev, to: e.target.value }))}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 text-gray-900"
               disabled={loading}
@@ -1444,6 +1456,13 @@ const TaxiBookingHomePreview = () => {
       setLoading(false)
     }
   }
+
+  // Tracking : capture form vu (utile pour mesurer le drop-off avant soumission)
+  useEffect(() => {
+    if (step === 2 && needsCapture && typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: 'capture_form_seen', from: tripData.from?.split(',')[0], to: tripData.to?.split(',')[0], distance: tripData.distance, price: tripData.price })
+    }
+  }, [step, needsCapture, tripData.from, tripData.to, tripData.distance, tripData.price])
 
   // Interface étape capture lead (longue distance)
   const renderLeadCapture = () => (

@@ -165,12 +165,25 @@ export async function POST(request) {
         ${reservationData.bookingDetails.notes ? `<li><strong>Notes :</strong> ${reservationData.bookingDetails.notes}</li>` : ''}
     </ul>`;
 
+    // Vérif var env critique
+    if (!process.env.RESEND_FROM_EMAIL || !process.env.RESEND_TO_EMAIL) {
+      console.error('CRITICAL: RESEND_FROM_EMAIL ou RESEND_TO_EMAIL manquant — email entreprise non envoyé');
+      return Response.json(
+        { success: false, error: 'Configuration email entreprise manquante' },
+        { status: 500 }
+      );
+    }
+
     const companyEmail = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL,
       to: [process.env.RESEND_TO_EMAIL],
       subject: `🚖 Nouvelle réservation - ${reservationData.customer.name} - N° ${reservationData.reservationId}`,
       html: companyEmailHtml,
     });
+
+    if (companyEmail.error) {
+      console.error('Erreur envoi mail entreprise:', companyEmail.error);
+    }
 
     return Response.json({
       success: true,

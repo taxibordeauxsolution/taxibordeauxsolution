@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import Link from 'next/link'
 import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin, FunnelSimple, Globe, NavigationArrow, Phone, PhoneCall } from '@phosphor-icons/react'
 
@@ -43,6 +43,7 @@ export default function AdminDashboard() {
     revenus: { aujourdhui: 0, semaine: 0, mois: 0, semainePrecedente: 0, moisPrecedent: 0 },
   })
   const [recentResas, setRecentResas] = useState<Reservation[]>([])
+  const [todayResas, setTodayResas] = useState<Reservation[]>([])
   const [recentLeads, setRecentLeads] = useState<Reservation[]>([])
   const [recentEstimations, setRecentEstimations] = useState<Estimation[]>([])
   const [loading, setLoading] = useState(true)
@@ -75,18 +76,24 @@ export default function AdminDashboard() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const [resaRes, estRes, allTermRes, leadsRes] = await Promise.all([
-        fetch('/api/admin/reservations?limit=100', { headers: { Authorization: `Bearer ${token()}` } }),
-        fetch('/api/admin/estimations', { headers: { Authorization: `Bearer ${token()}` } }),
-        fetch('/api/admin/reservations?status=terminee&limit=500', { headers: { Authorization: `Bearer ${token()}` } }),
-        fetch('/api/admin/reservations?status=lead_capture&limit=5', { headers: { Authorization: `Bearer ${token()}` } }),
-      ])
-      const resaJson = await resaRes.json()
-      const estJson = await estRes.json()
+      // Date d'aujourd'hui pour le fetch dédié "courses du jour"
+      const now = new Date()
+      const isoToday = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
 
-      const allTermJson = await allTermRes.json()
-      const leadsJson = await leadsRes.json()
+      const auth = { headers: { Authorization: `Bearer ${token()}` } }
+      const [resaRes, estRes, revenusRes, leadsRes, todayRes] = await Promise.all([
+        fetch('/api/admin/reservations?limit=5', auth),
+        fetch('/api/admin/estimations?limit=5', auth),
+        fetch('/api/admin/revenus', auth),
+        fetch('/api/admin/reservations?status=lead_capture&limit=5', auth),
+        fetch(`/api/admin/reservations?from=${isoToday}&to=${isoToday}&limit=50`, auth),
+      ])
+      const [resaJson, estJson, revenusJson, leadsJson, todayJson] = await Promise.all([
+        resaRes.json(), estRes.json(), revenusRes.json(), leadsRes.json(), todayRes.json(),
+      ])
+
       if (leadsJson.success) setRecentLeads(leadsJson.data)
+      if (todayJson.success) setTodayResas(todayJson.data)
 
       if (resaJson.success) {
         const leadCount = resaJson.stats.lead_capture || 0
@@ -105,34 +112,14 @@ export default function AdminDashboard() {
         lastLeadCountRef.current = leadCount
 
         setStats(prev => ({ ...prev, reservations: resaJson.stats }))
-        setRecentResas(resaJson.data.slice(0, 5))
-
-        const allTerminees = allTermJson.success ? (allTermJson.data as Reservation[]) : []
-        const now = new Date()
-        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-        const weekStart = new Date(todayStart)
-        weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1)
-        const prevWeekStart = new Date(weekStart)
-        prevWeekStart.setDate(prevWeekStart.getDate() - 7)
-        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
-        const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1)
-
-        const sum = (list: Reservation[]) => list.reduce((s, r) => s + (r.pricing.totalPrice || 0), 0)
-
-        setStats(prev => ({
-          ...prev,
-          revenus: {
-            aujourdhui: sum(allTerminees.filter(r => new Date(r.pickupDate) >= todayStart)),
-            semaine: sum(allTerminees.filter(r => new Date(r.pickupDate) >= weekStart)),
-            mois: sum(allTerminees.filter(r => new Date(r.pickupDate) >= monthStart)),
-            semainePrecedente: sum(allTerminees.filter(r => { const d = new Date(r.pickupDate); return d >= prevWeekStart && d < weekStart })),
-            moisPrecedent: sum(allTerminees.filter(r => { const d = new Date(r.pickupDate); return d >= prevMonthStart && d < monthStart })),
-          }
-        }))
+        setRecentResas(resaJson.data)
+      }
+      if (revenusJson.success) {
+        setStats(prev => ({ ...prev, revenus: revenusJson.data }))
       }
       if (estJson.success) {
         setStats(prev => ({ ...prev, estimations: { ...estJson.stats, funnel: estJson.stats.funnel || prev.estimations.funnel, topSources: estJson.stats.topSources || prev.estimations.topSources } }))
-        setRecentEstimations(estJson.data.slice(0, 5))
+        setRecentEstimations(estJson.data)
       }
     } catch {}
     setLoading(false)
@@ -140,9 +127,16 @@ export default function AdminDashboard() {
 
   useEffect(() => { load() }, [load])
 
+  // Polling 30s — en pause quand l'onglet est inactif (économie data + facturation Vercel)
   useEffect(() => {
-    const interval = setInterval(load, 30000)
-    return () => clearInterval(interval)
+    let interval: ReturnType<typeof setInterval> | null = null
+    const start = () => { if (!interval) interval = setInterval(load, 30000) }
+    const stop = () => { if (interval) { clearInterval(interval); interval = null } }
+    const onVisibility = () => { document.hidden ? stop() : (load(), start()) }
+
+    start()
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => { stop(); document.removeEventListener('visibilitychange', onVisibility) }
   }, [load])
 
   const formatDate = (d: string) => {
@@ -170,23 +164,37 @@ export default function AdminDashboard() {
   }
 
   const updateResaStatus = async (id: string, status: string) => {
-    await fetch('/api/admin/reservations', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
-      body: JSON.stringify({ id, status })
-    })
-    load()
+    // Update optimiste : on change l'UI immédiatement sans attendre le serveur
+    const patch = (list: Reservation[]) => list.map(r => r._id === id ? { ...r, status } : r)
+    setRecentResas(prev => patch(prev))
+    setTodayResas(prev => patch(prev))
+    setRecentLeads(prev => prev.filter(r => r._id !== id))
+
+    try {
+      const res = await fetch('/api/admin/reservations', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        body: JSON.stringify({ id, status })
+      })
+      if (!res.ok) load()  // rollback en rechargeant si erreur
+    } catch {
+      load()
+    }
   }
+
+  // Mémo des % de variation revenus (recalcul uniquement si stats.revenus change)
+  const { diffSem, diffMois } = useMemo(() => ({
+    diffSem: stats.revenus.semainePrecedente > 0
+      ? Math.round(((stats.revenus.semaine - stats.revenus.semainePrecedente) / stats.revenus.semainePrecedente) * 100)
+      : null,
+    diffMois: stats.revenus.moisPrecedent > 0
+      ? Math.round(((stats.revenus.mois - stats.revenus.moisPrecedent) / stats.revenus.moisPrecedent) * 100)
+      : null,
+  }), [stats.revenus])
 
   if (loading) {
     return <div className="flex items-center justify-center h-64 text-slate-400">Chargement...</div>
   }
-
-  const todayResas = recentResas.filter(r => {
-    const d = new Date(r.pickupDate)
-    const now = new Date()
-    return d.toDateString() === now.toDateString()
-  })
 
   return (
     <div className="space-y-6">
@@ -271,46 +279,36 @@ export default function AdminDashboard() {
       </div>
 
       {/* Revenus */}
-      {(() => {
-        const diffSem = stats.revenus.semainePrecedente > 0
-          ? Math.round(((stats.revenus.semaine - stats.revenus.semainePrecedente) / stats.revenus.semainePrecedente) * 100)
-          : null
-        const diffMois = stats.revenus.moisPrecedent > 0
-          ? Math.round(((stats.revenus.mois - stats.revenus.moisPrecedent) / stats.revenus.moisPrecedent) * 100)
-          : null
-        return (
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
-              <div className="text-xs text-green-700">Aujourd'hui</div>
-              <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.aujourdhui.toFixed(0)}€</div>
+      <div className="grid grid-cols-3 gap-3">
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
+          <div className="text-xs text-green-700">Aujourd'hui</div>
+          <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.aujourdhui.toFixed(0)}€</div>
+        </div>
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
+          <div className="text-xs text-green-700">Cette semaine</div>
+          <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.semaine.toFixed(0)}€</div>
+          {diffSem !== null && (
+            <div className={`text-xs font-semibold mt-1 ${diffSem >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              {diffSem >= 0 ? '+' : ''}{diffSem}% vs sem. préc.
             </div>
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
-              <div className="text-xs text-green-700">Cette semaine</div>
-              <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.semaine.toFixed(0)}€</div>
-              {diffSem !== null && (
-                <div className={`text-xs font-semibold mt-1 ${diffSem >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {diffSem >= 0 ? '+' : ''}{diffSem}% vs sem. préc.
-                </div>
-              )}
-              {stats.revenus.semainePrecedente > 0 && (
-                <div className="text-[10px] text-slate-400">{stats.revenus.semainePrecedente.toFixed(0)}€ sem. préc.</div>
-              )}
+          )}
+          {stats.revenus.semainePrecedente > 0 && (
+            <div className="text-[10px] text-slate-400">{stats.revenus.semainePrecedente.toFixed(0)}€ sem. préc.</div>
+          )}
+        </div>
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
+          <div className="text-xs text-green-700">Ce mois</div>
+          <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.mois.toFixed(0)}€</div>
+          {diffMois !== null && (
+            <div className={`text-xs font-semibold mt-1 ${diffMois >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              {diffMois >= 0 ? '+' : ''}{diffMois}% vs mois préc.
             </div>
-            <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200 bg-green-50">
-              <div className="text-xs text-green-700">Ce mois</div>
-              <div className="text-xl sm:text-2xl font-bold text-green-700">{stats.revenus.mois.toFixed(0)}€</div>
-              {diffMois !== null && (
-                <div className={`text-xs font-semibold mt-1 ${diffMois >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {diffMois >= 0 ? '+' : ''}{diffMois}% vs mois préc.
-                </div>
-              )}
-              {stats.revenus.moisPrecedent > 0 && (
-                <div className="text-[10px] text-slate-400">{stats.revenus.moisPrecedent.toFixed(0)}€ mois préc.</div>
-              )}
-            </div>
-          </div>
-        )
-      })()}
+          )}
+          {stats.revenus.moisPrecedent > 0 && (
+            <div className="text-[10px] text-slate-400">{stats.revenus.moisPrecedent.toFixed(0)}€ mois préc.</div>
+          )}
+        </div>
+      </div>
 
       {/* Funnel de conversion */}
       {stats.estimations.funnel.estimations > 0 && (() => {

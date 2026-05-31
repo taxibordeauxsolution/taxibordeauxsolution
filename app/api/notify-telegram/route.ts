@@ -34,8 +34,12 @@ export async function POST(request: Request) {
     });
 
     const result = await res.json();
-    return NextResponse.json({ success: result.ok });
-  } catch {
-    return NextResponse.json({ error: 'Erreur envoi Telegram' }, { status: 500 });
+    if (!result.ok) {
+      console.error('Telegram error:', result);
+    }
+    return NextResponse.json({ success: result.ok, telegramError: result.ok ? null : result.description });
+  } catch (e: any) {
+    console.error('Telegram fetch error:', e?.message || e);
+    return NextResponse.json({ error: 'Erreur envoi Telegram', message: e?.message }, { status: 500 });
   }
 }

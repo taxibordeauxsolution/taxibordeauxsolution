@@ -56,19 +56,29 @@ export async function GET(req: NextRequest) {
       baseFilter.pickupDate = filter.pickupDate
     }
 
-    const [reservations, total] = await Promise.all([
+    // Aggregation $facet : 1 seule query MongoDB pour les 7 compteurs au lieu de 7 séparées
+    const [reservations, total, statsAgg] = await Promise.all([
       Reservation.find(filter).sort({ pickupDate: -1 }).skip(skip).limit(limit).lean(),
       Reservation.countDocuments(filter),
+      Reservation.aggregate([
+        { $match: baseFilter },
+        { $group: { _id: '$status', count: { $sum: 1 } } },
+      ]),
     ])
 
+    const counts: Record<string, number> = {}
+    for (const row of statsAgg as Array<{ _id: string; count: number }>) {
+      counts[row._id] = row.count
+    }
+
     const stats = {
-      total: await Reservation.countDocuments({ ...baseFilter, status: { $ne: 'lead_capture' } }),
-      en_attente: await Reservation.countDocuments({ ...baseFilter, status: 'en_attente' }),
-      confirmee: await Reservation.countDocuments({ ...baseFilter, status: 'confirmee' }),
-      en_route: await Reservation.countDocuments({ ...baseFilter, status: 'en_route' }),
-      terminee: await Reservation.countDocuments({ ...baseFilter, status: 'terminee' }),
-      annulee: await Reservation.countDocuments({ ...baseFilter, status: 'annulee' }),
-      lead_capture: await Reservation.countDocuments({ ...baseFilter, status: 'lead_capture' }),
+      total: (counts.en_attente || 0) + (counts.confirmee || 0) + (counts.en_route || 0) + (counts.terminee || 0) + (counts.annulee || 0),
+      en_attente: counts.en_attente || 0,
+      confirmee: counts.confirmee || 0,
+      en_route: counts.en_route || 0,
+      terminee: counts.terminee || 0,
+      annulee: counts.annulee || 0,
+      lead_capture: counts.lead_capture || 0,
     }
 
     return NextResponse.json({ success: true, data: reservations, stats, pagination: { page, limit, total, totalPages: Math.ceil(total / limit) } })
