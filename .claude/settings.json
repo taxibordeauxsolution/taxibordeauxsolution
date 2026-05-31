@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(vercel:*)",
+      "Bash(npx vercel:*)",
+      "PowerShell(node *)",
+      "PowerShell(vercel *)",
+      "PowerShell(npx vercel *)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
