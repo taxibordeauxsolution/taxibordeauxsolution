@@ -33,6 +33,46 @@ function addDays(date: Date, days: number): Date {
   return d
 }
 
+function localNow() {
+  const now = new Date()
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return {
+    date: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`,
+    time: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
+  }
+}
+
+function isPublicHoliday(date: Date): boolean {
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const fixedHolidays = ['01-01', '05-01', '05-08', '07-14', '08-15', '11-01', '11-11', '12-25']
+  const dateStr = `${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
+  if (fixedHolidays.includes(dateStr)) return true
+  const easter = easterDate(year)
+  const sameDay = (d: Date) => d.getMonth() === date.getMonth() && d.getDate() === date.getDate()
+  return sameDay(addDays(easter, 1)) || sameDay(addDays(easter, 39)) || sameDay(addDays(easter, 50))
+}
+
+const LanguageSelector = React.memo(function LanguageSelector({
+  language, onChange,
+}: { language: string; onChange: (l: string) => void }) {
+  return (
+    <div className="flex items-center gap-2 bg-white border border-blue-200 rounded-full px-3 py-1.5 shadow-sm">
+      <Globe className="w-4 h-4 text-blue-500 shrink-0" />
+      <select
+        value={language}
+        onChange={(e) => onChange(e.target.value)}
+        className="bg-transparent border-none outline-none text-sm font-medium text-gray-700 cursor-pointer"
+      >
+        <option value="fr">FR</option>
+        <option value="en">EN</option>
+        <option value="es">ES</option>
+      </select>
+    </div>
+  )
+})
+
 const TaxiBookingHomePreview = () => {
   // États principaux
   const [step, setStep] = useState(1)
@@ -99,15 +139,6 @@ const TaxiBookingHomePreview = () => {
   const [leadMongoId, setLeadMongoId] = useState('')
   const [leadReservationId, setLeadReservationId] = useState('')
   const [frozenCapture, setFrozenCapture] = useState(false)
-
-  const localNow = () => {
-    const now = new Date()
-    const pad = (n: number) => String(n).padStart(2, '0')
-    return {
-      date: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`,
-      time: `${pad(now.getHours())}:${pad(now.getMinutes())}`,
-    }
-  }
 
   const [bookingData, setBookingData] = useState<BookingData>(() => {
     const { date, time } = localNow()
@@ -414,23 +445,10 @@ const TaxiBookingHomePreview = () => {
     return map[type] || type
   }
 
-  const LanguageSelector = () => (
-    <div className="flex items-center gap-2 bg-white border border-blue-200 rounded-full px-3 py-1.5 shadow-sm">
-      <Globe className="w-4 h-4 text-blue-500 shrink-0" />
-      <select
-        value={language}
-        onChange={(e) => {
-          setLanguage(e.target.value)
-          setBookingData(prev => ({ ...prev, language: e.target.value }))
-        }}
-        className="bg-transparent border-none outline-none text-sm font-medium text-gray-700 cursor-pointer"
-      >
-        <option value="fr">FR</option>
-        <option value="en">EN</option>
-        <option value="es">ES</option>
-      </select>
-    </div>
-  )
+  const handleLanguageChange = useCallback((lang: string) => {
+    setLanguage(lang)
+    setBookingData(prev => ({ ...prev, language: lang }))
+  }, [])
 
   // Initialisation DirectionsService + autocompletes (sans Map ni Renderer — économie API et perf)
   const initializeMaps = useCallback(() => {
@@ -502,7 +520,7 @@ const TaxiBookingHomePreview = () => {
     mapsLoadedRef.current = true
     return new Promise((resolve, reject) => {
       const script = document.createElement('script')
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&language=${language}&region=FR`
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&language=fr&region=FR`
       script.async = true
       script.defer = true
       script.onload = () => { initializeMaps(); resolve() }
@@ -513,7 +531,7 @@ const TaxiBookingHomePreview = () => {
       }
       document.head.appendChild(script)
     })
-  }, [language, initializeMaps])
+  }, [initializeMaps])
 
   // Cleanup du debounce estimation à l'unmount
   useEffect(() => {
@@ -534,26 +552,6 @@ const TaxiBookingHomePreview = () => {
       .then(d => { if (d.success) setConfigPrix(prev => ({ ...prev, ...d.data })) })
       .catch(() => {})
   }, [])
-
-  // Vérifie si la date est un jour férié français (fixes + mobiles autour de Pâques)
-  const isPublicHoliday = (date: Date) => {
-    const year = date.getFullYear()
-    const month = date.getMonth() + 1
-    const day = date.getDate()
-
-    const fixedHolidays = ['01-01', '05-01', '05-08', '07-14', '08-15', '11-01', '11-11', '12-25']
-    const dateStr = `${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
-    if (fixedHolidays.includes(dateStr)) return true
-
-    // Jours fériés mobiles : Pâques + offsets
-    const easter = easterDate(year)
-    const sameDay = (d: Date) => d.getMonth() === date.getMonth() && d.getDate() === date.getDate()
-    return (
-      sameDay(addDays(easter, 1)) ||   // Lundi de Pâques
-      sameDay(addDays(easter, 39)) ||  // Jeudi de l'Ascension
-      sameDay(addDays(easter, 50))     // Lundi de Pentecôte
-    )
-  }
 
   // Calcul de l'itinéraire (distance/durée) — pas d'affichage carte, juste les data
   const calculateRoute = useCallback(() => {
@@ -937,6 +935,7 @@ const TaxiBookingHomePreview = () => {
           body: JSON.stringify({
             ...reservationData,
             pickupDate: pickupTime.toISOString(),
+            leadMongoId: leadMongoId || undefined,
           })
         })
         resaSaved = resaRes.ok
@@ -1038,7 +1037,7 @@ const TaxiBookingHomePreview = () => {
                 type="date"
                 value={bookingData.departureDate}
                 onChange={(e) => handleBookingChange('departureDate', e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
+                min={localNow().date}
                 className={`w-full min-w-0 p-2 sm:p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 text-xs sm:text-base text-gray-900 ${jourOffError ? 'border-red-500' : 'border-gray-300'}`}
                 required
               />
@@ -1074,7 +1073,7 @@ const TaxiBookingHomePreview = () => {
                 type="text"
                 placeholder={t('fromPlaceholder')}
                 value={tripData.from}
-                onFocus={loadGoogleMapsLazy}
+                onFocus={() => { loadGoogleMapsLazy().catch(() => {}) }}
                 onClick={() => {
                   if (tripData.from) {
                     setTripData(prev => ({ ...prev, from: '', fromCoords: null, distance: 0, duration: 0, price: 0 }))
@@ -1439,10 +1438,10 @@ const TaxiBookingHomePreview = () => {
 
   // Tracking : capture form vu (utile pour mesurer le drop-off avant soumission)
   useEffect(() => {
-    if (step === 2 && needsCapture && typeof window !== 'undefined' && (window as any).gtag) {
+    if (step === 2 && frozenCapture && typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: 'capture_form_seen', from: tripData.from?.split(',')[0], to: tripData.to?.split(',')[0], distance: tripData.distance, price: tripData.price })
     }
-  }, [step, needsCapture, tripData.from, tripData.to, tripData.distance, tripData.price])
+  }, [step, frozenCapture, tripData.from, tripData.to, tripData.distance, tripData.price])
 
   // Interface étape capture lead (longue distance)
   const renderLeadCapture = () => (
@@ -2001,7 +2000,7 @@ const TaxiBookingHomePreview = () => {
           </div>
           <h2 id="reservation-title" className="text-lg lg:text-xl font-bold text-gray-800">{t('bookNow')} <span className="text-green-600">{t('bookNowHighlight')}</span></h2>
         </div>
-        <LanguageSelector />
+        <LanguageSelector language={language} onChange={handleLanguageChange} />
       </div>
 
       {/* Indicateur d'étapes — masqué à l'étape 1 */}
