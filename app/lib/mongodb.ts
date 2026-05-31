@@ -54,6 +54,7 @@ const ConfigPrixSchema = new mongoose.Schema({
   tarifJourDegressifMode: { type: String, default: 'degressif' },
   seuilKmCaptureLead: { type: Number, default: 25 },
   captureLeadActive:  { type: Boolean, default: true },
+  affichagePrixUnique: { type: Boolean, default: false },
   joursOff:           { type: [String], default: [] },
 }, { timestamps: true })
 

@@ -206,42 +206,38 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* Leads récents */}
-      {recentLeads.length > 0 && (
-        <div className="bg-purple-50 rounded-2xl p-4 border border-purple-200">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-bold text-purple-800 flex items-center gap-2">
-              <PhoneCall size={16} />
-              Leads à rappeler ({stats.reservations.lead_capture || recentLeads.length})
-            </h2>
-            <Link href="/admin/leads" className="text-xs text-purple-600 font-semibold flex items-center gap-1 hover:underline">
-              Tout voir <ArrowRight size={12} />
-            </Link>
-          </div>
+      {/* Courses du jour — priorité opérationnelle, affiché en premier */}
+      {todayResas.length > 0 && (
+        <div className="bg-blue-50 rounded-2xl p-4 border-2 border-blue-300">
+          <h2 className="text-base font-bold text-blue-800 flex items-center gap-2 mb-3">
+            <CalendarBlank size={18} />
+            Courses du jour ({todayResas.length})
+          </h2>
           <div className="space-y-2">
-            {recentLeads.map(r => (
-              <div key={r._id} className="bg-white rounded-xl p-3 text-sm flex items-center gap-3">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
+            {todayResas.map(r => (
+              <div key={r._id} className="bg-white rounded-xl p-3 text-sm space-y-2">
+                <div className="flex items-center gap-3">
+                  {statusIcon(r.status)}
+                  <div className="flex-1 min-w-0">
                     <span className="font-semibold text-slate-900">{r.customer.name}</span>
-                    <a href={`tel:${r.customer.phone}`} className="text-purple-600 font-medium text-xs flex items-center gap-1">
-                      <Phone size={12} /> {r.customer.phone}
-                    </a>
+                    <span className="text-slate-400 mx-1.5">·</span>
+                    <span className="text-slate-500">{formatDate(r.pickupDate)}</span>
                   </div>
-                  <div className="text-xs text-slate-400 mt-0.5 truncate">
-                    <MapPin size={10} className="inline" /> {(typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || '').split(',')[0]}
-                    {' → '}
-                    {(typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || '').split(',')[0]}
+                  <span className="font-bold text-green-700 shrink-0">{formatPrix(r)}</span>
+                </div>
+                {(r.status === 'en_attente' || r.status === 'confirmee' || r.status === 'en_route') && (
+                  <div className="flex items-center gap-2 pl-5">
+                    {r.status === 'en_attente' && (
+                      <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200 transition-colors">Confirmer</button>
+                    )}
+                    {(r.status === 'en_attente' || r.status === 'confirmee') && (
+                      <button onClick={() => updateResaStatus(r._id, 'en_route')} className="px-2.5 py-1 bg-orange-100 text-orange-700 rounded-lg text-xs font-semibold hover:bg-orange-200 transition-colors">En route</button>
+                    )}
+                    {(r.status === 'en_attente' || r.status === 'confirmee' || r.status === 'en_route') && (
+                      <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-2.5 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-semibold hover:bg-green-200 transition-colors">Terminer</button>
+                    )}
                   </div>
-                </div>
-                <div className="text-right shrink-0">
-                  <div className="font-bold text-green-700 text-xs">{formatPrix(r)}</div>
-                  <div className="text-xs text-slate-400">{formatDate(r.pickupDate)}</div>
-                </div>
-                <button onClick={() => updateResaStatus(r._id, 'en_attente')}
-                  className="px-2.5 py-1.5 bg-blue-600 text-white rounded-lg text-[10px] font-semibold hover:bg-blue-700 transition-colors shrink-0">
-                  Convertir
-                </button>
+                )}
               </div>
             ))}
           </div>
@@ -393,170 +389,127 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* Courses du jour */}
-      {todayResas.length > 0 && (
-        <div className="bg-blue-50 rounded-2xl p-4 border border-blue-200">
-          <h2 className="text-sm font-bold text-blue-800 flex items-center gap-2 mb-3">
-            <CalendarBlank size={16} />
-            Courses du jour ({todayResas.length})
+      {/* Dernières estimations — bloc plein et prominent (estimations = important) */}
+      <div className="bg-white rounded-2xl shadow-sm border-2 border-green-200 p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-base font-bold text-slate-800 flex items-center gap-2">
+            <ChartBar size={18} className="text-green-600" />
+            Dernières estimations
+            <span className="text-xs font-normal text-slate-400 ml-1">({stats.estimations.total} total · {stats.estimations.avgPrice.toFixed(0)}€ moy.)</span>
           </h2>
+          <Link href="/admin/estimations" className="text-xs text-green-700 font-semibold flex items-center gap-1 hover:underline">
+            Tout voir <ArrowRight size={12} />
+          </Link>
+        </div>
+        {recentEstimations.length === 0 ? (
+          <p className="text-sm text-slate-400 py-4 text-center">Aucune estimation</p>
+        ) : (
           <div className="space-y-2">
-            {todayResas.map(r => (
-              <div key={r._id} className="bg-white rounded-xl p-3 text-sm space-y-2">
-                <div className="flex items-center gap-3">
+            {recentEstimations.map(e => (
+              <div key={e._id} className="flex items-center gap-2 text-sm py-2 border-b border-slate-50 last:border-0">
+                <CurrencyEur size={14} className="text-green-600 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm text-slate-700 truncate">
+                    {e.from.split(',')[0]} → {e.to.split(',')[0]}
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="font-bold text-green-700">{e.price.toFixed(0)}€</div>
+                  <div className="text-xs text-slate-400">{formatDate(e.createdAt)}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Dernières réservations */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+            <Taxi size={16} />
+            Dernières réservations
+          </h2>
+          <Link href="/admin/reservations" className="text-xs text-blue-600 font-semibold flex items-center gap-1 hover:underline">
+            Tout voir <ArrowRight size={12} />
+          </Link>
+        </div>
+        {recentResas.length === 0 ? (
+          <p className="text-sm text-slate-400 py-4 text-center">Aucune réservation</p>
+        ) : (
+          <div className="space-y-2">
+            {recentResas.map(r => (
+              <div key={r._id} className="text-sm py-1.5 border-b border-slate-50 last:border-0 space-y-1">
+                <div className="flex items-center gap-2">
                   {statusIcon(r.status)}
                   <div className="flex-1 min-w-0">
-                    <span className="font-semibold text-slate-900">{r.customer.name}</span>
-                    <span className="text-slate-400 mx-1.5">·</span>
-                    <span className="text-slate-500">{formatDate(r.pickupDate)}</span>
+                    <span className="font-medium text-slate-800">{r.customer.name}</span>
+                    <div className="text-xs text-slate-400 truncate">
+                      <MapPin size={10} className="inline" /> {(typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || '').split(',')[0]}
+                      {' → '}
+                      {(typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || '').split(',')[0]}
+                    </div>
                   </div>
-                  <span className="font-bold text-green-700 shrink-0">{formatPrix(r)}</span>
+                  <div className="text-right shrink-0">
+                    <div className="font-bold text-green-700 text-xs">{formatPrix(r)}</div>
+                    <div className="text-xs text-slate-400">{formatDate(r.pickupDate)}</div>
+                  </div>
                 </div>
-                {(r.status === 'en_attente' || r.status === 'confirmee' || r.status === 'en_route') && (
-                  <div className="flex items-center gap-2 pl-5">
+                {(r.status === 'en_attente' || r.status === 'confirmee') && (
+                  <div className="flex items-center gap-1.5 pl-5">
                     {r.status === 'en_attente' && (
-                      <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200 transition-colors">Confirmer</button>
+                      <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-semibold hover:bg-blue-200">Conf.</button>
                     )}
-                    {(r.status === 'en_attente' || r.status === 'confirmee') && (
-                      <button onClick={() => updateResaStatus(r._id, 'en_route')} className="px-2.5 py-1 bg-orange-100 text-orange-700 rounded-lg text-xs font-semibold hover:bg-orange-200 transition-colors">En route</button>
-                    )}
-                    {(r.status === 'en_attente' || r.status === 'confirmee' || r.status === 'en_route') && (
-                      <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-2.5 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-semibold hover:bg-green-200 transition-colors">Terminer</button>
-                    )}
+                    <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-semibold hover:bg-green-200">Term.</button>
                   </div>
                 )}
               </div>
             ))}
           </div>
+        )}
+      </div>
+
+      {/* Leads à rappeler — déplacé en bas (capture désactivée actuellement) */}
+      {recentLeads.length > 0 && (
+        <div className="bg-purple-50 rounded-2xl p-4 border border-purple-200">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-bold text-purple-800 flex items-center gap-2">
+              <PhoneCall size={16} />
+              Leads à rappeler ({stats.reservations.lead_capture || recentLeads.length})
+            </h2>
+            <Link href="/admin/leads" className="text-xs text-purple-600 font-semibold flex items-center gap-1 hover:underline">
+              Tout voir <ArrowRight size={12} />
+            </Link>
+          </div>
+          <div className="space-y-2">
+            {recentLeads.map(r => (
+              <div key={r._id} className="bg-white rounded-xl p-3 text-sm flex items-center gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-semibold text-slate-900">{r.customer.name}</span>
+                    <a href={`tel:${r.customer.phone}`} className="text-purple-600 font-medium text-xs flex items-center gap-1">
+                      <Phone size={12} /> {r.customer.phone}
+                    </a>
+                  </div>
+                  <div className="text-xs text-slate-400 mt-0.5 truncate">
+                    <MapPin size={10} className="inline" /> {(typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || '').split(',')[0]}
+                    {' → '}
+                    {(typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || '').split(',')[0]}
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="font-bold text-green-700 text-xs">{formatPrix(r)}</div>
+                  <div className="text-xs text-slate-400">{formatDate(r.pickupDate)}</div>
+                </div>
+                <button onClick={() => updateResaStatus(r._id, 'en_attente')}
+                  className="px-2.5 py-1.5 bg-blue-600 text-white rounded-lg text-[10px] font-semibold hover:bg-blue-700 transition-colors shrink-0">
+                  Convertir
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
-
-      {/* Calendrier semaine */}
-      {(() => {
-        const now = new Date()
-        const weekStartCal = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-        weekStartCal.setDate(weekStartCal.getDate() - weekStartCal.getDay() + 1)
-        const days = Array.from({ length: 7 }, (_, i) => {
-          const d = new Date(weekStartCal)
-          d.setDate(d.getDate() + i)
-          return d
-        })
-        const joursFR = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
-        return (
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-            <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2 mb-3">
-              <CalendarBlank size={16} />
-              Semaine en cours
-            </h2>
-            <div className="grid grid-cols-7 gap-1.5">
-              {days.map((day, i) => {
-                const isToday = day.toDateString() === now.toDateString()
-                const dayResas = recentResas.filter(r => new Date(r.pickupDate).toDateString() === day.toDateString())
-                return (
-                  <div key={i} className={`rounded-xl p-2 text-center ${isToday ? 'bg-blue-50 border-2 border-blue-400' : 'bg-slate-50 border border-slate-200'}`}>
-                    <div className={`text-[10px] font-semibold ${isToday ? 'text-blue-700' : 'text-slate-500'}`}>{joursFR[i]}</div>
-                    <div className={`text-sm font-bold ${isToday ? 'text-blue-800' : 'text-slate-700'}`}>{day.getDate()}</div>
-                    {dayResas.length > 0 ? (
-                      <div className="mt-1 space-y-0.5">
-                        {dayResas.slice(0, 3).map(r => (
-                          <div key={r._id} className="text-[9px] bg-white rounded px-1 py-0.5 truncate text-slate-700 border border-slate-100">
-                            {r.customer.name.split(' ')[0]} {formatPrix(r)}
-                          </div>
-                        ))}
-                        {dayResas.length > 3 && <div className="text-[9px] text-slate-400">+{dayResas.length - 3}</div>}
-                      </div>
-                    ) : (
-                      <div className="text-[9px] text-slate-300 mt-1">—</div>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )
-      })()}
-
-      {/* Deux colonnes : dernières résas + dernières estimations */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Dernières réservations */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <Taxi size={16} />
-              Dernières réservations
-            </h2>
-            <Link href="/admin/reservations" className="text-xs text-blue-600 font-semibold flex items-center gap-1 hover:underline">
-              Tout voir <ArrowRight size={12} />
-            </Link>
-          </div>
-          {recentResas.length === 0 ? (
-            <p className="text-sm text-slate-400 py-4 text-center">Aucune réservation</p>
-          ) : (
-            <div className="space-y-2">
-              {recentResas.map(r => (
-                <div key={r._id} className="text-sm py-1.5 border-b border-slate-50 last:border-0 space-y-1">
-                  <div className="flex items-center gap-2">
-                    {statusIcon(r.status)}
-                    <div className="flex-1 min-w-0">
-                      <span className="font-medium text-slate-800">{r.customer.name}</span>
-                      <div className="text-xs text-slate-400 truncate">
-                        <MapPin size={10} className="inline" /> {(typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || '').split(',')[0]}
-                        {' → '}
-                        {(typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || '').split(',')[0]}
-                      </div>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <div className="font-bold text-green-700 text-xs">{formatPrix(r)}</div>
-                      <div className="text-xs text-slate-400">{formatDate(r.pickupDate)}</div>
-                    </div>
-                  </div>
-                  {(r.status === 'en_attente' || r.status === 'confirmee') && (
-                    <div className="flex items-center gap-1.5 pl-5">
-                      {r.status === 'en_attente' && (
-                        <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-semibold hover:bg-blue-200">Conf.</button>
-                      )}
-                      <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-1.5 py-0.5 bg-green-100 text-green-700 rounded text-[10px] font-semibold hover:bg-green-200">Term.</button>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Dernières estimations */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <ChartBar size={16} />
-              Dernières estimations
-            </h2>
-            <Link href="/admin/estimations" className="text-xs text-blue-600 font-semibold flex items-center gap-1 hover:underline">
-              Tout voir <ArrowRight size={12} />
-            </Link>
-          </div>
-          {recentEstimations.length === 0 ? (
-            <p className="text-sm text-slate-400 py-4 text-center">Aucune estimation</p>
-          ) : (
-            <div className="space-y-2">
-              {recentEstimations.map(e => (
-                <div key={e._id} className="flex items-center gap-2 text-sm py-1.5 border-b border-slate-50 last:border-0">
-                  <CurrencyEur size={14} className="text-green-600 shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-xs text-slate-500 truncate">
-                      {e.from.split(',')[0]} → {e.to.split(',')[0]}
-                    </div>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <div className="font-bold text-green-700 text-xs">{e.price.toFixed(0)}€</div>
-                    <div className="text-xs text-slate-400">{formatDate(e.createdAt)}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
     </div>
   )
 }

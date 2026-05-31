@@ -146,6 +146,29 @@ export default function AdminReservations() {
 
   const generateInvoice = async (r: Reservation) => {
     try {
+      // Demande du prix final (l'estimation peut être ajustée après la course)
+      const estimation = r.pricing.totalPrice
+      const input = window.prompt(
+        `Prix final TTC à facturer\n\nEstimation : ${estimation.toFixed(2)} €\n\nLaissez tel quel ou modifiez le prix réel facturé :`,
+        estimation.toFixed(2)
+      )
+      if (input === null) return  // annulé
+
+      const finalPrice = parseFloat(input.replace(',', '.'))
+      if (isNaN(finalPrice) || finalPrice < 0) { alert('Prix invalide'); return }
+
+      // Mise à jour en base si le prix a changé
+      if (Math.abs(finalPrice - estimation) > 0.01) {
+        const updateRes = await fetch('/api/admin/reservations', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+          body: JSON.stringify({ id: r._id, totalPrice: finalPrice })
+        })
+        const updateJson = await updateRes.json()
+        if (!updateJson.success) { alert('Erreur mise à jour du prix'); return }
+        r = { ...r, pricing: { ...r.pricing, totalPrice: finalPrice, fourchette: undefined } }
+      }
+
       const [res, logoBase64] = await Promise.all([
         fetch('/api/admin/invoice-number', {
           method: 'POST',

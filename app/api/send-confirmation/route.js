@@ -118,24 +118,31 @@ export async function POST(request) {
     </body>
     </html>`;
 
-    // Envoi de l'email de confirmation au client
-    const clientEmail = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL,
-      to: [reservationData.customer.email],
-      subject: `🚖 Réservation confirmée - N° ${reservationData.reservationId}`,
-      html: emailHtml,
-    });
+    // Envoi de l'email de confirmation au client (seulement s'il a fourni un email)
+    let clientEmail = null;
+    if (reservationData.customer.email) {
+      clientEmail = await resend.emails.send({
+        from: process.env.RESEND_FROM_EMAIL,
+        to: [reservationData.customer.email],
+        subject: `🚖 Réservation confirmée - N° ${reservationData.reservationId}`,
+        html: emailHtml,
+      });
+    }
 
-    // Envoi d'une copie à l'entreprise
+    // Envoi d'une copie à l'entreprise — toujours envoyé
+    const sansEmailWarning = !reservationData.customer.email
+      ? '<p style="background:#fef3c7;border-left:4px solid #f59e0b;padding:10px;margin:10px 0;"><strong>⚠️ Pas d\'email client</strong> — penser à envoyer la confirmation par SMS au ' + reservationData.customer.phone + '</p>'
+      : '';
     const companyEmailHtml = `
     <h2>🚖 Nouvelle réservation taxi</h2>
     <p><strong>N° ${reservationData.reservationId}</strong></p>
-    
+    ${sansEmailWarning}
+
     <h3>Client</h3>
     <ul>
         <li><strong>Nom :</strong> ${reservationData.customer.name}</li>
         <li><strong>Téléphone :</strong> ${reservationData.customer.phone}</li>
-        <li><strong>Email :</strong> ${reservationData.customer.email}</li>
+        <li><strong>Email :</strong> ${reservationData.customer.email || '<em>non fourni</em>'}</li>
     </ul>
 
     <h3>Trajet</h3>
@@ -167,7 +174,7 @@ export async function POST(request) {
 
     return Response.json({
       success: true,
-      clientEmailId: clientEmail.data?.id,
+      clientEmailId: clientEmail?.data?.id || null,
       companyEmailId: companyEmail.data?.id
     });
     

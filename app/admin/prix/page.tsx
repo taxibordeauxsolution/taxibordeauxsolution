@@ -29,6 +29,7 @@ export default function AdminPrix() {
     tarifJourDegressifMode: 'degressif' as string,
     seuilKmCaptureLead: 25,
     captureLeadActive: true,
+    affichagePrixUnique: false,
     joursOff: [] as string[],
   })
   const [newJourOff, setNewJourOff] = useState('')
@@ -475,6 +476,34 @@ export default function AdminPrix() {
               Plus rapide
             </div>
             <p className="text-xs text-gray-500 mt-1">Autoroutes et rocade incluses. Plus de km mais trajet plus rapide.</p>
+          </button>
+        </div>
+      </div>
+
+      {/* Affichage prix : fourchette ou prix unique */}
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-3">
+        <div className="flex items-center justify-between border-b pb-3">
+          <div>
+            <h2 className="font-bold text-gray-800 text-base sm:text-lg flex items-center gap-2">
+              <Tag size={20} className="text-green-600" />
+              Affichage du prix
+            </h2>
+            <p className="text-xs text-gray-400 mt-1">
+              {prix.affichagePrixUnique
+                ? 'Prix unique affiché (haut de fourchette inclus frais d\'approche) — plus clair, plus engageant'
+                : 'Fourchette affichée (ex: 30€ à 35€) — montre la possibilité de payer moins'}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setPrix(prev => ({ ...prev, affichagePrixUnique: !prev.affichagePrixUnique }))}
+            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
+              prix.affichagePrixUnique ? 'bg-green-500' : 'bg-gray-300'
+            }`}
+          >
+            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+              prix.affichagePrixUnique ? 'translate-x-6' : 'translate-x-1'
+            }`} />
           </button>
         </div>
       </div>

@@ -15,6 +15,7 @@ interface EmailCaptureFormProps {
   departureTime: string
   passengers: number
   isForfait: boolean
+  isTarifReduit?: boolean
 }
 
 export default function EmailCaptureForm({
@@ -29,6 +30,7 @@ export default function EmailCaptureForm({
   departureTime,
   passengers,
   isForfait,
+  isTarifReduit = false,
 }: EmailCaptureFormProps) {
   const [email, setEmail] = useState('')
   const [telephone, setTelephone] = useState('')
@@ -107,18 +109,24 @@ export default function EmailCaptureForm({
             })
           }
         }}
-        className="w-full text-center text-sm text-gray-500 hover:text-blue-600 transition-colors py-2"
+        className={`w-full text-center font-medium transition-colors py-2.5 rounded-lg ${
+          isTarifReduit
+            ? 'text-sm bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200'
+            : 'text-sm text-gray-600 hover:text-blue-600'
+        }`}
       >
-        <Mail className="w-3.5 h-3.5 inline mr-1" />
-        Recevoir ce devis par email
+        <Mail className="w-3.5 h-3.5 inline mr-1.5" />
+        {isTarifReduit ? 'Bloquer ce tarif réduit 24h' : 'Obtenir un devis personnalisé'}
       </button>
     )
   }
 
   return (
-    <div className="border border-gray-200 rounded-lg p-3 bg-gray-50/50">
+    <div className={`border rounded-lg p-3 ${isTarifReduit ? 'border-orange-200 bg-orange-50/40' : 'border-gray-200 bg-gray-50/50'}`}>
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs text-gray-500 font-medium">Recevoir ce devis par email</span>
+        <span className={`text-xs font-semibold ${isTarifReduit ? 'text-orange-700' : 'text-gray-700'}`}>
+          {isTarifReduit ? 'Bloquer ce tarif réduit 24h' : 'Devis personnalisé par email'}
+        </span>
         <button
           onClick={() => setExpanded(false)}
           className="text-gray-300 hover:text-gray-500 transition-colors"
@@ -126,6 +134,22 @@ export default function EmailCaptureForm({
           <ChevronUp className="w-4 h-4" />
         </button>
       </div>
+
+      <ul className="text-[11px] text-gray-600 space-y-0.5 mb-3 pl-0.5">
+        {isTarifReduit ? (
+          <>
+            <li>✓ Tarif réduit verrouillé pendant 24h</li>
+            <li>✓ Confirmation immédiate par email</li>
+            <li>✓ Numéro du chauffeur la veille</li>
+          </>
+        ) : (
+          <>
+            <li>✓ Devis officiel par email</li>
+            <li>✓ Tarif ajusté à votre situation</li>
+            <li>✓ Réponse rapide</li>
+          </>
+        )}
+      </ul>
 
       <div className="space-y-2">
         <div className="relative">
@@ -180,7 +204,9 @@ export default function EmailCaptureForm({
         <button
           onClick={handleSubmit}
           disabled={!emailValid || !rgpdConsent || loading || !estimationId}
-          className="w-full py-2 bg-gray-700 text-white rounded-lg text-sm font-medium hover:bg-gray-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+          className={`w-full py-2 text-white rounded-lg text-sm font-medium disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 ${
+            isTarifReduit ? 'bg-orange-600 hover:bg-orange-700' : 'bg-blue-600 hover:bg-blue-700'
+          }`}
         >
           {loading ? (
             <>
@@ -190,7 +216,7 @@ export default function EmailCaptureForm({
           ) : (
             <>
               <Send className="w-3.5 h-3.5" />
-              Envoyer
+              {isTarifReduit ? 'Bloquer mon tarif' : 'Recevoir mon devis'}
             </>
           )}
         </button>

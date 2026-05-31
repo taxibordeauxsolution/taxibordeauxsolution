@@ -43,6 +43,7 @@ const TaxiBookingHomePreview = () => {
     tarifJourDegressifMode: 'degressif',
     seuilKmCaptureLead: 25,
     captureLeadActive: true,
+    affichagePrixUnique: false,
     joursOff: [] as string[],
   })
   const [maps, setMaps] = useState<any>(null)
@@ -807,7 +808,7 @@ const TaxiBookingHomePreview = () => {
       }
     }))
 
-    const fourchetteTrack = isForfait
+    const fourchetteTrack = isForfait || configPrix.affichagePrixUnique
       ? null
       : finalPrice <= configPrix.courseMini
         ? { de: configPrix.courseMiniDe || 0, a: configPrix.courseMini || 0 }
@@ -914,7 +915,7 @@ const TaxiBookingHomePreview = () => {
           totalPrice: tripData.price,
           priceDetails: tripData.priceDetails,
           prixBarreDegressif: prixSansDegressif > 0 ? prixSansDegressif : null,
-          fourchette: (tripData.priceDetails?.isForfait || prixSansDegressif > 0)
+          fourchette: (tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique)
             ? null
             : tripData.price <= configPrix.courseMini
               ? { de: configPrix.courseMiniDe || 0, a: configPrix.courseMini || 0 }
@@ -958,25 +959,24 @@ const TaxiBookingHomePreview = () => {
         body: JSON.stringify({ type: 'reservation', payload: reservationData })
       }).catch(() => {})
 
-      // Envoi de l'email de confirmation
+      // Envoi de l'email — toujours envoyer pour notifier l'entreprise,
+      // même si le client n'a pas fourni d'email
       let emailSent = false
-      if (bookingData.customerEmail) {
-        try {
-          const emailResponse = await fetch('/api/send-confirmation', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(reservationData)
-          })
+      try {
+        const emailResponse = await fetch('/api/send-confirmation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(reservationData)
+        })
 
-          emailSent = emailResponse.ok
-          if (!emailSent) {
-            console.warn('Email de confirmation non envoyé')
-          }
-        } catch (emailError) {
-          console.warn('Erreur envoi email:', emailError)
+        emailSent = emailResponse.ok && !!bookingData.customerEmail
+        if (!emailResponse.ok) {
+          console.warn('Email de confirmation non envoyé')
         }
+      } catch (emailError) {
+        console.warn('Erreur envoi email:', emailError)
       }
 
       setReservation({...reservationData, emailSent})
@@ -1252,7 +1252,7 @@ const TaxiBookingHomePreview = () => {
                   </>
                 ) : (
                 <div className="flex items-center justify-center gap-2">
-                  {tripData.priceDetails?.isForfait || prixSansDegressif > 0
+                  {tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique
                     ? <span className="text-3xl font-extrabold tracking-tight text-green-700">{(tripData.price || 0).toFixed(2)}€</span>
                     : tripData.price <= configPrix.courseMini
                       ? <>
@@ -1326,33 +1326,44 @@ const TaxiBookingHomePreview = () => {
         </div>
       </div>
 
-      <button
-        onClick={() => {
-          setValidationAttempted(true)
+      {(() => {
+        const isReadyToBook = tripData.fromCoords && tripData.toCoords &&
+                              bookingData.departureDate && bookingData.departureTime &&
+                              tripData.price && !jourOffError && !needsCapture
+        return (
+          <button
+            onClick={() => {
+              setValidationAttempted(true)
 
-          const allFieldsValid = tripData.fromCoords && tripData.toCoords &&
-                                bookingData.departureDate && bookingData.departureTime &&
-                                bookingData.passengers && tripData.price && !jourOffError
+              const allFieldsValid = tripData.fromCoords && tripData.toCoords &&
+                                    bookingData.departureDate && bookingData.departureTime &&
+                                    bookingData.passengers && tripData.price && !jourOffError
 
-          if (allFieldsValid) {
-            setStep(2)
-            if (typeof window !== 'undefined' && (window as any).gtag) {
-              (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: needsCapture ? 'step1_to_capture' : 'step1_to_step2', from: tripData.from?.split(',')[0], to: tripData.to?.split(',')[0], price: tripData.price })
-            }
-            setTimeout(scrollToModule, 150)
-          }
-        }}
-        disabled={loading}
-        className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center transition-colors"
-      >
-        <Navigation className="w-5 h-5 mr-2" />
-        {!tripData.fromCoords || !tripData.toCoords ? t('selectAddresses') :
-         !bookingData.departureDate || !bookingData.departureTime ? t('dateTimeRequired') :
-         jourOffError ? 'Date indisponible' :
-         !tripData.price ? t('calculatingPrice') :
-         needsCapture ? 'Continuer' :
-         t('bookNowBtn')}
-      </button>
+              if (allFieldsValid) {
+                setStep(2)
+                if (typeof window !== 'undefined' && (window as any).gtag) {
+                  (window as any).gtag('event', 'funnel_step', { event_category: 'funnel', step: needsCapture ? 'step1_to_capture' : 'step1_to_step2', from: tripData.from?.split(',')[0], to: tripData.to?.split(',')[0], price: tripData.price })
+                }
+                setTimeout(scrollToModule, 150)
+              }
+            }}
+            disabled={loading}
+            className={`w-full text-white rounded-xl flex items-center justify-center transition-all disabled:bg-gray-400 disabled:cursor-not-allowed ${
+              isReadyToBook
+                ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 py-5 px-6 font-extrabold text-xl shadow-2xl hover:shadow-green-500/40 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] ring-4 ring-green-200'
+                : 'bg-blue-600 hover:bg-blue-700 py-3 px-6 font-medium'
+            }`}
+          >
+            {isReadyToBook ? <Car className="w-6 h-6 mr-2.5" /> : <Navigation className="w-5 h-5 mr-2" />}
+            {!tripData.fromCoords || !tripData.toCoords ? t('selectAddresses') :
+             !bookingData.departureDate || !bookingData.departureTime ? t('dateTimeRequired') :
+             jourOffError ? 'Date indisponible' :
+             !tripData.price ? t('calculatingPrice') :
+             needsCapture ? 'Continuer' :
+             'RÉSERVER MAINTENANT'}
+          </button>
+        )
+      })()}
 
       {/* ── Lien devis discret sous le CTA ── */}
       {tripData.distance > 0 && tripData.price > 0 && bookingData.departureDate && bookingData.departureTime && !needsCapture && (
@@ -1368,6 +1379,7 @@ const TaxiBookingHomePreview = () => {
           departureTime={bookingData.departureTime}
           passengers={bookingData.passengers}
           isForfait={tripData.priceDetails?.isForfait ?? false}
+          isTarifReduit={prixSansDegressif > 0}
         />
       )}
     </div>
@@ -1400,7 +1412,7 @@ const TaxiBookingHomePreview = () => {
           pricing: {
             totalPrice: tripData.price,
             priceDetails: tripData.priceDetails,
-            fourchette: (tripData.priceDetails?.isForfait || prixSansDegressif > 0)
+            fourchette: (tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique)
               ? null
               : tripData.price <= configPrix.courseMini
                 ? { de: configPrix.courseMiniDe || 0, a: configPrix.courseMini || 0 }
@@ -1636,7 +1648,7 @@ const TaxiBookingHomePreview = () => {
                   </>
                 ) : (
                 <div className="text-3xl font-bold text-green-700">
-                  {tripData.priceDetails?.isForfait || prixSansDegressif > 0
+                  {tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique
                     ? `${(tripData.price || 0).toFixed(2)}€`
                     : tripData.price <= configPrix.courseMini
                       ? `${(configPrix.courseMiniDe || 0).toFixed(2)}€ à ${(configPrix.courseMini || 0).toFixed(2)}€`
@@ -1819,7 +1831,7 @@ const TaxiBookingHomePreview = () => {
                   </>
                 ) : (
                 <span className="text-green-800 sm:text-green-600 font-semibold">
-                  {tripData.priceDetails?.isForfait || prixSansDegressif > 0
+                  {tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique
                     ? `${(tripData.price || 0).toFixed(2)}€`
                     : tripData.price <= configPrix.courseMini
                       ? `${(configPrix.courseMiniDe || 0).toFixed(2)}€ à ${(configPrix.courseMini || 0).toFixed(2)}€`
