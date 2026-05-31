@@ -1,14 +1,37 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { MapPin, Clock, Users, Briefcase, Euro, Calendar, Phone, Mail, Car, Navigation, CheckCircle, AlertCircle, Globe, Map, Route, Loader2, ArrowRight, Crosshair } from 'lucide-react'
+import { MapPin, Clock, Users, Euro, Calendar, Phone, Mail, Car, Navigation, CheckCircle, AlertCircle, Globe, Route, Loader2, Crosshair } from 'lucide-react'
 import type { TripData, BookingData, ReservationData } from '../../types/booking'
-import { calculateDistanceFare, isNightMinutes } from '@/app/lib/pricing'
+import { calculateDistanceFare, isNightMinutes, parseHM } from '@/app/lib/pricing'
 import EmailCaptureForm from './EmailCaptureForm'
 
-// Configuration API
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api'
-const GOOGLE_MAPS_API_KEY = 'AIzaSyCarUqBqL2yuEy36eOw4JNatmclfOhOGs0'
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyCarUqBqL2yuEy36eOw4JNatmclfOhOGs0'
+
+// Calcul de Pâques (algorithme de Gauss) — retourne 'MM-DD' pour comparaison
+function easterDate(year: number): Date {
+  const a = year % 19
+  const b = Math.floor(year / 100)
+  const c = year % 100
+  const d = Math.floor(b / 4)
+  const e = b % 4
+  const f = Math.floor((b + 8) / 25)
+  const g = Math.floor((b - f + 1) / 3)
+  const h = (19 * a + b - d - g + 15) % 30
+  const i = Math.floor(c / 4)
+  const k = c % 4
+  const l = (32 + 2 * e + 2 * i - h - k) % 7
+  const m = Math.floor((a + 11 * h + 22 * l) / 451)
+  const month = Math.floor((h + l - 7 * m + 114) / 31)
+  const day = ((h + l - 7 * m + 114) % 31) + 1
+  return new Date(year, month - 1, day)
+}
+
+function addDays(date: Date, days: number): Date {
+  const d = new Date(date)
+  d.setDate(d.getDate() + days)
+  return d
+}
 
 const TaxiBookingHomePreview = () => {
   // États principaux
@@ -46,13 +69,7 @@ const TaxiBookingHomePreview = () => {
     affichagePrixUnique: false,
     joursOff: [] as string[],
   })
-  const [maps, setMaps] = useState<any>(null)
-  const [map, setMap] = useState<any>(null)
   const [directionsService, setDirectionsService] = useState<any>(null)
-  const [directionsRenderer, setDirectionsRenderer] = useState<any>(null)
-  const [autocompleteFrom, setAutocompleteFrom] = useState<any>(null)
-  const [autocompleteTo, setAutocompleteTo] = useState<any>(null)
-  const [mapVisible, setMapVisible] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [validationAttempted, setValidationAttempted] = useState(false)
@@ -103,9 +120,9 @@ const TaxiBookingHomePreview = () => {
   // Références
   const fromInputRef = useRef<HTMLInputElement>(null)
   const toInputRef = useRef<HTMLInputElement>(null)
-  const mapRef = useRef<HTMLDivElement>(null)
   const moduleRef = useRef<HTMLDivElement>(null)
   const mapsLoadedRef = useRef(false)
+  const estimationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Dictionnaire de traductions complet
   const translations = {
@@ -405,67 +422,47 @@ const TaxiBookingHomePreview = () => {
     </div>
   )
 
-  // Initialisation carte + autocomplete (appelé après chargement du script)
+  // Initialisation DirectionsService + autocompletes (sans Map ni Renderer — économie API et perf)
   const initializeMaps = useCallback(() => {
     const google = (window as any).google
-    if (!google?.maps || !mapRef.current) return
-    setMaps(google.maps)
+    if (!google?.maps) return
 
-    const mapInstance = new google.maps.Map(mapRef.current, {
-      center: { lat: 44.8378, lng: -0.5792 },
-      zoom: 12,
-      styles: [{ featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }],
-      mapTypeControl: false,
-      streetViewControl: false,
-      fullscreenControl: true
-    })
-    setMap(mapInstance)
+    setDirectionsService(new google.maps.DirectionsService())
 
-    const directionsServiceInstance = new google.maps.DirectionsService()
-    const directionsRendererInstance = new google.maps.DirectionsRenderer({
-      map: mapInstance,
-      suppressMarkers: false,
-      draggable: false,
-      polylineOptions: { strokeColor: '#10b981', strokeWeight: 5, strokeOpacity: 0.9 }
-    })
-    setDirectionsService(directionsServiceInstance)
-    setDirectionsRenderer(directionsRendererInstance)
+    const bordeauxBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(44.7, -0.7),
+      new google.maps.LatLng(44.9, -0.4)
+    )
+    const autocompleteOpts = {
+      componentRestrictions: { country: 'fr' },
+      bounds: bordeauxBounds,
+      types: ['establishment', 'geocode'],
+      strictBounds: false,
+    }
 
-    if (fromInputRef.current) {
-      const autocompleteFromInstance = new google.maps.places.Autocomplete(
-        fromInputRef.current,
-        {
-          componentRestrictions: { country: 'fr' },
-          bounds: new google.maps.LatLngBounds(
-            new google.maps.LatLng(44.7, -0.7),
-            new google.maps.LatLng(44.9, -0.4)
-          ),
-          types: ['establishment', 'geocode'],
-          strictBounds: false
-        }
-      )
-      setAutocompleteFrom(autocompleteFromInstance)
-      autocompleteFromInstance.addListener('place_changed', () => {
-        const place = autocompleteFromInstance.getPlace()
+    const setupAutocomplete = (inputEl: HTMLInputElement | null, field: 'from' | 'to', coordsField: 'fromCoords' | 'toCoords') => {
+      if (!inputEl) return
+      const ac = new google.maps.places.Autocomplete(inputEl, autocompleteOpts)
+      ac.addListener('place_changed', () => {
+        const place = ac.getPlace()
         if (place.geometry) {
           setTripData(prev => ({
             ...prev,
-            from: place.formatted_address || place.name || prev.from,
-            fromCoords: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }
-          }))
+            [field]: place.formatted_address || place.name || (prev as any)[field],
+            [coordsField]: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() },
+          } as any))
         } else {
-          const query = place.name || fromInputRef.current?.value || ''
+          const query = place.name || inputEl.value || ''
           if (query) {
-            const geocoder = new google.maps.Geocoder()
-            geocoder.geocode({ address: query, region: 'FR' }, (results: any, status: string) => {
+            new google.maps.Geocoder().geocode({ address: query, region: 'FR' }, (results: any, status: string) => {
               if (status === 'OK' && results[0]) {
                 const loc = results[0].geometry.location
                 setTripData(prev => ({
                   ...prev,
-                  from: results[0].formatted_address,
-                  fromCoords: { lat: loc.lat(), lng: loc.lng() }
-                }))
-                if (fromInputRef.current) fromInputRef.current.value = results[0].formatted_address
+                  [field]: results[0].formatted_address,
+                  [coordsField]: { lat: loc.lat(), lng: loc.lng() },
+                } as any))
+                inputEl.value = results[0].formatted_address
               }
             })
           }
@@ -473,48 +470,9 @@ const TaxiBookingHomePreview = () => {
       })
     }
 
-    if (toInputRef.current) {
-      const autocompleteToInstance = new google.maps.places.Autocomplete(
-        toInputRef.current,
-        {
-          componentRestrictions: { country: 'fr' },
-          bounds: new google.maps.LatLngBounds(
-            new google.maps.LatLng(44.7, -0.7),
-            new google.maps.LatLng(44.9, -0.4)
-          ),
-          types: ['establishment', 'geocode'],
-          strictBounds: false
-        }
-      )
-      setAutocompleteTo(autocompleteToInstance)
-      autocompleteToInstance.addListener('place_changed', () => {
-        const place = autocompleteToInstance.getPlace()
-        if (place.geometry) {
-          setTripData(prev => ({
-            ...prev,
-            to: place.formatted_address || place.name || prev.to,
-            toCoords: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }
-          }))
-        } else {
-          const query = place.name || toInputRef.current?.value || ''
-          if (query) {
-            const geocoder = new google.maps.Geocoder()
-            geocoder.geocode({ address: query, region: 'FR' }, (results: any, status: string) => {
-              if (status === 'OK' && results[0]) {
-                const loc = results[0].geometry.location
-                setTripData(prev => ({
-                  ...prev,
-                  to: results[0].formatted_address,
-                  toCoords: { lat: loc.lat(), lng: loc.lng() }
-                }))
-                if (toInputRef.current) toInputRef.current.value = results[0].formatted_address
-              }
-            })
-          }
-        }
-      })
-    }
-  }, []) // Les setters React et les refs sont stables, aucune dépendance nécessaire
+    setupAutocomplete(fromInputRef.current, 'from', 'fromCoords')
+    setupAutocomplete(toInputRef.current, 'to', 'toCoords')
+  }, [])
 
   // Chargement lazy : déclenché au premier focus sur un champ d'adresse
   const loadGoogleMapsLazy = useCallback(() => {
@@ -527,12 +485,23 @@ const TaxiBookingHomePreview = () => {
     }
 
     const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places,drawing&language=${language}&region=FR`
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&language=${language}&region=FR`
     script.async = true
     script.defer = true
     script.onload = initializeMaps
+    script.onerror = () => {
+      mapsLoadedRef.current = false
+      setError('Impossible de charger l\'autocomplétion d\'adresses. Vérifiez votre connexion.')
+    }
     document.head.appendChild(script)
   }, [language, initializeMaps])
+
+  // Cleanup du debounce estimation à l'unmount
+  useEffect(() => {
+    return () => {
+      if (estimationTimerRef.current) clearTimeout(estimationTimerRef.current)
+    }
+  }, [])
 
   // Chargement des forfaits et config prix depuis l'API
   useEffect(() => {
@@ -547,31 +516,29 @@ const TaxiBookingHomePreview = () => {
       .catch(() => {})
   }, [])
 
-  // Fonction pour vérifier si c'est un jour férié
+  // Vérifie si la date est un jour férié français (fixes + mobiles autour de Pâques)
   const isPublicHoliday = (date: Date) => {
     const year = date.getFullYear()
     const month = date.getMonth() + 1
     const day = date.getDate()
-    
-    // Jours fériés fixes
-    const fixedHolidays = [
-      '01-01', // Nouvel An
-      '05-01', // Fête du travail
-      '05-08', // Victoire 1945
-      '07-14', // Fête nationale
-      '08-15', // Assomption
-      '11-01', // Toussaint
-      '11-11', // Armistice
-      '12-25'  // Noël
-    ]
-    
+
+    const fixedHolidays = ['01-01', '05-01', '05-08', '07-14', '08-15', '11-01', '11-11', '12-25']
     const dateStr = `${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
-    return fixedHolidays.includes(dateStr)
+    if (fixedHolidays.includes(dateStr)) return true
+
+    // Jours fériés mobiles : Pâques + offsets
+    const easter = easterDate(year)
+    const sameDay = (d: Date) => d.getMonth() === date.getMonth() && d.getDate() === date.getDate()
+    return (
+      sameDay(addDays(easter, 1)) ||   // Lundi de Pâques
+      sameDay(addDays(easter, 39)) ||  // Jeudi de l'Ascension
+      sameDay(addDays(easter, 50))     // Lundi de Pentecôte
+    )
   }
 
-  // Calcul de l'itinéraire - uniquement Google Maps, sans calcul de prix
+  // Calcul de l'itinéraire (distance/durée) — pas d'affichage carte, juste les data
   const calculateRoute = useCallback(() => {
-    if (!directionsService || !directionsRenderer || !tripData.fromCoords || !tripData.toCoords) return
+    if (!directionsService || !tripData.fromCoords || !tripData.toCoords) return
 
     setLoading(true)
     setError('')
@@ -583,15 +550,12 @@ const TaxiBookingHomePreview = () => {
       avoidHighways: configPrix.itineraireCourt,
       avoidTolls: false,
       unitSystem: (window as any).google.maps.UnitSystem.METRIC,
-      optimizeWaypoints: true,
       provideRouteAlternatives: false,
-      region: 'FR'
+      region: 'FR',
     }, (result: any, status: string) => {
       setLoading(false)
 
       if (status === 'OK' && result.routes[0]) {
-        directionsRenderer.setDirections(result)
-
         const route = result.routes[0].legs[0]
         const distance = (route.distance?.value || 0) / 1000
         const duration = (route.duration?.value || 0) / 60
@@ -600,42 +564,31 @@ const TaxiBookingHomePreview = () => {
           ...prev,
           distance,
           duration,
-          routeInfo: {
-            steps: route.steps,
-            overview: result.routes[0].overview_polyline,
-            bounds: result.routes[0].bounds
-          },
-          serviceAreaValidation: { valid: true }
+          routeInfo: null,
+          serviceAreaValidation: { valid: true },
         }))
 
-        if (map && result.routes[0].bounds) {
-          map.fitBounds(result.routes[0].bounds)
-        }
-        setMapVisible(true)
-
-        // Estimation péages
-        if (tripData.fromCoords && tripData.toCoords) {
-          fetch('/api/toll-estimate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ origin: tripData.fromCoords, destination: tripData.toCoords }),
-          })
-            .then(r => r.json())
-            .then(d => setTollCost(d.tollCost || 0))
-            .catch(() => setTollCost(0))
-        }
+        // Estimation péages (asynchrone, ne bloque pas l'affichage)
+        fetch('/api/toll-estimate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ origin: tripData.fromCoords, destination: tripData.toCoords }),
+        })
+          .then(r => r.json())
+          .then(d => setTollCost(d.tollCost || 0))
+          .catch(() => setTollCost(0))
       } else {
-        setError('Impossible de calculer l&apos;itinéraire')
+        setError("Impossible de calculer l'itinéraire")
       }
     })
-  }, [directionsService, directionsRenderer, tripData.fromCoords, tripData.toCoords, map, configPrix.itineraireCourt])
+  }, [directionsService, tripData.fromCoords, tripData.toCoords, configPrix.itineraireCourt])
 
-  // Calcul automatique de l'itinéraire dès que les adresses sont disponibles
+  // Calcul automatique dès que les adresses sont disponibles
   useEffect(() => {
-    if (tripData.fromCoords && tripData.toCoords && directionsService && directionsRenderer) {
+    if (tripData.fromCoords && tripData.toCoords && directionsService) {
       calculateRoute()
     }
-  }, [tripData.fromCoords, tripData.toCoords, directionsService, directionsRenderer, calculateRoute])
+  }, [tripData.fromCoords, tripData.toCoords, directionsService, calculateRoute])
 
   // Recalcul du prix à chaque changement de distance, durée, date ou heure — sans rappel Google Maps
   useEffect(() => {
@@ -646,12 +599,16 @@ const TaxiBookingHomePreview = () => {
     let isHoliday = false
     let isSunday = false
 
+    // Heures de nuit dynamiques depuis la config admin (fallback 19h-7h)
+    const nightStartMin = parseHM(configPrix.heureDebutNuit, 19 * 60)
+    const nightEndMin = parseHM(configPrix.heureFinNuit, 7 * 60)
+
     if (bookingData.departureDate && bookingData.departureTime) {
       const d = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
       if (!isNaN(d.getTime())) {
         departureDate = d
-        const hour = d.getHours()
-        isNight = hour >= 19 || hour < 7
+        const currentMin = d.getHours() * 60 + d.getMinutes()
+        isNight = isNightMinutes(currentMin, nightStartMin, nightEndMin)
         isHoliday = isPublicHoliday(d)
         isSunday = d.getDay() === 0
       }
@@ -698,7 +655,7 @@ const TaxiBookingHomePreview = () => {
         degressifApplique = true
         tarifNormalSansDegressif = tripData.distance * DAY_RATE
       } else {
-        distanceFare = calculateDistanceFare(departureDate, tripData.duration, tripData.distance, DAY_RATE, NIGHT_RATE)
+        distanceFare = calculateDistanceFare(departureDate, tripData.duration, tripData.distance, DAY_RATE, NIGHT_RATE, configPrix.heureDebutNuit, configPrix.heureFinNuit)
       }
     } else {
       if (useJourReduit) {
@@ -786,8 +743,10 @@ const TaxiBookingHomePreview = () => {
     else if (departureDate && tripData.duration > 0) {
       const depMin = departureDate.getHours() * 60 + departureDate.getMinutes()
       const arrMin = depMin + tripData.duration
-      if (isNightMinutes(depMin) && isNightMinutes(arrMin)) tariffType = 'Nuit'
-      else if (!isNightMinutes(depMin) && !isNightMinutes(arrMin)) tariffType = 'Jour'
+      const depIsNight = isNightMinutes(depMin, nightStartMin, nightEndMin)
+      const arrIsNight = isNightMinutes(arrMin, nightStartMin, nightEndMin)
+      if (depIsNight && arrIsNight) tariffType = 'Nuit'
+      else if (!depIsNight && !arrIsNight) tariffType = 'Jour'
       else tariffType = 'Mixte'
     } else if (isNight) tariffType = 'Nuit'
 
@@ -814,41 +773,47 @@ const TaxiBookingHomePreview = () => {
         ? { de: configPrix.courseMiniDe || 0, a: configPrix.courseMini || 0 }
         : { de: (finalPrice || 0) - (configPrix.fraisApproche || 0), a: finalPrice || 0 }
 
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'estimation_prix', {
-        event_category: 'estimation',
-        from: tripData.from,
-        to: tripData.to,
-        distance: tripData.distance,
-        duration: tripData.duration,
-        price: finalPrice,
-        tariff_type: tariffType,
-        is_forfait: isForfait,
-      })
-    }
+    // Debounce 800ms : on attend que l'utilisateur arrête de tweaker avant d'envoyer
+    // l'estimation à GA + l'API (évite la pollution funnel et les appels en cascade)
+    if (estimationTimerRef.current) clearTimeout(estimationTimerRef.current)
+    const snapshot = { from: tripData.from, to: tripData.to, distance: tripData.distance, duration: tripData.duration, finalPrice, tariffType, isForfait, departureDateIso: departureDate ? departureDate.toISOString() : null, fourchetteTrack }
+    estimationTimerRef.current = setTimeout(() => {
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'estimation_prix', {
+          event_category: 'estimation',
+          from: snapshot.from,
+          to: snapshot.to,
+          distance: snapshot.distance,
+          duration: snapshot.duration,
+          price: snapshot.finalPrice,
+          tariff_type: snapshot.tariffType,
+          is_forfait: snapshot.isForfait,
+        })
+      }
 
-    const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
-    fetch('/api/estimations', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        from: tripData.from,
-        to: tripData.to,
-        distance: tripData.distance,
-        duration: tripData.duration,
-        price: finalPrice,
-        fourchette: fourchetteTrack,
-        tariffType,
-        isForfait,
-        departureDate: departureDate ? departureDate.toISOString() : null,
-        utmSource: urlParams?.get('utm_source') || null,
-        utmMedium: urlParams?.get('utm_medium') || null,
-        utmCampaign: urlParams?.get('utm_campaign') || null,
-      }),
-    })
-      .then(r => r.json())
-      .then(d => { if (d.id) setEstimationId(d.id) })
-      .catch(() => {})
+      const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
+      fetch('/api/estimations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: snapshot.from,
+          to: snapshot.to,
+          distance: snapshot.distance,
+          duration: snapshot.duration,
+          price: snapshot.finalPrice,
+          fourchette: snapshot.fourchetteTrack,
+          tariffType: snapshot.tariffType,
+          isForfait: snapshot.isForfait,
+          departureDate: snapshot.departureDateIso,
+          utmSource: urlParams?.get('utm_source') || null,
+          utmMedium: urlParams?.get('utm_medium') || null,
+          utmCampaign: urlParams?.get('utm_campaign') || null,
+        }),
+      })
+        .then(r => r.json())
+        .then(d => { if (d.id) setEstimationId(d.id) })
+        .catch(() => {})
+    }, 800)
   }, [tripData.distance, tripData.duration, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, forfaits, configPrix, tollCost])
 
 
@@ -894,9 +859,11 @@ const TaxiBookingHomePreview = () => {
   const submitReservation = async () => {
     setLoading(true)
     setError('')
-    
+
     try {
-      const reservationId = 'TBS-' + Date.now().toString().slice(-6)
+      // ID unique : timestamp + suffixe aléatoire pour éviter collision
+      const rand = Math.random().toString(36).substring(2, 6).toUpperCase()
+      const reservationId = 'TBS-' + Date.now().toString().slice(-6) + '-' + rand
       const pickupTime = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
       
       const reservationData = {
@@ -942,17 +909,29 @@ const TaxiBookingHomePreview = () => {
         ]
       }
 
-      // Sauvegarde en base + Google Calendar
-      fetch('/api/reservations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...reservationData,
-          pickupDate: pickupTime.toISOString(),
+      // Sauvegarde en base + Google Calendar — ON ATTEND ET ON VÉRIFIE
+      let resaSaved = false
+      try {
+        const resaRes = await fetch('/api/reservations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...reservationData,
+            pickupDate: pickupTime.toISOString(),
+          })
         })
-      }).catch(() => {})
+        resaSaved = resaRes.ok
+      } catch {
+        resaSaved = false
+      }
 
-      // Notification Telegram
+      if (!resaSaved) {
+        setError("Erreur de sauvegarde de votre réservation. Merci d'appeler le +33 6 67 23 78 22 pour confirmer.")
+        setLoading(false)
+        return
+      }
+
+      // Notification Telegram (fire-and-forget OK : c'est juste une notif interne)
       fetch('/api/notify-telegram', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1297,9 +1276,6 @@ const TaxiBookingHomePreview = () => {
                     Dont {tollCost.toFixed(2)}€ de péage inclus
                   </div>
                 )}
-                {!bookingData.departureDate || !bookingData.departureTime ? (
-                  <div className="text-center text-orange-600 font-medium text-xs mt-2">{t('priceFineWithDateTime')}</div>
-                ) : null}
                 <div className="flex items-center justify-center mt-3 opacity-60">
                   <img src="/images/cb-logos.png" alt="Visa, CB, Mastercard, American Express" className="h-5" />
                 </div>
@@ -1307,34 +1283,6 @@ const TaxiBookingHomePreview = () => {
             </div>
           )}
 
-        </div>
-
-        {/* Colonne droite - Carte (cachée, gardée pour initialisation Google Maps) */}
-        <div className="hidden">
-          <div className="bg-gray-100 rounded-lg overflow-hidden border-2 border-gray-200">
-            <div className="h-96 lg:h-[500px] w-full">
-              <div 
-                ref={mapRef} 
-                className="w-full h-full"
-                style={{ minHeight: '300px' }}
-              />
-            </div>
-            {tripData.distance > 0 && (
-              <div className="p-3 bg-white border-t">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center text-green-800 sm:text-green-600">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {tripData.from?.split(',')[0]}
-                  </span>
-                  <ArrowRight className="text-gray-400" size={16} />
-                  <span className="flex items-center text-red-600">
-                    <MapPin className="w-4 h-4 mr-1" />
-                    {tripData.to?.split(',')[0]}
-                  </span>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       </div>
 
@@ -1402,10 +1350,11 @@ const TaxiBookingHomePreview = () => {
     setLoading(true)
     setError('')
     try {
-      const reservationId = 'TBS-' + Date.now().toString().slice(-6)
+      const rand = Math.random().toString(36).substring(2, 6).toUpperCase()
+      const reservationId = 'TBS-' + Date.now().toString().slice(-6) + '-' + rand
       const pickupTime = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
 
-      await fetch('/api/reservations', {
+      const res = await fetch('/api/reservations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1437,6 +1386,12 @@ const TaxiBookingHomePreview = () => {
           pickupDate: pickupTime.toISOString(),
         })
       })
+
+      if (!res.ok) {
+        setError('Impossible d\'enregistrer votre demande. Veuillez réessayer ou appeler le +33 6 67 23 78 22.')
+        setLoading(false)
+        return
+      }
 
       setBookingData(prev => ({
         ...prev,
@@ -1752,7 +1707,7 @@ const TaxiBookingHomePreview = () => {
             <label className="block text-sm font-medium text-gray-900 mb-2">
               <Phone className="inline w-4 h-4 mr-1" />
               {t('phone')}
-              {step3ValidationAttempted && !bookingData.customerPhone && <span className="text-red-500 ml-1">*</span>}
+              {step3ValidationAttempted && !/^(?:\+33|0)[1-9][0-9]{8}$/.test(bookingData.customerPhone.replace(/[\s.-]/g, '')) && <span className="text-red-500 ml-1">*</span>}
             </label>
             <input
               type="tel"
@@ -1762,8 +1717,11 @@ const TaxiBookingHomePreview = () => {
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
               required
             />
+            {step3ValidationAttempted && !/^(?:\+33|0)[1-9][0-9]{8}$/.test(bookingData.customerPhone.replace(/[\s.-]/g, '')) && (
+              <p className="text-red-500 text-xs mt-1">Numéro de téléphone français invalide (06 ou +33)</p>
+            )}
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-900 mb-2">
               <Mail className="inline w-4 h-4 mr-1" />
@@ -1776,6 +1734,9 @@ const TaxiBookingHomePreview = () => {
               onChange={(e) => handleBookingChange('customerEmail', e.target.value)}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-500"
             />
+            {step3ValidationAttempted && bookingData.customerEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bookingData.customerEmail) && (
+              <p className="text-red-500 text-xs mt-1">Format d'email invalide</p>
+            )}
           </div>
 
           <div>
@@ -1881,9 +1842,11 @@ const TaxiBookingHomePreview = () => {
           onClick={() => {
             setStep3ValidationAttempted(true)
 
-            const allFieldsValid = bookingData.customerName && bookingData.customerPhone
+            const nameValid = bookingData.customerName.trim().length >= 2
+            const phoneValid = /^(?:\+33|0)[1-9][0-9]{8}$/.test(bookingData.customerPhone.replace(/[\s.-]/g, ''))
+            const emailValid = !bookingData.customerEmail || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(bookingData.customerEmail)
 
-            if (allFieldsValid && !loading) {
+            if (nameValid && phoneValid && emailValid && !loading) {
               submitReservation()
             }
           }}
@@ -1966,11 +1929,12 @@ const TaxiBookingHomePreview = () => {
             serviceAreaValidation: { valid: true }
           })
           setTollCost(0)
+          const now = new Date()
           setBookingData({
             passengers: 1,
             luggage: 0,
-            departureDate: '',
-            departureTime: '',
+            departureDate: now.toISOString().split('T')[0],
+            departureTime: now.toTimeString().slice(0, 5),
             customerName: '',
             customerPhone: '',
             customerEmail: '',

@@ -1,10 +1,30 @@
-const NIGHT_START = 19 * 60 // 1140 min depuis minuit
-const NIGHT_END = 7 * 60    // 420 min depuis minuit
+const DEFAULT_NIGHT_START = 19 * 60 // 1140 min
+const DEFAULT_NIGHT_END = 7 * 60    // 420 min
 
-export function isNightMinutes(minutesFromMidnight: number): boolean {
-  const t = ((minutesFromMidnight % 1440) + 1440) % 1440
-  return t >= NIGHT_START || t < NIGHT_END
+/**
+ * Parse "HH:MM" string vers minutes depuis minuit. Fallback sur defaults si invalide.
+ */
+function parseHM(s: string | undefined, fallback: number): number {
+  if (!s) return fallback
+  const [h, m] = s.split(':').map(Number)
+  if (isNaN(h) || isNaN(m)) return fallback
+  return h * 60 + m
 }
+
+export function isNightMinutes(
+  minutesFromMidnight: number,
+  nightStart: number = DEFAULT_NIGHT_START,
+  nightEnd: number = DEFAULT_NIGHT_END
+): boolean {
+  const t = ((minutesFromMidnight % 1440) + 1440) % 1440
+  // Si la plage nuit traverse minuit (ex: 19h → 7h) : t >= start OR t < end
+  // Si la plage est sur une même journée (rare, ex: 7h → 19h) : t >= start AND t < end
+  return nightStart > nightEnd
+    ? (t >= nightStart || t < nightEnd)
+    : (t >= nightStart && t < nightEnd)
+}
+
+export { parseHM }
 
 /**
  * Calcule le tarif kilométrique en tenant compte du basculement
@@ -16,14 +36,19 @@ export function calculateDistanceFare(
   durationMinutes: number,
   distanceKm: number,
   dayRate: number,
-  nightRate: number
+  nightRate: number,
+  nightStartHM: string = '19:00',
+  nightEndHM: string = '07:00'
 ): number {
   if (distanceKm <= 0) return 0
+
+  const nightStart = parseHM(nightStartHM, DEFAULT_NIGHT_START)
+  const nightEnd = parseHM(nightEndHM, DEFAULT_NIGHT_END)
 
   const depMin = departureTime.getHours() * 60 + departureTime.getMinutes()
 
   if (durationMinutes <= 0) {
-    return distanceKm * (isNightMinutes(depMin) ? nightRate : dayRate)
+    return distanceKm * (isNightMinutes(depMin, nightStart, nightEnd) ? nightRate : dayRate)
   }
 
   const arrMin = depMin + durationMinutes
@@ -34,10 +59,10 @@ export function calculateDistanceFare(
   const maxDay = Math.ceil(arrMin / 1440) + 1
 
   for (let day = 0; day <= maxDay; day++) {
-    const t19 = day * 1440 + NIGHT_START
-    const t6  = day * 1440 + NIGHT_END
-    if (t19 > depMin && t19 < arrMin) points.push(t19)
-    if (t6  > depMin && t6  < arrMin) points.push(t6)
+    const tStart = day * 1440 + nightStart
+    const tEnd  = day * 1440 + nightEnd
+    if (tStart > depMin && tStart < arrMin) points.push(tStart)
+    if (tEnd  > depMin && tEnd  < arrMin) points.push(tEnd)
   }
 
   points.sort((a, b) => a - b)
@@ -45,7 +70,7 @@ export function calculateDistanceFare(
   let fare = 0
   for (let i = 0; i < points.length - 1; i++) {
     const segKm = (points[i + 1] - points[i]) * speedKmPerMin
-    fare += segKm * (isNightMinutes(points[i]) ? nightRate : dayRate)
+    fare += segKm * (isNightMinutes(points[i], nightStart, nightEnd) ? nightRate : dayRate)
   }
 
   return fare
