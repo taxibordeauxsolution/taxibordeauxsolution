@@ -15,6 +15,13 @@ export default function AnimateOnScroll({ children, className = '', delay = 0 }:
     const el = ref.current
     if (!el) return
 
+    // Si l'élément est déjà visible dans le viewport, animer immédiatement
+    const rect = el.getBoundingClientRect()
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setTimeout(() => el.classList.add('animate-in'), delay)
+      return
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -23,7 +30,7 @@ export default function AnimateOnScroll({ children, className = '', delay = 0 }:
           observer.disconnect()
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.1 }
     )
 
     observer.observe(el)

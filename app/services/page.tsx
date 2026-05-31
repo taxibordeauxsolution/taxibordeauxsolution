@@ -39,7 +39,7 @@ export default function HomePage() {
               {/* CTA Buttons Modernes */}
               <div className="flex flex-col sm:flex-row gap-4 lg:gap-6">
                 <Link
-                  href="/contact"
+                  href="/booking"
                   className="group relative bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-8 py-5 rounded-2xl font-bold text-lg transition-all duration-300 text-center shadow-2xl hover:shadow-green-500/25 hover:scale-105"
                 >
                   <span className="flex items-center justify-center gap-3">
@@ -133,7 +133,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             
             {/* Service Aéroport */}
-            <div className="group relative bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-blue-200 hover:-translate-y-2">
+            <Link href="/aeroport" className="group relative bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-blue-200 hover:-translate-y-2 block">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative">
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -143,14 +143,14 @@ export default function HomePage() {
                   Taxi Aéroport Bordeaux Mérignac
                 </h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Liaison directe aéroport Bordeaux-Mérignac. 
+                  Liaison directe aéroport Bordeaux-Mérignac.
                   Prise en charge rapide, suivi des vols, service premium 24h/24.
                 </p>
               </div>
-            </div>
+            </Link>
 
             {/* Service Gare */}
-            <div className="group relative bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-green-200 hover:-translate-y-2">
+            <Link href="/gare" className="group relative bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-green-200 hover:-translate-y-2 block">
               <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative">
                 <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -160,11 +160,11 @@ export default function HomePage() {
                   Taxi Gare Saint-Jean Bordeaux
                 </h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Transport gare SNCF Saint-Jean. 
+                  Transport gare SNCF Saint-Jean.
                   Arrivée ponctuelle, aide aux bagages, connexion immédiate.
                 </p>
               </div>
-            </div>
+            </Link>
 
             {/* Service Ville */}
             <div className="group relative bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-yellow-200 hover:-translate-y-2">
@@ -443,7 +443,7 @@ export default function HomePage() {
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
               <Link
-                href="/contact"
+                href="/booking"
                 className="group bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-10 py-6 rounded-2xl font-bold text-xl transition-all duration-300 shadow-2xl hover:shadow-green-500/25 hover:scale-105"
               >
                 <span className="flex items-center justify-center gap-3">

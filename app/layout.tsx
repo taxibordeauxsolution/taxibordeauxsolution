@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: 'Taxi Bordeaux Solution',
     images: [
       {
-        url: 'https://www.taxibordeauxsolution.fr/images/taxi-bordeaux-og.jpg',
+        url: 'https://www.taxibordeauxsolution.fr/images/hero/taxi-sign-sunset.jpg',
         width: 1200,
         height: 630,
         alt: 'Taxi Bordeaux Solution - Service professionnel',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Taxi Bordeaux Solution - Service rapide',
     description: 'Taxi professionnel à Bordeaux. Prise en charge rapide 24h/24 dans toute la métropole.',
-    images: ['https://www.taxibordeauxsolution.fr/images/taxi-bordeaux-twitter.jpg'],
+    images: ['https://www.taxibordeauxsolution.fr/images/hero/taxi-sign-sunset.jpg'],
   },
 
   // SEO Avancé
@@ -223,7 +223,7 @@ export default function RootLayout({
 
       </head>
 
-      <body className={inter.className} suppressHydrationWarning={true}>
+      <body className={inter.className}>
         <Header />
         <main className="min-h-screen">
           {children}

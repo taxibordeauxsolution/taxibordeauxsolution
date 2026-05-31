@@ -2,13 +2,23 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Phone, Menu, X, Calendar, PhoneCall, ChevronDown } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 
 export default function Header() {
   const pathname = usePathname()
+  const router = useRouter()
   const isAdmin = pathname?.startsWith('/admin')
+
+  const goToReservation = () => {
+    if (pathname === '/') {
+      const el = document.getElementById('reservation') || document.getElementById('reservation-mobile')
+      el?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      router.push('/booking')
+    }
+  }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false)
   const [visible, setVisible] = useState(true)
@@ -142,13 +152,7 @@ export default function Header() {
             {/* Actions Desktop */}
             <div className="hidden lg:flex items-center gap-2">
               <button
-                onClick={() => {
-                  if (pathname === '/') {
-                    document.getElementById('reservation')?.scrollIntoView({ behavior: 'smooth' })
-                  } else {
-                    window.location.href = '/#reservation'
-                  }
-                }}
+                onClick={goToReservation}
                 className="text-[15px] font-semibold px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer"
               >
                 Réserver
@@ -226,17 +230,7 @@ export default function Header() {
 
             <div className="mt-3 pt-3 border-t border-gray-100/50 grid grid-cols-2 gap-2.5">
               <button
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  if (pathname === '/') {
-                    setTimeout(() => {
-                      const el = document.getElementById('reservation-mobile') || document.getElementById('reservation')
-                      el?.scrollIntoView({ behavior: 'smooth' })
-                    }, 150)
-                  } else {
-                    window.location.href = '/#reservation-mobile'
-                  }
-                }}
+                onClick={() => { setMobileMenuOpen(false); goToReservation() }}
                 className="text-base font-semibold text-center px-3 py-3 rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <Calendar size={17} />

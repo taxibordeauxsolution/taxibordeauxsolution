@@ -6,7 +6,7 @@ import type { TripData, BookingData, ReservationData } from '../../types/booking
 import { calculateDistanceFare, isNightMinutes, parseHM } from '@/app/lib/pricing'
 import EmailCaptureForm from './EmailCaptureForm'
 
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyCarUqBqL2yuEy36eOw4JNatmclfOhOGs0'
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
 
 // Calcul de Pâques (algorithme de Gauss) — retourne 'MM-DD' pour comparaison
 function easterDate(year: number): Date {
