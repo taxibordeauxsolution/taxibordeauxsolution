@@ -199,8 +199,8 @@ export default function AdminReservations() {
         }),
         loadLogoBase64()
       ])
-      const json = await res.json()
-      if (!json.success) { alert('Erreur génération numéro de facture'); return }
+      const json = await res.json().catch(() => ({ success: false, message: 'Réponse invalide du serveur' }))
+      if (!json.success) { alert(`Erreur numéro de facture : ${json.message || 'inconnue'}`); return }
       const num = json.invoiceNumber
 
       const doc = new jsPDF()
