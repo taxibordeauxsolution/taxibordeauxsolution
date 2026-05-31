@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { z } from 'zod'
-import { connectDB, Reservation, ConfigPrix } from '@/app/lib/mongodb'
+import { connectDB, Reservation, ConfigPrix, Client } from '@/app/lib/mongodb'
 
 const ReservationBodySchema = z.object({
   reservationId: z.string().min(1),
@@ -212,6 +212,23 @@ export async function POST(req: NextRequest) {
           }
         }
       } catch { }
+    }
+
+    // Auto-upsert client dans le carnet d'adresses (non-bloquant)
+    if (!isLeadCapture && customer?.phone && customer?.name) {
+      Client.updateOne(
+        { telephone: customer.phone.trim() },
+        {
+          $setOnInsert: {
+            nom: customer.name.trim(),
+            telephone: customer.phone.trim(),
+            email: (customer.email || '').toLowerCase().trim(),
+            adresse: '',
+            notes: '',
+          },
+        },
+        { upsert: true }
+      ).catch(() => {})
     }
 
     return NextResponse.json({ success: true, id: reservation._id, googleEventId }, { status: 201 })

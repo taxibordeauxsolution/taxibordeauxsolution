@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { ArrowClockwise, Trash, Phone, Envelope, MapPin, MagnifyingGlass, Plus, FloppyDisk, X, PencilSimple, CaretLeft, CaretRight, AddressBook } from '@phosphor-icons/react'
+import { ArrowClockwise, Trash, Phone, Envelope, MapPin, MagnifyingGlass, Plus, FloppyDisk, X, PencilSimple, CaretLeft, CaretRight, AddressBook, DownloadSimple } from '@phosphor-icons/react'
 
 interface ClientData {
   _id: string
@@ -27,6 +27,7 @@ export default function AdminClients() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState(emptyClient)
   const [saving, setSaving] = useState(false)
+  const [importing, setImporting] = useState(false)
   const [message, setMessage] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
 
   const token = () => sessionStorage.getItem('admin_token') || ''
@@ -96,6 +97,28 @@ export default function AdminClients() {
     setSaving(false)
   }
 
+  const importFromResas = async () => {
+    if (!confirm('Importer tous les clients depuis les réservations existantes ?\n\nLes doublons (même téléphone) sont ignorés.')) return
+    setImporting(true)
+    setMessage(null)
+    try {
+      const res = await fetch('/api/admin/clients/import', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token()}` }
+      })
+      const json = await res.json()
+      if (json.success) {
+        setMessage({ type: 'ok', text: `Import terminé — ${json.created} créés · ${json.updated} mis à jour · ${json.skipped} ignorés (sur ${json.total} réservations)` })
+        load()
+      } else {
+        setMessage({ type: 'err', text: json.message || 'Erreur import' })
+      }
+    } catch (e: any) {
+      setMessage({ type: 'err', text: e.message })
+    }
+    setImporting(false)
+  }
+
   const deleteClient = async (id: string) => {
     if (!confirm('Supprimer ce client ?')) return
     await fetch('/api/admin/clients', {
@@ -114,6 +137,11 @@ export default function AdminClients() {
           Clients ({total})
         </h1>
         <div className="flex items-center gap-2">
+          <button onClick={importFromResas} disabled={importing}
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-purple-600 text-white rounded-xl text-sm font-semibold hover:bg-purple-700 disabled:bg-purple-300 transition-colors shrink-0">
+            <DownloadSimple size={16} className={importing ? 'animate-bounce' : ''} />
+            <span className="hidden sm:inline">{importing ? 'Import...' : 'Importer résas'}</span>
+          </button>
           <button onClick={openNew}
             className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors shrink-0">
             <Plus size={16} />
