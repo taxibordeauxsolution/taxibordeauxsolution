@@ -669,7 +669,7 @@ export default function HomePage() {
           <div className="max-w-2xl mx-auto text-center space-y-5">
             <p className="text-slate-500 text-sm font-semibold uppercase tracking-widest">Paiement à bord</p>
             <h2 className="text-2xl lg:text-3xl font-bold text-slate-900">
-              En espèces, CB, American Express ou sans contact
+              Espèces, CB ou sans contact
             </h2>
             <p className="text-slate-600">
               Paiement directement à bord à l'arrivée — aucun paiement en ligne.
