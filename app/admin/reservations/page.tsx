@@ -38,13 +38,11 @@ function addrStr(v: string | { address?: string }): string {
 
 // Construit l'URL du formulaire de réservation client avec les infos pré-remplies
 function buildBookingUrl(r: Reservation, retour = false): string {
-  const from = retour ? addrStr(r.trip.to)   : addrStr(r.trip.from)
-  const to   = retour ? addrStr(r.trip.from) : addrStr(r.trip.to)
   const p = new URLSearchParams({
-    from, to,
     name:  r.customer.name,
     phone: r.customer.phone,
     ...(r.customer.email ? { email: r.customer.email } : {}),
+    ...(retour ? { from: addrStr(r.trip.to), to: addrStr(r.trip.from) } : {}),
   })
   return `/booking?${p.toString()}`
 }
@@ -692,7 +690,11 @@ export default function AdminReservations() {
                     </div>
 
                     {/* Actions course */}
-                    <div className="grid grid-cols-3 gap-2 pt-1">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                      <a href={buildBookingUrl(r, false)} target="_blank" rel="noopener noreferrer"
+                        className="px-3 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-semibold hover:bg-blue-100 flex items-center justify-center gap-1.5">
+                        <PlusCircle size={14} /> Nouvelle course
+                      </a>
                       <a href={buildBookingUrl(r, true)} target="_blank" rel="noopener noreferrer"
                         className="px-3 py-2 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-semibold hover:bg-indigo-100 flex items-center justify-center gap-1.5">
                         <ArrowsLeftRight size={14} /> Créer retour
