@@ -162,11 +162,16 @@ const AdminUserSchema = new mongoose.Schema({
   passwordHash:     { type: String, required: true },
   name:             { type: String, required: true, trim: true },
   // Infos de facturation
-  nomEntreprise:    { type: String, default: '' },
-  adresse:          { type: String, default: '' },
-  telephone:        { type: String, default: '' },
-  emailFacturation: { type: String, default: '' },
-  siret:            { type: String, default: '' },
+  nomEntreprise:      { type: String, default: '' },
+  adresse:            { type: String, default: '' },
+  telephone:          { type: String, default: '' },
+  emailFacturation:   { type: String, default: '' },
+  siret:              { type: String, default: '' },
+  numeroTva:          { type: String, default: '' },
+  formeJuridique:     { type: String, default: '' },
+  capitalSocial:      { type: String, default: '' },
+  iban:               { type: String, default: '' },
+  conditionsPaiement: { type: String, default: 'Paiement comptant' },
 }, { timestamps: true })
 
 export const AdminUser =

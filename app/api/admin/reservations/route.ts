@@ -206,6 +206,40 @@ export async function PUT(req: NextRequest) {
     const reservation = await Reservation.findByIdAndUpdate(id, update, { new: true })
     if (!reservation) return NextResponse.json({ success: false, message: 'Non trouvée' }, { status: 404 })
 
+    // Email de notification de modification si demandé
+    if (editFull && body.notifyClient && reservation.customer.email) {
+      const fromAddr = typeof reservation.trip.from === 'string' ? reservation.trip.from : reservation.trip.from?.address || ''
+      const toAddr   = typeof reservation.trip.to   === 'string' ? reservation.trip.to   : reservation.trip.to?.address   || ''
+      const pickup   = new Date(reservation.pickupDate)
+      const dateStr  = pickup.toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', timeZone: 'Europe/Paris' })
+      const heureStr = pickup.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })
+      const fromEmail = process.env.RESEND_FROM_EMAIL || 'contact@taxibordeauxsolution.fr'
+      resend.emails.send({
+        from: fromEmail, to: [reservation.customer.email],
+        replyTo: 'contact@taxibordeauxsolution.fr',
+        subject: `Modification de votre réservation N° ${reservation.reservationId} — Taxi Bordeaux Solution`,
+        html: `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="font-family:Arial,sans-serif;background:#f4f4f5;margin:0;padding:0;color:#1e293b">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:24px 0"><tr><td align="center">
+<table width="520" cellpadding="0" cellspacing="0" style="max-width:520px;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden">
+  <tr><td style="background:#1e293b;padding:20px 32px;text-align:center"><h1 style="margin:0;font-size:18px;color:#fff;font-weight:600">Taxi Bordeaux Solution</h1></td></tr>
+  <tr><td style="padding:32px">
+    <h2 style="margin:0 0 8px;font-size:20px;color:#1e293b;text-align:center">Votre réservation a été modifiée</h2>
+    <p style="margin:0 0 24px;font-size:14px;color:#64748b;text-align:center">Bonjour ${reservation.customer.name}, voici les détails mis à jour de votre course.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;margin-bottom:24px"><tr><td style="padding:16px">
+      <div style="font-size:13px;color:#64748b;margin-bottom:4px">Réservation</div>
+      <div style="font-size:15px;color:#1e293b;font-weight:600;margin-bottom:12px">N° ${reservation.reservationId}</div>
+      <div style="font-size:13px;color:#64748b;margin-bottom:4px">Trajet</div>
+      <div style="font-size:15px;color:#1e293b;font-weight:600;margin-bottom:12px">${fromAddr.split(',')[0]} → ${toAddr.split(',')[0]}</div>
+      <div style="font-size:13px;color:#64748b;margin-bottom:4px">Date et heure</div>
+      <div style="font-size:15px;color:#1e293b;font-weight:600">${dateStr} à ${heureStr}</div>
+    </td></tr></table>
+    <p style="text-align:center;font-size:13px;color:#64748b;margin:0">Questions ? <a href="tel:+33667237822" style="color:#1e293b;font-weight:600;text-decoration:none">+33 6 67 23 78 22</a></p>
+  </td></tr>
+  <tr><td style="padding:12px 32px;border-top:1px solid #f1f5f9;text-align:center;font-size:11px;color:#94a3b8">Taxi Bordeaux Solution · contact@taxibordeauxsolution.fr</td></tr>
+</table></td></tr></table></body></html>`,
+      }).catch(() => {})
+    }
+
     let cancelEmailSent = false
 
     if (status === 'annulee') {

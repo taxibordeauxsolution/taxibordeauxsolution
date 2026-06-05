@@ -20,13 +20,12 @@ export async function PUT(req: NextRequest) {
   try {
     await connectDB()
     const email = getAdminEmail(req)
-    const { nomEntreprise, adresse, telephone, emailFacturation, siret } = await req.json()
+    const body = await req.json()
+    const fields = ['nomEntreprise','adresse','telephone','emailFacturation','siret','numeroTva','formeJuridique','capitalSocial','iban','conditionsPaiement']
     const update: any = {}
-    if (typeof nomEntreprise    !== 'undefined') update.nomEntreprise    = nomEntreprise.trim()
-    if (typeof adresse          !== 'undefined') update.adresse          = adresse.trim()
-    if (typeof telephone        !== 'undefined') update.telephone        = telephone.trim()
-    if (typeof emailFacturation !== 'undefined') update.emailFacturation = emailFacturation.trim()
-    if (typeof siret            !== 'undefined') update.siret            = siret.trim()
+    for (const f of fields) {
+      if (typeof body[f] !== 'undefined') update[f] = body[f].trim()
+    }
 
     const user = await AdminUser.findOneAndUpdate({ email }, { $set: update }, { new: true, projection: { passwordHash: 0 } })
     if (!user) return NextResponse.json({ success: false }, { status: 404 })

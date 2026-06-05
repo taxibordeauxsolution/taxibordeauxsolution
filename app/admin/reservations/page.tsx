@@ -13,6 +13,7 @@ interface Reservation {
   _id: string
   reservationId: string
   status: string
+  invoiceNumber?: number
   customer: { name: string; phone: string; email: string }
   trip: { from: string | { address?: string }; to: string | { address?: string }; distance: number }
   pricing: { totalPrice: number; fourchette?: { de: number; a: number }; tariffType: string; isForfait: boolean }
@@ -60,6 +61,7 @@ function EditModal({ r, token, onClose, onSaved }: {
   const [price,      setPrice]      = useState(String(r.pricing.totalPrice))
   const [notes,      setNotes]      = useState(r.notes)
   const [adminNotes, setAdminNotes] = useState(r.adminNotes || '')
+  const [notifyClient, setNotifyClient] = useState(false)
   const [saving, setSaving]         = useState(false)
   const [error,  setError]          = useState('')
 
@@ -70,7 +72,7 @@ function EditModal({ r, token, onClose, onSaved }: {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
-          id: r._id, editFull: true,
+          id: r._id, editFull: true, notifyClient,
           customer: { name: name.trim(), phone: phone.trim(), email: email.trim() },
           pickupDate: new Date(date + 'T' + time).toISOString(),
           pricing: { totalPrice: parseFloat(price) || r.pricing.totalPrice, tariffType: r.pricing.tariffType, isForfait: r.pricing.isForfait },
@@ -128,6 +130,12 @@ function EditModal({ r, token, onClose, onSaved }: {
               <textarea value={adminNotes} onChange={e => setAdminNotes(e.target.value)} rows={2} className="mt-1 w-full px-3 py-2 border border-amber-200 bg-amber-50 rounded-lg text-sm focus:border-amber-400 focus:outline-none resize-none" />
             </div>
           </div>
+          {r.customer.email && (
+            <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-600">
+              <input type="checkbox" checked={notifyClient} onChange={e => setNotifyClient(e.target.checked)} className="rounded border-slate-300" />
+              Notifier le client par email ({r.customer.email})
+            </label>
+          )}
           {error && <p className="text-xs text-red-600 bg-red-50 rounded px-3 py-2">{error}</p>}
         </div>
         <div className="flex justify-end gap-3 p-4 border-t border-slate-200">
@@ -327,11 +335,16 @@ export default function AdminReservations() {
       const profilRes  = await fetch('/api/admin/profil', { headers: { Authorization: `Bearer ${token()}` } })
       const profilJson = await profilRes.json()
       const profil = profilJson.data || {}
-      const factAdresse  = profil.adresse          || 'Sainte-Eulalie, 33560'
-      const factTel      = profil.telephone         || '+33 6 67 23 78 22'
-      const factEmail    = profil.emailFacturation  || 'contact@taxibordeauxsolution.fr'
-      const factSiret    = profil.siret             || '987 573 128 00012'
-      const factNom      = profil.nomEntreprise     || 'Taxi Bordeaux Solution'
+      const factNom               = profil.nomEntreprise     || 'Taxi Bordeaux Solution'
+      const factAdresse           = profil.adresse            || 'Sainte-Eulalie, 33560'
+      const factTel               = profil.telephone          || '+33 6 67 23 78 22'
+      const factEmail             = profil.emailFacturation   || 'contact@taxibordeauxsolution.fr'
+      const factSiret             = profil.siret              || '987 573 128 00012'
+      const factNumeroTva         = profil.numeroTva          || ''
+      const factFormeJuridique    = profil.formeJuridique     || ''
+      const factCapitalSocial     = profil.capitalSocial      || ''
+      const factIban              = profil.iban               || ''
+      const factConditions        = profil.conditionsPaiement || 'Paiement comptant'
 
       const estimation = r.pricing.totalPrice
       const input = window.prompt(
@@ -372,11 +385,14 @@ export default function AdminReservations() {
       if (logoBase64) doc.addImage(logoBase64, 'PNG', 20, y, 40, 40)
       const textX = logoBase64 ? 65 : 20
       doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(100, 100, 100)
-      doc.text(factAdresse,        textX, y + 12)
-      doc.text(`Tél : ${factTel}`, textX, y + 17)
-      doc.text(`Email : ${factEmail}`, textX, y + 22)
-      doc.text(`SIRET : ${factSiret}`, textX, y + 27)
-      y += 45
+      let enteteY = y + 10
+      if (factFormeJuridique) { doc.text(factFormeJuridique + (factCapitalSocial ? ` — Capital : ${factCapitalSocial}` : ''), textX, enteteY); enteteY += 5 }
+      doc.text(factAdresse, textX, enteteY); enteteY += 5
+      doc.text(`Tél : ${factTel}`, textX, enteteY); enteteY += 5
+      doc.text(`Email : ${factEmail}`, textX, enteteY); enteteY += 5
+      doc.text(`SIRET : ${factSiret}`, textX, enteteY); enteteY += 5
+      if (factNumeroTva) { doc.text(`TVA : ${factNumeroTva}`, textX, enteteY); enteteY += 5 }
+      y = Math.max(y + 45, enteteY + 5)
 
       doc.setDrawColor(30, 64, 175); doc.setLineWidth(0.8); doc.line(20, y, w - 20, y); y += 10
       doc.setFont('helvetica', 'bold'); doc.setFontSize(16); doc.setTextColor(30, 30, 30)
@@ -429,6 +445,25 @@ export default function AdminReservations() {
       doc.setDrawColor(30, 64, 175); doc.setLineWidth(0.8); doc.line(20, y, w - 20, y); y += 8
       doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(30, 64, 175)
       doc.text('TOTAL TTC', 26, y); doc.text(`${ttc.toFixed(2)} €`, w - 26, y, { align: 'right' })
+      y += 14
+
+      // Conditions de paiement + IBAN
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(60, 60, 60)
+      doc.text(`Conditions de paiement : ${factConditions}`, 20, y); y += 5
+      doc.text('Escompte : Aucun escompte consenti pour paiement anticipé.', 20, y); y += 5
+      if (factIban) { doc.text(`Virement : ${factIban}`, 20, y); y += 5 }
+      y += 3
+
+      // Mentions légales obligatoires
+      doc.setFontSize(7.5); doc.setTextColor(120, 120, 120)
+      const mentionLines = doc.splitTextToSize(
+        'Pénalités de retard : En cas de retard de paiement, une pénalité calculée au taux d\'intérêt légal majoré de 10 points sera appliquée, ainsi qu\'une indemnité forfaitaire pour frais de recouvrement de 40 € (art. L.441-10 C. com.).',
+        w - 40
+      )
+      doc.text(mentionLines, 20, y); y += mentionLines.length * 4 + 3
+
+      doc.setDrawColor(220, 220, 220); doc.setLineWidth(0.3); doc.line(20, y, w - 20, y)
+
       doc.setFont('helvetica', 'italic'); doc.setFontSize(9); doc.setTextColor(150, 150, 150)
       doc.text(`Merci pour votre confiance — ${factNom}`, w / 2, 280, { align: 'center' })
       doc.save(`Facture-FAC-${num}-${r.customer.name.replace(/\s+/g, '_')}.pdf`)
@@ -660,6 +695,13 @@ export default function AdminReservations() {
                       Destination : {addrStr(r.trip.to)}<br />
                       Créée le {formatDate(r.createdAt)}
                     </div>
+
+                    {r.invoiceNumber && (
+                      <div className="flex items-center gap-2 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-1.5">
+                        <Receipt size={13} weight="bold" />
+                        Facture <span className="font-bold">FAC-{r.invoiceNumber}</span> déjà générée
+                      </div>
+                    )}
 
                     {/* Actions statut */}
                     <div className="grid grid-cols-2 sm:flex gap-2 pt-2 border-t border-slate-200">
