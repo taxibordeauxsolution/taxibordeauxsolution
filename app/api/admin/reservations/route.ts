@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
-import { connectDB, Reservation } from '@/app/lib/mongodb'
+import { connectDB, Reservation, Client } from '@/app/lib/mongodb'
 import { verifyAdmin } from '@/app/lib/auth'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -75,21 +75,129 @@ export async function GET(req: NextRequest) {
   }
 }
 
+export async function POST(req: NextRequest) {
+  if (!verifyAdmin(req))
+    return NextResponse.json({ success: false, message: 'Non autorisé' }, { status: 401 })
+
+  try {
+    await connectDB()
+    const body = await req.json()
+    const { customer, trip, pricing, passengers, luggage, notes, adminNotes, pickupDate } = body
+
+    if (!customer?.name || !customer?.phone || !trip?.from || !trip?.to || !pickupDate) {
+      return NextResponse.json({ success: false, message: 'Champs requis manquants' }, { status: 400 })
+    }
+
+    const rand = Math.floor(Math.random() * 9000) + 1000
+    const reservationId = 'TBS-' + Date.now().toString().slice(-6) + '-' + rand
+
+    const reservation = await Reservation.create({
+      reservationId,
+      status: 'en_attente',
+      customer: { name: customer.name.trim(), phone: customer.phone.trim(), email: customer.email?.trim() || '' },
+      trip: { from: trip.from, to: trip.to, distance: trip.distance || 0 },
+      pricing: {
+        totalPrice: pricing?.totalPrice || 0,
+        fourchette: pricing?.fourchette || null,
+        tariffType: pricing?.tariffType || 'Jour',
+        isForfait: pricing?.isForfait || false,
+      },
+      passengers: passengers || 1,
+      luggage: luggage || 0,
+      notes: notes || '',
+      adminNotes: adminNotes || '',
+      pickupDate: new Date(pickupDate),
+    })
+
+    // Google Calendar
+    const gcalRefreshToken = process.env.GOOGLE_CALENDAR_REFRESH_TOKEN?.replace(/^﻿/, '').trim()
+    const gcalClientId = process.env.GOOGLE_CLIENT_ID?.replace(/^﻿/, '').trim()
+    const gcalClientSecret = process.env.GOOGLE_CLIENT_SECRET?.replace(/^﻿/, '').trim()
+    const gcalCalendarId = process.env.GOOGLE_CALENDAR_ID || 'primary'
+
+    if (gcalRefreshToken && gcalClientId && gcalClientSecret) {
+      try {
+        const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+          method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ client_id: gcalClientId, client_secret: gcalClientSecret, refresh_token: gcalRefreshToken, grant_type: 'refresh_token' }),
+        })
+        const tokenData = await tokenRes.json()
+        if (tokenData.access_token) {
+          const pickup = new Date(pickupDate)
+          const end = new Date(pickup.getTime() + (trip.distance > 50 ? 90 : 45) * 60000)
+          const prix = pricing?.fourchette
+            ? `${pricing.fourchette.de?.toFixed(2)}€ à ${pricing.fourchette.a?.toFixed(2)}€`
+            : `${(pricing?.totalPrice || 0).toFixed(2)}€`
+          const event = {
+            summary: `🚖 ${customer.name} — ${reservationId}`,
+            description: [`Client : ${customer.name}`, `Tel : ${customer.phone}`, customer.email ? `Email : ${customer.email}` : '', '', `Départ : ${trip.from}`, `Destination : ${trip.to}`, `Distance : ${(trip.distance||0).toFixed(1)} km`, '', `Prix : ${prix}`, `Passagers : ${passengers||1}`, `Bagages : ${luggage||0}`, notes ? `Notes : ${notes}` : '', adminNotes ? `Notes admin : ${adminNotes}` : ''].filter(Boolean).join('\n'),
+            start: { dateTime: pickup.toISOString(), timeZone: 'Europe/Paris' },
+            end: { dateTime: end.toISOString(), timeZone: 'Europe/Paris' },
+            reminders: { useDefault: false, overrides: [{ method: 'popup', minutes: 1440 }, { method: 'popup', minutes: 60 }] },
+          }
+          const calRes = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(gcalCalendarId)}/events`, {
+            method: 'POST', headers: { Authorization: `Bearer ${tokenData.access_token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify(event),
+          })
+          const calData = await calRes.json()
+          if (calData.id) await Reservation.findByIdAndUpdate(reservation._id, { googleEventId: calData.id })
+        }
+      } catch {}
+    }
+
+    // Auto-upsert client
+    Client.updateOne(
+      { telephone: customer.phone.trim() },
+      { $setOnInsert: { nom: customer.name.trim(), telephone: customer.phone.trim(), email: (customer.email || '').toLowerCase().trim(), adresse: '', notes: '' } },
+      { upsert: true }
+    ).catch(() => {})
+
+    return NextResponse.json({ success: true, id: reservation._id, reservationId }, { status: 201 })
+  } catch (e: any) {
+    return NextResponse.json({ success: false, message: e.message }, { status: 500 })
+  }
+}
+
 export async function PUT(req: NextRequest) {
   if (!verifyAdmin(req))
     return NextResponse.json({ success: false, message: 'Non autorisé' }, { status: 401 })
 
   try {
     await connectDB()
-    const { id, status, totalPrice } = await req.json()
+    const body = await req.json()
+    const { id, status, totalPrice, editFull } = body
     if (!id) return NextResponse.json({ success: false }, { status: 400 })
 
     const update: any = {}
-    if (status) update.status = status
-    if (status === 'en_route') update.enRouteAt = new Date()
-    if (typeof totalPrice === 'number' && totalPrice >= 0) {
-      update['pricing.totalPrice'] = totalPrice
-      update['pricing.fourchette'] = null
+
+    if (editFull) {
+      // Modification complète d'une réservation
+      const { customer, trip, pricing, passengers, luggage, notes, adminNotes, pickupDate } = body
+      if (customer?.name) update['customer.name'] = customer.name.trim()
+      if (customer?.phone) update['customer.phone'] = customer.phone.trim()
+      if (typeof customer?.email !== 'undefined') update['customer.email'] = customer.email?.trim() || ''
+      if (trip?.from) update['trip.from'] = trip.from
+      if (trip?.to) update['trip.to'] = trip.to
+      if (typeof trip?.distance === 'number') update['trip.distance'] = trip.distance
+      if (pickupDate) update.pickupDate = new Date(pickupDate)
+      if (typeof passengers === 'number') update.passengers = passengers
+      if (typeof luggage === 'number') update.luggage = luggage
+      if (typeof notes !== 'undefined') update.notes = notes
+      if (typeof adminNotes !== 'undefined') update.adminNotes = adminNotes
+      if (typeof pricing?.totalPrice === 'number') {
+        update['pricing.totalPrice'] = pricing.totalPrice
+        update['pricing.fourchette'] = pricing.fourchette || null
+        update['pricing.tariffType'] = pricing.tariffType || 'Jour'
+        update['pricing.isForfait'] = pricing.isForfait || false
+      }
+    } else {
+      if (status) update.status = status
+      if (status === 'en_route') update.enRouteAt = new Date()
+      if (typeof totalPrice === 'number' && totalPrice >= 0) {
+        update['pricing.totalPrice'] = totalPrice
+        update['pricing.fourchette'] = null
+      }
+      if (typeof body.adminNotes !== 'undefined') update.adminNotes = body.adminNotes
     }
 
     if (Object.keys(update).length === 0)

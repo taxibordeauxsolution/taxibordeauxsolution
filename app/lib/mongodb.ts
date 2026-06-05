@@ -146,6 +146,7 @@ const ReservationSchema = new mongoose.Schema({
   rappel24h: { type: Boolean, default: false },
   rappel1h:  { type: Boolean, default: false },
   googleEventId: { type: String, default: '' },
+  adminNotes: { type: String, default: '' },
 }, { timestamps: true })
 
 ReservationSchema.index({ pickupDate: 1 })

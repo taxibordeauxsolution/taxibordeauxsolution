@@ -553,6 +553,55 @@ const TaxiBookingHomePreview = () => {
       .catch(() => {})
   }, [])
 
+  // Pré-remplissage depuis les paramètres URL (pont depuis l'admin)
+  // Charge Maps eagerly si des adresses sont passées en params
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const fromParam  = params.get('from')
+    const toParam    = params.get('to')
+    const nameParam  = params.get('name')
+    const phoneParam = params.get('phone')
+    const emailParam = params.get('email')
+
+    if (!fromParam && !toParam && !nameParam && !phoneParam && !emailParam) return
+
+    if (nameParam || phoneParam || emailParam) {
+      setBookingData(prev => ({
+        ...prev,
+        customerName:  nameParam  || prev.customerName,
+        customerPhone: phoneParam || prev.customerPhone,
+        customerEmail: emailParam || prev.customerEmail,
+      }))
+    }
+
+    if (fromParam || toParam) {
+      loadGoogleMapsLazy().then(() => {
+        const geocoder = new (window as any).google.maps.Geocoder()
+        const geocode = (
+          address: string,
+          field: 'from' | 'to',
+          coordsField: 'fromCoords' | 'toCoords',
+          inputEl: HTMLInputElement | null
+        ) => {
+          geocoder.geocode({ address, region: 'FR' }, (results: any, status: string) => {
+            if (status === 'OK' && results[0]) {
+              const loc = results[0].geometry.location
+              const formatted = results[0].formatted_address
+              setTripData(prev => ({
+                ...prev,
+                [field]: formatted,
+                [coordsField]: { lat: loc.lat(), lng: loc.lng() },
+              } as any))
+              if (inputEl) inputEl.value = formatted
+            }
+          })
+        }
+        if (fromParam) geocode(fromParam, 'from', 'fromCoords', fromInputRef.current)
+        if (toParam)   geocode(toParam,   'to',   'toCoords',   toInputRef.current)
+      }).catch(() => {})
+    }
+  }, [loadGoogleMapsLazy])
+
   // Calcul de l'itinéraire (distance/durée) — pas d'affichage carte, juste les data
   const calculateRoute = useCallback(() => {
     if (!directionsService || !tripData.fromCoords || !tripData.toCoords) return
