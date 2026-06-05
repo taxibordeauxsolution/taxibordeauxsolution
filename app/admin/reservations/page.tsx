@@ -323,6 +323,16 @@ export default function AdminReservations() {
 
   const generateInvoice = async (r: Reservation) => {
     try {
+      // Chargement du profil de facturation de l'utilisateur connecté
+      const profilRes  = await fetch('/api/admin/profil', { headers: { Authorization: `Bearer ${token()}` } })
+      const profilJson = await profilRes.json()
+      const profil = profilJson.data || {}
+      const factAdresse  = profil.adresse          || 'Sainte-Eulalie, 33560'
+      const factTel      = profil.telephone         || '+33 6 67 23 78 22'
+      const factEmail    = profil.emailFacturation  || 'contact@taxibordeauxsolution.fr'
+      const factSiret    = profil.siret             || '987 573 128 00012'
+      const factNom      = profil.nomEntreprise     || 'Taxi Bordeaux Solution'
+
       const estimation = r.pricing.totalPrice
       const input = window.prompt(
         `Prix final TTC à facturer\n\nEstimation : ${estimation.toFixed(2)} €\n\nLaissez tel quel ou modifiez le prix réel facturé :`,
@@ -362,10 +372,10 @@ export default function AdminReservations() {
       if (logoBase64) doc.addImage(logoBase64, 'PNG', 20, y, 40, 40)
       const textX = logoBase64 ? 65 : 20
       doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.setTextColor(100, 100, 100)
-      doc.text('Sainte-Eulalie, 33560', textX, y + 12)
-      doc.text('Tél : +33 6 67 23 78 22', textX, y + 17)
-      doc.text('Email : contact@taxibordeauxsolution.fr', textX, y + 22)
-      doc.text('SIRET : 987 573 128 00012', textX, y + 27)
+      doc.text(factAdresse,        textX, y + 12)
+      doc.text(`Tél : ${factTel}`, textX, y + 17)
+      doc.text(`Email : ${factEmail}`, textX, y + 22)
+      doc.text(`SIRET : ${factSiret}`, textX, y + 27)
       y += 45
 
       doc.setDrawColor(30, 64, 175); doc.setLineWidth(0.8); doc.line(20, y, w - 20, y); y += 10
@@ -420,7 +430,7 @@ export default function AdminReservations() {
       doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.setTextColor(30, 64, 175)
       doc.text('TOTAL TTC', 26, y); doc.text(`${ttc.toFixed(2)} €`, w - 26, y, { align: 'right' })
       doc.setFont('helvetica', 'italic'); doc.setFontSize(9); doc.setTextColor(150, 150, 150)
-      doc.text('Merci pour votre confiance — Taxi Bordeaux Solution', w / 2, 280, { align: 'center' })
+      doc.text(`Merci pour votre confiance — ${factNom}`, w / 2, 280, { align: 'center' })
       doc.save(`Facture-FAC-${num}-${r.customer.name.replace(/\s+/g, '_')}.pdf`)
 
       const defaultEmail = r.customer.email || ''

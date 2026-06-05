@@ -158,9 +158,15 @@ export const Reservation =
 
 // ── Modèle AdminUser ─────────────────────────────────────────────────────
 const AdminUserSchema = new mongoose.Schema({
-  email:        { type: String, required: true, unique: true, lowercase: true, trim: true },
-  passwordHash: { type: String, required: true },
-  name:         { type: String, required: true, trim: true },
+  email:            { type: String, required: true, unique: true, lowercase: true, trim: true },
+  passwordHash:     { type: String, required: true },
+  name:             { type: String, required: true, trim: true },
+  // Infos de facturation
+  nomEntreprise:    { type: String, default: '' },
+  adresse:          { type: String, default: '' },
+  telephone:        { type: String, default: '' },
+  emailFacturation: { type: String, default: '' },
+  siret:            { type: String, default: '' },
 }, { timestamps: true })
 
 export const AdminUser =

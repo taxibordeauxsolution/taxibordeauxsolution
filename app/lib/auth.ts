@@ -19,6 +19,18 @@ export function verifyAdmin(req: NextRequest): boolean {
   } catch { return false }
 }
 
+export function getAdminEmail(req: NextRequest): string | null {
+  const secret = process.env.JWT_SECRET
+  if (!secret) return null
+  const auth = req.headers.get('authorization') || ''
+  const token = auth.replace('Bearer ', '')
+  if (!token) return null
+  try {
+    const p = jwt.verify(token, secret) as any
+    return p.role === 'admin' ? (p.email as string) : null
+  } catch { return null }
+}
+
 // Helper : minuit heure Paris → timestamp UTC correct (gère l'heure d'été/hiver)
 export function parisMidnight(date: Date): Date {
   const dateStr = date.toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' })
