@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { CurrencyEur, Path, SignOut, House, ChartBar, Taxi, List, X, SquaresFour, UsersThree, PhoneCall, AddressBook, IdentificationCard, Moon, Sun } from '@phosphor-icons/react'
+import { getToken } from '@/app/admin/lib/token'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -11,11 +12,52 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [ready, setReady] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
+  const lastCountRef = useRef<number>(-1)
 
   useEffect(() => {
     const saved = localStorage.getItem('admin_dark_mode')
     if (saved === 'true') setDarkMode(true)
   }, [])
+
+  // #21 — Notifications navigateur pour nouvelles réservations
+  useEffect(() => {
+    if (pathname === '/admin') return
+    if (typeof window === 'undefined') return
+
+    const requestPerm = async () => {
+      if ('Notification' in window && Notification.permission === 'default') {
+        await Notification.requestPermission()
+      }
+    }
+    requestPerm()
+
+    const poll = async () => {
+      const token = getToken()
+      if (!token) return
+      try {
+        const res = await fetch('/api/admin/reservations?status=en_attente&limit=1&page=1', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        const json = await res.json()
+        if (!json.success) return
+        const count: number = json.stats?.en_attente ?? 0
+        const prev = lastCountRef.current
+        if (prev >= 0 && count > prev && 'Notification' in window && Notification.permission === 'granted') {
+          const diff = count - prev
+          new Notification(`🚖 ${diff} nouvelle${diff > 1 ? 's' : ''} résa en attente`, {
+            body: 'Cliquez pour ouvrir l\'admin',
+            icon: '/favicon.ico',
+            tag: 'admin-resa',
+          })
+        }
+        lastCountRef.current = count
+      } catch { /* silencieux */ }
+    }
+
+    poll()
+    const interval = setInterval(poll, 30000)
+    return () => clearInterval(interval)
+  }, [pathname])
 
   const toggleDark = () => {
     setDarkMode(prev => {

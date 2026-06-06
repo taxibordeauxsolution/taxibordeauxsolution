@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { IdentificationCard, FloppyDisk, CheckCircle } from '@phosphor-icons/react'
+import { getToken } from '@/app/admin/lib/token'
 
 interface FormState {
   nomEntreprise: string; adresse: string; telephone: string
@@ -45,10 +46,9 @@ export default function ProfilPage() {
   const [saved, setSaved]     = useState(false)
   const [error, setError]     = useState('')
 
-  const token = () => sessionStorage.getItem('admin_token') || ''
 
   useEffect(() => {
-    fetch('/api/admin/profil', { headers: { Authorization: `Bearer ${token()}` } })
+    fetch('/api/admin/profil', { headers: { Authorization: `Bearer ${getToken()}` } })
       .then(r => r.json())
       .then(j => {
         if (j.success) {
@@ -77,7 +77,7 @@ export default function ProfilPage() {
     try {
       const res  = await fetch('/api/admin/profil', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify(form),
       })
       const json = await res.json()

@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Plus, PencilSimple, Trash, ToggleLeft, ToggleRight, ArrowClockwise, X, FloppyDisk, MapPin, Warning } from '@phosphor-icons/react'
+import { getToken } from '@/app/admin/lib/token'
+import { ConfirmDialog } from '@/app/admin/components/ConfirmDialog'
 
 const API = '/api'
 const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyCarUqBqL2yuEy36eOw4JNatmclfOhOGs0'
@@ -27,18 +29,16 @@ export default function AdminForfaits() {
   const [editing, setEditing] = useState<Forfait | null>(null)
   const [message, setMessage] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
   const [deleting, setDeleting] = useState<string | null>(null)
-
-  const token = () => sessionStorage.getItem('admin_token') || ''
+  const [confirmDel, setConfirmDel] = useState<{ id: string; nom: string } | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch(`${API}/admin/forfaits`, { headers: { Authorization: `Bearer ${token()}` } })
+      const res = await fetch(`${API}/admin/forfaits`, { headers: { Authorization: `Bearer ${getToken()}` } })
       const data = await res.json()
       if (data.success) setForfaits(data.data)
-    } finally {
-      setLoading(false)
-    }
+    } catch (e) { console.error('Erreur chargement forfaits:', e) }
+    finally { setLoading(false) }
   }, [])
 
   useEffect(() => { load() }, [load])
@@ -46,16 +46,15 @@ export default function AdminForfaits() {
   const toggleActif = async (f: Forfait) => {
     await fetch(`${API}/admin/forfaits/${f._id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
       body: JSON.stringify({ actif: !f.actif })
     })
     load()
   }
 
-  const deleteForfait = async (id: string, nom: string) => {
-    if (!confirm(`Supprimer le forfait "${nom}" ?`)) return
+  const deleteForfait = async (id: string) => {
     setDeleting(id)
-    await fetch(`${API}/admin/forfaits/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token()}` } })
+    await fetch(`${API}/admin/forfaits/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${getToken()}` } })
     setDeleting(null)
     load()
   }
@@ -70,6 +69,13 @@ export default function AdminForfaits() {
 
   return (
     <div className="space-y-6">
+      {confirmDel && (
+        <ConfirmDialog
+          message={`Supprimer le forfait "${confirmDel.nom}" ?`}
+          onConfirm={() => { const { id } = confirmDel; setConfirmDel(null); deleteForfait(id) }}
+          onCancel={() => setConfirmDel(null)}
+        />
+      )}
       <div className="flex items-center justify-between gap-2">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Forfaits</h1>
@@ -129,7 +135,7 @@ export default function AdminForfaits() {
                     <PencilSimple size={18} />
                   </button>
                   <button
-                    onClick={() => deleteForfait(f._id!, f.nom)}
+                    onClick={() => setConfirmDel({ id: f._id!, nom: f.nom })}
                     disabled={deleting === f._id}
                     className="p-1.5 sm:p-2 rounded-xl hover:bg-red-50 text-red-500 transition-colors"
                     title="Supprimer"
@@ -151,7 +157,7 @@ export default function AdminForfaits() {
       {editing && (
         <ForfaitForm
           initial={editing}
-          token={token()}
+          token={getToken()}
           onSaved={onSaved}
           onCancel={() => setEditing(null)}
         />
@@ -373,144 +379,145 @@ function ForfaitForm({ initial, token, onSaved, onCancel }: {
   }
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl border border-blue-100 p-8 space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-gray-900">{form._id ? 'Modifier le forfait' : 'Nouveau forfait'}</h2>
-        <button onClick={onCancel} className="p-2 rounded-xl hover:bg-gray-100 text-gray-500">
-          <X size={22} />
-        </button>
-      </div>
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 overflow-y-auto">
+      <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-blue-100 dark:border-slate-700 p-6 sm:p-8 space-y-6 w-full max-w-2xl my-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">{form._id ? 'Modifier le forfait' : 'Nouveau forfait'}</h2>
+          <button onClick={onCancel} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-500 dark:text-slate-400">
+            <X size={22} />
+          </button>
+        </div>
 
-      {/* Nom */}
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-1">Nom du forfait *</label>
-        <input
-          type="text"
-          value={form.nom}
-          onChange={e => setField('nom', e.target.value)}
-          placeholder="Ex: Gare Saint-Jean ↔ Aéroport Mérignac"
-          className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none"
-        />
-      </div>
+        {/* Nom */}
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1">Nom du forfait *</label>
+          <input
+            type="text"
+            value={form.nom}
+            onChange={e => setField('nom', e.target.value)}
+            placeholder="Ex: Gare Saint-Jean ↔ Aéroport Mérignac"
+            className="w-full border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none"
+          />
+        </div>
 
-      {/* Points A et B */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {(['A', 'B'] as const).map(z => {
-          const pt = z === 'A' ? 'pointA' : 'pointB'
-          const color = z === 'A' ? 'blue' : 'red'
-          const hasZone = form[pt].zone?.length > 2
-          return (
-            <div key={z} className={`border-2 rounded-2xl p-4 space-y-3 ${z === 'A' ? 'border-blue-200 bg-blue-50/30' : 'border-red-200 bg-red-50/30'}`}>
-              <div className="flex items-center gap-2">
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold ${z === 'A' ? 'bg-blue-600' : 'bg-red-500'}`}>{z}</div>
-                <span className="font-semibold text-gray-700">Point {z}</span>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-1">Adresse *</label>
-                <input
-                  ref={z === 'A' ? acRefA : acRefB}
-                  type="text"
-                  defaultValue={form[pt].adresse}
-                  placeholder="Tapez une adresse..."
-                  className="w-full border-2 border-gray-200 rounded-xl px-3 py-2 focus:border-blue-500 focus:outline-none text-sm"
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => startDraw(z)}
-                  className={`flex-1 text-sm font-semibold py-2 px-3 rounded-xl border-2 transition-colors ${
-                    z === 'A'
-                      ? 'border-blue-400 text-blue-700 hover:bg-blue-100'
-                      : 'border-red-400 text-red-700 hover:bg-red-100'
-                  } ${activeZone === z ? 'ring-2 ring-offset-1 ' + (z === 'A' ? 'ring-blue-400' : 'ring-red-400') : ''}`}
-                >
-                  {activeZone === z ? 'Dessinez sur la carte...' : `Dessiner zone ${z}`}
-                </button>
-                {hasZone && (
+        {/* Points A et B */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {(['A', 'B'] as const).map(z => {
+            const pt = z === 'A' ? 'pointA' : 'pointB'
+            const hasZone = form[pt].zone?.length > 2
+            return (
+              <div key={z} className={`border-2 rounded-2xl p-4 space-y-3 ${z === 'A' ? 'border-blue-200 bg-blue-50/30 dark:border-blue-900/40 dark:bg-blue-900/20' : 'border-red-200 bg-red-50/30 dark:border-red-900/40 dark:bg-red-900/20'}`}>
+                <div className="flex items-center gap-2">
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold ${z === 'A' ? 'bg-blue-600' : 'bg-red-500'}`}>{z}</div>
+                  <span className="font-semibold text-gray-700 dark:text-slate-300">Point {z}</span>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 dark:text-slate-400 mb-1">Adresse *</label>
+                  <input
+                    ref={z === 'A' ? acRefA : acRefB}
+                    type="text"
+                    defaultValue={form[pt].adresse}
+                    placeholder="Tapez une adresse..."
+                    className="w-full border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 py-2 focus:border-blue-500 focus:outline-none text-sm"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => clearZone(z)}
-                    className="text-gray-400 hover:text-red-500 p-2 rounded-xl hover:bg-red-50"
-                    title="Effacer la zone"
+                    onClick={() => startDraw(z)}
+                    className={`flex-1 text-sm font-semibold py-2 px-3 rounded-xl border-2 transition-colors ${
+                      z === 'A'
+                        ? 'border-blue-400 text-blue-700 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30'
+                        : 'border-red-400 text-red-700 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30'
+                    } ${activeZone === z ? 'ring-2 ring-offset-1 ' + (z === 'A' ? 'ring-blue-400' : 'ring-red-400') : ''}`}
                   >
-                    <X size={16} />
+                    {activeZone === z ? 'Dessinez sur la carte...' : `Dessiner zone ${z}`}
                   </button>
+                  {hasZone && (
+                    <button
+                      type="button"
+                      onClick={() => clearZone(z)}
+                      className="text-gray-400 hover:text-red-500 p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20"
+                      title="Effacer la zone"
+                    >
+                      <X size={16} />
+                    </button>
+                  )}
+                </div>
+                {hasZone && (
+                  <p className="text-xs text-green-600 dark:text-green-400 font-medium">
+                    Zone dessinée — {form[pt].zone.length} points
+                  </p>
+                )}
+                {!hasZone && form[pt].lat !== 0 && (
+                  <p className="text-xs text-gray-400 dark:text-slate-500">
+                    Rayon 500 m autour du point (par défaut)
+                  </p>
                 )}
               </div>
-              {hasZone && (
-                <p className="text-xs text-green-600 font-medium">
-                  Zone dessinée — {form[pt].zone.length} points
-                </p>
-              )}
-              {!hasZone && form[pt].lat !== 0 && (
-                <p className="text-xs text-gray-400">
-                  Rayon 500 m autour du point (par défaut)
-                </p>
-              )}
-            </div>
-          )
-        })}
-      </div>
-
-      {/* Carte */}
-      <div className="space-y-2">
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <Warning size={16} className="text-yellow-500" />
-          Sélectionnez d'abord les adresses, puis cliquez sur "Dessiner zone" et tracez un polygone sur la carte.
+            )
+          })}
         </div>
-        <div ref={mapRef} className="w-full h-80 rounded-2xl border-2 border-gray-200 overflow-hidden" />
-      </div>
 
-      {/* Prix */}
-      <div className="grid grid-cols-2 gap-5">
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Prix jour (€) *</label>
-          <input
-            type="text" inputMode="decimal"
-            value={form.prixJour || ''}
-            onChange={e => setField('prixJour', parseFloat(e.target.value) || 0)}
-            placeholder="0"
-            className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none"
-          />
+        {/* Carte */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
+            <Warning size={16} className="text-yellow-500" />
+            Sélectionnez d'abord les adresses, puis cliquez sur "Dessiner zone" et tracez un polygone sur la carte.
+          </div>
+          <div ref={mapRef} className="w-full h-80 rounded-2xl border-2 border-gray-200 dark:border-slate-600 overflow-hidden" />
         </div>
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Prix nuit (€) *</label>
-          <input
-            type="text" inputMode="decimal"
-            value={form.prixNuit || ''}
-            onChange={e => setField('prixNuit', parseFloat(e.target.value) || 0)}
-            placeholder="0"
-            className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none"
-          />
+
+        {/* Prix */}
+        <div className="grid grid-cols-2 gap-5">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1">Prix jour (€) *</label>
+            <input
+              type="text" inputMode="decimal"
+              value={form.prixJour || ''}
+              onChange={e => setField('prixJour', parseFloat(e.target.value) || 0)}
+              placeholder="0"
+              className="w-full border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1">Prix nuit (€) *</label>
+            <input
+              type="text" inputMode="decimal"
+              value={form.prixNuit || ''}
+              onChange={e => setField('prixNuit', parseFloat(e.target.value) || 0)}
+              placeholder="0"
+              className="w-full border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none"
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Actif */}
-      <label className="flex items-center gap-3 cursor-pointer">
-        <div
-          onClick={() => setField('actif', !form.actif)}
-          className={`w-12 h-6 rounded-full transition-colors ${form.actif ? 'bg-green-500' : 'bg-gray-300'} relative`}
-        >
-          <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${form.actif ? 'translate-x-7' : 'translate-x-1'}`} />
+        {/* Actif */}
+        <label className="flex items-center gap-3 cursor-pointer">
+          <div
+            onClick={() => setField('actif', !form.actif)}
+            className={`w-12 h-6 rounded-full transition-colors ${form.actif ? 'bg-green-500' : 'bg-gray-300 dark:bg-slate-600'} relative`}
+          >
+            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform ${form.actif ? 'translate-x-7' : 'translate-x-1'}`} />
+          </div>
+          <span className="text-sm font-semibold text-gray-700 dark:text-slate-300">{form.actif ? 'Actif' : 'Inactif'}</span>
+        </label>
+
+        {error && <p className="text-red-500 dark:text-red-400 text-sm font-medium">{error}</p>}
+
+        <div className="flex gap-3 justify-end">
+          <button onClick={onCancel} className="px-6 py-3 rounded-2xl border-2 border-gray-200 dark:border-slate-600 font-semibold text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">
+            Annuler
+          </button>
+          <button
+            onClick={save}
+            disabled={saving}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-bold px-8 py-3 rounded-2xl transition-colors shadow-lg"
+          >
+            <FloppyDisk size={20} />
+            {saving ? 'Sauvegarde...' : 'Enregistrer'}
+          </button>
         </div>
-        <span className="text-sm font-semibold text-gray-700">{form.actif ? 'Actif' : 'Inactif'}</span>
-      </label>
-
-      {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
-
-      <div className="flex gap-3 justify-end">
-        <button onClick={onCancel} className="px-6 py-3 rounded-2xl border-2 border-gray-200 font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
-          Annuler
-        </button>
-        <button
-          onClick={save}
-          disabled={saving}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-bold px-8 py-3 rounded-2xl transition-colors shadow-lg"
-        >
-          <FloppyDisk size={20} />
-          {saving ? 'Sauvegarde...' : 'Enregistrer'}
-        </button>
       </div>
     </div>
   )

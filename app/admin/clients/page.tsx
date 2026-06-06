@@ -2,6 +2,10 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { ArrowClockwise, Trash, Phone, Envelope, MapPin, MagnifyingGlass, Plus, FloppyDisk, X, PencilSimple, CaretLeft, CaretRight, AddressBook, DownloadSimple } from '@phosphor-icons/react'
+import { getToken } from '@/app/admin/lib/token'
+import { SkeletonList } from '@/app/admin/components/Skeleton'
+import { ConfirmDialog } from '@/app/admin/components/ConfirmDialog'
+import { CopyButton } from '@/app/admin/components/CopyButton'
 
 interface ClientData {
   _id: string
@@ -29,8 +33,8 @@ export default function AdminClients() {
   const [saving, setSaving] = useState(false)
   const [importing, setImporting] = useState(false)
   const [message, setMessage] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
-
-  const token = () => sessionStorage.getItem('admin_token') || ''
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+  const [confirmImportOpen, setConfirmImportOpen] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -38,7 +42,7 @@ export default function AdminClients() {
       const params = new URLSearchParams({ page: String(page), limit: '20' })
       if (search) params.set('search', search)
       const res = await fetch(`/api/admin/clients?${params}`, {
-        headers: { Authorization: `Bearer ${token()}` }
+        headers: { Authorization: `Bearer ${getToken()}` }
       })
       const json = await res.json()
       if (json.success) {
@@ -46,7 +50,7 @@ export default function AdminClients() {
         setTotal(json.pagination.total)
         setTotalPages(json.pagination.totalPages)
       }
-    } catch { }
+    } catch (e) { console.error('Erreur chargement clients:', e) }
     setLoading(false)
   }, [page, search])
 
@@ -80,7 +84,7 @@ export default function AdminClients() {
       const body = editingId ? { id: editingId, ...form } : form
       const res = await fetch('/api/admin/clients', {
         method,
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify(body)
       })
       const json = await res.json()
@@ -98,13 +102,12 @@ export default function AdminClients() {
   }
 
   const importFromResas = async () => {
-    if (!confirm('Importer tous les clients depuis les réservations existantes ?\n\nLes doublons (même téléphone) sont ignorés.')) return
     setImporting(true)
     setMessage(null)
     try {
       const res = await fetch('/api/admin/clients/import', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token()}` }
+        headers: { Authorization: `Bearer ${getToken()}` }
       })
       const json = await res.json()
       if (json.success) {
@@ -120,10 +123,9 @@ export default function AdminClients() {
   }
 
   const deleteClient = async (id: string) => {
-    if (!confirm('Supprimer ce client ?')) return
     await fetch('/api/admin/clients', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
       body: JSON.stringify({ ids: [id] })
     })
     load()
@@ -131,13 +133,29 @@ export default function AdminClients() {
 
   return (
     <div className="space-y-6">
+      {confirmDeleteId && (
+        <ConfirmDialog
+          message="Supprimer ce client définitivement ?"
+          onConfirm={() => { const id = confirmDeleteId; setConfirmDeleteId(null); deleteClient(id) }}
+          onCancel={() => setConfirmDeleteId(null)}
+        />
+      )}
+      {confirmImportOpen && (
+        <ConfirmDialog
+          message="Importer tous les clients depuis les réservations ? Les doublons (même téléphone) seront ignorés."
+          onConfirm={() => { setConfirmImportOpen(false); importFromResas() }}
+          onCancel={() => setConfirmImportOpen(false)}
+          confirmLabel="Importer"
+          danger={false}
+        />
+      )}
       <div className="flex items-center justify-between gap-2">
         <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <AddressBook size={24} weight="bold" className="text-blue-600 shrink-0" />
           Clients ({total})
         </h1>
         <div className="flex items-center gap-2">
-          <button onClick={importFromResas} disabled={importing}
+          <button onClick={() => setConfirmImportOpen(true)} disabled={importing}
             className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-purple-600 text-white rounded-xl text-sm font-semibold hover:bg-purple-700 disabled:bg-purple-300 transition-colors shrink-0">
             <DownloadSimple size={16} className={importing ? 'animate-bounce' : ''} />
             <span className="hidden sm:inline">{importing ? 'Import...' : 'Importer résas'}</span>
@@ -218,7 +236,7 @@ export default function AdminClients() {
       {/* Liste */}
       <div className="space-y-3">
         {loading ? (
-          <div className="text-center py-12 text-slate-400">Chargement...</div>
+          <SkeletonList count={5} />
         ) : clients.length === 0 ? (
           <div className="text-center py-12 text-slate-400">
             {search ? 'Aucun résultat' : 'Aucun client enregistré'}
@@ -233,9 +251,12 @@ export default function AdminClients() {
                 <div className="flex-1 min-w-0">
                   <div className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">{c.nom}</div>
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
-                    <a href={`tel:${c.telephone}`} className="text-blue-600 dark:text-blue-400 text-sm flex items-center gap-1 hover:underline">
-                      <Phone size={14} /> {c.telephone}
-                    </a>
+                    <div className="flex items-center gap-1">
+                      <a href={`tel:${c.telephone}`} className="text-blue-600 dark:text-blue-400 text-sm flex items-center gap-1 hover:underline">
+                        <Phone size={14} /> {c.telephone}
+                      </a>
+                      <CopyButton text={c.telephone} />
+                    </div>
                     {c.email && (
                       <a href={`mailto:${c.email}`} className="text-slate-500 dark:text-slate-400 text-sm flex items-center gap-1 hover:underline truncate">
                         <Envelope size={14} /> <span className="truncate">{c.email}</span>
@@ -256,7 +277,7 @@ export default function AdminClients() {
                     className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-500 hover:text-blue-600">
                     <PencilSimple size={16} />
                   </button>
-                  <button onClick={() => deleteClient(c._id)}
+                  <button onClick={() => setConfirmDeleteId(c._id)}
                     className="p-2 hover:bg-red-50 rounded-lg transition-colors text-slate-400 hover:text-red-600">
                     <Trash size={16} />
                   </button>

@@ -5,9 +5,13 @@ import {
   ArrowClockwise, Trash, Taxi, Phone, Envelope, MapPin, Clock,
   CheckCircle, XCircle, HourglassSimple, CaretDown, CaretLeft, CaretRight,
   MagnifyingGlass, Receipt, NavigationArrow, PlusCircle, PencilSimple,
-  ArrowsLeftRight, UserList, Export, X,
+  ArrowsLeftRight, UserList, Export, X, AddressBook,
 } from '@phosphor-icons/react'
 import jsPDF from 'jspdf'
+import { getToken } from '@/app/admin/lib/token'
+import { SkeletonList } from '@/app/admin/components/Skeleton'
+import { ConfirmDialog } from '@/app/admin/components/ConfirmDialog'
+import { CopyButton } from '@/app/admin/components/CopyButton'
 
 interface Reservation {
   _id: string
@@ -213,7 +217,11 @@ export default function AdminReservations() {
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const searchTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
   const [expandedId, setExpandedId] = useState<string | null>(null)
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(() => {
+    if (typeof window === 'undefined') return 1
+    const p = new URLSearchParams(window.location.search).get('page')
+    return p ? Math.max(1, parseInt(p) || 1) : 1
+  })
   const [totalPages, setTotalPages] = useState(1)
   const [notification, setNotification] = useState<{ type: 'success' | 'info' | 'warning'; msg: string } | null>(null)
   const [dateFrom, setDateFrom] = useState('')
@@ -222,8 +230,7 @@ export default function AdminReservations() {
   // Modales
   const [editModal,  setEditModal]  = useState<Reservation | null>(null)
   const [histModal,  setHistModal]  = useState<{ name: string; phone: string } | null>(null)
-
-  const token = () => sessionStorage.getItem('admin_token') || ''
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
 
   useEffect(() => {
     clearTimeout(searchTimerRef.current)
@@ -241,14 +248,21 @@ export default function AdminReservations() {
       if (debouncedSearch) params.set('search', debouncedSearch)
       params.set('page', String(page))
       params.set('limit', '20')
-      const res  = await fetch(`/api/admin/reservations?${params}`, { headers: { Authorization: `Bearer ${token()}` } })
+      const res  = await fetch(`/api/admin/reservations?${params}`, { headers: { Authorization: `Bearer ${getToken()}` } })
       const json = await res.json()
       if (json.success) { setReservations(json.data); setStats(json.stats); setTotalPages(json.pagination?.totalPages || 1) }
-    } catch {}
+    } catch (e) { console.error('Erreur chargement réservations:', e) }
     setLoading(false)
   }, [statusFilter, page, dateFrom, dateTo, debouncedSearch])
 
   useEffect(() => { load() }, [load])
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (page === 1) { params.delete('page') } else { params.set('page', String(page)) }
+    const qs = params.toString()
+    window.history.replaceState({}, '', qs ? `?${qs}` : window.location.pathname)
+  }, [page])
 
   const showNotif = (type: 'success' | 'info' | 'warning', msg: string) => {
     setNotification({ type, msg })
@@ -260,7 +274,7 @@ export default function AdminReservations() {
     try {
       const res  = await fetch('/api/admin/reservations', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify({ id, status }),
       })
       const json = await res.json()
@@ -270,15 +284,14 @@ export default function AdminReservations() {
         else if (json.customerEmail) showNotif('warning', `Échec envoi email à ${json.customerEmail} — Appelez le ${json.customerPhone}`)
         else                         showNotif('info',    `Aucun email client — Appelez le ${json.customerPhone} pour prévenir`)
       }
-    } catch { load() }
+    } catch (e) { console.error('Erreur mise à jour statut:', e); load() }
   }
 
   const deleteSelected = async () => {
     if (selected.size === 0) return
-    if (!confirm(`Supprimer ${selected.size} réservation(s) ?`)) return
     await fetch('/api/admin/reservations', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
       body: JSON.stringify({ ids: [...selected] }),
     })
     setSelected(new Set())
@@ -332,7 +345,7 @@ export default function AdminReservations() {
   const generateInvoice = async (r: Reservation) => {
     try {
       // Chargement du profil de facturation de l'utilisateur connecté
-      const profilRes  = await fetch('/api/admin/profil', { headers: { Authorization: `Bearer ${token()}` } })
+      const profilRes  = await fetch('/api/admin/profil', { headers: { Authorization: `Bearer ${getToken()}` } })
       const profilJson = await profilRes.json()
       const profil = profilJson.data || {}
       const factNom               = profil.nomEntreprise     || 'Taxi Bordeaux Solution'
@@ -358,7 +371,7 @@ export default function AdminReservations() {
       if (Math.abs(finalPrice - estimation) > 0.01) {
         const updateRes = await fetch('/api/admin/reservations', {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
           body: JSON.stringify({ id: r._id, totalPrice: finalPrice }),
         })
         const updateJson = await updateRes.json()
@@ -369,7 +382,7 @@ export default function AdminReservations() {
       const [res, logoBase64] = await Promise.all([
         fetch('/api/admin/invoice-number', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
           body: JSON.stringify({ reservationId: r._id }),
         }),
         loadLogoBase64(),
@@ -480,7 +493,7 @@ export default function AdminReservations() {
           const pdfBase64 = doc.output('datauristring').split(',')[1]
           const sendRes   = await fetch('/api/admin/send-invoice', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
             body: JSON.stringify({ email: emailDest, pdfBase64, invoiceNumber: num, reservationId: r.reservationId, customerName: r.customer.name }),
           })
           const sendJson = await sendRes.json()
@@ -497,7 +510,7 @@ export default function AdminReservations() {
       {editModal && (
         <EditModal
           r={editModal}
-          token={token()}
+          token={getToken()}
           onClose={() => setEditModal(null)}
           onSaved={() => { setEditModal(null); load(); showNotif('success', 'Réservation modifiée.') }}
         />
@@ -506,8 +519,15 @@ export default function AdminReservations() {
         <HistoriqueModal
           name={histModal.name}
           phone={histModal.phone}
-          token={token()}
+          token={getToken()}
           onClose={() => setHistModal(null)}
+        />
+      )}
+      {confirmDeleteOpen && (
+        <ConfirmDialog
+          message={`Supprimer définitivement ${selected.size} réservation(s) ?`}
+          onConfirm={() => { setConfirmDeleteOpen(false); deleteSelected() }}
+          onCancel={() => setConfirmDeleteOpen(false)}
         />
       )}
 
@@ -595,7 +615,7 @@ export default function AdminReservations() {
             </button>
           ))}
           {selected.size > 0 && (
-            <button onClick={deleteSelected}
+            <button onClick={() => setConfirmDeleteOpen(true)}
               className="ml-auto px-3 sm:px-4 py-1.5 sm:py-2 bg-red-600 text-white rounded-lg text-xs sm:text-sm font-semibold hover:bg-red-700 transition-colors flex items-center gap-2">
               <Trash size={16} />
               Supprimer ({selected.size})
@@ -607,7 +627,7 @@ export default function AdminReservations() {
       {/* Liste */}
       <div className="space-y-3">
         {loading ? (
-          <div className="text-center py-12 text-slate-400">Chargement...</div>
+          <SkeletonList count={5} />
         ) : reservations.length === 0 ? (
           <div className="text-center py-12 text-slate-400">{search ? 'Aucun résultat' : 'Aucune réservation'}</div>
         ) : (
@@ -654,9 +674,12 @@ export default function AdminReservations() {
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <span className="text-slate-400 dark:text-slate-500 block text-xs">Téléphone</span>
-                        <a href={`tel:${r.customer.phone}`} className="text-blue-600 font-medium flex items-center gap-1">
-                          <Phone size={14} /> {r.customer.phone}
-                        </a>
+                        <div className="flex items-center gap-1">
+                          <a href={`tel:${r.customer.phone}`} className="text-blue-600 font-medium flex items-center gap-1">
+                            <Phone size={14} /> {r.customer.phone}
+                          </a>
+                          <CopyButton text={r.customer.phone} />
+                        </div>
                       </div>
                       <div>
                         <span className="text-slate-400 dark:text-slate-500 block text-xs">Email</span>
@@ -675,6 +698,14 @@ export default function AdminReservations() {
                         <span className="text-slate-800 dark:text-slate-200 font-medium">{r.pricing.tariffType}</span>
                       </div>
                     </div>
+
+                    <a
+                      href={`/admin/clients?search=${encodeURIComponent(r.customer.phone)}`}
+                      className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <AddressBook size={13} /> Voir fiche client
+                    </a>
 
                     {r.notes && (
                       <div className="text-sm">

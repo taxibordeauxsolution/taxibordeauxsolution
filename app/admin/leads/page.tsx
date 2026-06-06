@@ -2,6 +2,10 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { ArrowClockwise, Trash, Phone, Envelope, MapPin, Clock, CheckCircle, CaretDown, CaretLeft, CaretRight, MagnifyingGlass, PhoneCall } from '@phosphor-icons/react'
+import { getToken } from '@/app/admin/lib/token'
+import { SkeletonList } from '@/app/admin/components/Skeleton'
+import { ConfirmDialog } from '@/app/admin/components/ConfirmDialog'
+import { CopyButton } from '@/app/admin/components/CopyButton'
 
 interface Lead {
   _id: string
@@ -25,8 +29,8 @@ export default function AdminLeads() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-
-  const token = () => sessionStorage.getItem('admin_token') || ''
+  const [confirmBulkOpen, setConfirmBulkOpen] = useState(false)
+  const [confirmSingleId, setConfirmSingleId] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -36,7 +40,7 @@ export default function AdminLeads() {
       params.set('page', String(page))
       params.set('limit', '20')
       const res = await fetch(`/api/admin/reservations?${params}`, {
-        headers: { Authorization: `Bearer ${token()}` }
+        headers: { Authorization: `Bearer ${getToken()}` }
       })
       const json = await res.json()
       if (json.success) {
@@ -44,7 +48,7 @@ export default function AdminLeads() {
         setStats({ total: json.pagination?.total || 0, lead_capture: json.stats?.lead_capture || 0 })
         setTotalPages(json.pagination?.totalPages || 1)
       }
-    } catch { }
+    } catch (e) { console.error('Erreur chargement leads:', e) }
     setLoading(false)
   }, [page])
 
@@ -53,7 +57,7 @@ export default function AdminLeads() {
   const convertToResa = async (id: string) => {
     await fetch('/api/admin/reservations', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
       body: JSON.stringify({ id, status: 'en_attente' })
     })
     load()
@@ -61,10 +65,9 @@ export default function AdminLeads() {
 
   const deleteSelected = async () => {
     if (selected.size === 0) return
-    if (!confirm(`Supprimer ${selected.size} lead(s) ?`)) return
     await fetch('/api/admin/reservations', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
       body: JSON.stringify({ ids: [...selected] })
     })
     setSelected(new Set())
@@ -72,10 +75,9 @@ export default function AdminLeads() {
   }
 
   const deleteSingle = async (id: string) => {
-    if (!confirm('Supprimer ce lead ?')) return
     await fetch('/api/admin/reservations', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
       body: JSON.stringify({ ids: [id] })
     })
     load()
@@ -113,6 +115,20 @@ export default function AdminLeads() {
 
   return (
     <div className="space-y-6">
+      {confirmBulkOpen && (
+        <ConfirmDialog
+          message={`Supprimer définitivement ${selected.size} lead(s) ?`}
+          onConfirm={() => { setConfirmBulkOpen(false); deleteSelected() }}
+          onCancel={() => setConfirmBulkOpen(false)}
+        />
+      )}
+      {confirmSingleId && (
+        <ConfirmDialog
+          message="Supprimer ce lead définitivement ?"
+          onConfirm={() => { const id = confirmSingleId; setConfirmSingleId(null); deleteSingle(id) }}
+          onCancel={() => setConfirmSingleId(null)}
+        />
+      )}
       <div className="flex items-center justify-between gap-2">
         <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <PhoneCall size={24} weight="bold" className="text-purple-600 shrink-0" />
@@ -147,7 +163,7 @@ export default function AdminLeads() {
         </div>
         {selected.size > 0 && (
           <div className="flex">
-            <button onClick={deleteSelected}
+            <button onClick={() => setConfirmBulkOpen(true)}
               className="px-3 sm:px-4 py-1.5 sm:py-2 bg-red-600 text-white rounded-lg text-xs sm:text-sm font-semibold hover:bg-red-700 transition-colors flex items-center gap-2">
               <Trash size={16} />
               Supprimer ({selected.size})
@@ -159,7 +175,7 @@ export default function AdminLeads() {
       {/* Liste */}
       <div className="space-y-3">
         {loading ? (
-          <div className="text-center py-12 text-slate-400">Chargement...</div>
+          <SkeletonList count={5} />
         ) : filtered.length === 0 ? (
           <div className="text-center py-12 text-slate-400">
             {search ? 'Aucun résultat' : 'Aucun lead en attente'}
@@ -202,9 +218,12 @@ export default function AdminLeads() {
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <span className="text-slate-400 dark:text-slate-500 block text-xs">Téléphone</span>
-                        <a href={`tel:${r.customer.phone}`} className="text-purple-600 font-medium flex items-center gap-1">
-                          <Phone size={14} /> {r.customer.phone}
-                        </a>
+                        <div className="flex items-center gap-1">
+                          <a href={`tel:${r.customer.phone}`} className="text-purple-600 font-medium flex items-center gap-1">
+                            <Phone size={14} /> {r.customer.phone}
+                          </a>
+                          <CopyButton text={r.customer.phone} />
+                        </div>
                       </div>
                       <div>
                         <span className="text-slate-400 block text-xs">Email</span>
@@ -239,7 +258,7 @@ export default function AdminLeads() {
                         <CheckCircle size={14} />
                         Convertir en réservation
                       </button>
-                      <button onClick={() => deleteSingle(r._id)}
+                      <button onClick={() => setConfirmSingleId(r._id)}
                         className="px-4 py-2 bg-red-100 text-red-700 rounded-lg text-xs font-semibold hover:bg-red-200">
                         Supprimer
                       </button>

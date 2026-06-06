@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { FloppyDisk, ArrowClockwise, Tag, CalendarX, Trash, Plus } from '@phosphor-icons/react'
+import { getToken } from '@/app/admin/lib/token'
 
 export default function AdminPrix() {
   const [prix, setPrix] = useState({
@@ -38,7 +39,7 @@ export default function AdminPrix() {
   const [message, setMessage] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
 
   useEffect(() => {
-    const token = sessionStorage.getItem('admin_token') || ''
+    const token = getToken()
     fetch('/api/admin/prix', { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.json())
       .then(d => { if (d.success) setPrix(prev => ({ ...prev, ...d.data })) })
@@ -55,7 +56,7 @@ export default function AdminPrix() {
   const save = async () => {
     setSaving(true)
     setMessage(null)
-    const token = sessionStorage.getItem('admin_token') || ''
+    const token = getToken()
     try {
       const res = await fetch('/api/admin/prix', {
         method: 'PUT',

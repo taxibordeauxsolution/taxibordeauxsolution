@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import Link from 'next/link'
 import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin, FunnelSimple, Globe, NavigationArrow, Phone, PhoneCall } from '@phosphor-icons/react'
+import { getToken } from '@/app/admin/lib/token'
 
 interface Funnel {
   estimations: number
@@ -52,7 +53,6 @@ export default function AdminDashboard() {
   const lastResaCountRef = useRef<number | null>(null)
   const lastLeadCountRef = useRef<number | null>(null)
 
-  const token = () => sessionStorage.getItem('admin_token') || ''
 
   const playNotificationSound = () => {
     try {
@@ -81,7 +81,7 @@ export default function AdminDashboard() {
       const now = new Date()
       const isoToday = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
 
-      const auth = { headers: { Authorization: `Bearer ${token()}` } }
+      const auth = { headers: { Authorization: `Bearer ${getToken()}` } }
       const [resaRes, estRes, revenusRes, leadsRes, todayRes] = await Promise.all([
         fetch('/api/admin/reservations?limit=5', auth),
         fetch('/api/admin/estimations?limit=5', auth),
@@ -174,7 +174,7 @@ export default function AdminDashboard() {
     try {
       const res = await fetch('/api/admin/reservations', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify({ id, status })
       })
       if (!res.ok) load()  // rollback en rechargeant si erreur

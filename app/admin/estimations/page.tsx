@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { ArrowClockwise, DownloadSimple, ChartBar, MapPin, CurrencyEur, Path, Trash, CaretLeft, CaretRight, EnvelopeSimple, ChatCircleDots, WhatsappLogo, CalendarBlank } from '@phosphor-icons/react'
+import { getToken } from '@/app/admin/lib/token'
 
 interface Estimation {
   _id: string
@@ -49,7 +50,6 @@ export default function AdminEstimations() {
   const [dateFrom, setDateFrom] = useState(thirtyDaysAgo)
   const [dateTo, setDateTo] = useState(today)
 
-  const token = () => sessionStorage.getItem('admin_token') || ''
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -61,7 +61,7 @@ export default function AdminEstimations() {
       params.set('limit', '30')
       if (leadsOnly) params.set('leadsOnly', 'true')
       const res = await fetch(`/api/admin/estimations?${params}`, {
-        headers: { Authorization: `Bearer ${token()}` }
+        headers: { Authorization: `Bearer ${getToken()}` }
       })
       const json = await res.json()
       if (json.success) {
@@ -115,7 +115,7 @@ export default function AdminEstimations() {
     try {
       await fetch('/api/admin/estimations', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify({ ids: [...selected] })
       })
       setSelected(new Set())
@@ -127,7 +127,7 @@ export default function AdminEstimations() {
     try {
       await fetch('/api/admin/estimations', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify({ id, statut })
       })
       setEstimations(prev => prev.map(e => e._id === id ? { ...e, statut } : e))
@@ -138,7 +138,7 @@ export default function AdminEstimations() {
     try {
       await fetch('/api/admin/estimations', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify({ id, notes: notesValue })
       })
       setEstimations(prev => prev.map(e => e._id === id ? { ...e, notes: notesValue } : e))

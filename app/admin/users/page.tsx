@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { ArrowClockwise, Trash, Plus, EnvelopeSimple, User, Lock } from '@phosphor-icons/react'
+import { getToken } from '@/app/admin/lib/token'
 
 interface AdminUser {
   _id: string
@@ -20,13 +21,12 @@ export default function AdminUsers() {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
 
-  const token = () => sessionStorage.getItem('admin_token') || ''
 
   const load = async () => {
     setLoading(true)
     try {
       const res = await fetch('/api/admin/users', {
-        headers: { Authorization: `Bearer ${token()}` }
+        headers: { Authorization: `Bearer ${getToken()}` }
       })
       const json = await res.json()
       if (json.success) setUsers(json.data)
@@ -43,7 +43,7 @@ export default function AdminUsers() {
     try {
       const res = await fetch('/api/admin/users', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify({ email, password, name })
       })
       const json = await res.json()
@@ -68,7 +68,7 @@ export default function AdminUsers() {
     try {
       const res = await fetch('/api/admin/users', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify({ id })
       })
       const json = await res.json()
