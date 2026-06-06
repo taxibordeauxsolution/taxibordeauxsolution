@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { ArrowClockwise, Trash, Phone, Envelope, MapPin, MagnifyingGlass, Plus, FloppyDisk, X, PencilSimple, CaretLeft, CaretRight, AddressBook, DownloadSimple } from '@phosphor-icons/react'
 import { getToken } from '@/app/admin/lib/token'
 import { SkeletonList } from '@/app/admin/components/Skeleton'
@@ -24,6 +24,8 @@ export default function AdminClients() {
   const [clients, setClients] = useState<ClientData[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
@@ -40,7 +42,7 @@ export default function AdminClients() {
     setLoading(true)
     try {
       const params = new URLSearchParams({ page: String(page), limit: '20' })
-      if (search) params.set('search', search)
+      if (debouncedSearch) params.set('search', debouncedSearch)
       const res = await fetch(`/api/admin/clients?${params}`, {
         headers: { Authorization: `Bearer ${getToken()}` }
       })
@@ -52,11 +54,15 @@ export default function AdminClients() {
       }
     } catch (e) { console.error('Erreur chargement clients:', e) }
     setLoading(false)
-  }, [page, search])
+  }, [page, debouncedSearch])
 
   useEffect(() => { load() }, [load])
 
-  useEffect(() => { setPage(1) }, [search])
+  useEffect(() => {
+    clearTimeout(searchTimerRef.current)
+    searchTimerRef.current = setTimeout(() => { setDebouncedSearch(search); setPage(1) }, 400)
+    return () => clearTimeout(searchTimerRef.current)
+  }, [search])
 
   const openNew = () => {
     setEditingId(null)

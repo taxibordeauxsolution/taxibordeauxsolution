@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { CurrencyEur, Path, SignOut, House, ChartBar, Taxi, List, X, SquaresFour, UsersThree, PhoneCall, AddressBook, IdentificationCard, Moon, Sun } from '@phosphor-icons/react'
 import { getToken } from '@/app/admin/lib/token'
+import { ErrorBoundary } from '@/app/admin/components/ErrorBoundary'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -215,7 +216,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         )}
       </nav>
 
-      <main className="p-4 sm:p-6 max-w-5xl mx-auto">{children}</main>
+      <main className="p-4 sm:p-6 max-w-5xl mx-auto">
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </main>
     </div>
   )
 }
