@@ -125,7 +125,7 @@ export default function ForfaitForm({ initial, token, onSaved, onCancel }: {
     }
 
     const script = document.createElement('script')
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&libraries=places,drawing`
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&v=3.64&libraries=places,drawing`
     script.async = true
     script.onload = init
     document.head.appendChild(script)
