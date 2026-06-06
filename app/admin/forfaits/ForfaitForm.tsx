@@ -117,18 +117,18 @@ export default function ForfaitForm({ initial, token, onSaved, onCancel }: {
     const g = (window as any).google
     if (g?.maps?.drawing) { init(); return }
 
-    if (!document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]')) {
-      (window as any).__gmapsAdminInit = init
-      const script = document.createElement('script')
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&libraries=places,drawing&callback=__gmapsAdminInit`
-      script.async = true
-      document.head.appendChild(script)
-    } else {
-      const wait = setInterval(() => {
-        if ((window as any).google?.maps?.drawing) { clearInterval(wait); init() }
-      }, 200)
-      setTimeout(() => clearInterval(wait), 10000)
+    // Maps chargé sans la library drawing (ex: chargé par la page booking) — forcer le rechargement
+    if (g?.maps) {
+      const old = document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]')
+      if (old) old.remove()
+      delete (window as any).google
     }
+
+    const script = document.createElement('script')
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}&libraries=places,drawing`
+    script.async = true
+    script.onload = init
+    document.head.appendChild(script)
   }, [])
 
   const startDraw = (zone: 'A' | 'B') => {

@@ -520,7 +520,7 @@ const TaxiBookingHomePreview = () => {
     mapsLoadedRef.current = true
     return new Promise((resolve, reject) => {
       const script = document.createElement('script')
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&language=fr&region=FR`
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places,drawing&language=fr&region=FR`
       script.async = true
       script.defer = true
       script.onload = () => { initializeMaps(); resolve() }
