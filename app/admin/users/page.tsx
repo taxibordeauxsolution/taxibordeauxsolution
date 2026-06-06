@@ -86,7 +86,7 @@ export default function AdminUsers() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-2">
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <User size={24} weight="bold" className="shrink-0" />
           Comptes admin
         </h1>
@@ -105,47 +105,47 @@ export default function AdminUsers() {
 
       {message && (
         <div className={`rounded-2xl px-4 py-3 font-semibold text-sm ${
-          message.type === 'ok' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+          message.type === 'ok' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
         }`}>
           {message.text}
         </div>
       )}
 
       {showForm && (
-        <form onSubmit={addUser} className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 space-y-4">
-          <h2 className="font-bold text-slate-800">Nouveau compte admin</h2>
+        <form onSubmit={addUser} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 sm:p-6 space-y-4">
+          <h2 className="font-bold text-slate-800 dark:text-white">Nouveau compte admin</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1">Nom</label>
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Nom</label>
               <div className="relative">
                 <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input type="text" value={name} onChange={e => setName(e.target.value)}
                   placeholder="Prénom ou pseudo" required
-                  className="w-full pl-9 pr-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+                  className="w-full pl-9 pr-3 py-2.5 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1">Email</label>
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Email</label>
               <div className="relative">
                 <EnvelopeSimple size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                   placeholder="partenaire@email.fr" required
-                  className="w-full pl-9 pr-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+                  className="w-full pl-9 pr-3 py-2.5 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1">Mot de passe</label>
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Mot de passe</label>
               <div className="relative">
                 <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input type="text" value={password} onChange={e => setPassword(e.target.value)}
                   placeholder="6 caractères min." required minLength={6}
-                  className="w-full pl-9 pr-3 py-2.5 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+                  className="w-full pl-9 pr-3 py-2.5 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
               </div>
             </div>
           </div>
           <div className="flex gap-2 justify-end">
             <button type="button" onClick={() => setShowForm(false)}
-              className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-200">
+              className="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600">
               Annuler
             </button>
             <button type="submit" disabled={saving}
@@ -163,18 +163,18 @@ export default function AdminUsers() {
           <div className="text-center py-12 text-slate-400">Aucun compte admin</div>
         ) : (
           users.map(u => (
-            <div key={u._id} className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex items-center justify-between gap-4">
+            <div key={u._id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
-                  <User size={20} className="text-blue-600" />
+                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/40 rounded-full flex items-center justify-center shrink-0">
+                  <User size={20} className="text-blue-600 dark:text-blue-400" />
                 </div>
                 <div className="min-w-0">
-                  <div className="font-bold text-slate-900 text-sm">{u.name}</div>
-                  <div className="text-xs text-slate-500 truncate">{u.email}</div>
+                  <div className="font-bold text-slate-900 dark:text-white text-sm">{u.name}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 truncate">{u.email}</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0">
-                <span className="text-xs text-slate-400 hidden sm:block">
+                <span className="text-xs text-slate-400 dark:text-slate-500 hidden sm:block">
                   {new Date(u.createdAt).toLocaleDateString('fr-FR')}
                 </span>
                 {users.length > 1 && (

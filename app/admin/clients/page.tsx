@@ -132,7 +132,7 @@ export default function AdminClients() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-2">
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <AddressBook size={24} weight="bold" className="text-blue-600 shrink-0" />
           Clients ({total})
         </h1>
@@ -148,7 +148,7 @@ export default function AdminClients() {
             <span className="hidden sm:inline">Nouveau client</span>
           </button>
           <button onClick={load}
-            className="flex items-center gap-2 px-3 py-2 bg-slate-200 rounded-xl text-sm font-semibold hover:bg-slate-300 transition-colors shrink-0">
+            className="flex items-center gap-2 px-3 py-2 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 rounded-xl text-sm font-semibold hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors shrink-0">
             <ArrowClockwise size={16} className={loading ? 'animate-spin' : ''} />
           </button>
         </div>
@@ -162,37 +162,37 @@ export default function AdminClients() {
 
       {/* Formulaire ajout/édition */}
       {showForm && (
-        <div className="bg-white rounded-2xl shadow-sm border border-blue-200 p-4 sm:p-6 space-y-4">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-blue-200 dark:border-slate-700 p-4 sm:p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-bold text-slate-800">{editingId ? 'Modifier le client' : 'Nouveau client'}</h2>
-            <button onClick={() => setShowForm(false)} className="p-1 hover:bg-slate-100 rounded-lg"><X size={20} /></button>
+            <h2 className="font-bold text-slate-800 dark:text-white">{editingId ? 'Modifier le client' : 'Nouveau client'}</h2>
+            <button onClick={() => setShowForm(false)} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"><X size={20} /></button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Nom *</label>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Nom *</label>
               <input type="text" value={form.nom} onChange={e => setForm(f => ({ ...f, nom: e.target.value }))}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Nom complet" />
+                className="w-full border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Nom complet" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Téléphone *</label>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Téléphone *</label>
               <input type="tel" value={form.telephone} onChange={e => setForm(f => ({ ...f, telephone: e.target.value }))}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="06 12 34 56 78" />
+                className="w-full border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="06 12 34 56 78" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Email</label>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Email</label>
               <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="email@exemple.fr" />
+                className="w-full border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="email@exemple.fr" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Adresse</label>
+              <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Adresse</label>
               <input type="text" value={form.adresse} onChange={e => setForm(f => ({ ...f, adresse: e.target.value }))}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Adresse du client" />
+                className="w-full border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Adresse du client" />
             </div>
           </div>
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-1">Notes</label>
+            <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Notes</label>
             <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} rows={2}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none resize-none"
+              className="w-full border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none resize-none"
               placeholder="Informations supplémentaires..." />
           </div>
           <div className="flex justify-end">
@@ -206,12 +206,12 @@ export default function AdminClients() {
       )}
 
       {/* Recherche */}
-      <div className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 dark:border-slate-700">
         <div className="relative">
           <MagnifyingGlass size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Rechercher par nom, téléphone, email..."
-            className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+            className="w-full pl-9 pr-4 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:placeholder-slate-400 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
         </div>
       </div>
 
@@ -225,30 +225,30 @@ export default function AdminClients() {
           </div>
         ) : (
           clients.map(c => (
-            <div key={c._id} className="bg-white rounded-2xl shadow-sm border border-slate-200 p-3 sm:p-4">
+            <div key={c._id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-3 sm:p-4">
               <div className="flex items-start sm:items-center gap-3 sm:gap-4">
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm shrink-0">
+                <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-700 dark:text-blue-400 font-bold text-sm shrink-0">
                   {c.nom.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-bold text-slate-900 text-sm sm:text-base">{c.nom}</div>
+                  <div className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">{c.nom}</div>
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
-                    <a href={`tel:${c.telephone}`} className="text-blue-600 text-sm flex items-center gap-1 hover:underline">
+                    <a href={`tel:${c.telephone}`} className="text-blue-600 dark:text-blue-400 text-sm flex items-center gap-1 hover:underline">
                       <Phone size={14} /> {c.telephone}
                     </a>
                     {c.email && (
-                      <a href={`mailto:${c.email}`} className="text-slate-500 text-sm flex items-center gap-1 hover:underline truncate">
+                      <a href={`mailto:${c.email}`} className="text-slate-500 dark:text-slate-400 text-sm flex items-center gap-1 hover:underline truncate">
                         <Envelope size={14} /> <span className="truncate">{c.email}</span>
                       </a>
                     )}
                     {c.adresse && (
-                      <span className="text-slate-400 text-xs flex items-center gap-1 truncate">
+                      <span className="text-slate-400 dark:text-slate-500 text-xs flex items-center gap-1 truncate">
                         <MapPin size={12} /> <span className="truncate">{c.adresse}</span>
                       </span>
                     )}
                   </div>
                   {c.notes && (
-                    <div className="mt-1.5 text-xs text-slate-500 bg-slate-50 rounded-lg px-2 py-1">{c.notes}</div>
+                    <div className="mt-1.5 text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-700 rounded-lg px-2 py-1">{c.notes}</div>
                   )}
                 </div>
                 <div className="flex items-center gap-1 shrink-0">

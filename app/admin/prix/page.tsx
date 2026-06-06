@@ -86,77 +86,77 @@ export default function AdminPrix() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Prix de base</h1>
-        <p className="text-gray-500 text-xs sm:text-sm mt-1">Tarifs kilométriques appliqués aux estimations</p>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Prix de base</h1>
+        <p className="text-gray-500 dark:text-slate-400 text-xs sm:text-sm mt-1">Tarifs kilométriques appliqués aux estimations</p>
       </div>
 
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
-        <h2 className="font-bold text-gray-800 text-base sm:text-lg border-b pb-3">Tarifs kilométriques</h2>
+      <div className="bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
+        <h2 className="font-bold text-gray-800 dark:text-slate-200 text-base sm:text-lg border-b dark:border-slate-700 pb-3">Tarifs kilométriques</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           <div>
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Prise en charge</label>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Prise en charge</label>
             <div className="flex items-center gap-2">
               <input type="number" step="0.01" min="0"
                 value={prix.priseEnCharge}
                 onChange={e => setNum('priseEnCharge', e.target.value)}
-                className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
-              <span className="text-gray-500 text-sm w-10">€</span>
+                className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+              <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€</span>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Tarif km — Jour</label>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Tarif km — Jour</label>
             <div className="flex items-center gap-2">
               <input type="number" step="0.01" min="0"
                 value={prix.tarifKmJour}
                 onChange={e => setNum('tarifKmJour', e.target.value)}
-                className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
-              <span className="text-gray-500 text-sm w-10">€/km</span>
+                className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+              <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€/km</span>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Tarif km — Nuit</label>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Tarif km — Nuit</label>
             <div className="flex items-center gap-2">
               <input type="number" step="0.01" min="0"
                 value={prix.tarifKmNuit}
                 onChange={e => setNum('tarifKmNuit', e.target.value)}
-                className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
-              <span className="text-gray-500 text-sm w-10">€/km</span>
+                className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+              <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€/km</span>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">{"Frais d'approche"}</label>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">{"Frais d'approche"}</label>
             <div className="flex items-center gap-2">
               <input type="number" step="0.01" min="0"
                 value={prix.fraisApproche}
                 onChange={e => setNum('fraisApproche', e.target.value)}
-                className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
-              <span className="text-gray-500 text-sm w-10">€</span>
+                className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+              <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€</span>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Course minimum — de</label>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Course minimum — de</label>
             <div className="flex items-center gap-2">
               <input type="number" step="0.01" min="0"
                 value={prix.courseMiniDe}
                 onChange={e => setNum('courseMiniDe', e.target.value)}
-                className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
-              <span className="text-gray-500 text-sm w-10">€</span>
+                className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+              <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€</span>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Course minimum — à</label>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Course minimum — à</label>
             <div className="flex items-center gap-2">
               <input type="number" step="0.01" min="0"
                 value={prix.courseMini}
                 onChange={e => setNum('courseMini', e.target.value)}
-                className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
-              <span className="text-gray-500 text-sm w-10">€</span>
+                className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+              <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€</span>
             </div>
           </div>
         </div>
@@ -164,24 +164,24 @@ export default function AdminPrix() {
         <h2 className="font-bold text-gray-800 text-base sm:text-lg border-b pb-3 pt-2">Heures tarif nuit</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           <div>
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Début nuit</label>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Début nuit</label>
             <input type="time" step="60"
               value={prix.heureDebutNuit}
               onChange={e => setStr('heureDebutNuit', e.target.value)}
-              className="w-full border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+              className="w-full border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
           </div>
           <div>
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Fin nuit</label>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Fin nuit</label>
             <input type="time" step="60"
               value={prix.heureFinNuit}
               onChange={e => setStr('heureFinNuit', e.target.value)}
-              className="w-full border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+              className="w-full border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
           </div>
         </div>
       </div>
 
       {/* Tarif nuit dégressif */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
         <div className="flex items-center justify-between border-b pb-3">
           <h2 className="font-bold text-gray-800 text-base sm:text-lg">Tarif nuit dégressif</h2>
           <button
@@ -235,23 +235,23 @@ export default function AdminPrix() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               <div>
-                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">À partir de</label>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">À partir de</label>
                 <div className="flex items-center gap-2">
                   <input type="number" step="1" min="5"
                     value={prix.tarifNuitDegressifSeuilKm}
                     onChange={e => setNum('tarifNuitDegressifSeuilKm', e.target.value)}
-                    className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
-                  <span className="text-gray-500 text-sm w-10">km</span>
+                    className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                  <span className="text-gray-500 dark:text-slate-400 text-sm w-10">km</span>
                 </div>
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Prix km nuit réduit</label>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Prix km nuit réduit</label>
                 <div className="flex items-center gap-2">
                   <input type="number" step="0.01" min="0"
                     value={prix.tarifNuitDegressifPrixKm}
                     onChange={e => setNum('tarifNuitDegressifPrixKm', e.target.value)}
-                    className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
-                  <span className="text-gray-500 text-sm w-10">€/km</span>
+                    className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                  <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€/km</span>
                 </div>
                 <p className="text-xs text-gray-400 mt-1">Au lieu de {prix.tarifKmNuit}€/km normal</p>
               </div>
@@ -263,7 +263,7 @@ export default function AdminPrix() {
       </div>
 
       {/* Tarif jour dégressif */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
         <div className="flex items-center justify-between border-b pb-3">
           <h2 className="font-bold text-gray-800 text-base sm:text-lg">Tarif jour dégressif</h2>
           <button
@@ -317,23 +317,23 @@ export default function AdminPrix() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
               <div>
-                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">À partir de</label>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">À partir de</label>
                 <div className="flex items-center gap-2">
                   <input type="number" step="1" min="5"
                     value={prix.tarifJourDegressifSeuilKm}
                     onChange={e => setNum('tarifJourDegressifSeuilKm', e.target.value)}
-                    className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
-                  <span className="text-gray-500 text-sm w-10">km</span>
+                    className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                  <span className="text-gray-500 dark:text-slate-400 text-sm w-10">km</span>
                 </div>
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Prix km jour réduit</label>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Prix km jour réduit</label>
                 <div className="flex items-center gap-2">
                   <input type="number" step="0.01" min="0"
                     value={prix.tarifJourDegressifPrixKm}
                     onChange={e => setNum('tarifJourDegressifPrixKm', e.target.value)}
-                    className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
-                  <span className="text-gray-500 text-sm w-10">€/km</span>
+                    className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                  <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€/km</span>
                 </div>
                 <p className="text-xs text-gray-400 mt-1">Au lieu de {prix.tarifKmJour}€/km normal</p>
               </div>
@@ -345,7 +345,7 @@ export default function AdminPrix() {
       </div>
 
       {/* Remise courses longues */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
         <div className="flex items-center justify-between border-b pb-3">
           <h2 className="font-bold text-gray-800 text-base sm:text-lg flex items-center gap-2">
             <Tag size={20} className="text-green-600" />
@@ -367,19 +367,19 @@ export default function AdminPrix() {
         {prix.remiseActive && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <div>
-              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Seuil de distance</label>
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Seuil de distance</label>
               <div className="flex items-center gap-2">
                 <input type="number" step="1" min="10"
                   value={prix.remiseSeuilKm}
                   onChange={e => setNum('remiseSeuilKm', e.target.value)}
                   className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-green-500 focus:outline-none font-medium text-gray-900" />
-                <span className="text-gray-500 text-sm w-10">km</span>
+                <span className="text-gray-500 dark:text-slate-400 text-sm w-10">km</span>
               </div>
               <p className="text-xs text-gray-400 mt-1">La remise s{"'"}applique au-delà de cette distance</p>
             </div>
 
             <div>
-              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Pourcentage de remise</label>
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Pourcentage de remise</label>
               <div className="flex gap-2">
                 {[5, 10, 15].map(pct => (
                   <button
@@ -406,7 +406,7 @@ export default function AdminPrix() {
       </div>
 
       {/* Suppression frais d'approche */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
         <div className="flex items-center justify-between border-b pb-3">
           <h2 className="font-bold text-gray-800 text-base sm:text-lg">Offrir les frais d{"'"}approche</h2>
           <button
@@ -424,13 +424,13 @@ export default function AdminPrix() {
 
         {prix.suppApprocheActive ? (
           <div>
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">À partir de</label>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">À partir de</label>
             <div className="flex items-center gap-2 max-w-xs">
               <input type="number" step="1" min="10"
                 value={prix.suppApprocheSeuilKm}
                 onChange={e => setNum('suppApprocheSeuilKm', e.target.value)}
                 className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-green-500 focus:outline-none font-medium text-gray-900" />
-              <span className="text-gray-500 text-sm w-10">km</span>
+              <span className="text-gray-500 dark:text-slate-400 text-sm w-10">km</span>
             </div>
             <p className="text-xs text-gray-400 mt-1">Les {prix.fraisApproche}€ de frais d{"'"}approche seront offerts au-delà de cette distance</p>
           </div>
@@ -509,7 +509,7 @@ export default function AdminPrix() {
       </div>
 
       {/* Capture lead longue distance */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
         <div className="flex items-center justify-between border-b pb-3">
           <div>
             <h2 className="font-bold text-gray-800 text-base sm:text-lg flex items-center gap-2">
@@ -537,13 +537,13 @@ export default function AdminPrix() {
 
         {prix.captureLeadActive ? (
           <div className="max-w-xs">
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Seuil km capture lead</label>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Seuil km capture lead</label>
             <div className="flex items-center gap-2">
               <input type="number" step="1" min="1"
                 value={prix.seuilKmCaptureLead}
                 onChange={e => setNum('seuilKmCaptureLead', e.target.value)}
                 className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-purple-500 focus:outline-none font-medium text-gray-900" />
-              <span className="text-gray-500 text-sm w-10">km</span>
+              <span className="text-gray-500 dark:text-slate-400 text-sm w-10">km</span>
             </div>
             <p className="text-xs text-gray-400 mt-1">Au-delà de cette distance, le client doit laisser ses coordonnées avant de voir le prix</p>
           </div>
@@ -553,7 +553,7 @@ export default function AdminPrix() {
       </div>
 
       {/* Jours de repos */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-5 sm:space-y-6">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
         <div className="border-b pb-3">
           <h2 className="font-bold text-gray-800 text-base sm:text-lg flex items-center gap-2">
             <CalendarX size={20} className="text-red-500" />
@@ -564,7 +564,7 @@ export default function AdminPrix() {
 
         <div className="flex gap-2 items-end">
           <div className="flex-1">
-            <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1">Ajouter une date</label>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Ajouter une date</label>
             <input
               type="date"
               value={newJourOff}

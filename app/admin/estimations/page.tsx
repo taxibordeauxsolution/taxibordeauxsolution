@@ -190,11 +190,11 @@ export default function AdminEstimations() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <ChartBar size={28} weight="bold" />
           Estimations clients
         </h1>
-        <button onClick={load} className="flex items-center gap-2 px-4 py-2 bg-slate-200 rounded-xl text-sm font-semibold hover:bg-slate-300 transition-colors">
+        <button onClick={load} className="flex items-center gap-2 px-4 py-2 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 rounded-xl text-sm font-semibold hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
           <ArrowClockwise size={16} className={loading ? 'animate-spin' : ''} />
           Actualiser
         </button>
@@ -202,20 +202,20 @@ export default function AdminEstimations() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-          <div className="text-sm text-slate-500">Total estimations</div>
-          <div className="text-2xl font-bold text-slate-900">{stats.total}</div>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+          <div className="text-sm text-slate-500 dark:text-slate-400">Total estimations</div>
+          <div className="text-2xl font-bold text-slate-900 dark:text-white">{stats.total}</div>
         </div>
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-          <div className="text-sm text-slate-500">Prix moyen</div>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+          <div className="text-sm text-slate-500 dark:text-slate-400">Prix moyen</div>
           <div className="text-2xl font-bold text-green-700">{stats.avgPrice.toFixed(2)}€</div>
         </div>
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-          <div className="text-sm text-slate-500">Forfaits</div>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+          <div className="text-sm text-slate-500 dark:text-slate-400">Forfaits</div>
           <div className="text-2xl font-bold text-blue-700">{stats.forfaitCount}</div>
         </div>
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-          <div className="text-sm text-slate-500">Taux forfait</div>
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+          <div className="text-sm text-slate-500 dark:text-slate-400">Taux forfait</div>
           <div className="text-2xl font-bold text-slate-900">
             {stats.total > 0 ? ((stats.forfaitCount / stats.total) * 100).toFixed(0) : 0}%
           </div>
@@ -250,33 +250,33 @@ export default function AdminEstimations() {
       )}
 
       {/* Filtres */}
-      <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-wrap items-end gap-4">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-wrap items-end gap-4">
         <div>
-          <label className="block text-xs text-slate-500 mb-1">Du</label>
+          <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">Du</label>
           <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
-            className="px-3 py-2 border border-slate-300 rounded-lg text-sm" />
+            className="px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm" />
         </div>
         <div>
-          <label className="block text-xs text-slate-500 mb-1">Au</label>
+          <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">Au</label>
           <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)}
-            className="px-3 py-2 border border-slate-300 rounded-lg text-sm" />
+            className="px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm" />
         </div>
         <button onClick={() => { setPage(1); load() }}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors">
           Filtrer
         </button>
         <button onClick={() => { const t = toLocalDate(new Date()); setDateFrom(t); setDateTo(t); setPage(1) }}
-          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${dateFrom === dateTo && dateFrom === toLocalDate(new Date()) ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${dateFrom === dateTo && dateFrom === toLocalDate(new Date()) ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>
           <CalendarBlank size={16} />
           Aujourd'hui
         </button>
         <button onClick={() => { setLeadsOnly(!leadsOnly); setPage(1) }}
-          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${leadsOnly ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${leadsOnly ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>
           <EnvelopeSimple size={16} />
           {leadsOnly ? 'Leads uniquement ✓' : 'Leads uniquement'}
         </button>
         <button onClick={exportCSV}
-          className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors flex items-center gap-2">
+          className="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center gap-2">
           <DownloadSimple size={16} />
           Export CSV
         </button>
@@ -304,7 +304,7 @@ export default function AdminEstimations() {
               <span className="text-xs text-slate-500">Tout sélectionner</span>
             </div>
             {estimations.map(e => (
-              <div key={e._id} className={`bg-white rounded-2xl p-4 shadow-sm border transition-colors ${selected.has(e._id) ? 'border-blue-400 bg-blue-50' : 'border-slate-200'}`}>
+              <div key={e._id} className={`rounded-2xl p-4 shadow-sm border transition-colors ${selected.has(e._id) ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700'}`}>
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <input type="checkbox" checked={selected.has(e._id)}
@@ -322,17 +322,17 @@ export default function AdminEstimations() {
                 <div className="space-y-1.5 text-sm">
                   <div className="flex items-start gap-2">
                     <MapPin size={14} className="text-green-600 mt-0.5 shrink-0" />
-                    <span className="text-slate-800">{e.from}</span>
+                    <span className="text-slate-800 dark:text-slate-200">{e.from}</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <MapPin size={14} className="text-red-500 mt-0.5 shrink-0" />
-                    <span className="text-slate-800">{e.to}</span>
+                    <span className="text-slate-800 dark:text-slate-200">{e.to}</span>
                   </div>
                 </div>
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
-                  <span className="text-xs text-slate-500">{e.distance.toFixed(1)} km</span>
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
+                  <span className="text-xs text-slate-500 dark:text-slate-400">{e.distance.toFixed(1)} km</span>
                   <div className="text-right">
-                    <span className="font-bold text-green-700">{e.price.toFixed(2)}€</span>
+                    <span className="font-bold text-green-700 dark:text-green-400">{e.price.toFixed(2)}€</span>
                     {e.fourchette && (
                       <div className="text-xs text-slate-400">{e.fourchette.de.toFixed(2)}€ - {e.fourchette.a.toFixed(2)}€</div>
                     )}

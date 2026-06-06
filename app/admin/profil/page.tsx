@@ -91,31 +91,31 @@ export default function ProfilPage() {
 
   return (
     <div className="max-w-lg space-y-6">
-      <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+      <h1 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
         <IdentificationCard size={24} weight="bold" />
         Mon profil de facturation
       </h1>
 
-      <div className="bg-slate-50 rounded-xl px-4 py-3 text-sm text-slate-500">
-        Connecté en tant que <span className="font-semibold text-slate-800">{userName}</span> — {userEmail}
+      <div className="bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3 text-sm text-slate-500 dark:text-slate-400">
+        Connecté en tant que <span className="font-semibold text-slate-800 dark:text-white">{userName}</span> — {userEmail}
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
-        <p className="text-xs text-slate-400">Ces informations apparaissent dans l'en-tête de vos factures PDF. Les champs optionnels peuvent rester vides.</p>
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 space-y-4">
+        <p className="text-xs text-slate-400 dark:text-slate-500">Ces informations apparaissent dans l'en-tête de vos factures PDF. Les champs optionnels peuvent rester vides.</p>
 
         {FIELDS.map(({ key, label, placeholder }) => (
           <div key={key}>
-            <label className="text-xs font-medium text-slate-500">{label}</label>
+            <label className="text-xs font-medium text-slate-500 dark:text-slate-400">{label}</label>
             <input
               value={form[key]}
               onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
               placeholder={placeholder}
-              className="mt-1 w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none"
+              className="mt-1 w-full px-3 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
         ))}
 
-        {error && <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
+        {error && <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2">{error}</p>}
 
         <button onClick={handleSave} disabled={saving}
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 disabled:opacity-60 transition-colors">

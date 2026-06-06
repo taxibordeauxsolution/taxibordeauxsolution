@@ -3,13 +3,26 @@
 import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { CurrencyEur, Path, SignOut, House, ChartBar, Taxi, List, X, SquaresFour, UsersThree, PhoneCall, AddressBook, IdentificationCard } from '@phosphor-icons/react'
+import { CurrencyEur, Path, SignOut, House, ChartBar, Taxi, List, X, SquaresFour, UsersThree, PhoneCall, AddressBook, IdentificationCard, Moon, Sun } from '@phosphor-icons/react'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const [ready, setReady] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [darkMode, setDarkMode] = useState(false)
+
+  useEffect(() => {
+    const saved = localStorage.getItem('admin_dark_mode')
+    if (saved === 'true') setDarkMode(true)
+  }, [])
+
+  const toggleDark = () => {
+    setDarkMode(prev => {
+      localStorage.setItem('admin_dark_mode', String(!prev))
+      return !prev
+    })
+  }
 
   useEffect(() => {
     if (pathname === '/admin') {
@@ -63,7 +76,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (!ready) return null
 
-  // Page login : pas de navbar
   if (pathname === '/admin') return <>{children}</>
 
   const navLinks = [
@@ -80,9 +92,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ]
 
   return (
-    <div className="min-h-screen bg-slate-100">
-      {/* Navbar admin */}
-      <nav className="bg-slate-900 text-white px-4 sm:px-6 py-3 sm:py-4 shadow-xl">
+    <div className={`min-h-screen bg-slate-100 dark:bg-slate-900 transition-colors${darkMode ? ' dark' : ''}`}>
+      <nav className="bg-slate-900 text-white px-4 sm:px-6 py-3 sm:py-4 shadow-xl border-b border-slate-800">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="font-bold text-lg">Admin</span>
@@ -104,6 +115,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </Link>
             ))}
             <button
+              onClick={toggleDark}
+              className="p-2 rounded-xl text-slate-300 hover:bg-slate-700 transition-colors"
+              title={darkMode ? 'Mode clair' : 'Mode sombre'}
+            >
+              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <button
               onClick={logout}
               className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-red-400 hover:bg-slate-700 transition-colors"
             >
@@ -112,16 +130,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </button>
           </div>
 
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-slate-700 transition-colors"
-          >
-            {menuOpen ? <X size={24} /> : <List size={24} />}
-          </button>
+          {/* Mobile */}
+          <div className="md:hidden flex items-center gap-1">
+            <button
+              onClick={toggleDark}
+              className="p-2 rounded-lg hover:bg-slate-700 transition-colors text-slate-300"
+              title={darkMode ? 'Mode clair' : 'Mode sombre'}
+            >
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-2 rounded-lg hover:bg-slate-700 transition-colors"
+            >
+              {menuOpen ? <X size={24} /> : <List size={24} />}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile menu */}
         {menuOpen && (
           <div className="md:hidden mt-3 pt-3 border-t border-slate-700 flex flex-col gap-1">
             {navLinks.map((link) => (

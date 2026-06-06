@@ -114,27 +114,27 @@ export default function AdminLeads() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-2">
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 flex items-center gap-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <PhoneCall size={24} weight="bold" className="text-purple-600 shrink-0" />
           Leads à rappeler
         </h1>
-        <button onClick={load} className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-slate-200 rounded-xl text-sm font-semibold hover:bg-slate-300 transition-colors shrink-0">
+        <button onClick={load} className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 rounded-xl text-sm font-semibold hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors shrink-0">
           <ArrowClockwise size={16} className={loading ? 'animate-spin' : ''} />
           <span className="hidden sm:inline">Actualiser</span>
         </button>
       </div>
 
       {/* Stats */}
-      <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4 sm:p-6 flex items-center justify-between">
+      <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800/50 rounded-2xl p-4 sm:p-6 flex items-center justify-between">
         <div>
-          <div className="text-sm text-purple-600 font-medium">Leads en attente de rappel</div>
-          <div className="text-3xl font-bold text-purple-800">{stats.lead_capture}</div>
+          <div className="text-sm text-purple-600 dark:text-purple-400 font-medium">Leads en attente de rappel</div>
+          <div className="text-3xl font-bold text-purple-800 dark:text-purple-300">{stats.lead_capture}</div>
         </div>
         <PhoneCall size={40} className="text-purple-300" />
       </div>
 
       {/* Recherche */}
-      <div className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 space-y-3">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
         <div className="relative">
           <MagnifyingGlass size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
@@ -142,7 +142,7 @@ export default function AdminLeads() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Rechercher par nom, téléphone..."
-            className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:border-purple-500 focus:outline-none"
+            className="w-full pl-9 pr-4 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:placeholder-slate-400 rounded-lg text-sm focus:border-purple-500 focus:outline-none"
           />
         </div>
         {selected.size > 0 && (
@@ -168,14 +168,14 @@ export default function AdminLeads() {
           filtered.map(r => {
             const expanded = expandedId === r._id
             return (
-              <div key={r._id} className={`bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden ${selected.has(r._id) ? 'ring-2 ring-purple-400' : ''}`}>
+              <div key={r._id} className={`bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden ${selected.has(r._id) ? 'ring-2 ring-purple-400' : ''}`}>
                 <div className="p-3 sm:p-4 flex items-start sm:items-center gap-3 sm:gap-4 cursor-pointer" onClick={() => setExpandedId(expanded ? null : r._id)}>
                   <input type="checkbox" checked={selected.has(r._id)}
                     onChange={(e) => { e.stopPropagation(); toggleSelect(r._id) }}
                     className="rounded border-slate-300 shrink-0 mt-1 sm:mt-0" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-slate-900 text-sm sm:text-base">{r.customer.name}</span>
+                      <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">{r.customer.name}</span>
                       <a href={`tel:${r.customer.phone}`} className="text-purple-600 font-semibold text-sm flex items-center gap-1" onClick={e => e.stopPropagation()}>
                         <Phone size={14} /> {r.customer.phone}
                       </a>
@@ -198,10 +198,10 @@ export default function AdminLeads() {
                 </div>
 
                 {expanded && (
-                  <div className="border-t border-slate-100 p-3 sm:p-4 bg-slate-50 space-y-3">
+                  <div className="border-t border-slate-100 dark:border-slate-700 p-3 sm:p-4 bg-slate-50 dark:bg-slate-900/50 space-y-3">
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
-                        <span className="text-slate-400 block text-xs">Téléphone</span>
+                        <span className="text-slate-400 dark:text-slate-500 block text-xs">Téléphone</span>
                         <a href={`tel:${r.customer.phone}`} className="text-purple-600 font-medium flex items-center gap-1">
                           <Phone size={14} /> {r.customer.phone}
                         </a>
@@ -218,7 +218,7 @@ export default function AdminLeads() {
                       </div>
                       <div>
                         <span className="text-slate-400 block text-xs">Passagers / Bagages</span>
-                        <span className="text-slate-800 font-medium">{r.passengers} pass. / {r.luggage} bag.</span>
+                        <span className="text-slate-800 dark:text-slate-200 font-medium">{r.passengers} pass. / {r.luggage} bag.</span>
                       </div>
                       <div>
                         <span className="text-slate-400 block text-xs">Prix estimé</span>
@@ -226,14 +226,14 @@ export default function AdminLeads() {
                       </div>
                     </div>
 
-                    <div className="text-xs text-slate-400 break-words">
+                    <div className="text-xs text-slate-400 dark:text-slate-500 break-words">
                       Départ : {typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || ''}
                       <br />Destination : {typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || ''}
                       <br />Date souhaitée : {formatDate(r.pickupDate)}
                       <br />Lead reçu le {formatDate(r.createdAt)}
                     </div>
 
-                    <div className="flex gap-2 pt-2 border-t border-slate-200">
+                    <div className="flex gap-2 pt-2 border-t border-slate-200 dark:border-slate-700">
                       <button onClick={() => convertToResa(r._id)}
                         className="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 flex items-center gap-1.5">
                         <CheckCircle size={14} />
@@ -256,12 +256,12 @@ export default function AdminLeads() {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
-            className="p-2 rounded-lg bg-white border border-slate-200 disabled:opacity-40 hover:bg-slate-50 transition-colors">
+            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
             <CaretLeft size={16} />
           </button>
           <span className="text-sm text-slate-600 px-3">Page {page} / {totalPages}</span>
           <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
-            className="p-2 rounded-lg bg-white border border-slate-200 disabled:opacity-40 hover:bg-slate-50 transition-colors">
+            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
             <CaretRight size={16} />
           </button>
         </div>

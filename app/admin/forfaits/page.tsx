@@ -72,8 +72,8 @@ export default function AdminForfaits() {
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Forfaits</h1>
-          <p className="text-gray-500 text-xs sm:text-sm mt-1">Prix fixes pour des trajets spécifiques</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">Forfaits</h1>
+          <p className="text-gray-500 dark:text-slate-400 text-xs sm:text-sm mt-1">Prix fixes pour des trajets spécifiques</p>
         </div>
         <button
           onClick={() => setEditing(EMPTY)}
@@ -87,7 +87,7 @@ export default function AdminForfaits() {
 
       {message && (
         <div className={`rounded-2xl px-5 py-3 font-semibold text-sm ${
-          message.type === 'ok' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+          message.type === 'ok' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
         }`}>
           {message.text}
         </div>
@@ -95,22 +95,22 @@ export default function AdminForfaits() {
 
       {/* Liste */}
       {forfaits.length === 0 ? (
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-12 text-center text-gray-400">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-12 text-center text-gray-400 dark:text-slate-500">
           Aucun forfait. Créez-en un !
         </div>
       ) : (
         <div className="space-y-3">
           {forfaits.map(f => (
-            <div key={f._id} className={`bg-white rounded-2xl shadow-sm border ${f.actif ? 'border-gray-100' : 'border-gray-200 opacity-60'} p-4 sm:p-5`}>
+            <div key={f._id} className={`bg-white dark:bg-slate-800 rounded-2xl shadow-sm border ${f.actif ? 'border-gray-100 dark:border-slate-700' : 'border-gray-200 dark:border-slate-700 opacity-60'} p-4 sm:p-5`}>
               <div className="flex items-start sm:items-center gap-3 sm:gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="font-bold text-gray-900 text-sm sm:text-base">{f.nom}</span>
+                    <span className="font-bold text-gray-900 dark:text-white text-sm sm:text-base">{f.nom}</span>
                     <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${f.actif ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
                       {f.actif ? 'Actif' : 'Inactif'}
                     </span>
                   </div>
-                  <div className="text-xs sm:text-sm text-gray-500 space-y-0.5 sm:space-y-0">
+                  <div className="text-xs sm:text-sm text-gray-500 dark:text-slate-400 space-y-0.5 sm:space-y-0">
                     <div className="flex items-center gap-1 truncate">
                       <MapPin size={14} className="shrink-0 text-green-500" />
                       <span className="truncate">{f.pointA.adresse}</span>
@@ -122,7 +122,7 @@ export default function AdminForfaits() {
                   </div>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                  <button onClick={() => toggleActif(f)} className="p-1.5 sm:p-2 rounded-xl hover:bg-gray-100 transition-colors" title="Activer/Désactiver">
+                  <button onClick={() => toggleActif(f)} className="p-1.5 sm:p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" title="Activer/Désactiver">
                     {f.actif ? <ToggleRight size={22} className="text-green-600" /> : <ToggleLeft size={22} className="text-gray-400" />}
                   </button>
                   <button onClick={() => setEditing(f)} className="p-1.5 sm:p-2 rounded-xl hover:bg-blue-50 text-blue-600 transition-colors" title="Modifier">
@@ -138,7 +138,7 @@ export default function AdminForfaits() {
                   </button>
                 </div>
               </div>
-              <div className="flex items-center gap-3 mt-2 pt-2 border-t border-gray-100 text-sm">
+              <div className="flex items-center gap-3 mt-2 pt-2 border-t border-gray-100 dark:border-slate-700 text-sm">
                 <span className="font-semibold text-blue-700">Jour : {f.prixJour} €</span>
                 <span className="font-semibold text-indigo-700">Nuit : {f.prixNuit} €</span>
               </div>

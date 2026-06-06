@@ -90,56 +90,56 @@ function EditModal({ r, token, onClose, onSaved }: {
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md my-4">
-        <div className="flex items-center justify-between p-4 border-b border-slate-200">
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2"><PencilSimple size={18} weight="bold" /> Modifier la course</h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100"><X size={18} /></button>
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md my-4">
+        <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+          <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2"><PencilSimple size={18} weight="bold" /> Modifier la course</h2>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><X size={18} /></button>
         </div>
         <div className="p-4 space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div className="col-span-2">
-              <label className="text-xs text-slate-500">Nom</label>
-              <input value={name} onChange={e => setName(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+              <label className="text-xs text-slate-500 dark:text-slate-400">Nom</label>
+              <input value={name} onChange={e => setName(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
             </div>
             <div>
-              <label className="text-xs text-slate-500">Téléphone</label>
-              <input value={phone} onChange={e => setPhone(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+              <label className="text-xs text-slate-500 dark:text-slate-400">Téléphone</label>
+              <input value={phone} onChange={e => setPhone(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
             </div>
             <div>
-              <label className="text-xs text-slate-500">Email</label>
-              <input value={email} onChange={e => setEmail(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+              <label className="text-xs text-slate-500 dark:text-slate-400">Email</label>
+              <input value={email} onChange={e => setEmail(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
             </div>
             <div>
-              <label className="text-xs text-slate-500">Date</label>
-              <input type="date" value={date} onChange={e => setDate(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+              <label className="text-xs text-slate-500 dark:text-slate-400">Date</label>
+              <input type="date" value={date} onChange={e => setDate(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
             </div>
             <div>
-              <label className="text-xs text-slate-500">Heure</label>
-              <input type="time" value={time} onChange={e => setTime(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+              <label className="text-xs text-slate-500 dark:text-slate-400">Heure</label>
+              <input type="time" value={time} onChange={e => setTime(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
             </div>
             <div className="col-span-2">
-              <label className="text-xs text-slate-500">Prix (€)</label>
-              <input type="number" min="0" step="0.5" value={price} onChange={e => setPrice(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+              <label className="text-xs text-slate-500 dark:text-slate-400">Prix (€)</label>
+              <input type="number" min="0" step="0.5" value={price} onChange={e => setPrice(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
             </div>
             <div>
-              <label className="text-xs text-slate-500">Notes client</label>
-              <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={2} className="mt-1 w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none resize-none" />
+              <label className="text-xs text-slate-500 dark:text-slate-400">Notes client</label>
+              <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={2} className="mt-1 w-full px-3 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none resize-none" />
             </div>
             <div>
-              <label className="text-xs text-slate-500">Notes admin</label>
-              <textarea value={adminNotes} onChange={e => setAdminNotes(e.target.value)} rows={2} className="mt-1 w-full px-3 py-2 border border-amber-200 bg-amber-50 rounded-lg text-sm focus:border-amber-400 focus:outline-none resize-none" />
+              <label className="text-xs text-slate-500 dark:text-slate-400">Notes admin</label>
+              <textarea value={adminNotes} onChange={e => setAdminNotes(e.target.value)} rows={2} className="mt-1 w-full px-3 py-2 border border-amber-200 dark:border-amber-800/50 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-100 rounded-lg text-sm focus:border-amber-400 focus:outline-none resize-none" />
             </div>
           </div>
           {r.customer.email && (
-            <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-600">
+            <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-600 dark:text-slate-400">
               <input type="checkbox" checked={notifyClient} onChange={e => setNotifyClient(e.target.checked)} className="rounded border-slate-300" />
               Notifier le client par email ({r.customer.email})
             </label>
           )}
           {error && <p className="text-xs text-red-600 bg-red-50 rounded px-3 py-2">{error}</p>}
         </div>
-        <div className="flex justify-end gap-3 p-4 border-t border-slate-200">
-          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-100">Annuler</button>
+        <div className="flex justify-end gap-3 p-4 border-t border-slate-200 dark:border-slate-700">
+          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">Annuler</button>
           <button onClick={handleSave} disabled={saving} className="px-5 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 disabled:opacity-60">
             {saving ? 'Enregistrement...' : 'Enregistrer'}
           </button>
@@ -167,30 +167,30 @@ function HistoriqueModal({ name, phone, token, onClose }: { name: string; phone:
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg my-4">
-        <div className="flex items-center justify-between p-4 border-b border-slate-200">
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-lg my-4">
+        <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
             <UserList size={20} weight="bold" />
             Historique — {name}
           </h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100"><X size={20} /></button>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><X size={20} /></button>
         </div>
         <div className="p-4 space-y-2 max-h-[60vh] overflow-y-auto">
-          {loading ? <p className="text-center text-slate-400 py-8">Chargement...</p> :
-           reservations.length === 0 ? <p className="text-center text-slate-400 py-8">Aucune réservation trouvée</p> :
+          {loading ? <p className="text-center text-slate-400 dark:text-slate-500 py-8">Chargement...</p> :
+           reservations.length === 0 ? <p className="text-center text-slate-400 dark:text-slate-500 py-8">Aucune réservation trouvée</p> :
            reservations.map(r => {
              const sc = STATUS_CONFIG[r.status] || STATUS_CONFIG.en_attente
              return (
-               <div key={r._id} className="border border-slate-200 rounded-xl p-3 text-sm">
+               <div key={r._id} className="border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm">
                  <div className="flex items-center justify-between mb-1">
-                   <span className="font-semibold text-slate-800">{r.reservationId}</span>
+                   <span className="font-semibold text-slate-800 dark:text-slate-200">{r.reservationId}</span>
                    <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${sc.color}`}>{sc.label}</span>
                  </div>
-                 <div className="text-slate-500 text-xs">{formatDate(r.pickupDate)}</div>
-                 <div className="text-slate-600 mt-1 truncate">
+                 <div className="text-slate-500 dark:text-slate-400 text-xs">{formatDate(r.pickupDate)}</div>
+                 <div className="text-slate-600 dark:text-slate-400 mt-1 truncate">
                    {addrStr(r.trip.from).split(',')[0]} → {addrStr(r.trip.to).split(',')[0]}
                  </div>
-                 <div className="text-green-700 font-bold mt-1">
+                 <div className="text-green-700 dark:text-green-400 font-bold mt-1">
                    {r.pricing.fourchette ? `${r.pricing.fourchette.de.toFixed(2)}€–${r.pricing.fourchette.a.toFixed(2)}€` : `${r.pricing.totalPrice.toFixed(2)}€`}
                  </div>
                </div>
@@ -554,34 +554,34 @@ export default function AdminReservations() {
           { label: 'Terminées',  count: stats.terminee,   color: 'text-green-700' },
           { label: 'Annulées',   count: stats.annulee,    color: 'text-red-700' },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 text-center">
-            <div className="text-xs text-slate-500">{s.label}</div>
+          <div key={s.label} className="bg-white dark:bg-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 dark:border-slate-700 text-center">
+            <div className="text-xs text-slate-500 dark:text-slate-400">{s.label}</div>
             <div className={`text-xl sm:text-2xl font-bold ${s.color}`}>{s.count}</div>
           </div>
         ))}
       </div>
 
       {/* Filtres */}
-      <div className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 space-y-3">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 dark:border-slate-700 space-y-3">
         <div className="relative">
           <MagnifyingGlass size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Rechercher par nom, téléphone, n° résa..."
-            className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+            className="w-full pl-9 pr-4 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:placeholder-slate-400 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-2">
             <label className="text-xs text-slate-500">Du</label>
             <input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1) }}
-              className="px-2 py-1.5 border border-slate-200 rounded-lg text-xs sm:text-sm" />
+              className="px-2 py-1.5 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-xs sm:text-sm" />
           </div>
           <div className="flex items-center gap-2">
             <label className="text-xs text-slate-500">Au</label>
             <input type="date" value={dateTo} onChange={e => { setDateTo(e.target.value); setPage(1) }}
-              className="px-2 py-1.5 border border-slate-200 rounded-lg text-xs sm:text-sm" />
+              className="px-2 py-1.5 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-xs sm:text-sm" />
           </div>
           <button onClick={exportCsv}
-            className="ml-auto flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-colors">
+            className="ml-auto flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
             <Export size={14} />
             Export CSV
           </button>
@@ -590,7 +590,7 @@ export default function AdminReservations() {
           {['all', 'en_attente', 'confirmee', 'en_route', 'terminee', 'annulee'].map(s => (
             <button key={s} onClick={() => { setStatusFilter(s); setPage(1) }}
               className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors ${
-                statusFilter === s ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
+                statusFilter === s ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>
               {s === 'all' ? 'Toutes' : STATUS_CONFIG[s]?.label || s}
             </button>
           ))}
@@ -615,19 +615,19 @@ export default function AdminReservations() {
             const sc       = STATUS_CONFIG[r.status] || STATUS_CONFIG.en_attente
             const expanded = expandedId === r._id
             return (
-              <div key={r._id} className={`bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden ${selected.has(r._id) ? 'ring-2 ring-blue-400' : ''}`}>
+              <div key={r._id} className={`bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden ${selected.has(r._id) ? 'ring-2 ring-blue-400' : ''}`}>
                 <div className="p-3 sm:p-4 flex items-start sm:items-center gap-3 sm:gap-4 cursor-pointer" onClick={() => setExpandedId(expanded ? null : r._id)}>
                   <input type="checkbox" checked={selected.has(r._id)}
                     onChange={e => { e.stopPropagation(); toggleSelect(r._id) }}
                     className="rounded border-slate-300 shrink-0 mt-1 sm:mt-0" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-slate-900 text-sm sm:text-base">{r.reservationId}</span>
+                      <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">{r.reservationId}</span>
                       <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${sc.color}`}>{sc.label}</span>
                       {r.pricing.isForfait && <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">Forfait</span>}
                       {isPast(r.pickupDate) && r.status === 'en_attente' && <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-800">Passée</span>}
                     </div>
-                    <div className="text-sm text-slate-600 mt-1">
+                    <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">
                       <span className="font-medium">{r.customer.name}</span>
                       <span className="mx-1 sm:mx-2 text-slate-300">|</span>
                       <span className="inline-flex items-center gap-0.5"><Clock size={14} className="inline" /> {formatDate(r.pickupDate)}</span>
@@ -650,16 +650,16 @@ export default function AdminReservations() {
                 </div>
 
                 {expanded && (
-                  <div className="border-t border-slate-100 p-3 sm:p-4 bg-slate-50 space-y-3">
+                  <div className="border-t border-slate-100 dark:border-slate-700 p-3 sm:p-4 bg-slate-50 dark:bg-slate-900/50 space-y-3">
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
-                        <span className="text-slate-400 block text-xs">Téléphone</span>
+                        <span className="text-slate-400 dark:text-slate-500 block text-xs">Téléphone</span>
                         <a href={`tel:${r.customer.phone}`} className="text-blue-600 font-medium flex items-center gap-1">
                           <Phone size={14} /> {r.customer.phone}
                         </a>
                       </div>
                       <div>
-                        <span className="text-slate-400 block text-xs">Email</span>
+                        <span className="text-slate-400 dark:text-slate-500 block text-xs">Email</span>
                         {r.customer.email ? (
                           <a href={`mailto:${r.customer.email}`} className="text-blue-600 font-medium flex items-center gap-1 truncate">
                             <Envelope size={14} className="shrink-0" /> <span className="truncate">{r.customer.email}</span>
@@ -667,12 +667,12 @@ export default function AdminReservations() {
                         ) : <span className="text-slate-400 text-xs">Non renseigné</span>}
                       </div>
                       <div>
-                        <span className="text-slate-400 block text-xs">Passagers / Bagages</span>
-                        <span className="text-slate-800 font-medium">{r.passengers} pass. / {r.luggage} bag.</span>
+                        <span className="text-slate-400 dark:text-slate-500 block text-xs">Passagers / Bagages</span>
+                        <span className="text-slate-800 dark:text-slate-200 font-medium">{r.passengers} pass. / {r.luggage} bag.</span>
                       </div>
                       <div>
-                        <span className="text-slate-400 block text-xs">Tarif</span>
-                        <span className="text-slate-800 font-medium">{r.pricing.tariffType}</span>
+                        <span className="text-slate-400 dark:text-slate-500 block text-xs">Tarif</span>
+                        <span className="text-slate-800 dark:text-slate-200 font-medium">{r.pricing.tariffType}</span>
                       </div>
                     </div>
 
@@ -684,13 +684,13 @@ export default function AdminReservations() {
                     )}
 
                     {r.adminNotes && (
-                      <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-sm">
-                        <span className="text-amber-700 text-xs font-semibold block mb-0.5">Notes internes</span>
-                        <p className="text-amber-900">{r.adminNotes}</p>
+                      <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/50 rounded-lg px-3 py-2 text-sm">
+                        <span className="text-amber-700 dark:text-amber-400 text-xs font-semibold block mb-0.5">Notes internes</span>
+                        <p className="text-amber-900 dark:text-amber-300">{r.adminNotes}</p>
                       </div>
                     )}
 
-                    <div className="text-xs text-slate-400 break-words">
+                    <div className="text-xs text-slate-400 dark:text-slate-500 break-words">
                       Départ : {addrStr(r.trip.from)}<br />
                       Destination : {addrStr(r.trip.to)}<br />
                       Créée le {formatDate(r.createdAt)}
@@ -704,7 +704,7 @@ export default function AdminReservations() {
                     )}
 
                     {/* Actions statut */}
-                    <div className="grid grid-cols-2 sm:flex gap-2 pt-2 border-t border-slate-200">
+                    <div className="grid grid-cols-2 sm:flex gap-2 pt-2 border-t border-slate-200 dark:border-slate-700">
                       {r.status !== 'confirmee' && r.status !== 'en_route' && r.status !== 'terminee' && (
                         <button onClick={() => updateStatus(r._id, 'confirmee')}
                           className="px-3 py-2 sm:py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700">
@@ -744,19 +744,19 @@ export default function AdminReservations() {
                     {/* Actions course */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
                       <a href={buildBookingUrl(r, false)} target="_blank" rel="noopener noreferrer"
-                        className="px-3 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-semibold hover:bg-blue-100 flex items-center justify-center gap-1.5">
+                        className="px-3 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 flex items-center justify-center gap-1.5">
                         <PlusCircle size={14} /> Nouvelle course
                       </a>
                       <a href={buildBookingUrl(r, true)} target="_blank" rel="noopener noreferrer"
-                        className="px-3 py-2 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-semibold hover:bg-indigo-100 flex items-center justify-center gap-1.5">
+                        className="px-3 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/50 rounded-lg text-xs font-semibold hover:bg-indigo-100 dark:hover:bg-indigo-900/50 flex items-center justify-center gap-1.5">
                         <ArrowsLeftRight size={14} /> Créer retour
                       </a>
                       <button onClick={() => setEditModal(r)}
-                        className="px-3 py-2 bg-slate-50 text-slate-700 border border-slate-200 rounded-lg text-xs font-semibold hover:bg-slate-100 flex items-center justify-center gap-1.5">
+                        className="px-3 py-2 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-600 flex items-center justify-center gap-1.5">
                         <PencilSimple size={14} /> Modifier
                       </button>
                       <button onClick={() => setHistModal({ name: r.customer.name, phone: r.customer.phone })}
-                        className="px-3 py-2 bg-slate-50 text-slate-700 border border-slate-200 rounded-lg text-xs font-semibold hover:bg-slate-100 flex items-center justify-center gap-1.5">
+                        className="px-3 py-2 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-600 flex items-center justify-center gap-1.5">
                         <UserList size={14} /> Historique
                       </button>
                     </div>
@@ -772,12 +772,12 @@ export default function AdminReservations() {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
-            className="p-2 rounded-lg bg-white border border-slate-200 disabled:opacity-40 hover:bg-slate-50 transition-colors">
+            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
             <CaretLeft size={16} />
           </button>
-          <span className="text-sm text-slate-600 px-3">Page {page} / {totalPages}</span>
+          <span className="text-sm text-slate-600 dark:text-slate-400 px-3">Page {page} / {totalPages}</span>
           <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
-            className="p-2 rounded-lg bg-white border border-slate-200 disabled:opacity-40 hover:bg-slate-50 transition-colors">
+            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
             <CaretRight size={16} />
           </button>
         </div>
