@@ -54,13 +54,13 @@ export default function AdminLogin() {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
             <div className="relative">
-              <EnvelopeSimple size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <EnvelopeSimple size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
               <input
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="votre@email.fr"
-                className="w-full border-2 border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm focus:border-blue-500 focus:outline-none text-gray-900"
+                className="w-full border-2 border-gray-300 rounded-xl pl-10 pr-4 py-3 text-sm focus:border-blue-500 focus:outline-none text-gray-900"
                 autoFocus
               />
             </div>
@@ -74,12 +74,12 @@ export default function AdminLogin() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-lg font-bold text-center focus:border-blue-500 focus:outline-none"
+                className="w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-lg font-bold text-center focus:border-blue-500 focus:outline-none"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(v => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
               >
                 {showPassword ? <EyeSlash size={20} /> : <Eye size={20} />}
               </button>
