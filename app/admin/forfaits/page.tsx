@@ -127,11 +127,11 @@ export default function AdminForfaits() {
                   <button onClick={() => toggleActif(f)} className="p-1.5 sm:p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" title="Activer/Désactiver">
                     {f.actif ? <ToggleRight size={22} className="text-green-600" /> : <ToggleLeft size={22} className="text-gray-600" />}
                   </button>
-                  <button onClick={() => setEditing(f)} className="p-1.5 sm:p-2 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/30 text-blue-600 transition-colors" title="Modifier">
+                  <button onClick={() => setEditing(f)} className="p-1.5 sm:p-2 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors text-blue-600" title="Modifier">
                     <PencilSimple size={18} />
                   </button>
                   <button onClick={() => setConfirmDel({ id: f._id!, nom: f.nom })} disabled={deleting === f._id}
-                    className="p-1.5 sm:p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/30 text-red-500 transition-colors" title="Supprimer">
+                    className="p-1.5 sm:p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors text-red-500" title="Supprimer">
                     {deleting === f._id ? <ArrowClockwise size={18} className="animate-spin" /> : <Trash size={18} />}
                   </button>
                 </div>

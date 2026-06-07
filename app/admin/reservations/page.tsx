@@ -97,7 +97,7 @@ function EditModal({ r, token, onClose, onSaved }: {
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md my-4">
         <div className="flex items-center justify-between p-4 border-b border-slate-300 dark:border-slate-700">
           <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2"><PencilSimple size={18} weight="bold" /> Modifier la course</h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><X size={18} /></button>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><X transition-colors size={18} /></button>
         </div>
         <div className="p-4 space-y-3">
           <div className="grid grid-cols-2 gap-3">
@@ -143,8 +143,8 @@ function EditModal({ r, token, onClose, onSaved }: {
           {error && <p className="text-xs text-red-600 bg-red-50 rounded px-3 py-2">{error}</p>}
         </div>
         <div className="flex justify-end gap-3 p-4 border-t border-slate-300 dark:border-slate-700">
-          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">Annuler</button>
-          <button onClick={handleSave} disabled={saving} className="px-5 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 disabled:opacity-60">
+          <button onClick={onClose} className="px-4 py-2 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">Annuler</button>
+          <button onClick={handleSave} disabled={saving} className="px-5 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
             {saving ? 'Enregistrement...' : 'Enregistrer'}
           </button>
         </div>
@@ -177,7 +177,7 @@ function HistoriqueModal({ name, phone, token, onClose }: { name: string; phone:
             <UserList size={20} weight="bold" />
             Historique — {name}
           </h2>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><X size={20} /></button>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"><X transition-colors size={20} /></button>
         </div>
         <div className="p-4 space-y-2 max-h-[60vh] overflow-y-auto">
           {loading ? <p className="text-center text-slate-600 dark:text-slate-500 py-8">Chargement...</p> :
@@ -253,7 +253,7 @@ function InlineAdminNote({ reservationId, initial }: { reservationId: string; in
       />
       <div className="flex gap-2">
         <button onClick={save} disabled={saving}
-          className="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold disabled:opacity-60 transition-colors">
+          className="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
           {saving ? 'Enregistrement…' : 'Enregistrer'}
         </button>
         <button onClick={() => { setValue(initial); setEditing(false) }}
@@ -646,7 +646,7 @@ export default function AdminReservations() {
           <MagnifyingGlass size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Rechercher par nom, téléphone, n° résa..."
-            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent dark:placeholder-slate-400 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent dark:placeholder-slate-400 dark:placeholder-slate-500 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-2">
@@ -669,8 +669,7 @@ export default function AdminReservations() {
           {['all', 'en_attente', 'confirmee', 'en_route', 'terminee', 'annulee'].map(s => (
             <button key={s} onClick={() => { setStatusFilter(s); setPage(1) }}
               className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors ${
-                statusFilter === s ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>
-              {s === 'all' ? 'Toutes' : STATUS_CONFIG[s]?.label || s}
+                statusFilter === s ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}> transition-colors {s === 'all' ? 'Toutes' : STATUS_CONFIG[s]?.label || s}
             </button>
           ))}
           {selected.size > 0 && (
@@ -806,7 +805,7 @@ export default function AdminReservations() {
                       )}
                       {(r.status === 'confirmee' || r.status === 'en_attente') && (
                         <button onClick={() => updateStatus(r._id, 'en_route')}
-                          className="px-3 py-2 sm:py-1.5 bg-orange-500 text-white rounded-lg text-xs font-semibold hover:bg-orange-600 flex items-center justify-center gap-1.5">
+                          className="px-3 py-2 sm:py-1.5 bg-orange-500 text-white rounded-lg text-xs font-semibold hover:bg-orange-600 transition-colors flex items-center justify-center gap-1.5">
                           <NavigationArrow size={14} /> En route
                         </button>
                       )}
@@ -829,7 +828,7 @@ export default function AdminReservations() {
                         </button>
                       )}
                       <button onClick={e => { e.stopPropagation(); generateInvoice(r) }}
-                        className="px-3 py-2 sm:py-1.5 bg-slate-700 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 flex items-center justify-center gap-1.5 col-span-2 sm:col-span-1 sm:ml-auto">
+                        className="px-3 py-2 sm:py-1.5 bg-slate-700 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition-colors flex items-center justify-center gap-1.5 col-span-2 sm:col-span-1 sm:ml-auto">
                         <Receipt size={14} /> Facture PDF
                       </button>
                     </div>
@@ -837,7 +836,7 @@ export default function AdminReservations() {
                     {/* Actions course */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
                       <a href={buildBookingUrl(r, false)} target="_blank" rel="noopener noreferrer"
-                        className="px-3 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 flex items-center justify-center gap-1.5">
+                        className="px-3 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors flex items-center justify-center gap-1.5">
                         <PlusCircle size={14} /> Nouvelle course
                       </a>
                       <a href={buildBookingUrl(r, true)} target="_blank" rel="noopener noreferrer"
@@ -845,11 +844,11 @@ export default function AdminReservations() {
                         <ArrowsLeftRight size={14} /> Créer retour
                       </a>
                       <button onClick={() => setEditModal(r)}
-                        className="px-3 py-2 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-600 flex items-center justify-center gap-1.5">
+                        className="px-3 py-2 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors flex items-center justify-center gap-1.5">
                         <PencilSimple size={14} /> Modifier
                       </button>
                       <button onClick={() => setHistModal({ name: r.customer.name, phone: r.customer.phone })}
-                        className="px-3 py-2 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-600 flex items-center justify-center gap-1.5">
+                        className="px-3 py-2 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors flex items-center justify-center gap-1.5">
                         <UserList size={14} /> Historique
                       </button>
                     </div>
@@ -865,12 +864,12 @@ export default function AdminReservations() {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
-            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
             <CaretLeft size={16} />
           </button>
           <span className="text-sm text-slate-600 dark:text-slate-400 px-3">Page {page} / {totalPages}</span>
           <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
-            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
             <CaretRight size={16} />
           </button>
         </div>

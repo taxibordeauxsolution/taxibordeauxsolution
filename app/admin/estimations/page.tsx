@@ -43,6 +43,7 @@ export default function AdminEstimations() {
   const [leadsOnly, setLeadsOnly] = useState(false)
   const [editingNotes, setEditingNotes] = useState<string | null>(null)
   const [notesValue, setNotesValue] = useState('')
+  const [exporting, setExporting] = useState(false)
 
   const toLocalDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
   const today = toLocalDate(new Date())
@@ -173,6 +174,7 @@ export default function AdminEstimations() {
     `https://wa.me/${e.telephone!.replace(/\D/g, '').replace(/^0/, '33')}?text=${encodeURIComponent(whatsappMsg(e))}`
 
   const exportCSV = () => {
+    setExporting(true)
     const header = 'Date,Départ,Destination,Distance (km),Durée (min),Prix,Fourchette,Tarif,Forfait,Email,Téléphone,Statut\n'
     const rows = estimations.map(e => {
       const fourchette = e.fourchette ? `${e.fourchette.de.toFixed(2)} - ${e.fourchette.a.toFixed(2)}` : '-'
@@ -185,6 +187,7 @@ export default function AdminEstimations() {
     a.download = `estimations_${dateFrom}_${dateTo}.csv`
     a.click()
     URL.revokeObjectURL(url)
+    setTimeout(() => setExporting(false), 800)
   }
 
   return (
@@ -233,7 +236,7 @@ export default function AdminEstimations() {
 
       {/* Top routes */}
       {stats.topRoutes.length > 0 && (
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-300">
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
             <Path size={16} />
             Top trajets
@@ -266,19 +269,17 @@ export default function AdminEstimations() {
           Filtrer
         </button>
         <button onClick={() => { const t = toLocalDate(new Date()); setDateFrom(t); setDateTo(t); setPage(1) }}
-          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${dateFrom === dateTo && dateFrom === toLocalDate(new Date()) ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>
-          <CalendarBlank size={16} />
+          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${dateFrom === dateTo && dateFrom === toLocalDate(new Date()) ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}><CalendarBlank size={16} />
           Aujourd'hui
         </button>
         <button onClick={() => { setLeadsOnly(!leadsOnly); setPage(1) }}
-          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${leadsOnly ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}>
-          <EnvelopeSimple size={16} />
+          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2 ${leadsOnly ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'}`}><EnvelopeSimple size={16} />
           {leadsOnly ? 'Leads uniquement ✓' : 'Leads uniquement'}
         </button>
-        <button onClick={exportCSV}
-          className="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center gap-2">
-          <DownloadSimple size={16} />
-          Export CSV
+        <button onClick={exportCSV} disabled={exporting}
+          className="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center gap-2 disabled:opacity-50">
+          <DownloadSimple size={16} className={exporting ? 'animate-spin' : ''} />
+          {exporting ? 'Export...' : 'Export CSV'}
         </button>
         {selected.size > 0 && (
           <button onClick={deleteSelected}
@@ -373,7 +374,7 @@ export default function AdminEstimations() {
           </div>
 
           {/* Tableau desktop */}
-          <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-300 overflow-hidden">
+          <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 overflow-hidden">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-300">
@@ -445,7 +446,7 @@ export default function AdminEstimations() {
                                 type="text" value={notesValue}
                                 onChange={ev => setNotesValue(ev.target.value)}
                                 onKeyDown={ev => ev.key === 'Enter' && saveNotes(e._id)}
-                                className="text-xs px-1.5 py-0.5 border border-slate-300 rounded w-full"
+                                className="text-xs px-1.5 py-0.5 border border-slate-300 dark:border-slate-700 rounded w-full"
                                 autoFocus
                               />
                               <button onClick={() => saveNotes(e._id)} className="text-xs text-blue-600 font-semibold whitespace-nowrap">OK</button>
@@ -494,7 +495,7 @@ export default function AdminEstimations() {
           <button
             onClick={() => setPage(p => Math.max(1, p - 1))}
             disabled={page <= 1}
-            className="p-2 rounded-lg bg-white border border-slate-300 disabled:opacity-40 hover:bg-slate-50 transition-colors"
+            className="p-2 rounded-lg bg-white border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
           >
             <CaretLeft size={16} />
           </button>
@@ -504,7 +505,7 @@ export default function AdminEstimations() {
           <button
             onClick={() => setPage(p => Math.min(totalPages, p + 1))}
             disabled={page >= totalPages}
-            className="p-2 rounded-lg bg-white border border-slate-300 disabled:opacity-40 hover:bg-slate-50 transition-colors"
+            className="p-2 rounded-lg bg-white border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors"
           >
             <CaretRight size={16} />
           </button>

@@ -17,7 +17,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     const saved = localStorage.getItem('admin_dark_mode')
-    if (saved === 'true') setDarkMode(true)
+    if (saved === 'true') {
+      setDarkMode(true)
+      document.documentElement.classList.add('dark')
+    }
   }, [])
 
   // #21 — Notifications navigateur pour nouvelles réservations
@@ -62,8 +65,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const toggleDark = () => {
     setDarkMode(prev => {
-      localStorage.setItem('admin_dark_mode', String(!prev))
-      return !prev
+      const next = !prev
+      localStorage.setItem('admin_dark_mode', String(next))
+      if (next) document.documentElement.classList.add('dark')
+      else document.documentElement.classList.remove('dark')
+      return next
     })
   }
 
@@ -135,7 +141,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ]
 
   return (
-    <div className={`min-h-screen bg-slate-100 dark:bg-slate-900 transition-colors${darkMode ? ' dark' : ''}`}>
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 transition-colors">
       <nav className="bg-slate-900 text-white px-4 sm:px-6 py-3 sm:py-4 shadow-xl border-b border-slate-800">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

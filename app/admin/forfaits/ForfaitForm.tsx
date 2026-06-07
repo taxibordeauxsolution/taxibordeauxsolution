@@ -179,10 +179,10 @@ export default function ForfaitForm({ initial, token, onSaved, onCancel }: {
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 overflow-y-auto">
-      <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-blue-100 dark:border-slate-700 p-6 sm:p-8 space-y-6 w-full max-w-2xl my-4">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-blue-100 dark:border-slate-700 p-6 sm:p-8 space-y-6 w-full max-w-2xl my-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">{form._id ? 'Modifier le forfait' : 'Nouveau forfait'}</h2>
-          <button onClick={onCancel} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-500 dark:text-slate-400"><X size={22} /></button>
+          <button onClick={onCancel} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors text-gray-500 dark:text-slate-400"><X size={22} /></button>
         </div>
 
         <div>
@@ -212,7 +212,7 @@ export default function ForfaitForm({ initial, token, onSaved, onCancel }: {
                     {activeZone === z ? 'Dessinez sur la carte...' : `Dessiner zone ${z}`}
                   </button>
                   {hasZone && (
-                    <button type="button" onClick={() => clearZone(z)} className="text-gray-600 hover:text-red-500 p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20" title="Effacer">
+                    <button type="button" onClick={() => clearZone(z)} className="text-gray-600 hover:text-red-500 p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20" transition-colors title="Effacer">
                       <X size={16} />
                     </button>
                   )}
@@ -256,7 +256,7 @@ export default function ForfaitForm({ initial, token, onSaved, onCancel }: {
 
         <div className="flex gap-3 justify-end">
           <button onClick={onCancel} className="px-6 py-3 rounded-2xl border-2 border-gray-300 dark:border-slate-600 font-semibold text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">Annuler</button>
-          <button onClick={save} disabled={saving} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-bold px-8 py-3 rounded-2xl transition-colors shadow-lg">
+          <button onClick={save} disabled={saving} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold px-8 py-3 rounded-2xl transition-colors shadow-lg">
             <FloppyDisk size={20} />
             {saving ? 'Sauvegarde...' : 'Enregistrer'}
           </button>

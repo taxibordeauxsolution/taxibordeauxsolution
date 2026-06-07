@@ -158,7 +158,7 @@ export default function AdminLeads() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Rechercher par nom, téléphone..."
-            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent dark:placeholder-slate-400 rounded-lg text-sm focus:border-purple-500 focus:outline-none"
+            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent dark:placeholder-slate-400 dark:placeholder-slate-500 rounded-lg text-sm focus:border-purple-500 focus:outline-none"
           />
         </div>
         {selected.size > 0 && (
@@ -254,7 +254,7 @@ export default function AdminLeads() {
 
                     <div className="flex gap-2 pt-2 border-t border-slate-300 dark:border-slate-700">
                       <button onClick={() => convertToResa(r._id)}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 flex items-center gap-1.5">
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition-colors flex items-center gap-1.5 whitespace-nowrap">
                         <CheckCircle size={14} />
                         Convertir en réservation
                       </button>
@@ -275,12 +275,12 @@ export default function AdminLeads() {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
-            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
             <CaretLeft size={16} />
           </button>
           <span className="text-sm text-slate-600 px-3">Page {page} / {totalPages}</span>
           <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
-            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
             <CaretRight size={16} />
           </button>
         </div>

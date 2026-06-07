@@ -145,11 +145,10 @@ export default function AdminUsers() {
           </div>
           <div className="flex gap-2 justify-end">
             <button type="button" onClick={() => setShowForm(false)}
-              className="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600">
-              Annuler
+              className="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">Annuler
             </button>
             <button type="submit" disabled={saving}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 disabled:bg-blue-300">
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
               {saving ? 'Création...' : 'Créer le compte'}
             </button>
           </div>
@@ -163,7 +162,7 @@ export default function AdminUsers() {
           <div className="text-center py-12 text-slate-600">Aucun compte admin</div>
         ) : (
           users.map(u => (
-            <div key={u._id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-4 flex items-center justify-between gap-4">
+            <div key={u._id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-4 flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/40 rounded-full flex items-center justify-center shrink-0">
                   <User size={20} className="text-blue-600 dark:text-blue-400" />

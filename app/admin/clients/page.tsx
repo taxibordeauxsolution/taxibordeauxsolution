@@ -162,7 +162,7 @@ export default function AdminClients() {
         </h1>
         <div className="flex items-center gap-2">
           <button onClick={() => setConfirmImportOpen(true)} disabled={importing}
-            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-purple-600 text-white rounded-xl text-sm font-semibold hover:bg-purple-700 disabled:bg-purple-300 transition-colors shrink-0">
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-purple-600 text-white rounded-xl text-sm font-semibold hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0">
             <DownloadSimple size={16} className={importing ? 'animate-bounce' : ''} />
             <span className="hidden sm:inline">{importing ? 'Import...' : 'Importer résas'}</span>
           </button>
@@ -189,7 +189,7 @@ export default function AdminClients() {
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-blue-200 dark:border-slate-700 p-4 sm:p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="font-bold text-slate-800 dark:text-white">{editingId ? 'Modifier le client' : 'Nouveau client'}</h2>
-            <button onClick={() => setShowForm(false)} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"><X size={20} /></button>
+            <button onClick={() => setShowForm(false)} className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors rounded-lg"><X size={20} /></button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -221,7 +221,7 @@ export default function AdminClients() {
           </div>
           <div className="flex justify-end">
             <button onClick={save} disabled={saving}
-              className="flex items-center gap-2 px-5 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 disabled:bg-blue-300 transition-colors">
+              className="flex items-center gap-2 px-5 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
               <FloppyDisk size={16} />
               {saving ? 'Enregistrement...' : 'Enregistrer'}
             </button>
@@ -235,7 +235,7 @@ export default function AdminClients() {
           <MagnifyingGlass size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Rechercher par nom, téléphone, email..."
-            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent dark:placeholder-slate-400 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent dark:placeholder-slate-400 dark:placeholder-slate-500 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
         </div>
       </div>
 
@@ -298,12 +298,12 @@ export default function AdminClients() {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
-            className="p-2 rounded-lg bg-white border border-slate-300 disabled:opacity-40 hover:bg-slate-50 transition-colors">
+            className="p-2 rounded-lg bg-white border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors">
             <CaretLeft size={16} />
           </button>
           <span className="text-sm text-slate-600 px-3">Page {page} / {totalPages}</span>
           <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
-            className="p-2 rounded-lg bg-white border border-slate-300 disabled:opacity-40 hover:bg-slate-50 transition-colors">
+            className="p-2 rounded-lg bg-white border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors">
             <CaretRight size={16} />
           </button>
         </div>

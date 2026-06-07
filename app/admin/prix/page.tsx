@@ -187,6 +187,7 @@ export default function AdminPrix() {
           <h2 className="font-bold text-gray-800 text-base sm:text-lg">Tarif nuit dégressif</h2>
           <button
             type="button"
+            role="switch" aria-checked={prix.tarifNuitDegressifActive} aria-label="Tarif nuit dégressif"
             onClick={() => setPrix(prev => ({ ...prev, tarifNuitDegressifActive: !prev.tarifNuitDegressifActive }))}
             className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
               prix.tarifNuitDegressifActive ? 'bg-green-500' : 'bg-gray-300'
@@ -269,6 +270,7 @@ export default function AdminPrix() {
           <h2 className="font-bold text-gray-800 text-base sm:text-lg">Tarif jour dégressif</h2>
           <button
             type="button"
+            role="switch" aria-checked={prix.tarifJourDegressifActive} aria-label="Tarif jour dégressif"
             onClick={() => setPrix(prev => ({ ...prev, tarifJourDegressifActive: !prev.tarifJourDegressifActive }))}
             className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
               prix.tarifJourDegressifActive ? 'bg-green-500' : 'bg-gray-300'
@@ -354,6 +356,7 @@ export default function AdminPrix() {
           </h2>
           <button
             type="button"
+            role="switch" aria-checked={prix.remiseActive} aria-label="Remise courses longues"
             onClick={() => setPrix(prev => ({ ...prev, remiseActive: !prev.remiseActive }))}
             className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
               prix.remiseActive ? 'bg-green-500' : 'bg-gray-300'
@@ -412,6 +415,7 @@ export default function AdminPrix() {
           <h2 className="font-bold text-gray-800 text-base sm:text-lg">Offrir les frais d{"'"}approche</h2>
           <button
             type="button"
+            role="switch" aria-checked={prix.suppApprocheActive} aria-label="Offrir frais d'approche"
             onClick={() => setPrix(prev => ({ ...prev, suppApprocheActive: !prev.suppApprocheActive }))}
             className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
               prix.suppApprocheActive ? 'bg-green-500' : 'bg-gray-300'
@@ -441,7 +445,7 @@ export default function AdminPrix() {
       </div>
 
       {/* Mode itinéraire */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-4">
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-200 dark:border-slate-700 p-4 sm:p-8 space-y-4">
         <div className="flex items-center justify-between border-b pb-3">
           <div>
             <h2 className="font-bold text-gray-800 text-base sm:text-lg">Mode itinéraire</h2>
@@ -482,7 +486,7 @@ export default function AdminPrix() {
       </div>
 
       {/* Affichage prix : fourchette ou prix unique */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-8 space-y-3">
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-200 dark:border-slate-700 p-4 sm:p-8 space-y-3">
         <div className="flex items-center justify-between border-b pb-3">
           <div>
             <h2 className="font-bold text-gray-800 text-base sm:text-lg flex items-center gap-2">
@@ -497,6 +501,7 @@ export default function AdminPrix() {
           </div>
           <button
             type="button"
+            role="switch" aria-checked={prix.affichagePrixUnique} aria-label="Affichage prix unique"
             onClick={() => setPrix(prev => ({ ...prev, affichagePrixUnique: !prev.affichagePrixUnique }))}
             className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
               prix.affichagePrixUnique ? 'bg-green-500' : 'bg-gray-300'
@@ -525,6 +530,7 @@ export default function AdminPrix() {
           </div>
           <button
             type="button"
+            role="switch" aria-checked={prix.captureLeadActive} aria-label="Capture lead longue distance"
             onClick={() => setPrix(prev => ({ ...prev, captureLeadActive: !prev.captureLeadActive }))}
             className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
               prix.captureLeadActive ? 'bg-purple-500' : 'bg-gray-300'
@@ -625,7 +631,7 @@ export default function AdminPrix() {
 
       <div className="flex justify-end">
         <button onClick={save} disabled={saving}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-bold px-6 sm:px-8 py-3 rounded-2xl transition-colors shadow-lg text-sm sm:text-base">
+          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold px-6 sm:px-8 py-3 rounded-2xl transition-colors shadow-lg text-sm sm:text-base">
           <FloppyDisk size={20} />
           {saving ? 'Sauvegarde...' : 'Enregistrer'}
         </button>

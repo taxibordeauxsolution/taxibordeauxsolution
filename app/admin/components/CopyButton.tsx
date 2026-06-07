@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState } from 'react'
 import { CopySimple, CheckCircle } from '@phosphor-icons/react'
 
@@ -17,12 +17,15 @@ export function CopyButton({ text, className = '' }: { text: string; className?:
   return (
     <button
       onClick={copy}
-      className={`p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 ${className}`}
+      className={`relative p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors text-slate-600 hover:text-slate-700 dark:hover:text-slate-300 ${className}`}
       title="Copier"
     >
-      {copied
-        ? <CheckCircle size={13} weight="bold" className="text-green-500" />
-        : <CopySimple size={13} />}
+      <span className={`block transition-all duration-200 ${copied ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`}>
+        <CopySimple size={13} />
+      </span>
+      <span className={`absolute inset-0 flex items-center justify-center transition-all duration-200 ${copied ? 'opacity-100 scale-100' : 'opacity-0 scale-50'} text-green-500`}>
+        <CheckCircle size={13} weight="bold" />
+      </span>
     </button>
   )
 }

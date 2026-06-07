@@ -202,14 +202,14 @@ export default function AdminDashboard() {
       <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
 
       {newResaAlert && (
-        <div className="bg-blue-600 text-white rounded-2xl p-4 shadow-lg flex items-center gap-3 animate-pulse">
+        <div className="bg-blue-600 text-white rounded-2xl p-4 shadow-lg flex items-center gap-3 ring-2 ring-blue-400 ring-offset-2">
           <Taxi size={24} />
           <span className="font-bold">Nouvelle réservation !</span>
         </div>
       )}
 
       {newLeadAlert && (
-        <div className="bg-purple-600 text-white rounded-2xl p-4 shadow-lg flex items-center gap-3 animate-pulse">
+        <div className="bg-purple-600 text-white rounded-2xl p-4 shadow-lg flex items-center gap-3 ring-2 ring-purple-400 ring-offset-2">
           <Phone size={24} />
           <span className="font-bold">Nouveau lead à rappeler !</span>
         </div>
@@ -289,7 +289,7 @@ export default function AdminDashboard() {
           <div className="text-xs text-green-700 dark:text-green-400">Cette semaine</div>
           <div className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400">{stats.revenus.semaine.toFixed(0)}€</div>
           {diffSem !== null && (
-            <div className={`text-xs font-semibold mt-1 ${diffSem >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`text-xs font-semibold mt-1 ${diffSem >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
               {diffSem >= 0 ? '+' : ''}{diffSem}% vs sem. préc.
             </div>
           )}
@@ -301,7 +301,7 @@ export default function AdminDashboard() {
           <div className="text-xs text-green-700 dark:text-green-400">Ce mois</div>
           <div className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400">{stats.revenus.mois.toFixed(0)}€</div>
           {diffMois !== null && (
-            <div className={`text-xs font-semibold mt-1 ${diffMois >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <div className={`text-xs font-semibold mt-1 ${diffMois >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
               {diffMois >= 0 ? '+' : ''}{diffMois}% vs mois préc.
             </div>
           )}
