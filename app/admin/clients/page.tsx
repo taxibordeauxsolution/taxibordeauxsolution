@@ -279,11 +279,11 @@ export default function AdminClients() {
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
                   <button onClick={() => openEdit(c)}
-                    className="p-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-500 hover:text-blue-600">
+                    className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400">
                     <PencilSimple size={16} />
                   </button>
                   <button onClick={() => setConfirmDeleteId(c._id)}
-                    className="p-2 hover:bg-red-50 rounded-lg transition-colors text-slate-600 hover:text-red-600">
+                    className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-slate-600 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400">
                     <Trash size={16} />
                   </button>
                 </div>
@@ -297,12 +297,12 @@ export default function AdminClients() {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
-            className="p-2 rounded-lg bg-white border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors">
+            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-300">
             <CaretLeft size={16} />
           </button>
-          <span className="text-sm text-slate-600 px-3">Page {page} / {totalPages}</span>
+          <span className="text-sm text-slate-600 dark:text-slate-400 px-3">Page {page} / {totalPages}</span>
           <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
-            className="p-2 rounded-lg bg-white border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 transition-colors">
+            className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-slate-700 dark:text-slate-300">
             <CaretRight size={16} />
           </button>
         </div>

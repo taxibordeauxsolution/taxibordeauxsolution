@@ -7,6 +7,7 @@ import { SkeletonList } from '@/app/admin/components/Skeleton'
 import { ConfirmDialog } from '@/app/admin/components/ConfirmDialog'
 import { CopyButton } from '@/app/admin/components/CopyButton'
 import { EmptyState } from '@/app/admin/components/EmptyState'
+import { useToast } from '@/app/admin/components/Toast'
 
 interface Lead {
   _id: string
@@ -32,6 +33,7 @@ export default function AdminLeads() {
   const [totalPages, setTotalPages] = useState(1)
   const [confirmBulkOpen, setConfirmBulkOpen] = useState(false)
   const [confirmSingleId, setConfirmSingleId] = useState<string | null>(null)
+  const { toast } = useToast()
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -66,22 +68,28 @@ export default function AdminLeads() {
 
   const deleteSelected = async () => {
     if (selected.size === 0) return
-    await fetch('/api/admin/reservations', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
-      body: JSON.stringify({ ids: [...selected] })
-    })
-    setSelected(new Set())
-    load()
+    try {
+      await fetch('/api/admin/reservations', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+        body: JSON.stringify({ ids: [...selected] })
+      })
+      toast(`${selected.size} lead(s) supprimé(s)`, 'success')
+      setSelected(new Set())
+      load()
+    } catch { toast('Erreur lors de la suppression', 'error') }
   }
 
   const deleteSingle = async (id: string) => {
-    await fetch('/api/admin/reservations', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
-      body: JSON.stringify({ ids: [id] })
-    })
-    load()
+    try {
+      await fetch('/api/admin/reservations', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+        body: JSON.stringify({ ids: [id] })
+      })
+      toast('Lead supprimé', 'success')
+      load()
+    } catch { toast('Erreur lors de la suppression', 'error') }
   }
 
   const toggleSelect = (id: string) => {
@@ -195,7 +203,7 @@ export default function AdminLeads() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">{r.customer.name}</span>
-                      <a href={`tel:${r.customer.phone}`} className="text-purple-600 font-semibold text-sm flex items-center gap-1" onClick={e => e.stopPropagation()}>
+                      <a href={`tel:${r.customer.phone}`} className="text-purple-600 dark:text-purple-400 font-semibold text-sm flex items-center gap-1" onClick={e => e.stopPropagation()}>
                         <Phone size={14} /> {r.customer.phone}
                       </a>
                     </div>
@@ -204,16 +212,16 @@ export default function AdminLeads() {
                       <span className="mx-1">→</span>
                       <MapPin size={14} className="inline text-red-500" /> {(typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || '').split(',')[0]}
                     </div>
-                    <div className="flex items-center gap-3 mt-1 text-xs text-slate-600">
+                    <div className="flex items-center gap-3 mt-1 text-xs text-slate-600 dark:text-slate-400">
                       <span>{r.trip.distance?.toFixed(1)} km</span>
                       <span><Clock size={12} className="inline" /> {formatDate(r.pickupDate)}</span>
                     </div>
                   </div>
                   <div className="text-right shrink-0 hidden sm:block">
-                    <div className="text-lg font-bold text-green-700">{formatPrix(r)}</div>
-                    <div className="text-xs text-slate-600">Reçu {new Date(r.createdAt).toLocaleDateString('fr-FR')}</div>
+                    <div className="text-lg font-bold text-green-700 dark:text-green-400">{formatPrix(r)}</div>
+                    <div className="text-xs text-slate-600 dark:text-slate-400">Reçu {new Date(r.createdAt).toLocaleDateString('fr-FR')}</div>
                   </div>
-                  <CaretDown size={20} className={`text-slate-600 transition-transform shrink-0 hidden sm:block ${expanded ? 'rotate-180' : ''}`} />
+                  <CaretDown size={20} className={`text-slate-600 dark:text-slate-400 transition-transform shrink-0 hidden sm:block ${expanded ? 'rotate-180' : ''}`} />
                 </div>
 
                 {expanded && (
@@ -222,29 +230,29 @@ export default function AdminLeads() {
                       <div>
                         <span className="text-slate-600 dark:text-slate-500 block text-xs">Téléphone</span>
                         <div className="flex items-center gap-1">
-                          <a href={`tel:${r.customer.phone}`} className="text-purple-600 font-medium flex items-center gap-1">
+                          <a href={`tel:${r.customer.phone}`} className="text-purple-600 dark:text-purple-400 font-medium flex items-center gap-1">
                             <Phone size={14} /> {r.customer.phone}
                           </a>
                           <CopyButton text={r.customer.phone} />
                         </div>
                       </div>
                       <div>
-                        <span className="text-slate-600 block text-xs">Email</span>
+                        <span className="text-slate-600 dark:text-slate-500 block text-xs">Email</span>
                         {r.customer.email ? (
-                          <a href={`mailto:${r.customer.email}`} className="text-blue-600 font-medium flex items-center gap-1 truncate">
+                          <a href={`mailto:${r.customer.email}`} className="text-blue-600 dark:text-blue-400 font-medium flex items-center gap-1 truncate">
                             <Envelope size={14} className="shrink-0" /> <span className="truncate">{r.customer.email}</span>
                           </a>
                         ) : (
-                          <span className="text-slate-600 text-xs">Non renseigné</span>
+                          <span className="text-slate-500 dark:text-slate-400 text-xs">Non renseigné</span>
                         )}
                       </div>
                       <div>
-                        <span className="text-slate-600 block text-xs">Passagers / Bagages</span>
+                        <span className="text-slate-600 dark:text-slate-500 block text-xs">Passagers / Bagages</span>
                         <span className="text-slate-800 dark:text-slate-200 font-medium">{r.passengers} pass. / {r.luggage} bag.</span>
                       </div>
                       <div>
-                        <span className="text-slate-600 block text-xs">Prix estimé</span>
-                        <span className="text-green-700 font-bold">{formatPrix(r)}</span>
+                        <span className="text-slate-600 dark:text-slate-500 block text-xs">Prix estimé</span>
+                        <span className="text-green-700 dark:text-green-400 font-bold">{formatPrix(r)}</span>
                       </div>
                     </div>
 
@@ -281,7 +289,7 @@ export default function AdminLeads() {
             className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
             <CaretLeft size={16} />
           </button>
-          <span className="text-sm text-slate-600 px-3">Page {page} / {totalPages}</span>
+          <span className="text-sm text-slate-600 dark:text-slate-400 px-3">Page {page} / {totalPages}</span>
           <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
             className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
             <CaretRight size={16} />

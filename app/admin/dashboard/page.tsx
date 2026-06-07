@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import Link from 'next/link'
-import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, CalendarBlank, CurrencyEur, MapPin, FunnelSimple, Globe, NavigationArrow, Phone, PhoneCall } from '@phosphor-icons/react'
+import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, ArrowClockwise, CalendarBlank, CurrencyEur, MapPin, FunnelSimple, Globe, NavigationArrow, Phone, PhoneCall } from '@phosphor-icons/react'
 import { getToken } from '@/app/admin/lib/token'
 
 interface Funnel {
@@ -194,12 +194,22 @@ export default function AdminDashboard() {
   }), [stats.revenus])
 
   if (loading) {
-    return <div className="flex items-center justify-center h-64 text-slate-600">Chargement...</div>
+    return (
+      <div className="flex items-center justify-center h-64">
+        <ArrowClockwise size={32} className="animate-spin text-blue-600" />
+      </div>
+    )
   }
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
+      <div className="flex items-center justify-between gap-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
+        <button onClick={load} className="flex items-center gap-2 px-3 py-2 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 rounded-xl text-sm font-semibold hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
+          <ArrowClockwise size={16} />
+          <span className="hidden sm:inline">Actualiser</span>
+        </button>
+      </div>
 
       {newResaAlert && (
         <div className="bg-blue-600 text-white rounded-2xl p-4 shadow-lg flex items-center gap-3 ring-2 ring-blue-400 ring-offset-2">
@@ -217,7 +227,7 @@ export default function AdminDashboard() {
 
       {/* Courses du jour — priorité opérationnelle, affiché en premier */}
       {todayResas.length > 0 && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-4 border-2 border-blue-300 dark:border-blue-800">
+        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-4 border border-blue-200 dark:border-blue-800/60">
           <h2 className="text-base font-bold text-blue-800 dark:text-blue-300 flex items-center gap-2 mb-3">
             <CalendarBlank size={18} />
             Courses du jour ({todayResas.length})
@@ -254,7 +264,7 @@ export default function AdminDashboard() {
       )}
 
       {/* Stats principales */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <div className="text-xs text-slate-500 dark:text-slate-400">Réservations</div>
           <div className="text-2xl font-bold text-slate-900 dark:text-white">{stats.reservations.total}</div>
@@ -263,12 +273,10 @@ export default function AdminDashboard() {
           <div className="text-xs text-yellow-700 dark:text-yellow-400">En attente</div>
           <div className="text-2xl font-bold text-yellow-700 dark:text-yellow-400">{stats.reservations.en_attente}</div>
         </div>
-        {stats.reservations.en_route > 0 && (
-          <div className="rounded-2xl p-4 shadow-sm border bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800/50">
-            <div className="text-xs text-orange-700 dark:text-orange-400">En route</div>
-            <div className="text-2xl font-bold text-orange-700 dark:text-orange-400">{stats.reservations.en_route}</div>
-          </div>
-        )}
+        <div className={`rounded-2xl p-4 shadow-sm border ${stats.reservations.en_route > 0 ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800/50' : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700'}`}>
+          <div className={`text-xs ${stats.reservations.en_route > 0 ? 'text-orange-700 dark:text-orange-400' : 'text-slate-500 dark:text-slate-400'}`}>En route</div>
+          <div className={`text-2xl font-bold ${stats.reservations.en_route > 0 ? 'text-orange-700 dark:text-orange-400' : 'text-slate-900 dark:text-white'}`}>{stats.reservations.en_route}</div>
+        </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <div className="text-xs text-slate-500 dark:text-slate-400">Estimations</div>
           <div className="text-2xl font-bold text-slate-900 dark:text-white">{stats.estimations.total}</div>
@@ -294,7 +302,7 @@ export default function AdminDashboard() {
             </div>
           )}
           {stats.revenus.semainePrecedente > 0 && (
-            <div className="text-[10px] text-slate-600">{stats.revenus.semainePrecedente.toFixed(0)}€ sem. préc.</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">{stats.revenus.semainePrecedente.toFixed(0)}€ sem. préc.</div>
           )}
         </div>
         <div className="rounded-2xl p-4 shadow-sm border bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800/50">
@@ -306,7 +314,7 @@ export default function AdminDashboard() {
             </div>
           )}
           {stats.revenus.moisPrecedent > 0 && (
-            <div className="text-[10px] text-slate-600">{stats.revenus.moisPrecedent.toFixed(0)}€ mois préc.</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">{stats.revenus.moisPrecedent.toFixed(0)}€ mois préc.</div>
           )}
         </div>
       </div>
@@ -389,7 +397,7 @@ export default function AdminDashboard() {
       )}
 
       {/* Dernières estimations — bloc plein et prominent (estimations = important) */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border-2 border-green-200 dark:border-green-800/50 p-4">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-4">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
             <ChartBar size={18} className="text-green-600 dark:text-green-400" />
@@ -401,7 +409,7 @@ export default function AdminDashboard() {
           </Link>
         </div>
         {recentEstimations.length === 0 ? (
-          <p className="text-sm text-slate-600 dark:text-slate-500 py-4 text-center">Aucune estimation</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 py-4 text-center">Aucune estimation sur cette période</p>
         ) : (
           <div className="space-y-2">
             {recentEstimations.map(e => (
@@ -434,7 +442,7 @@ export default function AdminDashboard() {
           </Link>
         </div>
         {recentResas.length === 0 ? (
-          <p className="text-sm text-slate-600 dark:text-slate-500 py-4 text-center">Aucune réservation</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 py-4 text-center">Aucune réservation récente</p>
         ) : (
           <div className="space-y-2">
             {recentResas.map(r => (

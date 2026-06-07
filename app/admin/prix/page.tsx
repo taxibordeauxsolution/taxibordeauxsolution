@@ -91,8 +91,8 @@ export default function AdminPrix() {
         <p className="text-gray-500 dark:text-slate-400 text-xs sm:text-sm mt-1">Tarifs kilométriques appliqués aux estimations</p>
       </div>
 
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
-        <h2 className="font-bold text-gray-800 dark:text-slate-200 text-base sm:text-lg border-b dark:border-slate-700 pb-3">Tarifs kilométriques</h2>
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
+        <h2 className="font-bold text-gray-800 dark:text-slate-200 text-base sm:text-lg border-b border-gray-200 dark:border-slate-700 pb-3">Tarifs kilométriques</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
           <div>

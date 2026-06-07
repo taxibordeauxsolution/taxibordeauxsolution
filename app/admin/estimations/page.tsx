@@ -228,41 +228,41 @@ export default function AdminEstimations() {
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <div className="text-sm text-slate-500 dark:text-slate-400">Prix moyen</div>
-          <div className="text-2xl font-bold text-green-700">{stats.avgPrice.toFixed(2)}€</div>
+          <div className="text-2xl font-bold text-green-700 dark:text-green-400">{stats.avgPrice.toFixed(2)}€</div>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <div className="text-sm text-slate-500 dark:text-slate-400">Forfaits</div>
-          <div className="text-2xl font-bold text-blue-700">{stats.forfaitCount}</div>
+          <div className="text-2xl font-bold text-blue-700 dark:text-blue-400">{stats.forfaitCount}</div>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <div className="text-sm text-slate-500 dark:text-slate-400">Taux forfait</div>
-          <div className="text-2xl font-bold text-slate-900">
+          <div className="text-2xl font-bold text-slate-900 dark:text-white">
             {stats.total > 0 ? ((stats.forfaitCount / stats.total) * 100).toFixed(0) : 0}%
           </div>
         </div>
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-green-200">
-          <div className="text-sm text-slate-500 flex items-center gap-1">
-            <EnvelopeSimple size={14} className="text-green-600" />
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-green-200 dark:border-green-800/50">
+          <div className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1">
+            <EnvelopeSimple size={14} className="text-green-600 dark:text-green-400" />
             Leads avec email
           </div>
-          <div className="text-2xl font-bold text-green-700">
-            {stats.leadCount} <span className="text-sm font-normal text-slate-600">/ {stats.total}</span>
+          <div className="text-2xl font-bold text-green-700 dark:text-green-400">
+            {stats.leadCount} <span className="text-sm font-normal text-slate-600 dark:text-slate-400">/ {stats.total}</span>
           </div>
         </div>
       </div>
 
       {/* Top routes */}
       {stats.topRoutes.length > 0 && (
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
+          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2">
             <Path size={16} />
             Top trajets
           </h3>
           <div className="space-y-2">
             {stats.topRoutes.map((r, i) => (
               <div key={i} className="flex items-center justify-between text-sm">
-                <span className="text-slate-700 truncate flex-1">{r.route}</span>
-                <span className="text-slate-500 font-semibold ml-4">{r.count}x</span>
+                <span className="text-slate-700 dark:text-slate-300 truncate flex-1">{r.route}</span>
+                <span className="text-slate-500 dark:text-slate-400 font-semibold ml-4">{r.count}x</span>
               </div>
             ))}
           </div>
@@ -326,7 +326,7 @@ export default function AdminEstimations() {
               <span className="text-xs text-slate-500">Tout sélectionner</span>
             </div>
             {estimations.map(e => (
-              <div key={e._id} className={`rounded-2xl p-4 shadow-sm border transition-colors ${selected.has(e._id) ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20' : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700'}`}>
+              <div key={e._id} className={`rounded-2xl p-4 shadow-sm border transition-colors ${selected.has(e._id) ? 'border-blue-400 dark:border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700'}`}>
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <input type="checkbox" checked={selected.has(e._id)}

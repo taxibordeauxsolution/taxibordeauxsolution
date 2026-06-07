@@ -191,6 +191,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </button>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
+              aria-expanded={menuOpen}
+              aria-label="Menu de navigation"
               className="p-2 rounded-lg hover:bg-slate-700 transition-colors"
             >
               {menuOpen ? <X size={24} /> : <List size={24} />}
@@ -198,30 +200,48 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </div>
 
-        {menuOpen && (
-          <div className="md:hidden mt-3 pt-3 border-t border-slate-700 flex flex-col gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
-                  pathname === link.href ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-700'
-                }`}
-              >
-                {link.icon}
-                {link.label}
-              </Link>
-            ))}
-            <button
-              onClick={logout}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-400 hover:bg-slate-700 transition-colors text-left"
-            >
-              <SignOut size={18} />
-              Déconnexion
-            </button>
-          </div>
-        )}
       </nav>
+
+      {menuOpen && (
+        <>
+          <div
+            className="md:hidden fixed inset-0 z-40 bg-black/50"
+            onClick={() => setMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="md:hidden fixed top-0 right-0 bottom-0 z-50 w-72 bg-slate-900 shadow-2xl flex flex-col animate-modal-in overflow-y-auto">
+            <div className="flex items-center justify-between px-4 py-4 border-b border-slate-700">
+              <span className="font-bold text-white text-base">Menu</span>
+              <button onClick={() => setMenuOpen(false)} className="p-2 rounded-lg hover:bg-slate-700 transition-colors text-slate-300">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="flex-1 px-3 py-3 flex flex-col gap-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
+                    pathname === link.href ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-700'
+                  }`}
+                >
+                  {link.icon}
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            <div className="px-3 py-3 border-t border-slate-700">
+              <button
+                onClick={logout}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-red-400 hover:bg-slate-700 transition-colors"
+              >
+                <SignOut size={18} />
+                Déconnexion
+              </button>
+            </div>
+          </div>
+        </>
+      )}
 
       <main className="p-4 sm:p-6 max-w-5xl mx-auto">
         <ErrorBoundary>{children}</ErrorBoundary>
