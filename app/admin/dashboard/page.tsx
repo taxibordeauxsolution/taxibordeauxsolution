@@ -465,9 +465,9 @@ export default function AdminDashboard() {
                 {(r.status === 'en_attente' || r.status === 'confirmee') && (
                   <div className="flex items-center gap-1.5 pl-5">
                     {r.status === 'en_attente' && (
-                      <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 rounded text-[10px] font-semibold hover:bg-blue-200">Conf.</button>
+                      <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 rounded text-xs font-semibold hover:bg-blue-200">Conf.</button>
                     )}
-                    <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-1.5 py-0.5 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 rounded text-[10px] font-semibold hover:bg-green-200">Term.</button>
+                    <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-1.5 py-0.5 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 rounded text-xs font-semibold hover:bg-green-200">Term.</button>
                   </div>
                 )}
               </div>
@@ -509,7 +509,7 @@ export default function AdminDashboard() {
                   <div className="text-xs text-slate-600 dark:text-slate-500">{formatDate(r.pickupDate)}</div>
                 </div>
                 <button onClick={() => updateResaStatus(r._id, 'en_attente')}
-                  className="px-2.5 py-1.5 bg-blue-600 text-white rounded-lg text-[10px] font-semibold hover:bg-blue-700 transition-colors shrink-0">
+                  className="px-2.5 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition-colors shrink-0">
                   Convertir
                 </button>
               </div>

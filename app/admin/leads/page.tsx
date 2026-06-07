@@ -195,7 +195,7 @@ export default function AdminLeads() {
           filtered.map(r => {
             const expanded = expandedId === r._id
             return (
-              <div key={r._id} className={`bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 overflow-hidden ${selected.has(r._id) ? 'ring-2 ring-purple-400' : ''}`}>
+              <div key={r._id} className={`bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 overflow-hidden ${selected.has(r._id) ? 'ring-2 ring-purple-400 dark:ring-purple-500' : ''}`}>
                 <div className="p-3 sm:p-4 flex items-start sm:items-center gap-3 sm:gap-4 cursor-pointer" onClick={() => setExpandedId(expanded ? null : r._id)}>
                   <input type="checkbox" checked={selected.has(r._id)}
                     onChange={(e) => { e.stopPropagation(); toggleSelect(r._id) }}

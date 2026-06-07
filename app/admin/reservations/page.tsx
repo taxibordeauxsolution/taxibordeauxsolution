@@ -10,6 +10,7 @@ import {
 import jsPDF from 'jspdf'
 import { getToken } from '@/app/admin/lib/token'
 import { SkeletonList } from '@/app/admin/components/Skeleton'
+import { EmptyState } from '@/app/admin/components/EmptyState'
 import { ConfirmDialog } from '@/app/admin/components/ConfirmDialog'
 import { CopyButton } from '@/app/admin/components/CopyButton'
 import { useToast } from '@/app/admin/components/Toast'
@@ -31,11 +32,11 @@ interface Reservation {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: any }> = {
-  en_attente: { label: 'En attente', color: 'bg-yellow-100 text-yellow-800', icon: HourglassSimple },
-  confirmee:  { label: 'Confirmée',  color: 'bg-blue-100 text-blue-800',   icon: CheckCircle },
-  en_route:   { label: 'En route',   color: 'bg-orange-100 text-orange-800', icon: NavigationArrow },
-  terminee:   { label: 'Terminée',   color: 'bg-green-100 text-green-800',  icon: CheckCircle },
-  annulee:    { label: 'Annulée',    color: 'bg-red-100 text-red-800',      icon: XCircle },
+  en_attente: { label: 'En attente', color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300', icon: HourglassSimple },
+  confirmee:  { label: 'Confirmée',  color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300',   icon: CheckCircle },
+  en_route:   { label: 'En route',   color: 'bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300', icon: NavigationArrow },
+  terminee:   { label: 'Terminée',   color: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300',  icon: CheckCircle },
+  annulee:    { label: 'Annulée',    color: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300',      icon: XCircle },
 }
 
 function addrStr(v: string | { address?: string }): string {
@@ -638,12 +639,12 @@ export default function AdminReservations() {
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-2">
-            <label className="text-xs text-slate-500">Du</label>
+            <label className="text-xs text-slate-500 dark:text-slate-400">Du</label>
             <input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1) }}
               className="px-2 py-1.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-xs sm:text-sm" />
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-xs text-slate-500">Au</label>
+            <label className="text-xs text-slate-500 dark:text-slate-400">Au</label>
             <input type="date" value={dateTo} onChange={e => { setDateTo(e.target.value); setPage(1) }}
               className="px-2 py-1.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-xs sm:text-sm" />
           </div>
@@ -675,7 +676,7 @@ export default function AdminReservations() {
         {loading ? (
           <SkeletonList count={5} />
         ) : reservations.length === 0 ? (
-          <div className="text-center py-12 text-slate-600">{search ? 'Aucun résultat' : 'Aucune réservation'}</div>
+          <EmptyState icon={<Taxi size={32} />} title={search ? 'Aucun résultat' : 'Aucune réservation'} subtitle={search ? 'Aucune résa ne correspond à la recherche.' : 'Les réservations apparaissent ici.'} />
         ) : (
           reservations.map(r => {
             const sc       = STATUS_CONFIG[r.status] || STATUS_CONFIG.en_attente
@@ -704,13 +705,13 @@ export default function AdminReservations() {
                       <MapPin size={14} className="inline text-red-500" /> {addrStr(r.trip.to).split(',')[0]}
                     </div>
                     <div className="flex items-center justify-between mt-1.5 sm:hidden">
-                      <span className="text-xs text-slate-600">{r.trip.distance?.toFixed(1)} km</span>
-                      <span className="text-sm font-bold text-green-700">{formatPrix(r)}</span>
+                      <span className="text-xs text-slate-600 dark:text-slate-400">{r.trip.distance?.toFixed(1)} km</span>
+                      <span className="text-sm font-bold text-green-700 dark:text-green-400">{formatPrix(r)}</span>
                     </div>
                   </div>
                   <div className="text-right shrink-0 hidden sm:block">
-                    <div className="text-lg font-bold text-green-700">{formatPrix(r)}</div>
-                    <div className="text-xs text-slate-600">{r.trip.distance?.toFixed(1)} km</div>
+                    <div className="text-lg font-bold text-green-700 dark:text-green-400">{formatPrix(r)}</div>
+                    <div className="text-xs text-slate-600 dark:text-slate-400">{r.trip.distance?.toFixed(1)} km</div>
                   </div>
                   <CaretDown size={20} className={`text-slate-600 transition-transform shrink-0 hidden sm:block ${expanded ? 'rotate-180' : ''}`} />
                 </div>
@@ -733,7 +734,7 @@ export default function AdminReservations() {
                           <a href={`mailto:${r.customer.email}`} className="text-blue-600 font-medium flex items-center gap-1 truncate">
                             <Envelope size={14} className="shrink-0" /> <span className="truncate">{r.customer.email}</span>
                           </a>
-                        ) : <span className="text-slate-600 text-xs">Non renseigné</span>}
+                        ) : <span className="text-slate-600 dark:text-slate-400 text-xs">Non renseigné</span>}
                       </div>
                       <div>
                         <span className="text-slate-600 dark:text-slate-500 block text-xs">Passagers / Bagages</span>
@@ -755,7 +756,7 @@ export default function AdminReservations() {
 
                     {r.notes && (
                       <div className="text-sm">
-                        <span className="text-slate-600 text-xs">Notes client :</span>
+                        <span className="text-slate-600 dark:text-slate-400 text-xs">Notes client :</span>
                         <p className="text-slate-700">{r.notes}</p>
                       </div>
                     )}
@@ -777,7 +778,7 @@ export default function AdminReservations() {
                     </div>
 
                     {r.invoiceNumber && (
-                      <div className="flex items-center gap-2 text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-1.5">
+                      <div className="flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800/50 rounded-lg px-3 py-1.5">
                         <Receipt size={13} weight="bold" />
                         Facture <span className="font-bold">FAC-{r.invoiceNumber}</span> déjà générée
                       </div>
