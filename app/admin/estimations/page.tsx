@@ -3,6 +3,9 @@
 import { useEffect, useState, useCallback } from 'react'
 import { ArrowClockwise, DownloadSimple, ChartBar, MapPin, CurrencyEur, Path, Trash, CaretLeft, CaretRight, EnvelopeSimple, ChatCircleDots, WhatsappLogo, CalendarBlank } from '@phosphor-icons/react'
 import { getToken } from '@/app/admin/lib/token'
+import { ConfirmDialog } from '@/app/admin/components/ConfirmDialog'
+import { EmptyState } from '@/app/admin/components/EmptyState'
+import { useToast } from '@/app/admin/components/Toast'
 
 interface Estimation {
   _id: string
@@ -44,6 +47,8 @@ export default function AdminEstimations() {
   const [editingNotes, setEditingNotes] = useState<string | null>(null)
   const [notesValue, setNotesValue] = useState('')
   const [exporting, setExporting] = useState(false)
+  const [confirmBulkOpen, setConfirmBulkOpen] = useState(false)
+  const { toast } = useToast()
 
   const toLocalDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
   const today = toLocalDate(new Date())
@@ -112,16 +117,21 @@ export default function AdminEstimations() {
 
   const deleteSelected = async () => {
     if (selected.size === 0) return
-    if (!confirm(`Supprimer ${selected.size} estimation(s) ?`)) return
+    setConfirmBulkOpen(true)
+  }
+
+  const doDeleteSelected = async () => {
+    setConfirmBulkOpen(false)
     try {
       await fetch('/api/admin/estimations', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
         body: JSON.stringify({ ids: [...selected] })
       })
+      toast(`${selected.size} estimation(s) supprimée(s)`, 'success')
       setSelected(new Set())
       load()
-    } catch { }
+    } catch { toast('Erreur lors de la suppression', 'error') }
   }
 
   const updateStatut = async (id: string, statut: string) => {
@@ -192,6 +202,13 @@ export default function AdminEstimations() {
 
   return (
     <div className="space-y-6">
+      {confirmBulkOpen && (
+        <ConfirmDialog
+          message={`Supprimer ${selected.size} estimation(s) définitivement ?`}
+          onConfirm={doDeleteSelected}
+          onCancel={() => setConfirmBulkOpen(false)}
+        />
+      )}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <ChartBar size={28} weight="bold" />
@@ -294,7 +311,11 @@ export default function AdminEstimations() {
       {loading ? (
         <div className="text-center py-8 text-slate-600">Chargement...</div>
       ) : estimations.length === 0 ? (
-        <div className="text-center py-8 text-slate-600">Aucune estimation sur cette période</div>
+        <EmptyState
+          icon={<ChartBar size={32} />}
+          title="Aucune estimation sur cette période"
+          subtitle="Modifiez la plage de dates ou attendez que des clients utilisent le calculateur."
+        />
       ) : (
         <>
           {/* Cartes mobile */}
@@ -377,7 +398,7 @@ export default function AdminEstimations() {
           <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-slate-50 border-b border-slate-300">
+                <tr className="bg-slate-50 dark:bg-slate-700/50 border-b border-slate-300 dark:border-slate-600">
                   <th className="px-4 py-3">
                     <input type="checkbox" checked={estimations.length > 0 && selected.size === estimations.length}
                       onChange={toggleAll} className="rounded border-slate-300" />
@@ -396,7 +417,7 @@ export default function AdminEstimations() {
               </thead>
               <tbody>
                 {estimations.map(e => (
-                  <tr key={e._id} className={`border-b border-slate-100 hover:bg-slate-50 transition-colors ${selected.has(e._id) ? 'bg-blue-50' : ''}`}>
+                  <tr key={e._id} className={`border-b border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors ${selected.has(e._id) ? 'bg-blue-50' : ''}`}>
                     <td className="px-4 py-3">
                       <input type="checkbox" checked={selected.has(e._id)}
                         onChange={() => toggleSelect(e._id)} className="rounded border-slate-300" />

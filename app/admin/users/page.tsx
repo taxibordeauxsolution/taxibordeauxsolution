@@ -1,8 +1,11 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useState } from 'react'
-import { ArrowClockwise, Trash, Plus, EnvelopeSimple, User, Lock } from '@phosphor-icons/react'
+import { ArrowClockwise, Trash, Plus, EnvelopeSimple, User, Lock, UsersThree } from '@phosphor-icons/react'
 import { getToken } from '@/app/admin/lib/token'
+import { useToast } from '@/app/admin/components/Toast'
+import { ConfirmDialog } from '@/app/admin/components/ConfirmDialog'
+import { EmptyState } from '@/app/admin/components/EmptyState'
 
 interface AdminUser {
   _id: string
@@ -19,8 +22,8 @@ export default function AdminUsers() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [saving, setSaving] = useState(false)
-  const [message, setMessage] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
-
+  const [confirmDelete, setConfirmDelete] = useState<{ id: string; email: string } | null>(null)
+  const { toast } = useToast()
 
   const load = async () => {
     setLoading(true)
@@ -39,7 +42,6 @@ export default function AdminUsers() {
   const addUser = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
-    setMessage(null)
     try {
       const res = await fetch('/api/admin/users', {
         method: 'POST',
@@ -48,23 +50,20 @@ export default function AdminUsers() {
       })
       const json = await res.json()
       if (json.success) {
-        setMessage({ type: 'ok', text: `Compte créé pour ${email}` })
-        setName('')
-        setEmail('')
-        setPassword('')
+        toast(`Compte créé pour ${email}`, 'success')
+        setName(''); setEmail(''); setPassword('')
         setShowForm(false)
         load()
       } else {
-        setMessage({ type: 'err', text: json.message })
+        toast(json.message, 'error')
       }
     } catch (err: any) {
-      setMessage({ type: 'err', text: err.message })
+      toast(err.message, 'error')
     }
     setSaving(false)
   }
 
   const deleteUser = async (id: string, userEmail: string) => {
-    if (!confirm(`Supprimer le compte ${userEmail} ?`)) return
     try {
       const res = await fetch('/api/admin/users', {
         method: 'DELETE',
@@ -72,19 +71,23 @@ export default function AdminUsers() {
         body: JSON.stringify({ id })
       })
       const json = await res.json()
-      if (json.success) {
-        setMessage({ type: 'ok', text: `Compte ${userEmail} supprimé` })
-        load()
-      } else {
-        setMessage({ type: 'err', text: json.message })
-      }
+      if (json.success) { toast(`Compte ${userEmail} supprimé`, 'success'); load() }
+      else toast(json.message, 'error')
     } catch (err: any) {
-      setMessage({ type: 'err', text: err.message })
+      toast(err.message, 'error')
     }
   }
 
   return (
     <div className="space-y-6">
+      {confirmDelete && (
+        <ConfirmDialog
+          message={`Supprimer le compte ${confirmDelete.email} ?`}
+          onConfirm={() => { const d = confirmDelete; setConfirmDelete(null); deleteUser(d.id, d.email) }}
+          onCancel={() => setConfirmDelete(null)}
+        />
+      )}
+
       <div className="flex items-center justify-between gap-2">
         <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <User size={24} weight="bold" className="shrink-0" />
@@ -97,22 +100,14 @@ export default function AdminUsers() {
             <span className="hidden sm:inline">Ajouter</span>
           </button>
           <button onClick={load}
-            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-slate-200 rounded-xl text-sm font-semibold hover:bg-slate-300 transition-colors shrink-0">
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-slate-200 dark:bg-slate-700 dark:text-slate-300 rounded-xl text-sm font-semibold hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors shrink-0">
             <ArrowClockwise size={16} className={loading ? 'animate-spin' : ''} />
           </button>
         </div>
       </div>
 
-      {message && (
-        <div className={`rounded-2xl px-4 py-3 font-semibold text-sm ${
-          message.type === 'ok' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
-        }`}>
-          {message.text}
-        </div>
-      )}
-
       {showForm && (
-        <form onSubmit={addUser} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-4 sm:p-6 space-y-4">
+        <form onSubmit={addUser} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-4 sm:p-6 space-y-4 animate-modal-in">
           <h2 className="font-bold text-slate-800 dark:text-white">Nouveau compte admin</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
@@ -121,7 +116,7 @@ export default function AdminUsers() {
                 <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
                 <input type="text" value={name} onChange={e => setName(e.target.value)}
                   placeholder="Prénom ou pseudo" required
-                  className="w-full pl-9 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+                  className="w-full pl-9 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" />
               </div>
             </div>
             <div>
@@ -130,7 +125,7 @@ export default function AdminUsers() {
                 <EnvelopeSimple size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                   placeholder="partenaire@email.fr" required
-                  className="w-full pl-9 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+                  className="w-full pl-9 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" />
               </div>
             </div>
             <div>
@@ -139,7 +134,7 @@ export default function AdminUsers() {
                 <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
                 <input type="text" value={password} onChange={e => setPassword(e.target.value)}
                   placeholder="6 caractères min." required minLength={6}
-                  className="w-full pl-9 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+                  className="w-full pl-9 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" />
               </div>
             </div>
           </div>
@@ -159,7 +154,17 @@ export default function AdminUsers() {
         {loading ? (
           <div className="text-center py-12 text-slate-600">Chargement...</div>
         ) : users.length === 0 ? (
-          <div className="text-center py-12 text-slate-600">Aucun compte admin</div>
+          <EmptyState
+            icon={<UsersThree size={32} />}
+            title="Aucun compte admin"
+            subtitle="Créez des comptes pour accéder à l'administration."
+            action={
+              <button onClick={() => setShowForm(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors">
+                <Plus size={16} /> Ajouter un compte
+              </button>
+            }
+          />
         ) : (
           users.map(u => (
             <div key={u._id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-4 flex items-center justify-between gap-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
@@ -177,8 +182,8 @@ export default function AdminUsers() {
                   {new Date(u.createdAt).toLocaleDateString('fr-FR')}
                 </span>
                 {users.length > 1 && (
-                  <button onClick={() => deleteUser(u._id, u.email)}
-                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                  <button onClick={() => setConfirmDelete({ id: u._id, email: u.email })}
+                    className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
                     <Trash size={18} />
                   </button>
                 )}

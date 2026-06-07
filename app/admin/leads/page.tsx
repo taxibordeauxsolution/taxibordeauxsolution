@@ -6,6 +6,7 @@ import { getToken } from '@/app/admin/lib/token'
 import { SkeletonList } from '@/app/admin/components/Skeleton'
 import { ConfirmDialog } from '@/app/admin/components/ConfirmDialog'
 import { CopyButton } from '@/app/admin/components/CopyButton'
+import { EmptyState } from '@/app/admin/components/EmptyState'
 
 interface Lead {
   _id: string
@@ -158,7 +159,7 @@ export default function AdminLeads() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Rechercher par nom, téléphone..."
-            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent dark:placeholder-slate-400 dark:placeholder-slate-500 rounded-lg text-sm focus:border-purple-500 focus:outline-none"
+            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent dark:placeholder-slate-400 dark:placeholder-slate-500 rounded-lg text-sm focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-1"
           />
         </div>
         {selected.size > 0 && (
@@ -177,9 +178,11 @@ export default function AdminLeads() {
         {loading ? (
           <SkeletonList count={5} />
         ) : filtered.length === 0 ? (
-          <div className="text-center py-12 text-slate-600">
-            {search ? 'Aucun résultat' : 'Aucun lead en attente'}
-          </div>
+          <EmptyState
+            icon={<PhoneCall size={32} />}
+            title={search ? 'Aucun résultat' : 'Aucun lead en attente'}
+            subtitle={search ? `Aucun lead ne correspond à "${search}".` : 'Les leads apparaissent lorsque des clients laissent leurs coordonnées.'}
+          />
         ) : (
           filtered.map(r => {
             const expanded = expandedId === r._id

@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 import { Warning } from '@phosphor-icons/react'
 
 interface ConfirmDialogProps {
@@ -11,8 +11,8 @@ interface ConfirmDialogProps {
 
 export function ConfirmDialog({ message, onConfirm, onCancel, confirmLabel = 'Supprimer', danger = true }: ConfirmDialogProps) {
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6 space-y-4">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6 space-y-4 animate-modal-in">
         <div className="flex items-start gap-3">
           {danger && <Warning size={24} weight="bold" className="text-red-500 shrink-0 mt-0.5" />}
           <p className="text-slate-800 dark:text-slate-200 font-medium text-sm leading-relaxed">{message}</p>

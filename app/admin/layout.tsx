@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { CurrencyEur, Path, SignOut, House, ChartBar, Taxi, List, X, SquaresFour, UsersThree, PhoneCall, AddressBook, IdentificationCard, Moon, Sun } from '@phosphor-icons/react'
 import { getToken } from '@/app/admin/lib/token'
 import { ErrorBoundary } from '@/app/admin/components/ErrorBoundary'
+import { ToastProvider } from '@/app/admin/components/Toast'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -125,7 +126,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (!ready) return null
 
-  if (pathname === '/admin') return <>{children}</>
+  if (pathname === '/admin') return <ToastProvider>{children}</ToastProvider>
 
   const navLinks = [
     { href: '/admin/dashboard', label: 'Dashboard', icon: <SquaresFour size={18} /> },
@@ -141,7 +142,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ]
 
   return (
-    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 transition-colors">
+    <ToastProvider><div className="min-h-screen bg-slate-100 dark:bg-slate-900 transition-colors">
       <nav className="bg-slate-900 text-white px-4 sm:px-6 py-3 sm:py-4 shadow-xl border-b border-slate-800">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -225,6 +226,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <main className="p-4 sm:p-6 max-w-5xl mx-auto">
         <ErrorBoundary>{children}</ErrorBoundary>
       </main>
-    </div>
+    </div></ToastProvider>
   )
 }

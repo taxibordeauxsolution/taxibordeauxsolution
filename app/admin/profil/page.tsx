@@ -1,8 +1,9 @@
 ﻿'use client'
 
 import { useEffect, useState } from 'react'
-import { IdentificationCard, FloppyDisk, CheckCircle } from '@phosphor-icons/react'
+import { IdentificationCard, FloppyDisk } from '@phosphor-icons/react'
 import { getToken } from '@/app/admin/lib/token'
+import { useToast } from '@/app/admin/components/Toast'
 
 interface FormState {
   nomEntreprise: string; adresse: string; telephone: string
@@ -43,8 +44,7 @@ export default function ProfilPage() {
   const [form, setForm]   = useState<FormState>(DEFAULTS)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving]   = useState(false)
-  const [saved, setSaved]     = useState(false)
-  const [error, setError]     = useState('')
+  const { toast } = useToast()
 
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function ProfilPage() {
   }, [])
 
   const handleSave = async () => {
-    setSaving(true); setError(''); setSaved(false)
+    setSaving(true)
     try {
       const res  = await fetch('/api/admin/profil', {
         method: 'PUT',
@@ -81,9 +81,9 @@ export default function ProfilPage() {
         body: JSON.stringify(form),
       })
       const json = await res.json()
-      if (json.success) { setSaved(true); setTimeout(() => setSaved(false), 3000) }
-      else setError(json.message || 'Erreur')
-    } catch { setError('Erreur réseau') }
+      if (json.success) toast('Profil de facturation sauvegardé', 'success')
+      else toast(json.message || 'Erreur', 'error')
+    } catch { toast('Erreur réseau', 'error') }
     setSaving(false)
   }
 
@@ -115,13 +115,12 @@ export default function ProfilPage() {
           </div>
         ))}
 
-        {error && <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg px-3 py-2">{error}</p>}
+
 
         <button onClick={handleSave} disabled={saving}
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-          {saved
-            ? <><CheckCircle size={16} weight="bold" /> Enregistré</>
-            : <><FloppyDisk size={16} weight="bold" /> {saving ? 'Enregistrement...' : 'Enregistrer'}</>}
+          <FloppyDisk size={16} weight="bold" />
+          {saving ? 'Enregistrement...' : 'Enregistrer'}
         </button>
       </div>
     </div>

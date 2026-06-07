@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic'
 import { Plus, PencilSimple, Trash, ToggleLeft, ToggleRight, ArrowClockwise, MapPin } from '@phosphor-icons/react'
 import { getToken } from '@/app/admin/lib/token'
 import { ConfirmDialog } from '@/app/admin/components/ConfirmDialog'
+import { EmptyState } from '@/app/admin/components/EmptyState'
+import { useToast } from '@/app/admin/components/Toast'
 import type { Forfait } from './ForfaitForm'
 
 const API = '/api'
@@ -27,8 +29,8 @@ export default function AdminForfaits() {
   const [forfaits, setForfaits] = useState<Forfait[]>([])
   const [loading, setLoading] = useState(true)
   const [editing, setEditing] = useState<Forfait | null>(null)
-  const [message, setMessage] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const { toast } = useToast()
   const [confirmDel, setConfirmDel] = useState<{ id: string; nom: string } | null>(null)
 
   const load = useCallback(async () => {
@@ -59,7 +61,7 @@ export default function AdminForfaits() {
     load()
   }
 
-  const onSaved = () => { setEditing(null); load() }
+  const onSaved = () => { setEditing(null); toast('Forfait enregistré', 'success'); load() }
 
   if (loading) return (
     <div className="flex items-center justify-center h-64">
@@ -90,16 +92,17 @@ export default function AdminForfaits() {
         </button>
       </div>
 
-      {message && (
-        <div className={`rounded-2xl px-5 py-3 font-semibold text-sm ${message.type === 'ok' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'}`}>
-          {message.text}
-        </div>
-      )}
-
       {forfaits.length === 0 ? (
-        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-12 text-center text-gray-600 dark:text-slate-500">
-          Aucun forfait. Créez-en un !
-        </div>
+        <EmptyState
+          icon={<MapPin size={32} />}
+          title="Aucun forfait créé"
+          subtitle="Définissez des tarifs fixes pour des zones géographiques spécifiques."
+          action={
+            <button onClick={() => setEditing(EMPTY)} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors">
+              <Plus size={16} /> Nouveau forfait
+            </button>
+          }
+        />
       ) : (
         <div className="space-y-3">
           {forfaits.map(f => (

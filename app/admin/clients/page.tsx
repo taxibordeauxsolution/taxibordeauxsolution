@@ -6,6 +6,8 @@ import { getToken } from '@/app/admin/lib/token'
 import { SkeletonList } from '@/app/admin/components/Skeleton'
 import { ConfirmDialog } from '@/app/admin/components/ConfirmDialog'
 import { CopyButton } from '@/app/admin/components/CopyButton'
+import { EmptyState } from '@/app/admin/components/EmptyState'
+import { useToast } from '@/app/admin/components/Toast'
 
 interface ClientData {
   _id: string
@@ -34,8 +36,8 @@ export default function AdminClients() {
   const [form, setForm] = useState(emptyClient)
   const [saving, setSaving] = useState(false)
   const [importing, setImporting] = useState(false)
-  const [message, setMessage] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+  const { toast } = useToast()
   const [confirmImportOpen, setConfirmImportOpen] = useState(false)
 
   const load = useCallback(async () => {
@@ -68,23 +70,20 @@ export default function AdminClients() {
     setEditingId(null)
     setForm(emptyClient)
     setShowForm(true)
-    setMessage(null)
   }
 
   const openEdit = (c: ClientData) => {
     setEditingId(c._id)
     setForm({ nom: c.nom, telephone: c.telephone, email: c.email, adresse: c.adresse, notes: c.notes })
     setShowForm(true)
-    setMessage(null)
   }
 
   const save = async () => {
     if (!form.nom.trim() || !form.telephone.trim()) {
-      setMessage({ type: 'err', text: 'Nom et téléphone obligatoires' })
+      toast('Nom et téléphone obligatoires', 'error')
       return
     }
     setSaving(true)
-    setMessage(null)
     try {
       const method = editingId ? 'PUT' : 'POST'
       const body = editingId ? { id: editingId, ...form } : form
@@ -95,21 +94,20 @@ export default function AdminClients() {
       })
       const json = await res.json()
       if (json.success) {
-        setMessage({ type: 'ok', text: editingId ? 'Client modifié' : 'Client ajouté' })
+        toast(editingId ? 'Client modifié' : 'Client ajouté', 'success')
         setShowForm(false)
         load()
       } else {
-        setMessage({ type: 'err', text: json.message || 'Erreur' })
+        toast(json.message || 'Erreur', 'error')
       }
     } catch (e: any) {
-      setMessage({ type: 'err', text: e.message })
+      toast(e.message, 'error')
     }
     setSaving(false)
   }
 
   const importFromResas = async () => {
     setImporting(true)
-    setMessage(null)
     try {
       const res = await fetch('/api/admin/clients/import', {
         method: 'POST',
@@ -117,13 +115,13 @@ export default function AdminClients() {
       })
       const json = await res.json()
       if (json.success) {
-        setMessage({ type: 'ok', text: `Import terminé — ${json.created} créés · ${json.updated} mis à jour · ${json.skipped} ignorés (sur ${json.total} réservations)` })
+        toast(`Import terminé — ${json.created} créés · ${json.updated} mis à jour · ${json.skipped} ignorés (sur ${json.total} réservations)`, 'success')
         load()
       } else {
-        setMessage({ type: 'err', text: json.message || 'Erreur import' })
+        toast(json.message || 'Erreur import', 'error')
       }
     } catch (e: any) {
-      setMessage({ type: 'err', text: e.message })
+      toast(e.message, 'error')
     }
     setImporting(false)
   }
@@ -178,12 +176,6 @@ export default function AdminClients() {
         </div>
       </div>
 
-      {message && (
-        <div className={`rounded-2xl px-4 py-3 font-semibold text-sm ${message.type === 'ok' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-          {message.text}
-        </div>
-      )}
-
       {/* Formulaire ajout/édition */}
       {showForm && (
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-blue-200 dark:border-slate-700 p-4 sm:p-6 space-y-4">
@@ -195,28 +187,28 @@ export default function AdminClients() {
             <div>
               <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Nom *</label>
               <input type="text" value={form.nom} onChange={e => setForm(f => ({ ...f, nom: e.target.value }))}
-                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Nom complet" />
+                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" placeholder="Nom complet" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Téléphone *</label>
               <input type="tel" value={form.telephone} onChange={e => setForm(f => ({ ...f, telephone: e.target.value }))}
-                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="06 12 34 56 78" />
+                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" placeholder="06 12 34 56 78" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Email</label>
               <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="email@exemple.fr" />
+                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" placeholder="email@exemple.fr" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Adresse</label>
               <input type="text" value={form.adresse} onChange={e => setForm(f => ({ ...f, adresse: e.target.value }))}
-                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Adresse du client" />
+                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" placeholder="Adresse du client" />
             </div>
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Notes</label>
             <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} rows={2}
-              className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none resize-none"
+              className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 resize-none"
               placeholder="Informations supplémentaires..." />
           </div>
           <div className="flex justify-end">
@@ -235,7 +227,7 @@ export default function AdminClients() {
           <MagnifyingGlass size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Rechercher par nom, téléphone, email..."
-            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent dark:placeholder-slate-400 dark:placeholder-slate-500 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent dark:placeholder-slate-400 dark:placeholder-slate-500 rounded-lg text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1" />
         </div>
       </div>
 
@@ -244,9 +236,16 @@ export default function AdminClients() {
         {loading ? (
           <SkeletonList count={5} />
         ) : clients.length === 0 ? (
-          <div className="text-center py-12 text-slate-600">
-            {search ? 'Aucun résultat' : 'Aucun client enregistré'}
-          </div>
+          <EmptyState
+            icon={<AddressBook size={32} />}
+            title={search ? 'Aucun résultat' : 'Aucun client enregistré'}
+            subtitle={search ? `Aucun client ne correspond à "${search}".` : 'Ajoutez un client ou importez depuis les réservations.'}
+            action={!search ? (
+              <button onClick={openNew} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors">
+                <Plus size={16} /> Nouveau client
+              </button>
+            ) : undefined}
+          />
         ) : (
           clients.map(c => (
             <div key={c._id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-3 sm:p-4">
