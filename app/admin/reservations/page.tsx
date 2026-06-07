@@ -103,31 +103,31 @@ function EditModal({ r, token, onClose, onSaved }: {
           <div className="grid grid-cols-2 gap-3">
             <div className="col-span-2">
               <label className="text-xs text-slate-500 dark:text-slate-400">Nom</label>
-              <input value={name} onChange={e => setName(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+              <input value={name} onChange={e => setName(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
             </div>
             <div>
               <label className="text-xs text-slate-500 dark:text-slate-400">Téléphone</label>
-              <input value={phone} onChange={e => setPhone(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+              <input value={phone} onChange={e => setPhone(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
             </div>
             <div>
               <label className="text-xs text-slate-500 dark:text-slate-400">Email</label>
-              <input value={email} onChange={e => setEmail(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+              <input value={email} onChange={e => setEmail(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
             </div>
             <div>
               <label className="text-xs text-slate-500 dark:text-slate-400">Date</label>
-              <input type="date" value={date} onChange={e => setDate(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+              <input type="date" value={date} onChange={e => setDate(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
             </div>
             <div>
               <label className="text-xs text-slate-500 dark:text-slate-400">Heure</label>
-              <input type="time" value={time} onChange={e => setTime(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+              <input type="time" value={time} onChange={e => setTime(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
             </div>
             <div className="col-span-2">
               <label className="text-xs text-slate-500 dark:text-slate-400">Prix (€)</label>
-              <input type="number" min="0" step="0.5" value={price} onChange={e => setPrice(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+              <input type="number" min="0" step="0.5" value={price} onChange={e => setPrice(e.target.value)} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
             </div>
             <div>
               <label className="text-xs text-slate-500 dark:text-slate-400">Notes client</label>
-              <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={2} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none resize-none" />
+              <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={2} className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none resize-none" />
             </div>
             <div>
               <label className="text-xs text-slate-500 dark:text-slate-400">Notes admin</label>
@@ -646,18 +646,18 @@ export default function AdminReservations() {
           <MagnifyingGlass size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Rechercher par nom, téléphone, n° résa..."
-            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:placeholder-slate-400 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent dark:placeholder-slate-400 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-2">
             <label className="text-xs text-slate-500">Du</label>
             <input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1) }}
-              className="px-2 py-1.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-xs sm:text-sm" />
+              className="px-2 py-1.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-xs sm:text-sm" />
           </div>
           <div className="flex items-center gap-2">
             <label className="text-xs text-slate-500">Au</label>
             <input type="date" value={dateTo} onChange={e => { setDateTo(e.target.value); setPage(1) }}
-              className="px-2 py-1.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-xs sm:text-sm" />
+              className="px-2 py-1.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-xs sm:text-sm" />
           </div>
           <button onClick={exportCsv}
             className="ml-auto flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">

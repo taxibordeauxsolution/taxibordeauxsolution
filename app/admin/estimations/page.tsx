@@ -254,12 +254,12 @@ export default function AdminEstimations() {
         <div>
           <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">Du</label>
           <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
-            className="px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm" />
+            className="px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm" />
         </div>
         <div>
           <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">Au</label>
           <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)}
-            className="px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm" />
+            className="px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm" />
         </div>
         <button onClick={() => { setPage(1); load() }}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors">

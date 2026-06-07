@@ -110,7 +110,7 @@ export default function ProfilPage() {
               value={form[key]}
               onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
               placeholder={placeholder}
-              className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none"
+              className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
         ))}

@@ -121,7 +121,7 @@ export default function AdminUsers() {
                 <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
                 <input type="text" value={name} onChange={e => setName(e.target.value)}
                   placeholder="Prénom ou pseudo" required
-                  className="w-full pl-9 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+                  className="w-full pl-9 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
               </div>
             </div>
             <div>
@@ -130,7 +130,7 @@ export default function AdminUsers() {
                 <EnvelopeSimple size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
                 <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                   placeholder="partenaire@email.fr" required
-                  className="w-full pl-9 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+                  className="w-full pl-9 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
               </div>
             </div>
             <div>
@@ -139,7 +139,7 @@ export default function AdminUsers() {
                 <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
                 <input type="text" value={password} onChange={e => setPassword(e.target.value)}
                   placeholder="6 caractères min." required minLength={6}
-                  className="w-full pl-9 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+                  className="w-full pl-9 pr-3 py-2.5 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
               </div>
             </div>
           </div>

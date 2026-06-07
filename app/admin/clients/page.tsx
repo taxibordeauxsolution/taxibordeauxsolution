@@ -195,28 +195,28 @@ export default function AdminClients() {
             <div>
               <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Nom *</label>
               <input type="text" value={form.nom} onChange={e => setForm(f => ({ ...f, nom: e.target.value }))}
-                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Nom complet" />
+                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Nom complet" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Téléphone *</label>
               <input type="tel" value={form.telephone} onChange={e => setForm(f => ({ ...f, telephone: e.target.value }))}
-                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="06 12 34 56 78" />
+                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="06 12 34 56 78" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Email</label>
               <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="email@exemple.fr" />
+                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="email@exemple.fr" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Adresse</label>
               <input type="text" value={form.adresse} onChange={e => setForm(f => ({ ...f, adresse: e.target.value }))}
-                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Adresse du client" />
+                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Adresse du client" />
             </div>
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Notes</label>
             <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} rows={2}
-              className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none resize-none"
+              className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none resize-none"
               placeholder="Informations supplémentaires..." />
           </div>
           <div className="flex justify-end">
@@ -235,7 +235,7 @@ export default function AdminClients() {
           <MagnifyingGlass size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Rechercher par nom, téléphone, email..."
-            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:placeholder-slate-400 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 text-gray-900 bg-white dark:text-slate-100 dark:bg-transparent dark:placeholder-slate-400 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
         </div>
       </div>
 
