@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState, useCallback } from 'react'
 import dynamic from 'next/dynamic'
@@ -97,13 +97,13 @@ export default function AdminForfaits() {
       )}
 
       {forfaits.length === 0 ? (
-        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-12 text-center text-gray-400 dark:text-slate-500">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 p-12 text-center text-gray-600 dark:text-slate-500">
           Aucun forfait. Créez-en un !
         </div>
       ) : (
         <div className="space-y-3">
           {forfaits.map(f => (
-            <div key={f._id} className={`bg-white dark:bg-slate-800 rounded-2xl shadow-sm border ${f.actif ? 'border-gray-100 dark:border-slate-700' : 'border-gray-200 dark:border-slate-700 opacity-60'} p-4 sm:p-5`}>
+            <div key={f._id} className={`bg-white dark:bg-slate-800 rounded-2xl shadow-sm border ${f.actif ? 'border-gray-100 dark:border-slate-700' : 'border-gray-300 dark:border-slate-700 opacity-60'} p-4 sm:p-5`}>
               <div className="flex items-start sm:items-center gap-3 sm:gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -125,7 +125,7 @@ export default function AdminForfaits() {
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                   <button onClick={() => toggleActif(f)} className="p-1.5 sm:p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" title="Activer/Désactiver">
-                    {f.actif ? <ToggleRight size={22} className="text-green-600" /> : <ToggleLeft size={22} className="text-gray-400" />}
+                    {f.actif ? <ToggleRight size={22} className="text-green-600" /> : <ToggleLeft size={22} className="text-gray-600" />}
                   </button>
                   <button onClick={() => setEditing(f)} className="p-1.5 sm:p-2 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/30 text-blue-600 transition-colors" title="Modifier">
                     <PencilSimple size={18} />

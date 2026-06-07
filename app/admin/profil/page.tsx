@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { IdentificationCard, FloppyDisk, CheckCircle } from '@phosphor-icons/react'
@@ -87,7 +87,7 @@ export default function ProfilPage() {
     setSaving(false)
   }
 
-  if (loading) return <div className="text-center py-12 text-slate-400">Chargement...</div>
+  if (loading) return <div className="text-center py-12 text-slate-600">Chargement...</div>
 
   return (
     <div className="max-w-lg space-y-6">
@@ -100,8 +100,8 @@ export default function ProfilPage() {
         Connecté en tant que <span className="font-semibold text-slate-800 dark:text-white">{userName}</span> — {userEmail}
       </div>
 
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-5 space-y-4">
-        <p className="text-xs text-slate-400 dark:text-slate-500">Ces informations apparaissent dans l'en-tête de vos factures PDF. Les champs optionnels peuvent rester vides.</p>
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-5 space-y-4">
+        <p className="text-xs text-slate-600 dark:text-slate-500">Ces informations apparaissent dans l'en-tête de vos factures PDF. Les champs optionnels peuvent rester vides.</p>
 
         {FIELDS.map(({ key, label, placeholder }) => (
           <div key={key}>
@@ -110,7 +110,7 @@ export default function ProfilPage() {
               value={form[key]}
               onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
               placeholder={placeholder}
-              className="mt-1 w-full px-3 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none"
+              className="mt-1 w-full px-3 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg text-sm focus:border-blue-500 focus:outline-none"
             />
           </div>
         ))}

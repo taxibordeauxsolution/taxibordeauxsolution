@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useRef, useState } from 'react'
 import { X, FloppyDisk, Warning } from '@phosphor-icons/react'
@@ -188,7 +188,7 @@ export default function ForfaitForm({ initial, token, onSaved, onCancel }: {
         <div>
           <label className="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1">Nom du forfait *</label>
           <input type="text" value={form.nom} onChange={e => setField('nom', e.target.value)} placeholder="Ex: Gare Saint-Jean ↔ Aéroport Mérignac"
-            className="w-full border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none" />
+            className="w-full border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -204,7 +204,7 @@ export default function ForfaitForm({ initial, token, onSaved, onCancel }: {
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 dark:text-slate-400 mb-1">Adresse *</label>
                   <input ref={z === 'A' ? acRefA : acRefB} type="text" defaultValue={form[pt].adresse} placeholder="Tapez une adresse..."
-                    className="w-full border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 py-2 focus:border-blue-500 focus:outline-none text-sm" />
+                    className="w-full border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 py-2 focus:border-blue-500 focus:outline-none text-sm" />
                 </div>
                 <div className="flex items-center gap-2">
                   <button type="button" onClick={() => startDraw(z)}
@@ -212,13 +212,13 @@ export default function ForfaitForm({ initial, token, onSaved, onCancel }: {
                     {activeZone === z ? 'Dessinez sur la carte...' : `Dessiner zone ${z}`}
                   </button>
                   {hasZone && (
-                    <button type="button" onClick={() => clearZone(z)} className="text-gray-400 hover:text-red-500 p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20" title="Effacer">
+                    <button type="button" onClick={() => clearZone(z)} className="text-gray-600 hover:text-red-500 p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20" title="Effacer">
                       <X size={16} />
                     </button>
                   )}
                 </div>
                 {hasZone && <p className="text-xs text-green-600 dark:text-green-400 font-medium">Zone dessinée — {form[pt].zone.length} points</p>}
-                {!hasZone && form[pt].lat !== 0 && <p className="text-xs text-gray-400 dark:text-slate-500">Rayon 500 m autour du point (par défaut)</p>}
+                {!hasZone && form[pt].lat !== 0 && <p className="text-xs text-gray-600 dark:text-slate-500">Rayon 500 m autour du point (par défaut)</p>}
               </div>
             )
           })}
@@ -229,19 +229,19 @@ export default function ForfaitForm({ initial, token, onSaved, onCancel }: {
             <Warning size={16} className="text-yellow-500" />
             Sélectionnez d'abord les adresses, puis cliquez sur "Dessiner zone" et tracez un polygone sur la carte.
           </div>
-          <div ref={mapRef} className="w-full h-80 rounded-2xl border-2 border-gray-200 dark:border-slate-600 overflow-hidden" />
+          <div ref={mapRef} className="w-full h-80 rounded-2xl border-2 border-gray-300 dark:border-slate-600 overflow-hidden" />
         </div>
 
         <div className="grid grid-cols-2 gap-5">
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1">Prix jour (€) *</label>
             <input type="text" inputMode="decimal" value={form.prixJour || ''} onChange={e => setField('prixJour', parseFloat(e.target.value) || 0)} placeholder="0"
-              className="w-full border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none" />
+              className="w-full border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none" />
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1">Prix nuit (€) *</label>
             <input type="text" inputMode="decimal" value={form.prixNuit || ''} onChange={e => setField('prixNuit', parseFloat(e.target.value) || 0)} placeholder="0"
-              className="w-full border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none" />
+              className="w-full border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-4 py-2.5 focus:border-blue-500 focus:outline-none" />
           </div>
         </div>
 
@@ -255,7 +255,7 @@ export default function ForfaitForm({ initial, token, onSaved, onCancel }: {
         {error && <p className="text-red-500 dark:text-red-400 text-sm font-medium">{error}</p>}
 
         <div className="flex gap-3 justify-end">
-          <button onClick={onCancel} className="px-6 py-3 rounded-2xl border-2 border-gray-200 dark:border-slate-600 font-semibold text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">Annuler</button>
+          <button onClick={onCancel} className="px-6 py-3 rounded-2xl border-2 border-gray-300 dark:border-slate-600 font-semibold text-gray-600 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">Annuler</button>
           <button onClick={save} disabled={saving} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-bold px-8 py-3 rounded-2xl transition-colors shadow-lg">
             <FloppyDisk size={20} />
             {saving ? 'Sauvegarde...' : 'Enregistrer'}

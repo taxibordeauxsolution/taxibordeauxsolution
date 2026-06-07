@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState } from 'react'
 import { FloppyDisk, ArrowClockwise, Tag, CalendarX, Trash, Plus } from '@phosphor-icons/react'
@@ -101,7 +101,7 @@ export default function AdminPrix() {
               <input type="number" step="0.01" min="0"
                 value={prix.priseEnCharge}
                 onChange={e => setNum('priseEnCharge', e.target.value)}
-                className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
               <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€</span>
             </div>
           </div>
@@ -112,7 +112,7 @@ export default function AdminPrix() {
               <input type="number" step="0.01" min="0"
                 value={prix.tarifKmJour}
                 onChange={e => setNum('tarifKmJour', e.target.value)}
-                className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
               <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€/km</span>
             </div>
           </div>
@@ -123,7 +123,7 @@ export default function AdminPrix() {
               <input type="number" step="0.01" min="0"
                 value={prix.tarifKmNuit}
                 onChange={e => setNum('tarifKmNuit', e.target.value)}
-                className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
               <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€/km</span>
             </div>
           </div>
@@ -134,7 +134,7 @@ export default function AdminPrix() {
               <input type="number" step="0.01" min="0"
                 value={prix.fraisApproche}
                 onChange={e => setNum('fraisApproche', e.target.value)}
-                className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
               <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€</span>
             </div>
           </div>
@@ -145,7 +145,7 @@ export default function AdminPrix() {
               <input type="number" step="0.01" min="0"
                 value={prix.courseMiniDe}
                 onChange={e => setNum('courseMiniDe', e.target.value)}
-                className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
               <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€</span>
             </div>
           </div>
@@ -156,7 +156,7 @@ export default function AdminPrix() {
               <input type="number" step="0.01" min="0"
                 value={prix.courseMini}
                 onChange={e => setNum('courseMini', e.target.value)}
-                className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
               <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€</span>
             </div>
           </div>
@@ -169,14 +169,14 @@ export default function AdminPrix() {
             <input type="time" step="60"
               value={prix.heureDebutNuit}
               onChange={e => setStr('heureDebutNuit', e.target.value)}
-              className="w-full border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+              className="w-full border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
           </div>
           <div>
             <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Fin nuit</label>
             <input type="time" step="60"
               value={prix.heureFinNuit}
               onChange={e => setStr('heureFinNuit', e.target.value)}
-              className="w-full border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+              className="w-full border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
           </div>
         </div>
       </div>
@@ -209,7 +209,7 @@ export default function AdminPrix() {
                   className={`flex-1 p-3 rounded-xl border-2 text-left transition-all ${
                     prix.tarifNuitDegressifMode === 'degressif'
                       ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      : 'border-gray-300 hover:border-gray-300'
                   }`}
                 >
                   <div className={`font-bold text-sm ${prix.tarifNuitDegressifMode === 'degressif' ? 'text-blue-700' : 'text-gray-700'}`}>
@@ -223,7 +223,7 @@ export default function AdminPrix() {
                   className={`flex-1 p-3 rounded-xl border-2 text-left transition-all ${
                     prix.tarifNuitDegressifMode === 'retroactif'
                       ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      : 'border-gray-300 hover:border-gray-300'
                   }`}
                 >
                   <div className={`font-bold text-sm ${prix.tarifNuitDegressifMode === 'retroactif' ? 'text-blue-700' : 'text-gray-700'}`}>
@@ -241,7 +241,7 @@ export default function AdminPrix() {
                   <input type="number" step="1" min="5"
                     value={prix.tarifNuitDegressifSeuilKm}
                     onChange={e => setNum('tarifNuitDegressifSeuilKm', e.target.value)}
-                    className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                    className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
                   <span className="text-gray-500 dark:text-slate-400 text-sm w-10">km</span>
                 </div>
               </div>
@@ -251,15 +251,15 @@ export default function AdminPrix() {
                   <input type="number" step="0.01" min="0"
                     value={prix.tarifNuitDegressifPrixKm}
                     onChange={e => setNum('tarifNuitDegressifPrixKm', e.target.value)}
-                    className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                    className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
                   <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€/km</span>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Au lieu de {prix.tarifKmNuit}€/km normal</p>
+                <p className="text-xs text-gray-600 mt-1">Au lieu de {prix.tarifKmNuit}€/km normal</p>
               </div>
             </div>
           </div>
         ) : (
-          <p className="text-gray-400 text-sm">Activez pour appliquer un tarif nuit réduit au-delà d{"'"}un certain nombre de km.</p>
+          <p className="text-gray-600 text-sm">Activez pour appliquer un tarif nuit réduit au-delà d{"'"}un certain nombre de km.</p>
         )}
       </div>
 
@@ -291,7 +291,7 @@ export default function AdminPrix() {
                   className={`flex-1 p-3 rounded-xl border-2 text-left transition-all ${
                     prix.tarifJourDegressifMode === 'degressif'
                       ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      : 'border-gray-300 hover:border-gray-300'
                   }`}
                 >
                   <div className={`font-bold text-sm ${prix.tarifJourDegressifMode === 'degressif' ? 'text-blue-700' : 'text-gray-700'}`}>
@@ -305,7 +305,7 @@ export default function AdminPrix() {
                   className={`flex-1 p-3 rounded-xl border-2 text-left transition-all ${
                     prix.tarifJourDegressifMode === 'retroactif'
                       ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      : 'border-gray-300 hover:border-gray-300'
                   }`}
                 >
                   <div className={`font-bold text-sm ${prix.tarifJourDegressifMode === 'retroactif' ? 'text-blue-700' : 'text-gray-700'}`}>
@@ -323,7 +323,7 @@ export default function AdminPrix() {
                   <input type="number" step="1" min="5"
                     value={prix.tarifJourDegressifSeuilKm}
                     onChange={e => setNum('tarifJourDegressifSeuilKm', e.target.value)}
-                    className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                    className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
                   <span className="text-gray-500 dark:text-slate-400 text-sm w-10">km</span>
                 </div>
               </div>
@@ -333,15 +333,15 @@ export default function AdminPrix() {
                   <input type="number" step="0.01" min="0"
                     value={prix.tarifJourDegressifPrixKm}
                     onChange={e => setNum('tarifJourDegressifPrixKm', e.target.value)}
-                    className="flex-1 border-2 border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
+                    className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none font-medium text-gray-900" />
                   <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€/km</span>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Au lieu de {prix.tarifKmJour}€/km normal</p>
+                <p className="text-xs text-gray-600 mt-1">Au lieu de {prix.tarifKmJour}€/km normal</p>
               </div>
             </div>
           </div>
         ) : (
-          <p className="text-gray-400 text-sm">Activez pour appliquer un tarif jour réduit au-delà d{"'"}un certain nombre de km.</p>
+          <p className="text-gray-600 text-sm">Activez pour appliquer un tarif jour réduit au-delà d{"'"}un certain nombre de km.</p>
         )}
       </div>
 
@@ -373,10 +373,10 @@ export default function AdminPrix() {
                 <input type="number" step="1" min="10"
                   value={prix.remiseSeuilKm}
                   onChange={e => setNum('remiseSeuilKm', e.target.value)}
-                  className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-green-500 focus:outline-none font-medium text-gray-900" />
+                  className="flex-1 border-2 border-gray-300 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-green-500 focus:outline-none font-medium text-gray-900" />
                 <span className="text-gray-500 dark:text-slate-400 text-sm w-10">km</span>
               </div>
-              <p className="text-xs text-gray-400 mt-1">La remise s{"'"}applique au-delà de cette distance</p>
+              <p className="text-xs text-gray-600 mt-1">La remise s{"'"}applique au-delà de cette distance</p>
             </div>
 
             <div>
@@ -402,7 +402,7 @@ export default function AdminPrix() {
         )}
 
         {!prix.remiseActive && (
-          <p className="text-gray-400 text-sm">Activez la remise pour proposer un prix réduit sur les courses longues distance.</p>
+          <p className="text-gray-600 text-sm">Activez la remise pour proposer un prix réduit sur les courses longues distance.</p>
         )}
       </div>
 
@@ -430,13 +430,13 @@ export default function AdminPrix() {
               <input type="number" step="1" min="10"
                 value={prix.suppApprocheSeuilKm}
                 onChange={e => setNum('suppApprocheSeuilKm', e.target.value)}
-                className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-green-500 focus:outline-none font-medium text-gray-900" />
+                className="flex-1 border-2 border-gray-300 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-green-500 focus:outline-none font-medium text-gray-900" />
               <span className="text-gray-500 dark:text-slate-400 text-sm w-10">km</span>
             </div>
-            <p className="text-xs text-gray-400 mt-1">Les {prix.fraisApproche}€ de frais d{"'"}approche seront offerts au-delà de cette distance</p>
+            <p className="text-xs text-gray-600 mt-1">Les {prix.fraisApproche}€ de frais d{"'"}approche seront offerts au-delà de cette distance</p>
           </div>
         ) : (
-          <p className="text-gray-400 text-sm">Activez pour supprimer les frais d{"'"}approche ({prix.fraisApproche}€) sur les longues distances.</p>
+          <p className="text-gray-600 text-sm">Activez pour supprimer les frais d{"'"}approche ({prix.fraisApproche}€) sur les longues distances.</p>
         )}
       </div>
 
@@ -445,7 +445,7 @@ export default function AdminPrix() {
         <div className="flex items-center justify-between border-b pb-3">
           <div>
             <h2 className="font-bold text-gray-800 text-base sm:text-lg">Mode itinéraire</h2>
-            <p className="text-xs text-gray-400 mt-0.5">Détermine le calcul de distance pour les estimations</p>
+            <p className="text-xs text-gray-600 mt-0.5">Détermine le calcul de distance pour les estimations</p>
           </div>
         </div>
 
@@ -456,7 +456,7 @@ export default function AdminPrix() {
             className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${
               prix.itineraireCourt
                 ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 hover:border-gray-300'
+                : 'border-gray-300 hover:border-gray-300'
             }`}
           >
             <div className={`font-bold text-sm ${prix.itineraireCourt ? 'text-blue-700' : 'text-gray-700'}`}>
@@ -470,7 +470,7 @@ export default function AdminPrix() {
             className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${
               !prix.itineraireCourt
                 ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 hover:border-gray-300'
+                : 'border-gray-300 hover:border-gray-300'
             }`}
           >
             <div className={`font-bold text-sm ${!prix.itineraireCourt ? 'text-blue-700' : 'text-gray-700'}`}>
@@ -489,7 +489,7 @@ export default function AdminPrix() {
               <Tag size={20} className="text-green-600" />
               Affichage du prix
             </h2>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-gray-600 mt-1">
               {prix.affichagePrixUnique
                 ? 'Prix unique affiché (haut de fourchette inclus frais d\'approche) — plus clair, plus engageant'
                 : 'Fourchette affichée (ex: 30€ à 35€) — montre la possibilité de payer moins'}
@@ -517,7 +517,7 @@ export default function AdminPrix() {
               <Tag size={20} className="text-purple-600" />
               Capture lead longue distance
             </h2>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-gray-600 mt-1">
               {prix.captureLeadActive
                 ? 'Module 5 étapes : le client laisse ses coordonnées avant de voir le prix'
                 : 'Module 4 étapes classique : le client voit le prix directement'}
@@ -543,13 +543,13 @@ export default function AdminPrix() {
               <input type="number" step="1" min="1"
                 value={prix.seuilKmCaptureLead}
                 onChange={e => setNum('seuilKmCaptureLead', e.target.value)}
-                className="flex-1 border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-purple-500 focus:outline-none font-medium text-gray-900" />
+                className="flex-1 border-2 border-gray-300 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-purple-500 focus:outline-none font-medium text-gray-900" />
               <span className="text-gray-500 dark:text-slate-400 text-sm w-10">km</span>
             </div>
-            <p className="text-xs text-gray-400 mt-1">Au-delà de cette distance, le client doit laisser ses coordonnées avant de voir le prix</p>
+            <p className="text-xs text-gray-600 mt-1">Au-delà de cette distance, le client doit laisser ses coordonnées avant de voir le prix</p>
           </div>
         ) : (
-          <p className="text-gray-400 text-sm">Désactivé — le client voit directement le prix et peut réserver en 4 étapes sans laisser ses coordonnées au préalable.</p>
+          <p className="text-gray-600 text-sm">Désactivé — le client voit directement le prix et peut réserver en 4 étapes sans laisser ses coordonnées au préalable.</p>
         )}
       </div>
 
@@ -560,7 +560,7 @@ export default function AdminPrix() {
             <CalendarX size={20} className="text-red-500" />
             Jours de repos
           </h2>
-          <p className="text-xs text-gray-400 mt-1">Bloquez les jours où vous ne travaillez pas. Les clients ne pourront pas réserver ces dates.</p>
+          <p className="text-xs text-gray-600 mt-1">Bloquez les jours où vous ne travaillez pas. Les clients ne pourront pas réserver ces dates.</p>
         </div>
 
         <div className="flex gap-2 items-end">
@@ -571,7 +571,7 @@ export default function AdminPrix() {
               value={newJourOff}
               onChange={e => setNewJourOff(e.target.value)}
               min={new Date().toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' })}
-              className="w-full border-2 border-gray-200 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-red-500 focus:outline-none font-medium text-gray-900"
+              className="w-full border-2 border-gray-300 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-red-500 focus:outline-none font-medium text-gray-900"
             />
           </div>
           <button
@@ -597,7 +597,7 @@ export default function AdminPrix() {
               const label = d.toLocaleDateString('fr-FR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })
               const isPast = jour < new Date().toISOString().split('T')[0]
               return (
-                <div key={jour} className={`flex items-center justify-between px-4 py-2.5 rounded-xl border ${isPast ? 'bg-gray-50 border-gray-200 opacity-60' : 'bg-red-50 border-red-200'}`}>
+                <div key={jour} className={`flex items-center justify-between px-4 py-2.5 rounded-xl border ${isPast ? 'bg-gray-50 border-gray-300 opacity-60' : 'bg-red-50 border-red-200'}`}>
                   <span className={`text-sm font-medium capitalize ${isPast ? 'text-gray-500' : 'text-red-800'}`}>{label}</span>
                   <button
                     type="button"
@@ -611,7 +611,7 @@ export default function AdminPrix() {
             })}
           </div>
         ) : (
-          <p className="text-gray-400 text-sm">Aucun jour bloqué — les clients peuvent réserver tous les jours.</p>
+          <p className="text-gray-600 text-sm">Aucun jour bloqué — les clients peuvent réserver tous les jours.</p>
         )}
       </div>
 

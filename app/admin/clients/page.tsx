@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { ArrowClockwise, Trash, Phone, Envelope, MapPin, MagnifyingGlass, Plus, FloppyDisk, X, PencilSimple, CaretLeft, CaretRight, AddressBook, DownloadSimple } from '@phosphor-icons/react'
@@ -195,28 +195,28 @@ export default function AdminClients() {
             <div>
               <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Nom *</label>
               <input type="text" value={form.nom} onChange={e => setForm(f => ({ ...f, nom: e.target.value }))}
-                className="w-full border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Nom complet" />
+                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Nom complet" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Téléphone *</label>
               <input type="tel" value={form.telephone} onChange={e => setForm(f => ({ ...f, telephone: e.target.value }))}
-                className="w-full border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="06 12 34 56 78" />
+                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="06 12 34 56 78" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Email</label>
               <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                className="w-full border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="email@exemple.fr" />
+                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="email@exemple.fr" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Adresse</label>
               <input type="text" value={form.adresse} onChange={e => setForm(f => ({ ...f, adresse: e.target.value }))}
-                className="w-full border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Adresse du client" />
+                className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none" placeholder="Adresse du client" />
             </div>
           </div>
           <div>
             <label className="block text-xs font-semibold text-gray-700 dark:text-slate-400 mb-1">Notes</label>
             <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} rows={2}
-              className="w-full border border-gray-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none resize-none"
+              className="w-full border border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-lg px-3 py-2 text-sm focus:border-blue-500 focus:outline-none resize-none"
               placeholder="Informations supplémentaires..." />
           </div>
           <div className="flex justify-end">
@@ -230,12 +230,12 @@ export default function AdminClients() {
       )}
 
       {/* Recherche */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-300 dark:border-slate-700">
         <div className="relative">
-          <MagnifyingGlass size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <MagnifyingGlass size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600" />
           <input type="text" value={search} onChange={e => setSearch(e.target.value)}
             placeholder="Rechercher par nom, téléphone, email..."
-            className="w-full pl-9 pr-4 py-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:placeholder-slate-400 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
+            className="w-full pl-9 pr-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:placeholder-slate-400 rounded-lg text-sm focus:border-blue-500 focus:outline-none" />
         </div>
       </div>
 
@@ -244,12 +244,12 @@ export default function AdminClients() {
         {loading ? (
           <SkeletonList count={5} />
         ) : clients.length === 0 ? (
-          <div className="text-center py-12 text-slate-400">
+          <div className="text-center py-12 text-slate-600">
             {search ? 'Aucun résultat' : 'Aucun client enregistré'}
           </div>
         ) : (
           clients.map(c => (
-            <div key={c._id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-3 sm:p-4">
+            <div key={c._id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-3 sm:p-4">
               <div className="flex items-start sm:items-center gap-3 sm:gap-4">
                 <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-700 dark:text-blue-400 font-bold text-sm shrink-0">
                   {c.nom.charAt(0).toUpperCase()}
@@ -269,7 +269,7 @@ export default function AdminClients() {
                       </a>
                     )}
                     {c.adresse && (
-                      <span className="text-slate-400 dark:text-slate-500 text-xs flex items-center gap-1 truncate">
+                      <span className="text-slate-600 dark:text-slate-500 text-xs flex items-center gap-1 truncate">
                         <MapPin size={12} /> <span className="truncate">{c.adresse}</span>
                       </span>
                     )}
@@ -284,7 +284,7 @@ export default function AdminClients() {
                     <PencilSimple size={16} />
                   </button>
                   <button onClick={() => setConfirmDeleteId(c._id)}
-                    className="p-2 hover:bg-red-50 rounded-lg transition-colors text-slate-400 hover:text-red-600">
+                    className="p-2 hover:bg-red-50 rounded-lg transition-colors text-slate-600 hover:text-red-600">
                     <Trash size={16} />
                   </button>
                 </div>
@@ -298,12 +298,12 @@ export default function AdminClients() {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1}
-            className="p-2 rounded-lg bg-white border border-slate-200 disabled:opacity-40 hover:bg-slate-50 transition-colors">
+            className="p-2 rounded-lg bg-white border border-slate-300 disabled:opacity-40 hover:bg-slate-50 transition-colors">
             <CaretLeft size={16} />
           </button>
           <span className="text-sm text-slate-600 px-3">Page {page} / {totalPages}</span>
           <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
-            className="p-2 rounded-lg bg-white border border-slate-200 disabled:opacity-40 hover:bg-slate-50 transition-colors">
+            className="p-2 rounded-lg bg-white border border-slate-300 disabled:opacity-40 hover:bg-slate-50 transition-colors">
             <CaretRight size={16} />
           </button>
         </div>

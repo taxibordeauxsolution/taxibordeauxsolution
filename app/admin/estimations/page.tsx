@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState, useCallback } from 'react'
 import { ArrowClockwise, DownloadSimple, ChartBar, MapPin, CurrencyEur, Path, Trash, CaretLeft, CaretRight, EnvelopeSimple, ChatCircleDots, WhatsappLogo, CalendarBlank } from '@phosphor-icons/react'
@@ -202,19 +202,19 @@ export default function AdminEstimations() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <div className="text-sm text-slate-500 dark:text-slate-400">Total estimations</div>
           <div className="text-2xl font-bold text-slate-900 dark:text-white">{stats.total}</div>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <div className="text-sm text-slate-500 dark:text-slate-400">Prix moyen</div>
           <div className="text-2xl font-bold text-green-700">{stats.avgPrice.toFixed(2)}€</div>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <div className="text-sm text-slate-500 dark:text-slate-400">Forfaits</div>
           <div className="text-2xl font-bold text-blue-700">{stats.forfaitCount}</div>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <div className="text-sm text-slate-500 dark:text-slate-400">Taux forfait</div>
           <div className="text-2xl font-bold text-slate-900">
             {stats.total > 0 ? ((stats.forfaitCount / stats.total) * 100).toFixed(0) : 0}%
@@ -226,14 +226,14 @@ export default function AdminEstimations() {
             Leads avec email
           </div>
           <div className="text-2xl font-bold text-green-700">
-            {stats.leadCount} <span className="text-sm font-normal text-slate-400">/ {stats.total}</span>
+            {stats.leadCount} <span className="text-sm font-normal text-slate-600">/ {stats.total}</span>
           </div>
         </div>
       </div>
 
       {/* Top routes */}
       {stats.topRoutes.length > 0 && (
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-300">
           <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
             <Path size={16} />
             Top trajets
@@ -250,7 +250,7 @@ export default function AdminEstimations() {
       )}
 
       {/* Filtres */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700 flex flex-wrap items-end gap-4">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700 flex flex-wrap items-end gap-4">
         <div>
           <label className="block text-xs text-slate-500 dark:text-slate-400 mb-1">Du</label>
           <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)}
@@ -291,9 +291,9 @@ export default function AdminEstimations() {
 
       {/* Liste : cartes mobile / tableau desktop */}
       {loading ? (
-        <div className="text-center py-8 text-slate-400">Chargement...</div>
+        <div className="text-center py-8 text-slate-600">Chargement...</div>
       ) : estimations.length === 0 ? (
-        <div className="text-center py-8 text-slate-400">Aucune estimation sur cette période</div>
+        <div className="text-center py-8 text-slate-600">Aucune estimation sur cette période</div>
       ) : (
         <>
           {/* Cartes mobile */}
@@ -304,12 +304,12 @@ export default function AdminEstimations() {
               <span className="text-xs text-slate-500">Tout sélectionner</span>
             </div>
             {estimations.map(e => (
-              <div key={e._id} className={`rounded-2xl p-4 shadow-sm border transition-colors ${selected.has(e._id) ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700'}`}>
+              <div key={e._id} className={`rounded-2xl p-4 shadow-sm border transition-colors ${selected.has(e._id) ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20' : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700'}`}>
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <input type="checkbox" checked={selected.has(e._id)}
                       onChange={() => toggleSelect(e._id)} className="rounded border-slate-300" />
-                    <span className="text-xs text-slate-400">{formatDate(e.createdAt)}</span>
+                    <span className="text-xs text-slate-600">{formatDate(e.createdAt)}</span>
                     {e.utmSource && <span className="text-[10px] text-indigo-500 font-medium">{e.utmSource}</span>}
                     {e.departureDate && (
                       <span className="text-[10px] text-blue-500 ml-1">Dep: {formatDate(e.departureDate)}</span>
@@ -334,7 +334,7 @@ export default function AdminEstimations() {
                   <div className="text-right">
                     <span className="font-bold text-green-700 dark:text-green-400">{e.price.toFixed(2)}€</span>
                     {e.fourchette && (
-                      <div className="text-xs text-slate-400">{e.fourchette.de.toFixed(2)}€ - {e.fourchette.a.toFixed(2)}€</div>
+                      <div className="text-xs text-slate-600">{e.fourchette.de.toFixed(2)}€ - {e.fourchette.a.toFixed(2)}€</div>
                     )}
                   </div>
                 </div>
@@ -373,10 +373,10 @@ export default function AdminEstimations() {
           </div>
 
           {/* Tableau desktop */}
-          <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-300 overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-slate-50 border-b border-slate-200">
+                <tr className="bg-slate-50 border-b border-slate-300">
                   <th className="px-4 py-3">
                     <input type="checkbox" checked={estimations.length > 0 && selected.size === estimations.length}
                       onChange={toggleAll} className="rounded border-slate-300" />
@@ -405,7 +405,7 @@ export default function AdminEstimations() {
                       {e.utmSource && <div className="text-[10px] text-indigo-500 font-medium">{e.utmSource}</div>}
                     </td>
                     <td className="px-4 py-3 text-slate-500 whitespace-nowrap text-xs">
-                      {e.departureDate ? formatDate(e.departureDate) : <span className="text-slate-300">—</span>}
+                      {e.departureDate ? formatDate(e.departureDate) : <span className="text-slate-500">—</span>}
                     </td>
                     <td className="px-4 py-3 text-slate-800" title={e.from}>{truncate(e.from)}</td>
                     <td className="px-4 py-3 text-slate-800" title={e.to}>{truncate(e.to)}</td>
@@ -436,7 +436,7 @@ export default function AdminEstimations() {
                             </div>
                           )}
                           {e.dateSouhaitee && (
-                            <div className="text-[10px] text-slate-400">Souhaité : {new Date(e.dateSouhaitee).toLocaleDateString('fr-FR')}</div>
+                            <div className="text-[10px] text-slate-600">Souhaité : {new Date(e.dateSouhaitee).toLocaleDateString('fr-FR')}</div>
                           )}
                           {/* Notes */}
                           {editingNotes === e._id ? (
@@ -453,7 +453,7 @@ export default function AdminEstimations() {
                           ) : (
                             <button
                               onClick={() => { setEditingNotes(e._id); setNotesValue(e.notes || '') }}
-                              className="text-[10px] text-slate-400 hover:text-slate-600 flex items-center gap-0.5"
+                              className="text-[10px] text-slate-600 hover:text-slate-600 flex items-center gap-0.5"
                             >
                               <ChatCircleDots size={10} />
                               {e.notes ? truncate(e.notes, 20) : 'Ajouter note'}
@@ -461,7 +461,7 @@ export default function AdminEstimations() {
                           )}
                         </div>
                       ) : (
-                        <span className="text-slate-300 text-xs">—</span>
+                        <span className="text-slate-500 text-xs">—</span>
                       )}
                     </td>
                     <td className="px-4 py-3 text-center">
@@ -477,7 +477,7 @@ export default function AdminEstimations() {
                           <option value="perdu">Perdu</option>
                         </select>
                       ) : (
-                        <span className="text-slate-300 text-xs">—</span>
+                        <span className="text-slate-500 text-xs">—</span>
                       )}
                     </td>
                   </tr>
@@ -494,7 +494,7 @@ export default function AdminEstimations() {
           <button
             onClick={() => setPage(p => Math.max(1, p - 1))}
             disabled={page <= 1}
-            className="p-2 rounded-lg bg-white border border-slate-200 disabled:opacity-40 hover:bg-slate-50 transition-colors"
+            className="p-2 rounded-lg bg-white border border-slate-300 disabled:opacity-40 hover:bg-slate-50 transition-colors"
           >
             <CaretLeft size={16} />
           </button>
@@ -504,7 +504,7 @@ export default function AdminEstimations() {
           <button
             onClick={() => setPage(p => Math.min(totalPages, p + 1))}
             disabled={page >= totalPages}
-            className="p-2 rounded-lg bg-white border border-slate-200 disabled:opacity-40 hover:bg-slate-50 transition-colors"
+            className="p-2 rounded-lg bg-white border border-slate-300 disabled:opacity-40 hover:bg-slate-50 transition-colors"
           >
             <CaretRight size={16} />
           </button>

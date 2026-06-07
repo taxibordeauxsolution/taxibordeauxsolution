@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import Link from 'next/link'
@@ -160,7 +160,7 @@ export default function AdminDashboard() {
       case 'en_route': return <NavigationArrow size={14} className="text-orange-600" />
       case 'terminee': return <CheckCircle size={14} className="text-green-600" />
       case 'annulee': return <XCircle size={14} className="text-red-600" />
-      default: return <Clock size={14} className="text-slate-400" />
+      default: return <Clock size={14} className="text-slate-600" />
     }
   }
 
@@ -194,7 +194,7 @@ export default function AdminDashboard() {
   }), [stats.revenus])
 
   if (loading) {
-    return <div className="flex items-center justify-center h-64 text-slate-400">Chargement...</div>
+    return <div className="flex items-center justify-center h-64 text-slate-600">Chargement...</div>
   }
 
   return (
@@ -229,7 +229,7 @@ export default function AdminDashboard() {
                   {statusIcon(r.status)}
                   <div className="flex-1 min-w-0">
                     <span className="font-semibold text-slate-900 dark:text-white">{r.customer.name}</span>
-                    <span className="text-slate-400 dark:text-slate-500 mx-1.5">·</span>
+                    <span className="text-slate-600 dark:text-slate-500 mx-1.5">·</span>
                     <span className="text-slate-500 dark:text-slate-400">{formatDate(r.pickupDate)}</span>
                   </div>
                   <span className="font-bold text-green-700 dark:text-green-400 shrink-0">{formatPrix(r)}</span>
@@ -255,7 +255,7 @@ export default function AdminDashboard() {
 
       {/* Stats principales */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <div className="text-xs text-slate-500 dark:text-slate-400">Réservations</div>
           <div className="text-2xl font-bold text-slate-900 dark:text-white">{stats.reservations.total}</div>
         </div>
@@ -269,11 +269,11 @@ export default function AdminDashboard() {
             <div className="text-2xl font-bold text-orange-700 dark:text-orange-400">{stats.reservations.en_route}</div>
           </div>
         )}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <div className="text-xs text-slate-500 dark:text-slate-400">Estimations</div>
           <div className="text-2xl font-bold text-slate-900 dark:text-white">{stats.estimations.total}</div>
         </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <div className="text-xs text-slate-500 dark:text-slate-400">Prix moyen</div>
           <div className="text-2xl font-bold text-green-700 dark:text-green-400">{stats.estimations.avgPrice.toFixed(0)}€</div>
         </div>
@@ -294,7 +294,7 @@ export default function AdminDashboard() {
             </div>
           )}
           {stats.revenus.semainePrecedente > 0 && (
-            <div className="text-[10px] text-slate-400">{stats.revenus.semainePrecedente.toFixed(0)}€ sem. préc.</div>
+            <div className="text-[10px] text-slate-600">{stats.revenus.semainePrecedente.toFixed(0)}€ sem. préc.</div>
           )}
         </div>
         <div className="rounded-2xl p-4 shadow-sm border bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800/50">
@@ -306,7 +306,7 @@ export default function AdminDashboard() {
             </div>
           )}
           {stats.revenus.moisPrecedent > 0 && (
-            <div className="text-[10px] text-slate-400">{stats.revenus.moisPrecedent.toFixed(0)}€ mois préc.</div>
+            <div className="text-[10px] text-slate-600">{stats.revenus.moisPrecedent.toFixed(0)}€ mois préc.</div>
           )}
         </div>
       </div>
@@ -325,7 +325,7 @@ export default function AdminDashboard() {
           { label: 'Convertis', count: f.convertis, pct: pctConverti, color: 'bg-green-500', width: '' },
         ]
         return (
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 dark:border-slate-700">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-300 dark:border-slate-700">
             <h2 className="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2 mb-4">
               <FunnelSimple size={16} />
               Funnel de conversion
@@ -339,7 +339,7 @@ export default function AdminDashboard() {
                       <span className="text-slate-600 dark:text-slate-400">{s.label}</span>
                       <span className="font-semibold text-slate-900 dark:text-white">
                         {s.count}
-                        {i > 0 && <span className="text-slate-400 dark:text-slate-500 font-normal ml-1">({s.pct}%{i === 1 ? ' des estim.' : ' des leads'})</span>}
+                        {i > 0 && <span className="text-slate-600 dark:text-slate-500 font-normal ml-1">({s.pct}%{i === 1 ? ' des estim.' : ' des leads'})</span>}
                       </span>
                     </div>
                     <div className="h-5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
@@ -355,7 +355,7 @@ export default function AdminDashboard() {
             {f.perdus > 0 && (
               <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between text-sm">
                 <span className="text-red-600 dark:text-red-400">Perdus</span>
-                <span className="font-semibold text-red-600 dark:text-red-400">{f.perdus} <span className="font-normal text-slate-400 dark:text-slate-500">({pctPerdu}% des leads)</span></span>
+                <span className="font-semibold text-red-600 dark:text-red-400">{f.perdus} <span className="font-normal text-slate-600 dark:text-slate-500">({pctPerdu}% des leads)</span></span>
               </div>
             )}
           </div>
@@ -364,7 +364,7 @@ export default function AdminDashboard() {
 
       {/* Top sources trafic */}
       {stats.estimations.topSources.length > 0 && stats.estimations.topSources.some(s => s.source !== 'direct') && (
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
           <h2 className="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2 mb-3">
             <Globe size={16} />
             Sources de trafic
@@ -380,7 +380,7 @@ export default function AdminDashboard() {
                   <div className="flex-1 h-4 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
                     <div className={`h-full ${color} rounded-full`} style={{ width: `${Math.max(4, pct)}%` }} />
                   </div>
-                  <span className="text-sm text-slate-600 dark:text-slate-400 font-semibold w-16 text-right">{s.count} <span className="text-slate-400 dark:text-slate-500 font-normal text-xs">({pct}%)</span></span>
+                  <span className="text-sm text-slate-600 dark:text-slate-400 font-semibold w-16 text-right">{s.count} <span className="text-slate-600 dark:text-slate-500 font-normal text-xs">({pct}%)</span></span>
                 </div>
               )
             })}
@@ -394,14 +394,14 @@ export default function AdminDashboard() {
           <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
             <ChartBar size={18} className="text-green-600 dark:text-green-400" />
             Dernières estimations
-            <span className="text-xs font-normal text-slate-400 dark:text-slate-500 ml-1">({stats.estimations.total} total · {stats.estimations.avgPrice.toFixed(0)}€ moy.)</span>
+            <span className="text-xs font-normal text-slate-600 dark:text-slate-500 ml-1">({stats.estimations.total} total · {stats.estimations.avgPrice.toFixed(0)}€ moy.)</span>
           </h2>
           <Link href="/admin/estimations" className="text-xs text-green-700 dark:text-green-400 font-semibold flex items-center gap-1 hover:underline">
             Tout voir <ArrowRight size={12} />
           </Link>
         </div>
         {recentEstimations.length === 0 ? (
-          <p className="text-sm text-slate-400 dark:text-slate-500 py-4 text-center">Aucune estimation</p>
+          <p className="text-sm text-slate-600 dark:text-slate-500 py-4 text-center">Aucune estimation</p>
         ) : (
           <div className="space-y-2">
             {recentEstimations.map(e => (
@@ -414,7 +414,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="text-right shrink-0">
                   <div className="font-bold text-green-700 dark:text-green-400">{e.price.toFixed(0)}€</div>
-                  <div className="text-xs text-slate-400 dark:text-slate-500">{formatDate(e.createdAt)}</div>
+                  <div className="text-xs text-slate-600 dark:text-slate-500">{formatDate(e.createdAt)}</div>
                 </div>
               </div>
             ))}
@@ -423,7 +423,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Dernières réservations */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-4">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
             <Taxi size={16} />
@@ -434,7 +434,7 @@ export default function AdminDashboard() {
           </Link>
         </div>
         {recentResas.length === 0 ? (
-          <p className="text-sm text-slate-400 dark:text-slate-500 py-4 text-center">Aucune réservation</p>
+          <p className="text-sm text-slate-600 dark:text-slate-500 py-4 text-center">Aucune réservation</p>
         ) : (
           <div className="space-y-2">
             {recentResas.map(r => (
@@ -443,7 +443,7 @@ export default function AdminDashboard() {
                   {statusIcon(r.status)}
                   <div className="flex-1 min-w-0">
                     <span className="font-medium text-slate-800 dark:text-slate-200">{r.customer.name}</span>
-                    <div className="text-xs text-slate-400 dark:text-slate-500 truncate">
+                    <div className="text-xs text-slate-600 dark:text-slate-500 truncate">
                       <MapPin size={10} className="inline" /> {(typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || '').split(',')[0]}
                       {' → '}
                       {(typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || '').split(',')[0]}
@@ -451,7 +451,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="text-right shrink-0">
                     <div className="font-bold text-green-700 dark:text-green-400 text-xs">{formatPrix(r)}</div>
-                    <div className="text-xs text-slate-400 dark:text-slate-500">{formatDate(r.pickupDate)}</div>
+                    <div className="text-xs text-slate-600 dark:text-slate-500">{formatDate(r.pickupDate)}</div>
                   </div>
                 </div>
                 {(r.status === 'en_attente' || r.status === 'confirmee') && (
@@ -490,7 +490,7 @@ export default function AdminDashboard() {
                       <Phone size={12} /> {r.customer.phone}
                     </a>
                   </div>
-                  <div className="text-xs text-slate-400 dark:text-slate-500 mt-0.5 truncate">
+                  <div className="text-xs text-slate-600 dark:text-slate-500 mt-0.5 truncate">
                     <MapPin size={10} className="inline" /> {(typeof r.trip.from === 'string' ? r.trip.from : r.trip.from?.address || '').split(',')[0]}
                     {' → '}
                     {(typeof r.trip.to === 'string' ? r.trip.to : r.trip.to?.address || '').split(',')[0]}
@@ -498,7 +498,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="text-right shrink-0">
                   <div className="font-bold text-green-700 dark:text-green-400 text-xs">{formatPrix(r)}</div>
-                  <div className="text-xs text-slate-400 dark:text-slate-500">{formatDate(r.pickupDate)}</div>
+                  <div className="text-xs text-slate-600 dark:text-slate-500">{formatDate(r.pickupDate)}</div>
                 </div>
                 <button onClick={() => updateResaStatus(r._id, 'en_attente')}
                   className="px-2.5 py-1.5 bg-blue-600 text-white rounded-lg text-[10px] font-semibold hover:bg-blue-700 transition-colors shrink-0">
