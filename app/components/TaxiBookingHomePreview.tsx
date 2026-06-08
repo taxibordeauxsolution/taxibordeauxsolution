@@ -135,6 +135,8 @@ const TaxiBookingHomePreview = () => {
   const [tollCost, setTollCost] = useState(0)
   const [prixAvantRemise, setPrixAvantRemise] = useState(0)
   const [prixSansDegressif, setPrixSansDegressif] = useState(0)
+  const [nbVehicules, setNbVehicules] = useState(1)
+  const [luggageSupplement, setLuggageSupplement] = useState(0)
   const [estimationId, setEstimationId] = useState<string | null>(null)
   const [leadMongoId, setLeadMongoId] = useState('')
   const [leadReservationId, setLeadReservationId] = useState('')
@@ -473,10 +475,16 @@ const TaxiBookingHomePreview = () => {
       const ac = new google.maps.places.Autocomplete(inputEl, autocompleteOpts)
       ac.addListener('place_changed', () => {
         const place = ac.getPlace()
+        const isAirport = place.types?.includes('airport') ||
+          (place.name || '').toLowerCase().includes('aéroport') ||
+          (place.name || '').toLowerCase().includes('aeroport')
+        const displayLabel = isAirport
+          ? (place.name || place.formatted_address || '')
+          : (place.formatted_address || place.name || '')
         if (place.geometry) {
           setTripData(prev => ({
             ...prev,
-            [field]: place.formatted_address || place.name || (prev as any)[field],
+            [field]: displayLabel || (prev as any)[field],
             [coordsField]: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() },
           } as any))
         } else {
@@ -616,13 +624,17 @@ const TaxiBookingHomePreview = () => {
       avoidHighways: configPrix.itineraireCourt,
       avoidTolls: false,
       unitSystem: (window as any).google.maps.UnitSystem.METRIC,
-      provideRouteAlternatives: false,
+      provideRouteAlternatives: true,
       region: 'FR',
     }, (result: any, status: string) => {
       setLoading(false)
 
       if (status === 'OK' && result.routes[0]) {
-        const route = result.routes[0].legs[0]
+        // Prendre la route avec le plus de km parmi les alternatives
+        const longestRoute = result.routes.reduce((best: any, r: any) =>
+          (r.legs[0]?.distance?.value || 0) > (best.legs[0]?.distance?.value || 0) ? r : best
+        , result.routes[0])
+        const route = longestRoute.legs[0]
         const distance = (route.distance?.value || 0) / 1000
         const duration = (route.duration?.value || 0) / 60
 
@@ -792,16 +804,24 @@ const TaxiBookingHomePreview = () => {
       finalPrice = Math.round(finalPrice * (1 - configPrix.remisePourcentage / 100) * 100) / 100
       remiseAppliquee = true
     }
-    setPrixAvantRemise(remiseAppliquee ? prixSansRemise : 0)
+    // Multi-véhicules et supplément bagages
+    const nbVehiculesCurrent = Math.ceil(bookingData.passengers / 4)
+    const luggageCapacityCurrent = nbVehiculesCurrent * 4
+    const luggageSupplementCurrent = Math.max(0, bookingData.luggage - luggageCapacityCurrent) * 2
+    setNbVehicules(nbVehiculesCurrent)
+    setLuggageSupplement(luggageSupplementCurrent)
+
+    setPrixAvantRemise(remiseAppliquee ? Math.round(prixSansRemise * nbVehiculesCurrent * 100) / 100 : 0)
     if (degressifApplique && !isForfait && prixNormalSansDegressif > finalPrice) {
       let prixBarreDegressif = prixNormalSansDegressif
       if (remiseAppliquee) {
         prixBarreDegressif = Math.round(prixNormalSansDegressif * (1 - configPrix.remisePourcentage / 100) * 100) / 100
       }
-      setPrixSansDegressif(prixBarreDegressif)
+      setPrixSansDegressif(Math.round(prixBarreDegressif * nbVehiculesCurrent * 100) / 100)
     } else {
       setPrixSansDegressif(0)
     }
+    finalPrice = Math.round((finalPrice * nbVehiculesCurrent + luggageSupplementCurrent) * 100) / 100
 
     let tariffType = 'Jour'
     if (isHoliday) tariffType = 'Férié'
@@ -833,7 +853,7 @@ const TaxiBookingHomePreview = () => {
       }
     }))
 
-    const fourchetteTrack = isForfait || configPrix.affichagePrixUnique
+    const fourchetteTrack = isForfait || configPrix.affichagePrixUnique || nbVehiculesCurrent > 1
       ? null
       : finalPrice <= configPrix.courseMini
         ? { de: configPrix.courseMiniDe || 0, a: configPrix.courseMini || 0 }
@@ -880,7 +900,7 @@ const TaxiBookingHomePreview = () => {
         .then(d => { if (d.id) setEstimationId(d.id) })
         .catch(() => {})
     }, 800)
-  }, [tripData.distance, tripData.duration, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, forfaits, configPrix, tollCost])
+  }, [tripData.distance, tripData.duration, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, bookingData.passengers, bookingData.luggage, forfaits, configPrix, tollCost])
 
 
   const [jourOffError, setJourOffError] = useState('')
@@ -948,7 +968,7 @@ const TaxiBookingHomePreview = () => {
           totalPrice: tripData.price,
           priceDetails: tripData.priceDetails,
           prixBarreDegressif: prixSansDegressif > 0 ? prixSansDegressif : null,
-          fourchette: (tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique)
+          fourchette: (tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique || nbVehicules > 1)
             ? null
             : tripData.price <= configPrix.courseMini
               ? { de: configPrix.courseMiniDe || 0, a: configPrix.courseMini || 0 }
@@ -957,7 +977,9 @@ const TaxiBookingHomePreview = () => {
         bookingDetails: {
           passengers: bookingData.passengers,
           luggage: bookingData.luggage,
-          notes: bookingData.notes
+          notes: bookingData.notes,
+          nbVehicules,
+          luggageSupplement,
         },
         estimatedPickupTime: pickupTime.toLocaleString('fr-FR', {
           timeZone: 'Europe/Paris',
@@ -1211,7 +1233,7 @@ const TaxiBookingHomePreview = () => {
               <input
                 type="range"
                 min={0}
-                max={5}
+                max={10}
                 value={bookingData.luggage}
                 onChange={(e) => handleBookingChange('luggage', parseInt(e.target.value))}
                 className="slider-styled w-full"
@@ -1305,7 +1327,7 @@ const TaxiBookingHomePreview = () => {
                   </>
                 ) : (
                 <div className="flex items-center justify-center gap-2">
-                  {tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique
+                  {tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique || nbVehicules > 1
                     ? <span className="text-3xl font-extrabold tracking-tight text-green-700">{(tripData.price || 0).toFixed(2)}€</span>
                     : tripData.price <= configPrix.courseMini
                       ? <>
@@ -1336,6 +1358,19 @@ const TaxiBookingHomePreview = () => {
                 {tollCost > 0 && !tripData.priceDetails?.isForfait && (
                   <div className="text-center text-slate-500 text-xs mt-2">
                     Dont {tollCost.toFixed(2)}€ de péage inclus
+                  </div>
+                )}
+                {nbVehicules > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-2">
+                    <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1">
+                      <Car className="w-3 h-3" />
+                      2 véhicules — {((tripData.price - luggageSupplement) / 2).toFixed(2)}€ / véhicule
+                    </span>
+                  </div>
+                )}
+                {luggageSupplement > 0 && (
+                  <div className="text-center text-slate-500 text-xs mt-1">
+                    Dont {luggageSupplement.toFixed(2)}€ de supplément bagages
                   </div>
                 )}
               </div>
@@ -1439,7 +1474,7 @@ const TaxiBookingHomePreview = () => {
           pricing: {
             totalPrice: tripData.price,
             priceDetails: tripData.priceDetails,
-            fourchette: (tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique)
+            fourchette: (tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique || nbVehicules > 1)
               ? null
               : tripData.price <= configPrix.courseMini
                 ? { de: configPrix.courseMiniDe || 0, a: configPrix.courseMini || 0 }
@@ -1448,6 +1483,8 @@ const TaxiBookingHomePreview = () => {
           bookingDetails: {
             passengers: bookingData.passengers,
             luggage: bookingData.luggage,
+            nbVehicules,
+            luggageSupplement,
           },
           pickupDate: pickupTime.toISOString(),
         })
@@ -1663,6 +1700,7 @@ const TaxiBookingHomePreview = () => {
                   <div className="font-medium text-gray-900">{t('details')}</div>
                   <div className="text-sm text-gray-900 sm:text-gray-600">
                     {bookingData.passengers} {bookingData.passengers > 1 ? t('passengerPlural') : t('passengerSingular')} • {bookingData.luggage} {bookingData.luggage > 1 ? t('luggagePlural') : t('luggageSingular')}
+                    {nbVehicules > 1 && <span className="ml-2 bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-0.5 rounded-full">2 véhicules</span>}
                   </div>
                 </div>
               </div>
@@ -1691,14 +1729,25 @@ const TaxiBookingHomePreview = () => {
                     </div>
                   </>
                 ) : (
+                <>
                 <div className="text-3xl font-bold text-green-700">
-                  {tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique
+                  {tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique || nbVehicules > 1
                     ? `${(tripData.price || 0).toFixed(2)}€`
                     : tripData.price <= configPrix.courseMini
                       ? `${(configPrix.courseMiniDe || 0).toFixed(2)}€ à ${(configPrix.courseMini || 0).toFixed(2)}€`
                       : `${((tripData.price || 0) - (configPrix.fraisApproche || 0)).toFixed(2)}€ à ${(tripData.price || 0).toFixed(2)}€`
                   }
                 </div>
+                {nbVehicules > 1 && (
+                  <div className="text-xs text-green-700 mt-1 font-medium">
+                    2 véhicules × {((tripData.price - luggageSupplement) / 2).toFixed(2)}€
+                    {luggageSupplement > 0 && ` + ${luggageSupplement.toFixed(2)}€ suppl. bagages`}
+                  </div>
+                )}
+                {luggageSupplement > 0 && nbVehicules === 1 && (
+                  <div className="text-xs text-green-700 mt-1">Dont {luggageSupplement.toFixed(2)}€ suppl. bagages</div>
+                )}
+                </>
                 )}
                 {tripData.priceDetails && tripData.priceDetails.tariffType && tripData.priceDetails.tariffType !== 'Jour' && (
                   <div className="text-xs text-blue-800 sm:text-blue-600 mt-2 font-medium">
@@ -1857,6 +1906,18 @@ const TaxiBookingHomePreview = () => {
               <span>{t('luggageLabel')}</span>
               <span className="font-medium">{bookingData.luggage}</span>
             </div>
+            {nbVehicules > 1 && (
+              <div className="flex justify-between text-blue-700">
+                <span>Véhicules</span>
+                <span className="font-medium">2 × {((tripData.price - luggageSupplement) / 2).toFixed(2)}€</span>
+              </div>
+            )}
+            {luggageSupplement > 0 && (
+              <div className="flex justify-between text-orange-700">
+                <span>Suppl. bagages</span>
+                <span className="font-medium">+{luggageSupplement.toFixed(2)}€</span>
+              </div>
+            )}
             <hr className="my-3" />
             <div className="flex justify-between text-lg font-bold">
               <span>{t('totalPrice')}:</span>
@@ -1881,7 +1942,7 @@ const TaxiBookingHomePreview = () => {
                   </>
                 ) : (
                 <span className="text-green-800 sm:text-green-600 font-semibold">
-                  {tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique
+                  {tripData.priceDetails?.isForfait || prixSansDegressif > 0 || configPrix.affichagePrixUnique || nbVehicules > 1
                     ? `${(tripData.price || 0).toFixed(2)}€`
                     : tripData.price <= configPrix.courseMini
                       ? `${(configPrix.courseMiniDe || 0).toFixed(2)}€ à ${(configPrix.courseMini || 0).toFixed(2)}€`
