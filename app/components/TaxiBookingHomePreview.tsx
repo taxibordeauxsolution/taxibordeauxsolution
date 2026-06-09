@@ -104,6 +104,12 @@ const TaxiBookingHomePreview = () => {
     tarifJourDegressifSeuilKm: 30,
     tarifJourDegressifPrixKm: 1.80,
     tarifJourDegressifMode: 'degressif',
+    tarifNuitMajoreActive: false,
+    tarifNuitMajoreSeuilKm: 20,
+    tarifNuitMajorePrixKm: 4.00,
+    tarifJourMajoreActive: false,
+    tarifJourMajoreSeuilKm: 20,
+    tarifJourMajorePrixKm: 3.00,
     seuilKmCaptureLead: 25,
     captureLeadActive: true,
     affichagePrixUnique: false,
@@ -696,53 +702,54 @@ const TaxiBookingHomePreview = () => {
     const DAY_RATE  = configPrix.tarifKmJour
     const NIGHT_RATE = configPrix.tarifKmNuit
 
+    const calcFareNuit = (dist: number): number => {
+      const rate = NIGHT_RATE
+      const mA = configPrix.tarifNuitMajoreActive, sM = configPrix.tarifNuitMajoreSeuilKm, pM = configPrix.tarifNuitMajorePrixKm
+      const dA = configPrix.tarifNuitDegressifActive, sD = configPrix.tarifNuitDegressifSeuilKm, pD = configPrix.tarifNuitDegressifPrixKm
+      if (!mA && !dA) return dist * rate
+      if (mA && !dA) return Math.min(dist, sM) * pM + Math.max(0, dist - sM) * rate
+      if (!mA && dA) {
+        if (dist <= sD) return dist * rate
+        return configPrix.tarifNuitDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
+      }
+      return Math.min(dist, sM) * pM + Math.max(0, Math.min(dist, sD) - sM) * rate + Math.max(0, dist - sD) * pD
+    }
+    const calcFareJour = (dist: number): number => {
+      const rate = DAY_RATE
+      const mA = configPrix.tarifJourMajoreActive, sM = configPrix.tarifJourMajoreSeuilKm, pM = configPrix.tarifJourMajorePrixKm
+      const dA = configPrix.tarifJourDegressifActive, sD = configPrix.tarifJourDegressifSeuilKm, pD = configPrix.tarifJourDegressifPrixKm
+      if (!mA && !dA) return dist * rate
+      if (mA && !dA) return Math.min(dist, sM) * pM + Math.max(0, dist - sM) * rate
+      if (!mA && dA) {
+        if (dist <= sD) return dist * rate
+        return configPrix.tarifJourDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
+      }
+      return Math.min(dist, sM) * pM + Math.max(0, Math.min(dist, sD) - sM) * rate + Math.max(0, dist - sD) * pD
+    }
+    const hasNuitSpecial = configPrix.tarifNuitMajoreActive || configPrix.tarifNuitDegressifActive
+    const hasJourSpecial = configPrix.tarifJourMajoreActive || configPrix.tarifJourDegressifActive
+    const useNuitDegressif = configPrix.tarifNuitDegressifActive && tripData.distance > configPrix.tarifNuitDegressifSeuilKm
+    const useJourDegressif = configPrix.tarifJourDegressifActive && tripData.distance > configPrix.tarifJourDegressifSeuilKm
+
     let distanceFare: number
     let degressifApplique = false
-    const useNuitReduit = configPrix.tarifNuitDegressifActive && tripData.distance > configPrix.tarifNuitDegressifSeuilKm
-    const nuitReduitCalc = (dist: number, rate: number) => {
-      if (configPrix.tarifNuitDegressifMode === 'retroactif') {
-        return dist * configPrix.tarifNuitDegressifPrixKm
-      }
-      const seuil = configPrix.tarifNuitDegressifSeuilKm
-      return seuil * rate + (dist - seuil) * configPrix.tarifNuitDegressifPrixKm
-    }
-    const useJourReduit = configPrix.tarifJourDegressifActive && tripData.distance > configPrix.tarifJourDegressifSeuilKm
-    const jourReduitCalc = (dist: number, rate: number) => {
-      if (configPrix.tarifJourDegressifMode === 'retroactif') {
-        return dist * configPrix.tarifJourDegressifPrixKm
-      }
-      const seuil = configPrix.tarifJourDegressifSeuilKm
-      return seuil * rate + (dist - seuil) * configPrix.tarifJourDegressifPrixKm
-    }
     let tarifNormalSansDegressif = 0
     if (isHoliday || isSunday) {
-      if (useNuitReduit) {
-        distanceFare = nuitReduitCalc(tripData.distance, NIGHT_RATE)
-        degressifApplique = true
-        tarifNormalSansDegressif = tripData.distance * NIGHT_RATE
-      } else {
-        distanceFare = tripData.distance * NIGHT_RATE
-      }
+      distanceFare = calcFareNuit(tripData.distance)
+      if (useNuitDegressif) { degressifApplique = true; tarifNormalSansDegressif = tripData.distance * NIGHT_RATE }
     } else if (departureDate) {
-      if (useNuitReduit && isNight) {
-        distanceFare = nuitReduitCalc(tripData.distance, NIGHT_RATE)
-        degressifApplique = true
-        tarifNormalSansDegressif = tripData.distance * NIGHT_RATE
-      } else if (useJourReduit && !isNight) {
-        distanceFare = jourReduitCalc(tripData.distance, DAY_RATE)
-        degressifApplique = true
-        tarifNormalSansDegressif = tripData.distance * DAY_RATE
+      if (hasNuitSpecial && isNight) {
+        distanceFare = calcFareNuit(tripData.distance)
+        if (useNuitDegressif) { degressifApplique = true; tarifNormalSansDegressif = tripData.distance * NIGHT_RATE }
+      } else if (hasJourSpecial && !isNight) {
+        distanceFare = calcFareJour(tripData.distance)
+        if (useJourDegressif) { degressifApplique = true; tarifNormalSansDegressif = tripData.distance * DAY_RATE }
       } else {
         distanceFare = calculateDistanceFare(departureDate, tripData.duration, tripData.distance, DAY_RATE, NIGHT_RATE, configPrix.heureDebutNuit, configPrix.heureFinNuit)
       }
     } else {
-      if (useJourReduit) {
-        distanceFare = jourReduitCalc(tripData.distance, DAY_RATE)
-        degressifApplique = true
-        tarifNormalSansDegressif = tripData.distance * DAY_RATE
-      } else {
-        distanceFare = tripData.distance * DAY_RATE
-      }
+      distanceFare = calcFareJour(tripData.distance)
+      if (useJourDegressif) { degressifApplique = true; tarifNormalSansDegressif = tripData.distance * DAY_RATE }
     }
 
     const basePrice = priseEnCharge + distanceFare

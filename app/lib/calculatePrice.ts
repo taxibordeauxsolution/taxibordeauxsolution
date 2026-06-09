@@ -22,6 +22,12 @@ export interface PriceConfig {
   tarifJourDegressifSeuilKm: number
   tarifJourDegressifPrixKm: number
   tarifJourDegressifMode: string
+  tarifNuitMajoreActive: boolean
+  tarifNuitMajoreSeuilKm: number
+  tarifNuitMajorePrixKm: number
+  tarifJourMajoreActive: boolean
+  tarifJourMajoreSeuilKm: number
+  tarifJourMajorePrixKm: number
   affichagePrixUnique: boolean
 }
 
@@ -108,28 +114,44 @@ export function computePrice(
   const DAY_RATE   = config.tarifKmJour
   const NIGHT_RATE = config.tarifKmNuit
 
-  const useNuitReduit = config.tarifNuitDegressifActive && distance > config.tarifNuitDegressifSeuilKm
-  const useJourReduit = config.tarifJourDegressifActive && distance > config.tarifJourDegressifSeuilKm
+  const calcFareNuit = (dist: number): number => {
+    const rate = NIGHT_RATE
+    const mA = config.tarifNuitMajoreActive,  sM = config.tarifNuitMajoreSeuilKm,  pM = config.tarifNuitMajorePrixKm
+    const dA = config.tarifNuitDegressifActive, sD = config.tarifNuitDegressifSeuilKm, pD = config.tarifNuitDegressifPrixKm
+    if (!mA && !dA) return dist * rate
+    if (mA && !dA) return Math.min(dist, sM) * pM + Math.max(0, dist - sM) * rate
+    if (!mA && dA) {
+      if (dist <= sD) return dist * rate
+      return config.tarifNuitDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
+    }
+    return Math.min(dist, sM) * pM + Math.max(0, Math.min(dist, sD) - sM) * rate + Math.max(0, dist - sD) * pD
+  }
 
-  const nuitReduitCalc = (dist: number, rate: number) =>
-    config.tarifNuitDegressifMode === 'retroactif'
-      ? dist * config.tarifNuitDegressifPrixKm
-      : config.tarifNuitDegressifSeuilKm * rate + (dist - config.tarifNuitDegressifSeuilKm) * config.tarifNuitDegressifPrixKm
+  const calcFareJour = (dist: number): number => {
+    const rate = DAY_RATE
+    const mA = config.tarifJourMajoreActive,  sM = config.tarifJourMajoreSeuilKm,  pM = config.tarifJourMajorePrixKm
+    const dA = config.tarifJourDegressifActive, sD = config.tarifJourDegressifSeuilKm, pD = config.tarifJourDegressifPrixKm
+    if (!mA && !dA) return dist * rate
+    if (mA && !dA) return Math.min(dist, sM) * pM + Math.max(0, dist - sM) * rate
+    if (!mA && dA) {
+      if (dist <= sD) return dist * rate
+      return config.tarifJourDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
+    }
+    return Math.min(dist, sM) * pM + Math.max(0, Math.min(dist, sD) - sM) * rate + Math.max(0, dist - sD) * pD
+  }
 
-  const jourReduitCalc = (dist: number, rate: number) =>
-    config.tarifJourDegressifMode === 'retroactif'
-      ? dist * config.tarifJourDegressifPrixKm
-      : config.tarifJourDegressifSeuilKm * rate + (dist - config.tarifJourDegressifSeuilKm) * config.tarifJourDegressifPrixKm
+  const hasNuitSpecial = config.tarifNuitMajoreActive || config.tarifNuitDegressifActive
+  const hasJourSpecial = config.tarifJourMajoreActive || config.tarifJourDegressifActive
 
   let distanceFare: number
   if (isHoliday || isSunday) {
-    distanceFare = useNuitReduit ? nuitReduitCalc(distance, NIGHT_RATE) : distance * NIGHT_RATE
+    distanceFare = calcFareNuit(distance)
   } else if (pickupDate) {
-    if (useNuitReduit && isNight)       distanceFare = nuitReduitCalc(distance, NIGHT_RATE)
-    else if (useJourReduit && !isNight) distanceFare = jourReduitCalc(distance, DAY_RATE)
+    if (hasNuitSpecial && isNight)       distanceFare = calcFareNuit(distance)
+    else if (hasJourSpecial && !isNight) distanceFare = calcFareJour(distance)
     else distanceFare = calculateDistanceFare(pickupDate, duration, distance, DAY_RATE, NIGHT_RATE, config.heureDebutNuit, config.heureFinNuit)
   } else {
-    distanceFare = useJourReduit ? jourReduitCalc(distance, DAY_RATE) : distance * DAY_RATE
+    distanceFare = calcFareJour(distance)
   }
 
   const approachFees = (config.suppApprocheActive && distance >= config.suppApprocheSeuilKm) ? 0 : config.fraisApproche

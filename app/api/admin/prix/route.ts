@@ -29,7 +29,9 @@ export async function PUT(req: NextRequest) {
     const numFields = ['priseEnCharge', 'tarifKmJour', 'tarifKmNuit', 'fraisApproche', 'courseMini', 'courseMiniDe',
       'remiseSeuilKm', 'remisePourcentage', 'suppApprocheSeuilKm',
       'tarifNuitDegressifSeuilKm', 'tarifNuitDegressifPrixKm',
-      'tarifJourDegressifSeuilKm', 'tarifJourDegressifPrixKm', 'seuilKmCaptureLead']
+      'tarifJourDegressifSeuilKm', 'tarifJourDegressifPrixKm',
+      'tarifNuitMajoreSeuilKm', 'tarifNuitMajorePrixKm',
+      'tarifJourMajoreSeuilKm', 'tarifJourMajorePrixKm', 'seuilKmCaptureLead']
     for (const f of numFields) {
       if (body[f] !== undefined && body[f] !== '') {
         const v = Number(body[f])
@@ -47,6 +49,8 @@ export async function PUT(req: NextRequest) {
       'suppApprocheActive', 'suppApprocheSeuilKm', 'itineraireCourt',
       'tarifNuitDegressifActive', 'tarifNuitDegressifSeuilKm', 'tarifNuitDegressifPrixKm', 'tarifNuitDegressifMode',
       'tarifJourDegressifActive', 'tarifJourDegressifSeuilKm', 'tarifJourDegressifPrixKm', 'tarifJourDegressifMode',
+      'tarifNuitMajoreActive', 'tarifNuitMajoreSeuilKm', 'tarifNuitMajorePrixKm',
+      'tarifJourMajoreActive', 'tarifJourMajoreSeuilKm', 'tarifJourMajorePrixKm',
       'seuilKmCaptureLead', 'captureLeadActive', 'affichagePrixUnique']
     const update: Record<string, any> = {}
     for (const f of fields) {

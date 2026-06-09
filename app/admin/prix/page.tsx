@@ -29,6 +29,12 @@ export default function AdminPrix() {
     tarifJourDegressifSeuilKm: 30,
     tarifJourDegressifPrixKm: 1.80,
     tarifJourDegressifMode: 'degressif' as string,
+    tarifNuitMajoreActive: false,
+    tarifNuitMajoreSeuilKm: 20,
+    tarifNuitMajorePrixKm: 4.00,
+    tarifJourMajoreActive: false,
+    tarifJourMajoreSeuilKm: 20,
+    tarifJourMajorePrixKm: 3.00,
     seuilKmCaptureLead: 25,
     captureLeadActive: true,
     affichagePrixUnique: false,
@@ -343,6 +349,110 @@ export default function AdminPrix() {
           </div>
         </div>
         {!prix.tarifJourDegressifActive && <p className="text-gray-600 dark:text-slate-400 text-sm">Activez pour appliquer un tarif jour réduit au-delà d{"'"}un certain nombre de km.</p>}
+      </div>
+
+      {/* Tarif nuit majoré courts trajets */}
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
+        <div className="flex items-center justify-between border-b border-gray-200 dark:border-slate-700 pb-3">
+          <div>
+            <h2 className="font-bold text-gray-800 dark:text-slate-200 text-base sm:text-lg">Tarif nuit majoré — courts trajets</h2>
+            <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">Prix au km plus élevé pour les premiers km (nuit)</p>
+          </div>
+          <button
+            type="button"
+            role="switch" aria-checked={prix.tarifNuitMajoreActive} aria-label="Tarif nuit majoré"
+            onClick={() => setPrix(prev => ({ ...prev, tarifNuitMajoreActive: !prev.tarifNuitMajoreActive }))}
+            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
+              prix.tarifNuitMajoreActive ? 'bg-amber-500' : 'bg-gray-300 dark:bg-slate-600'
+            }`}
+          >
+            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+              prix.tarifNuitMajoreActive ? 'translate-x-6' : 'translate-x-1'
+            }`} />
+          </button>
+        </div>
+
+        <div className={`overflow-hidden transition-all duration-300 ${prix.tarifNuitMajoreActive ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            <div>
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Jusqu{"'"}à</label>
+              <div className="flex items-center gap-2">
+                <input type="number" step="1" min="1"
+                  value={prix.tarifNuitMajoreSeuilKm}
+                  onChange={e => setNum('tarifNuitMajoreSeuilKm', e.target.value)}
+                  className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 font-medium text-gray-900" />
+                <span className="text-gray-500 dark:text-slate-400 text-sm w-10">km</span>
+              </div>
+            </div>
+            <div>
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Prix km nuit majoré</label>
+              <div className="flex items-center gap-2">
+                <input type="number" step="0.01" min="0"
+                  value={prix.tarifNuitMajorePrixKm}
+                  onChange={e => setNum('tarifNuitMajorePrixKm', e.target.value)}
+                  className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 font-medium text-gray-900" />
+                <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€/km</span>
+              </div>
+              <p className="text-xs text-gray-600 dark:text-slate-400 mt-1">Au lieu de {prix.tarifKmNuit}€/km normal</p>
+            </div>
+          </div>
+          <div className="mt-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl px-4 py-3 text-xs text-amber-800 dark:text-amber-300">
+            Les {prix.tarifNuitMajoreSeuilKm} premiers km à {prix.tarifNuitMajorePrixKm}€/km, puis {prix.tarifKmNuit}€/km au-delà
+          </div>
+        </div>
+        {!prix.tarifNuitMajoreActive && <p className="text-gray-600 dark:text-slate-400 text-sm">Activez pour appliquer un tarif nuit majoré sur les premiers kilomètres.</p>}
+      </div>
+
+      {/* Tarif jour majoré courts trajets */}
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
+        <div className="flex items-center justify-between border-b border-gray-200 dark:border-slate-700 pb-3">
+          <div>
+            <h2 className="font-bold text-gray-800 dark:text-slate-200 text-base sm:text-lg">Tarif jour majoré — courts trajets</h2>
+            <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">Prix au km plus élevé pour les premiers km (jour)</p>
+          </div>
+          <button
+            type="button"
+            role="switch" aria-checked={prix.tarifJourMajoreActive} aria-label="Tarif jour majoré"
+            onClick={() => setPrix(prev => ({ ...prev, tarifJourMajoreActive: !prev.tarifJourMajoreActive }))}
+            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
+              prix.tarifJourMajoreActive ? 'bg-amber-500' : 'bg-gray-300 dark:bg-slate-600'
+            }`}
+          >
+            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+              prix.tarifJourMajoreActive ? 'translate-x-6' : 'translate-x-1'
+            }`} />
+          </button>
+        </div>
+
+        <div className={`overflow-hidden transition-all duration-300 ${prix.tarifJourMajoreActive ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+            <div>
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Jusqu{"'"}à</label>
+              <div className="flex items-center gap-2">
+                <input type="number" step="1" min="1"
+                  value={prix.tarifJourMajoreSeuilKm}
+                  onChange={e => setNum('tarifJourMajoreSeuilKm', e.target.value)}
+                  className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 font-medium text-gray-900" />
+                <span className="text-gray-500 dark:text-slate-400 text-sm w-10">km</span>
+              </div>
+            </div>
+            <div>
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Prix km jour majoré</label>
+              <div className="flex items-center gap-2">
+                <input type="number" step="0.01" min="0"
+                  value={prix.tarifJourMajorePrixKm}
+                  onChange={e => setNum('tarifJourMajorePrixKm', e.target.value)}
+                  className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-1 font-medium text-gray-900" />
+                <span className="text-gray-500 dark:text-slate-400 text-sm w-10">€/km</span>
+              </div>
+              <p className="text-xs text-gray-600 dark:text-slate-400 mt-1">Au lieu de {prix.tarifKmJour}€/km normal</p>
+            </div>
+          </div>
+          <div className="mt-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl px-4 py-3 text-xs text-amber-800 dark:text-amber-300">
+            Les {prix.tarifJourMajoreSeuilKm} premiers km à {prix.tarifJourMajorePrixKm}€/km, puis {prix.tarifKmJour}€/km au-delà
+          </div>
+        </div>
+        {!prix.tarifJourMajoreActive && <p className="text-gray-600 dark:text-slate-400 text-sm">Activez pour appliquer un tarif jour majoré sur les premiers kilomètres.</p>}
       </div>
 
       {/* Remise courses longues */}
