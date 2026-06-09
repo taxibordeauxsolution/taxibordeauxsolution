@@ -364,7 +364,7 @@ export default function AdminPrix() {
             role="switch" aria-checked={prix.tarifNuitMajoreActive} aria-label="Tarif nuit majoré"
             onClick={() => setPrix(prev => ({ ...prev, tarifNuitMajoreActive: !prev.tarifNuitMajoreActive }))}
             className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
-              prix.tarifNuitMajoreActive ? 'bg-amber-500' : 'bg-gray-300 dark:bg-slate-600'
+              prix.tarifNuitMajoreActive ? 'bg-green-500' : 'bg-gray-300 dark:bg-slate-600'
             }`}
           >
             <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
@@ -416,7 +416,7 @@ export default function AdminPrix() {
             role="switch" aria-checked={prix.tarifJourMajoreActive} aria-label="Tarif jour majoré"
             onClick={() => setPrix(prev => ({ ...prev, tarifJourMajoreActive: !prev.tarifJourMajoreActive }))}
             className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
-              prix.tarifJourMajoreActive ? 'bg-amber-500' : 'bg-gray-300 dark:bg-slate-600'
+              prix.tarifJourMajoreActive ? 'bg-green-500' : 'bg-gray-300 dark:bg-slate-600'
             }`}
           >
             <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
