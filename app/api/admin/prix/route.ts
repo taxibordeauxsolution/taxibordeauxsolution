@@ -46,7 +46,7 @@ export async function PUT(req: NextRequest) {
 
     const fields = ['priseEnCharge', 'tarifKmJour', 'tarifKmNuit', 'fraisApproche', 'courseMini', 'courseMiniDe',
       'heureDebutNuit', 'heureFinNuit', 'remiseActive', 'remiseSeuilKm', 'remisePourcentage',
-      'suppApprocheActive', 'suppApprocheSeuilKm', 'itineraireCourt',
+      'suppApprocheActive', 'suppApprocheSeuilKm', 'itineraireJour', 'itineraireNuit',
       'tarifNuitDegressifActive', 'tarifNuitDegressifSeuilKm', 'tarifNuitDegressifPrixKm', 'tarifNuitDegressifMode',
       'tarifJourDegressifActive', 'tarifJourDegressifSeuilKm', 'tarifJourDegressifPrixKm', 'tarifJourDegressifMode',
       'tarifNuitMajoreActive', 'tarifNuitMajoreSeuilKm', 'tarifNuitMajorePrixKm',

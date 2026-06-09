@@ -95,7 +95,8 @@ const TaxiBookingHomePreview = () => {
     remisePourcentage: 10,
     suppApprocheActive: false,
     suppApprocheSeuilKm: 50,
-    itineraireCourt: true,
+    itineraireJour: 'rapide',
+    itineraireNuit: 'court',
     tarifNuitDegressifActive: false,
     tarifNuitDegressifSeuilKm: 30,
     tarifNuitDegressifPrixKm: 2.50,
@@ -623,11 +624,17 @@ const TaxiBookingHomePreview = () => {
     setLoading(true)
     setError('')
 
+    const deptMin = parseHM(tripData.departureTime, 0)
+    const nightStartMin = parseHM(configPrix.heureDebutNuit, 19 * 60)
+    const nightEndMin = parseHM(configPrix.heureFinNuit, 7 * 60)
+    const isNight = isNightMinutes(deptMin, nightStartMin, nightEndMin)
+    const modeItineraire = isNight ? configPrix.itineraireNuit : configPrix.itineraireJour
+
     directionsService.route({
       origin: tripData.fromCoords,
       destination: tripData.toCoords,
       travelMode: (window as any).google.maps.TravelMode.DRIVING,
-      avoidHighways: configPrix.itineraireCourt,
+      avoidHighways: modeItineraire === 'court',
       avoidTolls: false,
       unitSystem: (window as any).google.maps.UnitSystem.METRIC,
       provideRouteAlternatives: true,
@@ -665,7 +672,7 @@ const TaxiBookingHomePreview = () => {
         setError("Impossible de calculer l'itinéraire")
       }
     })
-  }, [directionsService, tripData.fromCoords, tripData.toCoords, configPrix.itineraireCourt])
+  }, [directionsService, tripData.fromCoords, tripData.toCoords, tripData.departureTime, configPrix.itineraireJour, configPrix.itineraireNuit, configPrix.heureDebutNuit, configPrix.heureFinNuit])
 
   // Calcul automatique dès que les adresses sont disponibles
   useEffect(() => {

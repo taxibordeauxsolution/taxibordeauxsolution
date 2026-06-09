@@ -20,7 +20,8 @@ export default function AdminPrix() {
     remisePourcentage: 10,
     suppApprocheActive: false,
     suppApprocheSeuilKm: 50,
-    itineraireCourt: true,
+    itineraireJour: 'rapide' as string,
+    itineraireNuit: 'court' as string,
     tarifNuitDegressifActive: false,
     tarifNuitDegressifSeuilKm: 30,
     tarifNuitDegressifPrixKm: 2.50,
@@ -553,39 +554,80 @@ export default function AdminPrix() {
         <div className="flex items-center justify-between border-b border-gray-200 dark:border-slate-700 pb-3">
           <div>
             <h2 className="font-bold text-gray-800 dark:text-slate-200 text-base sm:text-lg">Mode itinéraire</h2>
-            <p className="text-xs text-gray-600 dark:text-slate-400 mt-0.5">Détermine le calcul de distance pour les estimations</p>
+            <p className="text-xs text-gray-600 dark:text-slate-400 mt-0.5">
+              Appliqué automatiquement selon l{"'"}heure du trajet (plages définies ci-dessus : jour {prix.heureFinNuit}–{prix.heureDebutNuit}, nuit {prix.heureDebutNuit}–{prix.heureFinNuit})
+            </p>
           </div>
         </div>
 
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={() => setPrix(prev => ({ ...prev, itineraireCourt: true }))}
-            className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${
-              prix.itineraireCourt
-                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                : 'border-gray-300 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500'
-            }`}
-          >
-            <div className={`font-bold text-sm ${prix.itineraireCourt ? 'text-blue-700 dark:text-blue-400' : 'text-gray-700 dark:text-slate-300'}`}>
-              Plus court
-            </div>
-            <p className="text-xs text-gray-500 mt-1">Évite les autoroutes, passe par la ville. Moins de km = prix plus bas.</p>
-          </button>
-          <button
-            type="button"
-            onClick={() => setPrix(prev => ({ ...prev, itineraireCourt: false }))}
-            className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${
-              !prix.itineraireCourt
-                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                : 'border-gray-300 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500'
-            }`}
-          >
-            <div className={`font-bold text-sm ${!prix.itineraireCourt ? 'text-blue-700 dark:text-blue-400' : 'text-gray-700 dark:text-slate-300'}`}>
-              Plus rapide
-            </div>
-            <p className="text-xs text-gray-500 mt-1">Autoroutes et rocade incluses. Plus de km mais trajet plus rapide.</p>
-          </button>
+        {/* Jour */}
+        <div className="space-y-2">
+          <p className="text-sm font-semibold text-yellow-600 dark:text-yellow-400">Heures de jour ({prix.heureFinNuit} → {prix.heureDebutNuit})</p>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() => setPrix(prev => ({ ...prev, itineraireJour: 'court' }))}
+              className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${
+                prix.itineraireJour === 'court'
+                  ? 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/30'
+                  : 'border-gray-300 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500'
+              }`}
+            >
+              <div className={`font-bold text-sm ${prix.itineraireJour === 'court' ? 'text-yellow-700 dark:text-yellow-400' : 'text-gray-700 dark:text-slate-300'}`}>
+                Plus court
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Évite les autoroutes. Moins de km.</p>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPrix(prev => ({ ...prev, itineraireJour: 'rapide' }))}
+              className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${
+                prix.itineraireJour === 'rapide'
+                  ? 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/30'
+                  : 'border-gray-300 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500'
+              }`}
+            >
+              <div className={`font-bold text-sm ${prix.itineraireJour === 'rapide' ? 'text-yellow-700 dark:text-yellow-400' : 'text-gray-700 dark:text-slate-300'}`}>
+                Plus rapide
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Autoroutes incluses. Plus de km, trajet plus rapide.</p>
+            </button>
+          </div>
+        </div>
+
+        {/* Nuit */}
+        <div className="space-y-2">
+          <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400">Heures de nuit ({prix.heureDebutNuit} → {prix.heureFinNuit})</p>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() => setPrix(prev => ({ ...prev, itineraireNuit: 'court' }))}
+              className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${
+                prix.itineraireNuit === 'court'
+                  ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30'
+                  : 'border-gray-300 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500'
+              }`}
+            >
+              <div className={`font-bold text-sm ${prix.itineraireNuit === 'court' ? 'text-indigo-700 dark:text-indigo-400' : 'text-gray-700 dark:text-slate-300'}`}>
+                Plus court
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Évite les autoroutes. Moins de km.</p>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPrix(prev => ({ ...prev, itineraireNuit: 'rapide' }))}
+              className={`flex-1 p-4 rounded-xl border-2 text-left transition-all ${
+                prix.itineraireNuit === 'rapide'
+                  ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30'
+                  : 'border-gray-300 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500'
+              }`}
+            >
+              <div className={`font-bold text-sm ${prix.itineraireNuit === 'rapide' ? 'text-indigo-700 dark:text-indigo-400' : 'text-gray-700 dark:text-slate-300'}`}>
+                Plus rapide
+              </div>
+              <p className="text-xs text-gray-500 mt-1">Autoroutes incluses. Plus de km, trajet plus rapide.</p>
+            </button>
+          </div>
         </div>
       </div>
 
