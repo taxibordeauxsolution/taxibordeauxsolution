@@ -624,7 +624,7 @@ const TaxiBookingHomePreview = () => {
     setLoading(true)
     setError('')
 
-    const deptMin = parseHM(tripData.departureTime, 0)
+    const deptMin = parseHM(bookingData.departureTime, 0)
     const nightStartMin = parseHM(configPrix.heureDebutNuit, 19 * 60)
     const nightEndMin = parseHM(configPrix.heureFinNuit, 7 * 60)
     const isNight = isNightMinutes(deptMin, nightStartMin, nightEndMin)
@@ -672,7 +672,7 @@ const TaxiBookingHomePreview = () => {
         setError("Impossible de calculer l'itinéraire")
       }
     })
-  }, [directionsService, tripData.fromCoords, tripData.toCoords, tripData.departureTime, configPrix.itineraireJour, configPrix.itineraireNuit, configPrix.heureDebutNuit, configPrix.heureFinNuit])
+  }, [directionsService, tripData.fromCoords, tripData.toCoords, bookingData.departureTime, configPrix.itineraireJour, configPrix.itineraireNuit, configPrix.heureDebutNuit, configPrix.heureFinNuit])
 
   // Calcul automatique dès que les adresses sont disponibles
   useEffect(() => {
