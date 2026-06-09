@@ -397,7 +397,7 @@ export default function AdminPrix() {
             </div>
           </div>
           <div className="mt-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl px-4 py-3 text-xs text-amber-800 dark:text-amber-300">
-            Les {prix.tarifNuitMajoreSeuilKm} premiers km à {prix.tarifNuitMajorePrixKm}€/km, puis {prix.tarifKmNuit}€/km au-delà
+            Trajet ≤ {prix.tarifNuitMajoreSeuilKm} km → {prix.tarifNuitMajorePrixKm}€/km sur toute la distance · Au-delà → calcul normal ({prix.tarifKmNuit}€/km)
           </div>
         </div>
         {!prix.tarifNuitMajoreActive && <p className="text-gray-600 dark:text-slate-400 text-sm">Activez pour appliquer un tarif nuit majoré sur les premiers kilomètres.</p>}
@@ -449,7 +449,7 @@ export default function AdminPrix() {
             </div>
           </div>
           <div className="mt-3 bg-amber-50 dark:bg-amber-900/20 rounded-xl px-4 py-3 text-xs text-amber-800 dark:text-amber-300">
-            Les {prix.tarifJourMajoreSeuilKm} premiers km à {prix.tarifJourMajorePrixKm}€/km, puis {prix.tarifKmJour}€/km au-delà
+            Trajet ≤ {prix.tarifJourMajoreSeuilKm} km → {prix.tarifJourMajorePrixKm}€/km sur toute la distance · Au-delà → calcul normal ({prix.tarifKmJour}€/km)
           </div>
         </div>
         {!prix.tarifJourMajoreActive && <p className="text-gray-600 dark:text-slate-400 text-sm">Activez pour appliquer un tarif jour majoré sur les premiers kilomètres.</p>}

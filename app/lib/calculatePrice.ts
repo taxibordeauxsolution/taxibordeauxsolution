@@ -116,28 +116,20 @@ export function computePrice(
 
   const calcFareNuit = (dist: number): number => {
     const rate = NIGHT_RATE
-    const mA = config.tarifNuitMajoreActive,  sM = config.tarifNuitMajoreSeuilKm,  pM = config.tarifNuitMajorePrixKm
+    const mA = config.tarifNuitMajoreActive, sM = config.tarifNuitMajoreSeuilKm, pM = config.tarifNuitMajorePrixKm
     const dA = config.tarifNuitDegressifActive, sD = config.tarifNuitDegressifSeuilKm, pD = config.tarifNuitDegressifPrixKm
-    if (!mA && !dA) return dist * rate
-    if (mA && !dA) return Math.min(dist, sM) * pM + Math.max(0, dist - sM) * rate
-    if (!mA && dA) {
-      if (dist <= sD) return dist * rate
-      return config.tarifNuitDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
-    }
-    return Math.min(dist, sM) * pM + Math.max(0, Math.min(dist, sD) - sM) * rate + Math.max(0, dist - sD) * pD
+    if (mA && dist <= sM) return dist * pM
+    if (dA && dist > sD) return config.tarifNuitDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
+    return dist * rate
   }
 
   const calcFareJour = (dist: number): number => {
     const rate = DAY_RATE
-    const mA = config.tarifJourMajoreActive,  sM = config.tarifJourMajoreSeuilKm,  pM = config.tarifJourMajorePrixKm
+    const mA = config.tarifJourMajoreActive, sM = config.tarifJourMajoreSeuilKm, pM = config.tarifJourMajorePrixKm
     const dA = config.tarifJourDegressifActive, sD = config.tarifJourDegressifSeuilKm, pD = config.tarifJourDegressifPrixKm
-    if (!mA && !dA) return dist * rate
-    if (mA && !dA) return Math.min(dist, sM) * pM + Math.max(0, dist - sM) * rate
-    if (!mA && dA) {
-      if (dist <= sD) return dist * rate
-      return config.tarifJourDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
-    }
-    return Math.min(dist, sM) * pM + Math.max(0, Math.min(dist, sD) - sM) * rate + Math.max(0, dist - sD) * pD
+    if (mA && dist <= sM) return dist * pM
+    if (dA && dist > sD) return config.tarifJourDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
+    return dist * rate
   }
 
   const hasNuitSpecial = config.tarifNuitMajoreActive || config.tarifNuitDegressifActive

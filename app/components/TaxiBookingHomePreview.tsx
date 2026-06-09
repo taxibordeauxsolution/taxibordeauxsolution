@@ -706,25 +706,17 @@ const TaxiBookingHomePreview = () => {
       const rate = NIGHT_RATE
       const mA = configPrix.tarifNuitMajoreActive, sM = configPrix.tarifNuitMajoreSeuilKm, pM = configPrix.tarifNuitMajorePrixKm
       const dA = configPrix.tarifNuitDegressifActive, sD = configPrix.tarifNuitDegressifSeuilKm, pD = configPrix.tarifNuitDegressifPrixKm
-      if (!mA && !dA) return dist * rate
-      if (mA && !dA) return Math.min(dist, sM) * pM + Math.max(0, dist - sM) * rate
-      if (!mA && dA) {
-        if (dist <= sD) return dist * rate
-        return configPrix.tarifNuitDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
-      }
-      return Math.min(dist, sM) * pM + Math.max(0, Math.min(dist, sD) - sM) * rate + Math.max(0, dist - sD) * pD
+      if (mA && dist <= sM) return dist * pM
+      if (dA && dist > sD) return configPrix.tarifNuitDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
+      return dist * rate
     }
     const calcFareJour = (dist: number): number => {
       const rate = DAY_RATE
       const mA = configPrix.tarifJourMajoreActive, sM = configPrix.tarifJourMajoreSeuilKm, pM = configPrix.tarifJourMajorePrixKm
       const dA = configPrix.tarifJourDegressifActive, sD = configPrix.tarifJourDegressifSeuilKm, pD = configPrix.tarifJourDegressifPrixKm
-      if (!mA && !dA) return dist * rate
-      if (mA && !dA) return Math.min(dist, sM) * pM + Math.max(0, dist - sM) * rate
-      if (!mA && dA) {
-        if (dist <= sD) return dist * rate
-        return configPrix.tarifJourDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
-      }
-      return Math.min(dist, sM) * pM + Math.max(0, Math.min(dist, sD) - sM) * rate + Math.max(0, dist - sD) * pD
+      if (mA && dist <= sM) return dist * pM
+      if (dA && dist > sD) return configPrix.tarifJourDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
+      return dist * rate
     }
     const hasNuitSpecial = configPrix.tarifNuitMajoreActive || configPrix.tarifNuitDegressifActive
     const hasJourSpecial = configPrix.tarifJourMajoreActive || configPrix.tarifJourDegressifActive
