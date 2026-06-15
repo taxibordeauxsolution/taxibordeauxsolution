@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Contact — Taxi Bordeaux Solution | Réponse Rapide',
-  description: 'Contactez Taxi Bordeaux Solution : formulaire en ligne, réponse rapide. Disponible 24h/24, 7j/7. Téléphone : +33 6 67 23 78 22.',
+  description: 'Contactez Taxi Bordeaux Solution : formulaire en ligne, réponse rapide. Disponible 24h/24, 7j/7. Téléphone : +33 5 54 54 34 66.',
   openGraph: {
     title: 'Contactez Taxi Bordeaux Solution',
     description: 'Formulaire de contact ou téléphone direct. Service disponible 24h/24, 7j/7.',

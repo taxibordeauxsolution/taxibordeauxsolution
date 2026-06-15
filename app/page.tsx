@@ -5,8 +5,8 @@ import BookingSection from './components/BookingSection'
 import AnimateOnScroll from './components/AnimateOnScroll'
 
 export default function HomePage() {
-  const phoneNumber = "+33667237822"
-  const phoneDisplay = "+33 6 67 23 78 22"
+  const phoneNumber = "+33554543466"
+  const phoneDisplay = "+33 5 54 54 34 66"
 
   return (
     <div className="min-h-screen">
@@ -400,7 +400,7 @@ export default function HomePage() {
 
           <AnimateOnScroll className="text-center mt-12 flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="tel:+33667237822"
+              href="tel:+33554543466"
               className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
             >
               <Phone size={22} />
@@ -622,8 +622,8 @@ export default function HomePage() {
                 <Phone className="text-green-600" size={32} />
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-4">Téléphone</h3>
-              <a href="tel:+33667237822" className="text-2xl font-bold text-green-600 hover:text-green-700 transition-colors mb-2 block">
-                +33 6 67 23 78 22
+              <a href="tel:+33554543466" className="text-2xl font-bold text-green-600 hover:text-green-700 transition-colors mb-2 block">
+                +33 5 54 54 34 66
               </a>
               <p className="text-slate-600 text-sm font-medium">
                 Service 24h/24 - 7j/7

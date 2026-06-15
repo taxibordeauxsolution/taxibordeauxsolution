@@ -233,7 +233,7 @@ export async function PUT(req: NextRequest) {
       <div style="font-size:13px;color:#64748b;margin-bottom:4px">Date et heure</div>
       <div style="font-size:15px;color:#1e293b;font-weight:600">${dateStr} à ${heureStr}</div>
     </td></tr></table>
-    <p style="text-align:center;font-size:13px;color:#64748b;margin:0">Questions ? <a href="tel:+33667237822" style="color:#1e293b;font-weight:600;text-decoration:none">+33 6 67 23 78 22</a></p>
+    <p style="text-align:center;font-size:13px;color:#64748b;margin:0">Questions ? <a href="tel:+33554543466" style="color:#1e293b;font-weight:600;text-decoration:none">+33 5 54 54 34 66</a></p>
   </td></tr>
   <tr><td style="padding:12px 32px;border-top:1px solid #f1f5f9;text-align:center;font-size:11px;color:#94a3b8">Taxi Bordeaux Solution · contact@taxibordeauxsolution.fr</td></tr>
 </table></td></tr></table></body></html>`,
@@ -310,7 +310,7 @@ export async function PUT(req: NextRequest) {
     </table>
     <p style="text-align:center;font-size:14px;color:#1e293b;margin:0 0 16px;font-weight:600">Besoin d'une nouvelle course ?</p>
     <p style="text-align:center;font-size:13px;color:#64748b;margin:0">
-      Appelez-nous au <a href="tel:+33667237822" style="color:#1e293b;font-weight:600;text-decoration:none">+33 6 67 23 78 22</a><br>
+      Appelez-nous au <a href="tel:+33554543466" style="color:#1e293b;font-weight:600;text-decoration:none">+33 5 54 54 34 66</a><br>
       ou réservez en ligne sur <a href="https://taxibordeauxsolution.fr" style="color:#1e293b;font-weight:600;text-decoration:none">taxibordeauxsolution.fr</a>
     </p>
   </td></tr>
@@ -368,7 +368,7 @@ export async function PUT(req: NextRequest) {
     </table>
     <p style="text-align:center;font-size:13px;color:#64748b;margin:0">
       Besoin de nous joindre ?<br>
-      <a href="tel:+33667237822" style="color:#1e293b;font-weight:600;text-decoration:none">+33 6 67 23 78 22</a>
+      <a href="tel:+33554543466" style="color:#1e293b;font-weight:600;text-decoration:none">+33 5 54 54 34 66</a>
     </p>
   </td></tr>
   <tr><td style="padding:12px 32px;border-top:1px solid #f1f5f9;text-align:center;font-size:11px;color:#94a3b8">

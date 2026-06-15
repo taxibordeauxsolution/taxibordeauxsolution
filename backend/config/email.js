@@ -320,17 +320,17 @@ export class EmailService {
       fr: {
         greeting: 'Bonjour',
         footer: 'Cordialement,<br>L\'équipe Taxi Bordeaux Solution',
-        contact: 'Besoin d\'aide ? Contactez-nous au +33 6 67 23 78 22'
+        contact: 'Besoin d\'aide ? Contactez-nous au +33 5 54 54 34 66'
       },
       en: {
         greeting: 'Hello',
         footer: 'Best regards,<br>Taxi Bordeaux Solution Team',
-        contact: 'Need help? Contact us at +33 6 67 23 78 22'
+        contact: 'Need help? Contact us at +33 5 54 54 34 66'
       },
       es: {
         greeting: 'Hola',
         footer: 'Saludos,<br>Equipo Taxi Bordeaux Solution',
-        contact: '¿Necesita ayuda? Contáctenos al +33 6 67 23 78 22'
+        contact: '¿Necesita ayuda? Contáctenos al +33 5 54 54 34 66'
       }
     }
 

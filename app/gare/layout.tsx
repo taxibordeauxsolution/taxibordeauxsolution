@@ -45,13 +45,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             name: 'Taxi Bordeaux Gare Saint-Jean',
             description: 'Service taxi professionnel depuis et vers la Gare SNCF Bordeaux Saint-Jean. Prise en charge directe sur le parvis, tarif réglementé.',
             url: 'https://www.taxibordeauxsolution.fr/gare',
-            telephone: '+33667237822',
+            telephone: '+33554543466',
             serviceType: 'Transfert gare',
             areaServed: { '@type': 'TrainStation', name: 'Gare de Bordeaux Saint-Jean' },
             provider: {
               '@type': 'LocalBusiness',
               name: 'Taxi Bordeaux Solution',
-              telephone: '+33667237822',
+              telephone: '+33554543466',
               url: 'https://www.taxibordeauxsolution.fr',
             },
             openingHoursSpecification: {

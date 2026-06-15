@@ -180,7 +180,7 @@ export async function POST(req: NextRequest) {
     </table>
 
     <p style="text-align:center;font-size:13px;color:#64748b;margin:0">
-      <a href="tel:+33667237822" style="color:#475569;text-decoration:none">+33 6 67 23 78 22</a>
+      <a href="tel:+33554543466" style="color:#475569;text-decoration:none">+33 5 54 54 34 66</a>
       &nbsp;&nbsp;·&nbsp;&nbsp;
       <a href="https://wa.me/33667237822?text=${whatsappMsg}" style="color:#475569;text-decoration:none">WhatsApp</a>
     </p>
@@ -209,7 +209,7 @@ Prix estimé : ${prixAffiche}€
 Paiement CB accepté à bord
 
 Réserver en ligne : https://www.taxibordeauxsolution.fr/#reservation
-Appeler : +33 6 67 23 78 22
+Appeler : +33 5 54 54 34 66
 WhatsApp : https://wa.me/33667237822`
 
     // ── Email alerte Yassine ──

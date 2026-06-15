@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useState } from 'react'
 import { IdentificationCard, FloppyDisk } from '@phosphor-icons/react'
@@ -15,7 +15,7 @@ interface FormState {
 const DEFAULTS: FormState = {
   nomEntreprise:      'Taxi Bordeaux Solution',
   adresse:            'Sainte-Eulalie, 33560',
-  telephone:          '+33 6 67 23 78 22',
+  telephone:          '+33 5 54 54 34 66',
   emailFacturation:   'contact@taxibordeauxsolution.fr',
   siret:              '987 573 128 00012',
   numeroTva:          '',

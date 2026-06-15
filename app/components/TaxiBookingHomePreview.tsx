@@ -913,7 +913,7 @@ const TaxiBookingHomePreview = () => {
 
   const handleBookingChange = (field: keyof BookingData, value: any) => {
     if (field === 'departureDate' && configPrix.joursOff.includes(value)) {
-      setJourOffError('Nous sommes indisponibles ce jour-là. Merci de choisir une autre date ou de nous appeler au 06 67 23 78 22.')
+      setJourOffError('Nous sommes indisponibles ce jour-là. Merci de choisir une autre date ou de nous appeler au 05 54 54 34 66.')
       return
     }
     if (field === 'departureDate') setJourOffError('')
@@ -999,7 +999,7 @@ const TaxiBookingHomePreview = () => {
           "Votre réservation a été confirmée",
           "Un chauffeur sera assigné avant l'heure de prise en charge",
           "Vous recevrez un email avec les détails du véhicule",
-          "Pour toute modification, appelez le +33 6 67 23 78 22"
+          "Pour toute modification, appelez le +33 5 54 54 34 66"
         ]
       }
 
@@ -1021,7 +1021,7 @@ const TaxiBookingHomePreview = () => {
       }
 
       if (!resaSaved) {
-        setError("Erreur de sauvegarde de votre réservation. Merci d'appeler le +33 6 67 23 78 22 pour confirmer.")
+        setError("Erreur de sauvegarde de votre réservation. Merci d'appeler le +33 5 54 54 34 66 pour confirmer.")
         setLoading(false)
         return
       }
@@ -1497,7 +1497,7 @@ const TaxiBookingHomePreview = () => {
       })
 
       if (!res.ok) {
-        setError('Impossible d\'enregistrer votre demande. Veuillez réessayer ou appeler le +33 6 67 23 78 22.')
+        setError('Impossible d\'enregistrer votre demande. Veuillez réessayer ou appeler le +33 5 54 54 34 66.')
         setLoading(false)
         return
       }

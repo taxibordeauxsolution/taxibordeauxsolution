@@ -30,7 +30,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <p className="font-semibold text-gray-900">Téléphone</p>
-                      <a href="tel:+33667237822" className="text-blue-600 font-medium">+33 6 67 23 78 22</a>
+                      <a href="tel:+33554543466" className="text-blue-600 font-medium">+33 5 54 54 34 66</a>
                       <p className="text-sm text-gray-500 mt-0.5">Service 24h/24 - 7j/7</p>
                     </div>
                   </div>
@@ -62,8 +62,8 @@ export default function Contact() {
               <div className="bg-green-600 rounded-2xl p-6 text-white">
                 <p className="font-bold text-lg mb-1">Réservation urgente ?</p>
                 <p className="text-green-100 text-sm mb-4">Appelez-nous directement pour une prise en charge immédiate.</p>
-                <a href="tel:+33667237822" className="inline-block bg-white text-green-600 font-bold px-5 py-2.5 rounded-xl hover:bg-green-50 transition-colors">
-                  +33 6 67 23 78 22
+                <a href="tel:+33554543466" className="inline-block bg-white text-green-600 font-bold px-5 py-2.5 rounded-xl hover:bg-green-50 transition-colors">
+                  +33 5 54 54 34 66
                 </a>
               </div>
             </div>

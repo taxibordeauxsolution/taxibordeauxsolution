@@ -95,7 +95,7 @@ export default function RootLayout({
               "name": "Taxi Bordeaux Solution",
               "description": "Service taxi professionnel à Bordeaux 24h/24. Transferts aéroport Mérignac, gare Saint-Jean, toute la métropole bordelaise. Tarifs réglementés Préfecture de Gironde.",
               "url": "https://www.taxibordeauxsolution.fr",
-              "telephone": "+33667237822",
+              "telephone": "+33554543466",
               "email": "contact@taxibordeauxsolution.fr",
               "address": {
                 "@type": "PostalAddress",

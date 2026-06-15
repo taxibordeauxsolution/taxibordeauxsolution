@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
                 </div>
                 <h3>📞 Contact</h3>
                 <p>
-                    <strong>Téléphone :</strong> +33 6 67 23 78 22<br>
+                    <strong>Téléphone :</strong> +33 5 54 54 34 66<br>
                     <strong>Email :</strong> contact@taxibordeauxsolution.fr
                 </p>
             </div>
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
                 Disponible 24h/24 - 7j/7</p>
                 <p style="font-size: 0.8em; color: #666; margin-top: 15px;">
                     Cet email de confirmation a été envoyé automatiquement.
-                    Pour toute question, contactez-nous au +33 6 67 23 78 22.
+                    Pour toute question, contactez-nous au +33 5 54 54 34 66.
                 </p>
             </div>
         </div>

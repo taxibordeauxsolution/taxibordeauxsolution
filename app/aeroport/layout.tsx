@@ -45,13 +45,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             name: 'Taxi Bordeaux Aéroport Mérignac',
             description: 'Service taxi professionnel depuis et vers l\'aéroport Bordeaux-Mérignac. Station officielle Hall A, suivi des vols, tarif réglementé.',
             url: 'https://www.taxibordeauxsolution.fr/aeroport',
-            telephone: '+33667237822',
+            telephone: '+33554543466',
             serviceType: 'Transfert aéroport',
             areaServed: { '@type': 'Airport', name: 'Aéroport de Bordeaux-Mérignac', iataCode: 'BOD' },
             provider: {
               '@type': 'LocalBusiness',
               name: 'Taxi Bordeaux Solution',
-              telephone: '+33667237822',
+              telephone: '+33554543466',
               url: 'https://www.taxibordeauxsolution.fr',
             },
             openingHoursSpecification: {

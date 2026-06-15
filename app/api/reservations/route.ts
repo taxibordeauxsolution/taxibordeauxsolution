@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     if (config?.joursOff?.length) {
       const pickupLocal = new Date(pickupDate).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' })
       if (config.joursOff.includes(pickupLocal)) {
-        return NextResponse.json({ success: false, message: 'Nous sommes indisponibles ce jour-là. Merci de choisir une autre date ou de nous appeler au 06 67 23 78 22.' }, { status: 400 })
+        return NextResponse.json({ success: false, message: 'Nous sommes indisponibles ce jour-là. Merci de choisir une autre date ou de nous appeler au 05 54 54 34 66.' }, { status: 400 })
       }
     }
 

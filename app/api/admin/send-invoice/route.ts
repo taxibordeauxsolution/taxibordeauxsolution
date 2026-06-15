@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       Merci pour votre confiance et à bientôt à bord de nos taxis.
     </p>
     <p style="margin:0;font-size:13px;color:#94a3b8">
-      Contact : <a href="tel:+33667237822" style="color:#1e293b">+33 6 67 23 78 22</a> ·
+      Contact : <a href="tel:+33554543466" style="color:#1e293b">+33 5 54 54 34 66</a> ·
       <a href="mailto:contact@taxibordeauxsolution.fr" style="color:#1e293b">contact@taxibordeauxsolution.fr</a>
     </p>
   </td></tr>

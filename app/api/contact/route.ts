@@ -85,7 +85,7 @@ export async function POST(request: Request) {
 
             <div class="info">
               <p><strong>Besoin urgent ?</strong></p>
-              <p>📞 <a href="tel:+33667237822" style="color:#2563eb">+33 6 67 23 78 22</a> — Disponible 24h/24</p>
+              <p>📞 <a href="tel:+33554543466" style="color:#2563eb">+33 5 54 54 34 66</a> — Disponible 24h/24</p>
               <p>💬 <a href="https://wa.me/33667237822" style="color:#25D366">WhatsApp</a></p>
             </div>
 
@@ -134,7 +134,7 @@ export async function POST(request: Request) {
         to: email,
         subject: `Confirmation — Taxi Bordeaux Solution`,
         html: clientEmailHtml,
-        text: `Bonjour ${firstName},\n\nNous avons bien reçu votre message et vous répondrons dans les plus brefs délais.\n\nBesoin urgent ? Appelez-nous au +33 6 67 23 78 22.\n\nTaxi Bordeaux Solution`
+        text: `Bonjour ${firstName},\n\nNous avons bien reçu votre message et vous répondrons dans les plus brefs délais.\n\nBesoin urgent ? Appelez-nous au +33 5 54 54 34 66.\n\nTaxi Bordeaux Solution`
       });
     }
 

@@ -25,8 +25,8 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const lastScrollY = useRef(0)
 
-  const phoneNumber = "+33667237822"
-  const phoneDisplay = "+33 6 67 23 78 22"
+  const phoneNumber = "+33554543466"
+  const phoneDisplay = "+33 5 54 54 34 66"
 
   const navigation = [
     { name: 'Accueil', href: '/' },

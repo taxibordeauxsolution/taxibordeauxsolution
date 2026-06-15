@@ -8,8 +8,8 @@ import { usePathname } from 'next/navigation'
 export default function Footer() {
   const pathname = usePathname()
   if (pathname?.startsWith('/admin')) return null
-  const phoneNumber = "+33667237822"
-  const phoneDisplay = "+33 6 67 23 78 22"
+  const phoneNumber = "+33554543466"
+  const phoneDisplay = "+33 5 54 54 34 66"
 
   const currentYear = new Date().getFullYear()
 

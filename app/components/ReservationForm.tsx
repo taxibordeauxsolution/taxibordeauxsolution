@@ -106,7 +106,7 @@ export default function ReservationForm({ context = 'general', defaultService }:
       }
     } catch (error) {
       setStatus('error')
-      setStatusMessage(`Une erreur est survenue. Appelez-nous au +33 6 67 23 78 22`)
+      setStatusMessage(`Une erreur est survenue. Appelez-nous au +33 5 54 54 34 66`)
     } finally {
       setIsLoading(false)
     }
@@ -169,11 +169,11 @@ export default function ReservationForm({ context = 'general', defaultService }:
 
                 <div className="flex items-center justify-center gap-6">
                   <a
-                    href="tel:+33667237822"
+                    href="tel:+33554543466"
                     className="flex items-center gap-3 text-white hover:text-green-400 transition-colors font-semibold hover:scale-105"
                   >
                     <Phone size={20} aria-hidden="true" />
-                    <span>+33 6 67 23 78 22</span>
+                    <span>+33 5 54 54 34 66</span>
                   </a>
                   <span className="text-slate-500" aria-hidden="true">|</span>
                   <span className="text-slate-400">Appel immédiat</span>

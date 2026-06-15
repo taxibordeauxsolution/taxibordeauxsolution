@@ -45,7 +45,7 @@ export default function ContactForm() {
       }
     } catch (error) {
       setStatus('error')
-      setStatusMessage(`Une erreur est survenue. Appelez-nous directement au +33 6 67 23 78 22`)
+      setStatusMessage(`Une erreur est survenue. Appelez-nous directement au +33 5 54 54 34 66`)
     } finally {
       setIsLoading(false)
     }

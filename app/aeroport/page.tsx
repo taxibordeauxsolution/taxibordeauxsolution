@@ -58,11 +58,11 @@ export default function TaxiAeroport() {
           <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto mb-16">
             <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
               <a
-                href="tel:+33667237822"
+                href="tel:+33554543466"
                 className="group bg-green-600 hover:bg-green-700 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all duration-300 shadow-xl hover:shadow-green-500/25 hover:scale-105 flex items-center justify-center gap-3"
               >
                 <Phone size={24} />
-                <span>+33 6 67 23 78 22</span>
+                <span>+33 5 54 54 34 66</span>
               </a>
             </div>
 
@@ -309,11 +309,11 @@ export default function TaxiAeroport() {
                 Appelez ou réservez en ligne — indiquez votre n° de vol ou de train pour une prise en charge parfaitement synchronisée.
               </p>
               <a
-                href="tel:+33667237822"
+                href="tel:+33554543466"
                 className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 <Phone size={20} />
-                +33 6 67 23 78 22
+                +33 5 54 54 34 66
               </a>
             </div>
           </div>
@@ -459,7 +459,7 @@ export default function TaxiAeroport() {
           </div>
 
           <div className="text-center mt-10">
-            <a href="tel:+33667237822" className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg hover:shadow-xl">
+            <a href="tel:+33554543466" className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg hover:shadow-xl">
               <Phone size={22} />
               Appeler maintenant
             </a>
@@ -482,7 +482,7 @@ export default function TaxiAeroport() {
 
             <div className="border border-gray-200 bg-white rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-2">Comment réserver un taxi Bordeaux aéroport à l&apos;avance ?</h3>
-              <p className="text-gray-600">Appelez le <strong>+33 6 67 23 78 22</strong> ou utilisez le formulaire de réservation en ligne. Indiquez votre numéro de vol — votre chauffeur suivra les horaires en temps réel et s&apos;adaptera à tout retard.</p>
+              <p className="text-gray-600">Appelez le <strong>+33 5 54 54 34 66</strong> ou utilisez le formulaire de réservation en ligne. Indiquez votre numéro de vol — votre chauffeur suivra les horaires en temps réel et s&apos;adaptera à tout retard.</p>
             </div>
 
             <div className="border border-gray-200 bg-white rounded-2xl p-6">
@@ -497,7 +497,7 @@ export default function TaxiAeroport() {
 
             <div className="border border-gray-200 bg-white rounded-2xl p-6">
               <h3 className="font-bold text-gray-900 mb-2">Où se trouve la station taxi à l&apos;aéroport de Bordeaux-Mérignac ?</h3>
-              <p className="text-gray-600">La station taxi officielle est située au niveau extérieur du <strong>Hall A</strong>, en sortie des arrivées. Elle est signalisée. Vous pouvez aussi appeler le <strong>+33 6 67 23 78 22</strong> pour une prise en charge immédiate.</p>
+              <p className="text-gray-600">La station taxi officielle est située au niveau extérieur du <strong>Hall A</strong>, en sortie des arrivées. Elle est signalisée. Vous pouvez aussi appeler le <strong>+33 5 54 54 34 66</strong> pour une prise en charge immédiate.</p>
             </div>
           </div>
         </div>
@@ -526,11 +526,11 @@ export default function TaxiAeroport() {
           </p>
 
           <a
-            href="tel:+33667237822"
+            href="tel:+33554543466"
             className="group bg-white text-green-600 px-12 py-6 rounded-2xl font-bold text-2xl hover:bg-gray-100 transition-all duration-300 shadow-2xl hover:scale-105 inline-flex items-center gap-3"
           >
             <Phone size={28} />
-            <span>+33 6 67 23 78 22</span>
+            <span>+33 5 54 54 34 66</span>
           </a>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12 text-blue-100 text-sm">

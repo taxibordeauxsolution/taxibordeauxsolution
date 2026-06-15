@@ -1,4 +1,4 @@
-﻿'use client'
+'use client'
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import {
@@ -410,7 +410,7 @@ export default function AdminReservations() {
       const profil = profilJson.data || {}
       const factNom               = profil.nomEntreprise     || 'Taxi Bordeaux Solution'
       const factAdresse           = profil.adresse            || 'Sainte-Eulalie, 33560'
-      const factTel               = profil.telephone          || '+33 6 67 23 78 22'
+      const factTel               = profil.telephone          || '+33 5 54 54 34 66'
       const factEmail             = profil.emailFacturation   || 'contact@taxibordeauxsolution.fr'
       const factSiret             = profil.siret              || '987 573 128 00012'
       const factNumeroTva         = profil.numeroTva          || ''
