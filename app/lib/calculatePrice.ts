@@ -29,6 +29,8 @@ export interface PriceConfig {
   tarifJourMajoreSeuilKm: number
   tarifJourMajorePrixKm: number
   affichagePrixUnique: boolean
+  marcheLenteActive: boolean
+  tauxMarcheLente: number
 }
 
 export interface ForfaitData {
@@ -47,6 +49,9 @@ export interface PriceResult {
   isNight: boolean
   isHoliday: boolean
   isSunday: boolean
+  marcheLenteCost: number
+  priceBeforeDegressif: number  // 0 si non appliqué
+  priceBeforeRemise: number     // 0 si non appliqué
 }
 
 function isPublicHoliday(date: Date): boolean {
@@ -99,6 +104,7 @@ export function computePrice(
   fromCoords: {lat:number,lng:number} | null,
   toCoords: {lat:number,lng:number} | null,
   tollCost = 0,
+  durationInTraffic = 0,
 ): PriceResult {
   const nightStartMin = parseHM(config.heureDebutNuit, 19*60)
   const nightEndMin   = parseHM(config.heureFinNuit, 7*60)
@@ -111,15 +117,26 @@ export function computePrice(
     isSunday   = pickupDate.getDay() === 0
   }
 
+  const marcheLenteCost = (config.marcheLenteActive && durationInTraffic > 0)
+    ? Math.round(Math.max(0, durationInTraffic - duration) / 60 * config.tauxMarcheLente * 100) / 100
+    : 0
+
   const DAY_RATE   = config.tarifKmJour
   const NIGHT_RATE = config.tarifKmNuit
+
+  let degressifApplique = false
+  let distanceFareNormal = 0
 
   const calcFareNuit = (dist: number): number => {
     const rate = NIGHT_RATE
     const mA = config.tarifNuitMajoreActive, sM = config.tarifNuitMajoreSeuilKm, pM = config.tarifNuitMajorePrixKm
     const dA = config.tarifNuitDegressifActive, sD = config.tarifNuitDegressifSeuilKm, pD = config.tarifNuitDegressifPrixKm
     if (mA && dist <= sM) return dist * pM
-    if (dA && dist > sD) return config.tarifNuitDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
+    if (dA && dist > sD) {
+      degressifApplique = true
+      distanceFareNormal = dist * rate
+      return config.tarifNuitDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
+    }
     return dist * rate
   }
 
@@ -128,7 +145,11 @@ export function computePrice(
     const mA = config.tarifJourMajoreActive, sM = config.tarifJourMajoreSeuilKm, pM = config.tarifJourMajorePrixKm
     const dA = config.tarifJourDegressifActive, sD = config.tarifJourDegressifSeuilKm, pD = config.tarifJourDegressifPrixKm
     if (mA && dist <= sM) return dist * pM
-    if (dA && dist > sD) return config.tarifJourDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
+    if (dA && dist > sD) {
+      degressifApplique = true
+      distanceFareNormal = dist * rate
+      return config.tarifJourDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
+    }
     return dist * rate
   }
 
@@ -147,9 +168,16 @@ export function computePrice(
   }
 
   const approachFees = (config.suppApprocheActive && distance >= config.suppApprocheSeuilKm) ? 0 : config.fraisApproche
-  let finalPrice = Math.max(Math.round((config.priseEnCharge + distanceFare + approachFees + tollCost) * 100) / 100, config.courseMini)
+  let finalPrice = Math.max(Math.round((config.priseEnCharge + distanceFare + approachFees + tollCost + marcheLenteCost) * 100) / 100, config.courseMini)
 
-  // Vérification forfaits (prioritaire sur remise)
+  // Prix sans dégressif (pour affichage barré)
+  let priceBeforeDegressif = 0
+  if (degressifApplique) {
+    const normalFare = Math.max(Math.round((config.priseEnCharge + distanceFareNormal + approachFees + tollCost + marcheLenteCost) * 100) / 100, config.courseMini)
+    if (normalFare > finalPrice) priceBeforeDegressif = normalFare
+  }
+
+  // Forfaits
   let isForfait = false
   for (const f of forfaits) {
     if (!f.actif) continue
@@ -162,12 +190,14 @@ export function computePrice(
     }
   }
 
-  // Remise courses longues (jamais sur forfait)
+  // Remise courses longues
+  let priceBeforeRemise = 0
   if (config.remiseActive && !isForfait && distance >= config.remiseSeuilKm) {
+    priceBeforeRemise = finalPrice
     finalPrice = Math.round(finalPrice * (1 - config.remisePourcentage / 100) * 100) / 100
   }
 
-  // Tariff type précis (Mixte si le trajet traverse la frontière jour/nuit)
+  // Tariff type
   let tariffType = 'Jour'
   if (isHoliday) tariffType = 'Férié'
   else if (isSunday) tariffType = 'Dimanche'
@@ -181,12 +211,11 @@ export function computePrice(
     else                                 tariffType = 'Mixte'
   } else if (isNight) tariffType = 'Nuit'
 
-  // Fourchette (identique au booking public)
   const fourchette = isForfait || config.affichagePrixUnique
     ? null
     : finalPrice <= config.courseMini
       ? { de: config.courseMiniDe || 0, a: config.courseMini }
       : { de: Math.round((finalPrice - config.fraisApproche) * 100) / 100, a: finalPrice }
 
-  return { totalPrice: finalPrice, fourchette, tariffType, isForfait, isNight, isHoliday, isSunday }
+  return { totalPrice: finalPrice, fourchette, tariffType, isForfait, isNight, isHoliday, isSunday, marcheLenteCost, priceBeforeDegressif, priceBeforeRemise }
 }

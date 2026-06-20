@@ -31,6 +31,7 @@ export interface TripData {
   toCoords: Coordinates | null;
   distance: number;
   duration: number;
+  durationInTraffic?: number;
   price: number;
   priceDetails: Partial<PriceDetails>;
   routeInfo: RouteInfo | null;

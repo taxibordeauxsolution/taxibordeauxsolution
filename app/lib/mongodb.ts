@@ -63,6 +63,8 @@ const ConfigPrixSchema = new mongoose.Schema({
   captureLeadActive:  { type: Boolean, default: true },
   affichagePrixUnique: { type: Boolean, default: false },
   joursOff:           { type: [String], default: [] },
+  marcheLenteActive:  { type: Boolean, default: false },
+  tauxMarcheLente:    { type: Number, default: 41.84 },
 }, { timestamps: true })
 
 export const ConfigPrix =

@@ -40,6 +40,8 @@ export default function AdminPrix() {
     captureLeadActive: true,
     affichagePrixUnique: false,
     joursOff: [] as string[],
+    marcheLenteActive: false,
+    tauxMarcheLente: 41.84,
   })
   const [newJourOff, setNewJourOff] = useState('')
   const [loading, setLoading] = useState(true)
@@ -547,6 +549,45 @@ export default function AdminPrix() {
           </div>
         </div>
         {!prix.suppApprocheActive && <p className="text-gray-600 dark:text-slate-400 text-sm">Activez pour supprimer les frais d{"'"}approche ({prix.fraisApproche}€) sur les longues distances.</p>}
+      </div>
+
+      {/* Marche lente / Attente bouchons */}
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
+        <div className="flex items-center justify-between border-b border-gray-200 dark:border-slate-700 pb-3">
+          <div>
+            <h2 className="font-bold text-gray-800 dark:text-slate-200 text-base sm:text-lg">Marche lente / Attente bouchons</h2>
+            <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">Tarif horaire appliqué au temps estimé en bouchon (via trafic Google)</p>
+          </div>
+          <button
+            type="button"
+            role="switch" aria-checked={prix.marcheLenteActive} aria-label="Marche lente"
+            onClick={() => setPrix(prev => ({ ...prev, marcheLenteActive: !prev.marcheLenteActive }))}
+            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
+              prix.marcheLenteActive ? 'bg-green-500' : 'bg-gray-300 dark:bg-slate-600'
+            }`}
+          >
+            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+              prix.marcheLenteActive ? 'translate-x-6' : 'translate-x-1'
+            }`} />
+          </button>
+        </div>
+
+        <div className={`overflow-hidden transition-all duration-300 ${prix.marcheLenteActive ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="max-w-xs">
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Tarif attente</label>
+            <div className="flex items-center gap-2">
+              <input type="number" step="0.01" min="0"
+                value={prix.tauxMarcheLente}
+                onChange={e => setNum('tauxMarcheLente', e.target.value)}
+                className="flex-1 border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 font-medium text-gray-900" />
+              <span className="text-gray-500 dark:text-slate-400 text-sm w-12">€/h</span>
+            </div>
+            <p className="text-xs text-gray-600 dark:text-slate-400 mt-2">
+              Appliqué uniquement au temps de retard lié au trafic estimé par Google Maps au moment de la simulation.
+            </p>
+          </div>
+        </div>
+        {!prix.marcheLenteActive && <p className="text-gray-600 dark:text-slate-400 text-sm">Désactivé — le temps d{"'"}attente en bouchon n{"'"}est pas pris en compte dans l{"'"}estimation.</p>}
       </div>
 
       {/* Mode itinéraire */}

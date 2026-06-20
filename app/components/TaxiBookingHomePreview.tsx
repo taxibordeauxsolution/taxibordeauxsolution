@@ -3,8 +3,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { MapPin, Clock, Users, Euro, Calendar, Phone, Mail, Car, Navigation, CheckCircle, AlertCircle, Globe, Route, Loader2, Crosshair } from 'lucide-react'
 import type { TripData, BookingData, ReservationData } from '../../types/booking'
-import { calculateDistanceFare, isNightMinutes, parseHM } from '@/app/lib/pricing'
+import { isNightMinutes, parseHM } from '@/app/lib/pricing'
+import { computePrice } from '@/app/lib/calculatePrice'
 import EmailCaptureForm from './EmailCaptureForm'
+
+const TAXI_PHONE = '+33 5 54 54 34 66'
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
 
@@ -115,6 +118,8 @@ const TaxiBookingHomePreview = () => {
     captureLeadActive: true,
     affichagePrixUnique: false,
     joursOff: [] as string[],
+    marcheLenteActive: false,
+    tauxMarcheLente: 41.84,
   })
   const [directionsService, setDirectionsService] = useState<any>(null)
   const [error, setError] = useState('')
@@ -140,6 +145,7 @@ const TaxiBookingHomePreview = () => {
     serviceAreaValidation: { valid: true }
   })
   const [tollCost, setTollCost] = useState(0)
+  const [marcheLenteCost, setMarcheLenteCost] = useState(0)
   const [prixAvantRemise, setPrixAvantRemise] = useState(0)
   const [prixSansDegressif, setPrixSansDegressif] = useState(0)
   const [nbVehicules, setNbVehicules] = useState(1)
@@ -173,6 +179,7 @@ const TaxiBookingHomePreview = () => {
   const moduleRef = useRef<HTMLDivElement>(null)
   const mapsLoadedRef = useRef(false)
   const estimationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const calculateRouteTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Dictionnaire de traductions complet
   const translations = {
@@ -261,6 +268,9 @@ const TaxiBookingHomePreview = () => {
       tariffHoliday: "Férié",
       tariffSunday: "Dimanche",
       bookNowBtn: "Réserver maintenant",
+      nextStep1: "Votre réservation a bien été enregistrée",
+      nextStep2: "Vous recevrez un email de confirmation avec les détails",
+      nextStep3: "Pour toute modification, appelez le",
     },
     en: {
       title: "Taxi Bordeaux Solution",
@@ -347,6 +357,9 @@ const TaxiBookingHomePreview = () => {
       tariffHoliday: "Holiday",
       tariffSunday: "Sunday",
       bookNowBtn: "Book now",
+      nextStep1: "Your booking has been confirmed",
+      nextStep2: "You will receive a confirmation email with the details",
+      nextStep3: "For any changes, call",
     },
     es: {
       title: "Taxi Bordeaux Solution",
@@ -433,6 +446,9 @@ const TaxiBookingHomePreview = () => {
       tariffHoliday: "Festivo",
       tariffSunday: "Domingo",
       bookNowBtn: "Reservar ahora",
+      nextStep1: "Su reserva ha sido confirmada",
+      nextStep2: "Recibirá un email de confirmación con los detalles",
+      nextStep3: "Para cualquier cambio, llame al",
     }
   }
 
@@ -548,10 +564,11 @@ const TaxiBookingHomePreview = () => {
     })
   }, [initializeMaps])
 
-  // Cleanup du debounce estimation à l'unmount
+  // Cleanup des debounces à l'unmount
   useEffect(() => {
     return () => {
       if (estimationTimerRef.current) clearTimeout(estimationTimerRef.current)
+      if (calculateRouteTimerRef.current) clearTimeout(calculateRouteTimerRef.current)
     }
   }, [])
 
@@ -621,6 +638,8 @@ const TaxiBookingHomePreview = () => {
   const calculateRoute = useCallback(() => {
     if (!directionsService || !tripData.fromCoords || !tripData.toCoords) return
 
+    if (calculateRouteTimerRef.current) clearTimeout(calculateRouteTimerRef.current)
+    calculateRouteTimerRef.current = setTimeout(() => {
     setLoading(true)
     setError('')
 
@@ -639,22 +658,34 @@ const TaxiBookingHomePreview = () => {
       unitSystem: (window as any).google.maps.UnitSystem.METRIC,
       provideRouteAlternatives: true,
       region: 'FR',
+      drivingOptions: {
+        departureTime: (() => {
+          if (bookingData.departureDate && bookingData.departureTime) {
+            const d = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
+            if (!isNaN(d.getTime()) && d > new Date()) return d
+          }
+          return new Date()
+        })(),
+        trafficModel: 'bestguess',
+      },
     }, (result: any, status: string) => {
       setLoading(false)
 
       if (status === 'OK' && result.routes[0]) {
-        // Prendre la route avec le plus de km parmi les alternatives
-        const longestRoute = result.routes.reduce((best: any, r: any) =>
-          (r.legs[0]?.distance?.value || 0) > (best.legs[0]?.distance?.value || 0) ? r : best
+        // Prendre la route la plus rapide parmi les alternatives
+        const fastestRoute = result.routes.reduce((best: any, r: any) =>
+          (r.legs[0]?.duration?.value || Infinity) < (best.legs[0]?.duration?.value || Infinity) ? r : best
         , result.routes[0])
-        const route = longestRoute.legs[0]
+        const route = fastestRoute.legs[0]
         const distance = (route.distance?.value || 0) / 1000
         const duration = (route.duration?.value || 0) / 60
+        const durationInTraffic = (route.duration_in_traffic?.value || 0) / 60
 
         setTripData(prev => ({
           ...prev,
           distance,
           duration,
+          durationInTraffic: durationInTraffic > 0 ? durationInTraffic : undefined,
           routeInfo: null,
           serviceAreaValidation: { valid: true },
         }))
@@ -672,7 +703,8 @@ const TaxiBookingHomePreview = () => {
         setError("Impossible de calculer l'itinéraire")
       }
     })
-  }, [directionsService, tripData.fromCoords, tripData.toCoords, bookingData.departureTime, configPrix.itineraireJour, configPrix.itineraireNuit, configPrix.heureDebutNuit, configPrix.heureFinNuit])
+    }, 500)
+  }, [directionsService, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, configPrix.itineraireJour, configPrix.itineraireNuit, configPrix.heureDebutNuit, configPrix.heureFinNuit])
 
   // Calcul automatique dès que les adresses sont disponibles
   useEffect(() => {
@@ -685,217 +717,86 @@ const TaxiBookingHomePreview = () => {
   useEffect(() => {
     if (tripData.distance <= 0 || tripData.duration <= 0) return
 
-    let departureDate: Date | null = null
-    let isNight = false
-    let isHoliday = false
-    let isSunday = false
-
-    // Heures de nuit dynamiques depuis la config admin (fallback 19h-7h)
-    const nightStartMin = parseHM(configPrix.heureDebutNuit, 19 * 60)
-    const nightEndMin = parseHM(configPrix.heureFinNuit, 7 * 60)
-
+    let pickupDate: Date | null = null
     if (bookingData.departureDate && bookingData.departureTime) {
       const d = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
-      if (!isNaN(d.getTime())) {
-        departureDate = d
-        const currentMin = d.getHours() * 60 + d.getMinutes()
-        isNight = isNightMinutes(currentMin, nightStartMin, nightEndMin)
-        isHoliday = isPublicHoliday(d)
-        isSunday = d.getDay() === 0
-      }
+      if (!isNaN(d.getTime())) pickupDate = d
     }
 
-    const priseEnCharge = configPrix.priseEnCharge
-    const DAY_RATE  = configPrix.tarifKmJour
-    const NIGHT_RATE = configPrix.tarifKmNuit
+    const result = computePrice(
+      tripData.distance,
+      tripData.duration,
+      pickupDate,
+      configPrix as any,
+      forfaits,
+      tripData.fromCoords,
+      tripData.toCoords,
+      tollCost,
+      tripData.durationInTraffic || 0,
+    )
 
-    const calcFareNuit = (dist: number): number => {
-      const rate = NIGHT_RATE
-      const mA = configPrix.tarifNuitMajoreActive, sM = configPrix.tarifNuitMajoreSeuilKm, pM = configPrix.tarifNuitMajorePrixKm
-      const dA = configPrix.tarifNuitDegressifActive, sD = configPrix.tarifNuitDegressifSeuilKm, pD = configPrix.tarifNuitDegressifPrixKm
-      if (mA && dist <= sM) return dist * pM
-      if (dA && dist > sD) return configPrix.tarifNuitDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
-      return dist * rate
-    }
-    const calcFareJour = (dist: number): number => {
-      const rate = DAY_RATE
-      const mA = configPrix.tarifJourMajoreActive, sM = configPrix.tarifJourMajoreSeuilKm, pM = configPrix.tarifJourMajorePrixKm
-      const dA = configPrix.tarifJourDegressifActive, sD = configPrix.tarifJourDegressifSeuilKm, pD = configPrix.tarifJourDegressifPrixKm
-      if (mA && dist <= sM) return dist * pM
-      if (dA && dist > sD) return configPrix.tarifJourDegressifMode === 'retroactif' ? dist * pD : sD * rate + (dist - sD) * pD
-      return dist * rate
-    }
-    const hasNuitSpecial = configPrix.tarifNuitMajoreActive || configPrix.tarifNuitDegressifActive
-    const hasJourSpecial = configPrix.tarifJourMajoreActive || configPrix.tarifJourDegressifActive
-    const useNuitDegressif = configPrix.tarifNuitDegressifActive && tripData.distance > configPrix.tarifNuitDegressifSeuilKm
-    const useJourDegressif = configPrix.tarifJourDegressifActive && tripData.distance > configPrix.tarifJourDegressifSeuilKm
-
-    let distanceFare: number
-    let degressifApplique = false
-    let tarifNormalSansDegressif = 0
-    if (isHoliday || isSunday) {
-      distanceFare = calcFareNuit(tripData.distance)
-      if (useNuitDegressif) { degressifApplique = true; tarifNormalSansDegressif = tripData.distance * NIGHT_RATE }
-    } else if (departureDate) {
-      if (hasNuitSpecial && isNight) {
-        distanceFare = calcFareNuit(tripData.distance)
-        if (useNuitDegressif) { degressifApplique = true; tarifNormalSansDegressif = tripData.distance * NIGHT_RATE }
-      } else if (hasJourSpecial && !isNight) {
-        distanceFare = calcFareJour(tripData.distance)
-        if (useJourDegressif) { degressifApplique = true; tarifNormalSansDegressif = tripData.distance * DAY_RATE }
-      } else {
-        distanceFare = calculateDistanceFare(departureDate, tripData.duration, tripData.distance, DAY_RATE, NIGHT_RATE, configPrix.heureDebutNuit, configPrix.heureFinNuit)
-      }
-    } else {
-      distanceFare = calcFareJour(tripData.distance)
-      if (useJourDegressif) { degressifApplique = true; tarifNormalSansDegressif = tripData.distance * DAY_RATE }
-    }
-
-    const basePrice = priseEnCharge + distanceFare
-    const approachFees = (configPrix.suppApprocheActive && tripData.distance >= configPrix.suppApprocheSeuilKm) ? 0 : configPrix.fraisApproche
-    let finalPrice = Math.max(Math.round((basePrice + approachFees + tollCost) * 100) / 100, configPrix.courseMini)
-
-    let prixNormalSansDegressif = 0
-    if (degressifApplique) {
-      const basePriceNormal = priseEnCharge + tarifNormalSansDegressif
-      prixNormalSansDegressif = Math.max(Math.round((basePriceNormal + approachFees + tollCost) * 100) / 100, configPrix.courseMini)
-    }
-
-    // ── Vérification forfaits (chargés depuis l'API) ─────────────────────
-    const distM = (a: {lat: number, lng: number}, b: {lat: number, lng: number}) => {
-      const R = 6371000
-      const dLat = (b.lat - a.lat) * Math.PI / 180
-      const dLng = (b.lng - a.lng) * Math.PI / 180
-      const x = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * Math.PI / 180) * Math.cos(b.lat * Math.PI / 180) * Math.sin(dLng / 2) ** 2
-      return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x))
-    }
-
-    // Ray casting : point dans polygone
-    const pointInPolygon = (pt: {lat: number, lng: number}, poly: {lat: number, lng: number}[]) => {
-      let inside = false
-      for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-        const xi = poly[i].lng, yi = poly[i].lat
-        const xj = poly[j].lng, yj = poly[j].lat
-        if (((yi > pt.lat) !== (yj > pt.lat)) && (pt.lng < ((xj - xi) * (pt.lat - yi)) / (yj - yi) + xi)) {
-          inside = !inside
-        }
-      }
-      return inside
-    }
-
-    const coordInZone = (coords: {lat: number, lng: number} | null, point: any) => {
-      if (!coords) return false
-      if (point.zone && point.zone.length > 2) return pointInPolygon(coords, point.zone)
-      if (point.lat && point.lng) return distM(coords, { lat: point.lat, lng: point.lng }) <= 500
-      return false
-    }
-
-    let isForfait = false
-    for (const f of forfaits) {
-      if (!f.actif) continue
-      const matchAB = coordInZone(tripData.fromCoords, f.pointA) && coordInZone(tripData.toCoords, f.pointB)
-      const matchBA = coordInZone(tripData.fromCoords, f.pointB) && coordInZone(tripData.toCoords, f.pointA)
-      if (matchAB || matchBA) {
-        finalPrice = (isNight || isHoliday || isSunday) ? f.prixNuit : f.prixJour
-        isForfait = true
-        break
-      }
-    }
-
-    // Remise courses longues
-    let remiseAppliquee = false
-    let prixSansRemise = finalPrice
-    if (configPrix.remiseActive && !isForfait && tripData.distance >= configPrix.remiseSeuilKm) {
-      prixSansRemise = finalPrice
-      finalPrice = Math.round(finalPrice * (1 - configPrix.remisePourcentage / 100) * 100) / 100
-      remiseAppliquee = true
-    }
-    // Multi-véhicules et supplément bagages
     const nbVehiculesCurrent = Math.ceil(bookingData.passengers / 4)
-    const luggageCapacityCurrent = nbVehiculesCurrent * 4
-    const luggageSupplementCurrent = Math.max(0, bookingData.luggage - luggageCapacityCurrent) * 2
+    const luggageSupplementCurrent = Math.max(0, bookingData.luggage - nbVehiculesCurrent * 4) * 2
+
     setNbVehicules(nbVehiculesCurrent)
     setLuggageSupplement(luggageSupplementCurrent)
+    setMarcheLenteCost(result.marcheLenteCost)
 
-    setPrixAvantRemise(remiseAppliquee ? Math.round(prixSansRemise * nbVehiculesCurrent * 100) / 100 : 0)
-    if (degressifApplique && !isForfait && prixNormalSansDegressif > finalPrice) {
-      let prixBarreDegressif = prixNormalSansDegressif
-      if (remiseAppliquee) {
-        prixBarreDegressif = Math.round(prixNormalSansDegressif * (1 - configPrix.remisePourcentage / 100) * 100) / 100
-      }
-      setPrixSansDegressif(Math.round(prixBarreDegressif * nbVehiculesCurrent * 100) / 100)
+    // Prix barré dégressif (remise appliquée dessus si les deux sont actifs)
+    if (result.priceBeforeDegressif > 0 && !result.isForfait) {
+      const prixBarre = result.priceBeforeRemise > 0
+        ? Math.round(result.priceBeforeDegressif * (1 - configPrix.remisePourcentage / 100) * 100) / 100
+        : result.priceBeforeDegressif
+      setPrixSansDegressif(Math.round(prixBarre * nbVehiculesCurrent * 100) / 100)
     } else {
       setPrixSansDegressif(0)
     }
-    finalPrice = Math.round((finalPrice * nbVehiculesCurrent + luggageSupplementCurrent) * 100) / 100
+    setPrixAvantRemise(result.priceBeforeRemise > 0 ? Math.round(result.priceBeforeRemise * nbVehiculesCurrent * 100) / 100 : 0)
 
-    let tariffType = 'Jour'
-    if (isHoliday) tariffType = 'Férié'
-    else if (isSunday) tariffType = 'Dimanche'
-    else if (departureDate && tripData.duration > 0) {
-      const depMin = departureDate.getHours() * 60 + departureDate.getMinutes()
-      const arrMin = depMin + tripData.duration
-      const depIsNight = isNightMinutes(depMin, nightStartMin, nightEndMin)
-      const arrIsNight = isNightMinutes(arrMin, nightStartMin, nightEndMin)
-      if (depIsNight && arrIsNight) tariffType = 'Nuit'
-      else if (!depIsNight && !arrIsNight) tariffType = 'Jour'
-      else tariffType = 'Mixte'
-    } else if (isNight) tariffType = 'Nuit'
+    const approachFees = (configPrix.suppApprocheActive && tripData.distance >= configPrix.suppApprocheSeuilKm) ? 0 : configPrix.fraisApproche
+    const finalPrice = Math.round((result.totalPrice * nbVehiculesCurrent + luggageSupplementCurrent) * 100) / 100
 
     setTripData(prev => ({
       ...prev,
       price: finalPrice,
       priceDetails: {
-        basePrice: Math.round(basePrice * 100) / 100,
+        basePrice: Math.round((result.totalPrice - approachFees - tollCost - result.marcheLenteCost) * 100) / 100,
         approachFees,
-        tollCost,
         totalPrice: finalPrice,
-        tariffType,
-        priseEnCharge,
-        isNight,
-        isHoliday,
-        isSunday,
-        isForfait
+        tariffType: result.tariffType,
+        priseEnCharge: configPrix.priseEnCharge,
+        isNight: result.isNight,
+        isHoliday: result.isHoliday,
+        isSunday: result.isSunday,
+        isForfait: result.isForfait,
       }
     }))
 
-    const fourchetteTrack = isForfait || configPrix.affichagePrixUnique || nbVehiculesCurrent > 1
+    const fourchetteTrack = result.isForfait || configPrix.affichagePrixUnique || nbVehiculesCurrent > 1
       ? null
-      : finalPrice <= configPrix.courseMini
-        ? { de: configPrix.courseMiniDe || 0, a: configPrix.courseMini || 0 }
-        : { de: (finalPrice || 0) - (configPrix.fraisApproche || 0), a: finalPrice || 0 }
+      : result.fourchette
 
-    // Debounce 800ms : on attend que l'utilisateur arrête de tweaker avant d'envoyer
-    // l'estimation à GA + l'API (évite la pollution funnel et les appels en cascade)
     if (estimationTimerRef.current) clearTimeout(estimationTimerRef.current)
-    const snapshot = { from: tripData.from, to: tripData.to, distance: tripData.distance, duration: tripData.duration, finalPrice, tariffType, isForfait, departureDateIso: departureDate ? departureDate.toISOString() : null, fourchetteTrack }
+    const snapshot = { from: tripData.from, to: tripData.to, distance: tripData.distance, duration: tripData.duration, finalPrice, tariffType: result.tariffType, isForfait: result.isForfait, departureDateIso: pickupDate ? pickupDate.toISOString() : null, fourchetteTrack }
     estimationTimerRef.current = setTimeout(() => {
       if (typeof window !== 'undefined' && (window as any).gtag) {
         (window as any).gtag('event', 'estimation_prix', {
           event_category: 'estimation',
-          from: snapshot.from,
-          to: snapshot.to,
-          distance: snapshot.distance,
-          duration: snapshot.duration,
-          price: snapshot.finalPrice,
-          tariff_type: snapshot.tariffType,
+          from: snapshot.from, to: snapshot.to,
+          distance: snapshot.distance, duration: snapshot.duration,
+          price: snapshot.finalPrice, tariff_type: snapshot.tariffType,
           is_forfait: snapshot.isForfait,
         })
       }
-
       const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
       fetch('/api/estimations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          from: snapshot.from,
-          to: snapshot.to,
-          distance: snapshot.distance,
-          duration: snapshot.duration,
-          price: snapshot.finalPrice,
-          fourchette: snapshot.fourchetteTrack,
-          tariffType: snapshot.tariffType,
-          isForfait: snapshot.isForfait,
+          from: snapshot.from, to: snapshot.to,
+          distance: snapshot.distance, duration: snapshot.duration,
+          price: snapshot.finalPrice, fourchette: snapshot.fourchetteTrack,
+          tariffType: snapshot.tariffType, isForfait: snapshot.isForfait,
           departureDate: snapshot.departureDateIso,
           utmSource: urlParams?.get('utm_source') || null,
           utmMedium: urlParams?.get('utm_medium') || null,
@@ -906,14 +807,14 @@ const TaxiBookingHomePreview = () => {
         .then(d => { if (d.id) setEstimationId(d.id) })
         .catch(() => {})
     }, 800)
-  }, [tripData.distance, tripData.duration, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, bookingData.passengers, bookingData.luggage, forfaits, configPrix, tollCost])
+  }, [tripData.distance, tripData.duration, tripData.durationInTraffic, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, bookingData.passengers, bookingData.luggage, forfaits, configPrix, tollCost])
 
 
   const [jourOffError, setJourOffError] = useState('')
 
   const handleBookingChange = (field: keyof BookingData, value: any) => {
     if (field === 'departureDate' && configPrix.joursOff.includes(value)) {
-      setJourOffError('Nous sommes indisponibles ce jour-là. Merci de choisir une autre date ou de nous appeler au 05 54 54 34 66.')
+      setJourOffError(`Nous sommes indisponibles ce jour-là. Merci de choisir une autre date ou de nous appeler au ${TAXI_PHONE}.`)
       return
     }
     if (field === 'departureDate') setJourOffError('')
@@ -996,10 +897,9 @@ const TaxiBookingHomePreview = () => {
           minute: '2-digit'
         }),
         next_steps: [
-          "Votre réservation a été confirmée",
-          "Un chauffeur sera assigné avant l'heure de prise en charge",
-          "Vous recevrez un email avec les détails du véhicule",
-          "Pour toute modification, appelez le +33 5 54 54 34 66"
+          t('nextStep1'),
+          t('nextStep2'),
+          `${t('nextStep3')} ${TAXI_PHONE}`,
         ]
       }
 
@@ -1021,7 +921,7 @@ const TaxiBookingHomePreview = () => {
       }
 
       if (!resaSaved) {
-        setError("Erreur de sauvegarde de votre réservation. Merci d'appeler le +33 5 54 54 34 66 pour confirmer.")
+        setError(`Erreur de sauvegarde de votre réservation. Merci d'appeler le ${TAXI_PHONE} pour confirmer.`)
         setLoading(false)
         return
       }
@@ -1153,7 +1053,7 @@ const TaxiBookingHomePreview = () => {
                 onFocus={() => { loadGoogleMapsLazy().catch(() => {}) }}
                 onClick={() => {
                   if (tripData.from) {
-                    setTripData(prev => ({ ...prev, from: '', fromCoords: null, distance: 0, duration: 0, price: 0 }))
+                    setTripData(prev => ({ ...prev, from: '', fromCoords: null, distance: 0, duration: 0, durationInTraffic: undefined, price: 0 }))
                     if (fromInputRef.current) fromInputRef.current.value = ''
                   }
                 }}
@@ -1182,7 +1082,7 @@ const TaxiBookingHomePreview = () => {
                   }
                   const onError = () => {
                     setLoading(false)
-                    alert('Impossible de vous localiser. Vérifiez que la localisation est activée dans les paramètres de votre navigateur.')
+                    setError('Impossible de vous localiser. Vérifiez que la localisation est activée dans les paramètres de votre navigateur.')
                   }
                   navigator.geolocation.getCurrentPosition(onSuccess, onError, { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 })
                 }}
@@ -1209,7 +1109,7 @@ const TaxiBookingHomePreview = () => {
               onFocus={loadGoogleMapsLazy}
               onClick={() => {
                 if (tripData.to) {
-                  setTripData(prev => ({ ...prev, to: '', toCoords: null, distance: 0, duration: 0, price: 0 }))
+                  setTripData(prev => ({ ...prev, to: '', toCoords: null, distance: 0, duration: 0, durationInTraffic: undefined, price: 0 }))
                   if (toInputRef.current) toInputRef.current.value = ''
                 }
               }}
@@ -1272,7 +1172,12 @@ const TaxiBookingHomePreview = () => {
                 </div>
                 <div className="text-center">
                   <span className="text-gray-900 sm:text-gray-600 block">{t('duration')}</span>
-                  <div className="font-semibold text-lg text-gray-900">{Math.round(tripData.duration || 0)} min</div>
+                  <div className="font-semibold text-lg text-gray-900">
+                    {Math.round(tripData.durationInTraffic || tripData.duration || 0)} min
+                    {tripData.durationInTraffic && tripData.durationInTraffic > (tripData.duration || 0) + 2 && (
+                      <span className="block text-xs text-orange-500 font-normal">avec trafic</span>
+                    )}
+                  </div>
                 </div>
                 <div className="text-center">
                   <span className="text-gray-900 sm:text-gray-600 block">{t('passengers')}</span>
@@ -1299,7 +1204,12 @@ const TaxiBookingHomePreview = () => {
                 </div>
                 <div className="text-center">
                   <span className="text-gray-900 sm:text-gray-600 block">{t('duration')}</span>
-                  <div className="font-semibold text-lg text-gray-900">{Math.round(tripData.duration || 0)} min</div>
+                  <div className="font-semibold text-lg text-gray-900">
+                    {Math.round(tripData.durationInTraffic || tripData.duration || 0)} min
+                    {tripData.durationInTraffic && tripData.durationInTraffic > (tripData.duration || 0) + 2 && (
+                      <span className="block text-xs text-orange-500 font-normal">avec trafic</span>
+                    )}
+                  </div>
                 </div>
                 <div className="text-center">
                   <span className="text-gray-900 sm:text-gray-600 block">{t('passengers')}</span>
@@ -1364,6 +1274,11 @@ const TaxiBookingHomePreview = () => {
                 {tollCost > 0 && !tripData.priceDetails?.isForfait && (
                   <div className="text-center text-slate-500 text-xs mt-2">
                     Dont {tollCost.toFixed(2)}€ de péage inclus
+                  </div>
+                )}
+                {marcheLenteCost > 0 && !tripData.priceDetails?.isForfait && (
+                  <div className="text-center text-orange-600 text-xs mt-1">
+                    Dont ~{marcheLenteCost.toFixed(2)}€ attente trafic estimé
                   </div>
                 )}
                 {nbVehicules > 1 && (
@@ -1497,7 +1412,7 @@ const TaxiBookingHomePreview = () => {
       })
 
       if (!res.ok) {
-        setError('Impossible d\'enregistrer votre demande. Veuillez réessayer ou appeler le +33 5 54 54 34 66.')
+        setError(`Impossible d'enregistrer votre demande. Veuillez réessayer ou appeler le ${TAXI_PHONE}.`)
         setLoading(false)
         return
       }
@@ -2066,6 +1981,7 @@ const TaxiBookingHomePreview = () => {
             serviceAreaValidation: { valid: true }
           })
           setTollCost(0)
+          setMarcheLenteCost(0)
           const { date: nd, time: nt } = localNow()
           setBookingData({
             passengers: 1,
