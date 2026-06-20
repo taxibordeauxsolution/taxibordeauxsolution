@@ -31,7 +31,7 @@ export async function PUT(req: NextRequest) {
       'tarifNuitDegressifSeuilKm', 'tarifNuitDegressifPrixKm',
       'tarifJourDegressifSeuilKm', 'tarifJourDegressifPrixKm',
       'tarifNuitMajoreSeuilKm', 'tarifNuitMajorePrixKm',
-      'tarifJourMajoreSeuilKm', 'tarifJourMajorePrixKm', 'seuilKmCaptureLead']
+      'tarifJourMajoreSeuilKm', 'tarifJourMajorePrixKm', 'seuilKmCaptureLead', 'tauxMarcheLente']
     for (const f of numFields) {
       if (body[f] !== undefined && body[f] !== '') {
         const v = Number(body[f])
@@ -51,7 +51,8 @@ export async function PUT(req: NextRequest) {
       'tarifJourDegressifActive', 'tarifJourDegressifSeuilKm', 'tarifJourDegressifPrixKm', 'tarifJourDegressifMode',
       'tarifNuitMajoreActive', 'tarifNuitMajoreSeuilKm', 'tarifNuitMajorePrixKm',
       'tarifJourMajoreActive', 'tarifJourMajoreSeuilKm', 'tarifJourMajorePrixKm',
-      'seuilKmCaptureLead', 'captureLeadActive', 'affichagePrixUnique']
+      'seuilKmCaptureLead', 'captureLeadActive', 'affichagePrixUnique',
+      'marcheLenteActive', 'tauxMarcheLente']
     const update: Record<string, any> = {}
     for (const f of fields) {
       if (body[f] !== undefined && body[f] !== '') update[f] = body[f]
