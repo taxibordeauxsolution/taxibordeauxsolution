@@ -42,6 +42,9 @@ export default function AdminPrix() {
     joursOff: [] as string[],
     marcheLenteActive: false,
     tauxMarcheLente: 41.84,
+    reservationFermeeActive: false,
+    heureOuvertureResa: '07:00',
+    heureFermetureResa: '23:00',
   })
   const [newJourOff, setNewJourOff] = useState('')
   const [loading, setLoading] = useState(true)
@@ -806,6 +809,61 @@ export default function AdminPrix() {
         ) : (
           <p className="text-gray-600 dark:text-slate-400 text-sm">Aucun jour bloqué — les clients peuvent réserver tous les jours.</p>
         )}
+      </div>
+
+      {/* Horaires réservation en ligne */}
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-300 dark:border-slate-700 p-4 sm:p-8 space-y-5 sm:space-y-6">
+        <div className="flex items-center justify-between border-b border-gray-200 dark:border-slate-700 pb-3">
+          <div>
+            <h2 className="font-bold text-gray-800 dark:text-slate-200 text-base sm:text-lg">Horaires réservation en ligne</h2>
+            <p className="text-xs text-gray-500 dark:text-slate-400 mt-0.5">
+              En dehors de ces heures, le formulaire affiche un écran &quot;Appelez-nous&quot; à la place de la confirmation.
+            </p>
+          </div>
+          <button
+            type="button"
+            role="switch" aria-checked={prix.reservationFermeeActive} aria-label="Fermer réservation en ligne"
+            title={prix.reservationFermeeActive ? 'Réservation fermée manuellement — cliquer pour rouvrir' : 'Réservation ouverte — cliquer pour fermer manuellement'}
+            onClick={() => setPrix(prev => ({ ...prev, reservationFermeeActive: !prev.reservationFermeeActive }))}
+            className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors shrink-0 ${
+              prix.reservationFermeeActive ? 'bg-red-500' : 'bg-green-500'
+            }`}
+          >
+            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+              prix.reservationFermeeActive ? 'translate-x-6' : 'translate-x-1'
+            }`} />
+          </button>
+        </div>
+
+        {prix.reservationFermeeActive && (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 rounded-xl px-4 py-3 text-sm text-red-700 dark:text-red-300 font-medium">
+            Réservation en ligne fermée manuellement — les clients voient l&apos;écran &quot;Appelez-nous&quot;.
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-4 max-w-sm">
+          <div>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Ouverture</label>
+            <input
+              type="time"
+              value={prix.heureOuvertureResa}
+              onChange={e => setStr('heureOuvertureResa', e.target.value)}
+              className="w-full border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 py-2 focus:border-blue-500 focus:outline-none font-medium text-gray-900"
+            />
+          </div>
+          <div>
+            <label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-slate-400 mb-1">Fermeture</label>
+            <input
+              type="time"
+              value={prix.heureFermetureResa}
+              onChange={e => setStr('heureFermetureResa', e.target.value)}
+              className="w-full border-2 border-gray-300 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 rounded-xl px-3 py-2 focus:border-blue-500 focus:outline-none font-medium text-gray-900"
+            />
+          </div>
+        </div>
+        <p className="text-xs text-gray-500 dark:text-slate-400">
+          Actuellement : réservation en ligne ouverte de <strong>{prix.heureOuvertureResa}</strong> à <strong>{prix.heureFermetureResa}</strong>. En dehors, le client est invité à appeler.
+        </p>
       </div>
 
       <div className="flex justify-end">

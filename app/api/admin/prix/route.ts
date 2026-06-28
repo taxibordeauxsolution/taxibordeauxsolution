@@ -52,7 +52,8 @@ export async function PUT(req: NextRequest) {
       'tarifNuitMajoreActive', 'tarifNuitMajoreSeuilKm', 'tarifNuitMajorePrixKm',
       'tarifJourMajoreActive', 'tarifJourMajoreSeuilKm', 'tarifJourMajorePrixKm',
       'seuilKmCaptureLead', 'captureLeadActive', 'affichagePrixUnique',
-      'marcheLenteActive', 'tauxMarcheLente']
+      'marcheLenteActive', 'tauxMarcheLente',
+      'reservationFermeeActive', 'heureOuvertureResa', 'heureFermetureResa']
     const update: Record<string, any> = {}
     for (const f of fields) {
       if (body[f] !== undefined && body[f] !== '') update[f] = body[f]

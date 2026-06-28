@@ -120,6 +120,9 @@ const TaxiBookingHomePreview = () => {
     joursOff: [] as string[],
     marcheLenteActive: false,
     tauxMarcheLente: 41.84,
+    reservationFermeeActive: false,
+    heureOuvertureResa: '07:00',
+    heureFermetureResa: '23:00',
   })
   const [directionsService, setDirectionsService] = useState<any>(null)
   const [error, setError] = useState('')
@@ -1711,7 +1714,48 @@ const TaxiBookingHomePreview = () => {
   )
 
   // Interface étape 3 - Coordonnées client
-  const renderStep3 = () => (
+  const renderStep3 = () => {
+    // Vérifie si les réservations en ligne sont fermées à cette heure
+    const resaClosed = (() => {
+      if (configPrix.reservationFermeeActive) return true
+      const now = new Date()
+      const cur = now.getHours() * 60 + now.getMinutes()
+      const open = parseHM(configPrix.heureOuvertureResa, 7 * 60)
+      const close = parseHM(configPrix.heureFermetureResa, 23 * 60)
+      return close > open ? (cur < open || cur >= close) : (cur >= close && cur < open)
+    })()
+
+    if (resaClosed) return (
+      <div className="text-center space-y-6 py-4">
+        <div className="mx-auto w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center">
+          <span className="text-4xl">🌙</span>
+        </div>
+        <div>
+          <h3 className="text-2xl font-bold text-gray-800 mb-2">Réservation en ligne fermée</h3>
+          <p className="text-gray-500 text-sm">
+            {configPrix.reservationFermeeActive
+              ? 'Les réservations en ligne sont temporairement indisponibles.'
+              : `La réservation en ligne est disponible de ${configPrix.heureOuvertureResa} à ${configPrix.heureFermetureResa}.`}
+          </p>
+        </div>
+        <a
+          href={`tel:${TAXI_PHONE}`}
+          className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white font-bold px-8 py-4 rounded-2xl text-lg transition-colors shadow-lg"
+        >
+          <Phone className="w-6 h-6" />
+          Appelez-nous
+        </a>
+        <p className="text-gray-400 text-xs">{TAXI_PHONE}</p>
+        <button
+          onClick={() => { setStep(frozenCapture ? 3 : 2); setTimeout(scrollToModule, 150) }}
+          className="text-sm text-gray-500 hover:text-gray-700 underline"
+        >
+          Retour
+        </button>
+      </div>
+    )
+
+    return (
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h3 className="text-2xl font-bold text-gray-800 mb-2">{t('step3Title')}</h3>
@@ -1919,7 +1963,8 @@ const TaxiBookingHomePreview = () => {
         </button>
       </div>
     </div>
-  )
+    )
+  }
 
   // Interface étape 4 - Confirmation
   const renderStep4 = () => (

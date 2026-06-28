@@ -65,6 +65,9 @@ const ConfigPrixSchema = new mongoose.Schema({
   joursOff:           { type: [String], default: [] },
   marcheLenteActive:  { type: Boolean, default: false },
   tauxMarcheLente:    { type: Number, default: 41.84 },
+  reservationFermeeActive: { type: Boolean, default: false },
+  heureOuvertureResa:      { type: String, default: '07:00' },
+  heureFermetureResa:      { type: String, default: '23:00' },
 }, { timestamps: true })
 
 export const ConfigPrix =
