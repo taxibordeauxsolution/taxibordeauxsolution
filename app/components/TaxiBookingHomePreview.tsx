@@ -504,9 +504,12 @@ const TaxiBookingHomePreview = () => {
         const isAirport = place.types?.includes('airport') ||
           (place.name || '').toLowerCase().includes('aéroport') ||
           (place.name || '').toLowerCase().includes('aeroport')
-        const displayLabel = isAirport
+        const rawLabel = isAirport
           ? (place.name || place.formatted_address || '')
           : (place.formatted_address || place.name || '')
+        const displayLabel = /bordeaux/i.test(rawLabel) && isAirport
+          ? 'Aéroport de Bordeaux-Mérignac'
+          : rawLabel
         if (place.geometry) {
           setTripData(prev => ({
             ...prev,
@@ -1277,11 +1280,6 @@ const TaxiBookingHomePreview = () => {
                 {tollCost > 0 && !tripData.priceDetails?.isForfait && (
                   <div className="text-center text-slate-500 text-xs mt-2">
                     Dont {tollCost.toFixed(2)}€ de péage inclus
-                  </div>
-                )}
-                {marcheLenteCost > 0 && !tripData.priceDetails?.isForfait && (
-                  <div className="text-center text-orange-600 text-xs mt-1">
-                    Dont ~{marcheLenteCost.toFixed(2)}€ attente trafic estimé
                   </div>
                 )}
                 {nbVehicules > 1 && (

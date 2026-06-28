@@ -43,7 +43,7 @@ function addrStr(v: string | { address?: string }): string {
   return typeof v === 'string' ? v : v?.address || ''
 }
 
-const wazeUrl = (addr: string) => `waze://ul?q=${encodeURIComponent(addr)}&navigate=yes`
+const wazeUrl = (addr: string) => `https://waze.com/ul?q=${encodeURIComponent(addr)}&navigate=yes`
 
 // Construit l'URL du formulaire de réservation client avec les infos pré-remplies
 function buildBookingUrl(r: Reservation, retour = false): string {
