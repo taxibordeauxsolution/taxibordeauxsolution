@@ -158,6 +158,14 @@ const TaxiBookingHomePreview = () => {
   const [leadReservationId, setLeadReservationId] = useState('')
   const [frozenCapture, setFrozenCapture] = useState(false)
 
+  // Aller-retour
+  const [isAllerRetour, setIsAllerRetour] = useState(false)
+  const [retourDate, setRetourDate] = useState('')
+  const [retourTime, setRetourTime] = useState('')
+  const [retourPrice, setRetourPrice] = useState(0)
+  const [retourPriceDetails, setRetourPriceDetails] = useState<any>({})
+  const [retourReservationId, setRetourReservationId] = useState('')
+
   const [bookingData, setBookingData] = useState<BookingData>(() => {
     const { date, time } = localNow()
     return {
@@ -815,6 +823,23 @@ const TaxiBookingHomePreview = () => {
     }, 800)
   }, [tripData.distance, tripData.duration, tripData.durationInTraffic, tripData.fromCoords, tripData.toCoords, bookingData.departureDate, bookingData.departureTime, bookingData.passengers, bookingData.luggage, forfaits, configPrix, tollCost])
 
+  // Calcul prix du retour à chaque changement de date/heure retour
+  useEffect(() => {
+    if (!isAllerRetour || !retourDate || !retourTime || tripData.distance === 0) {
+      setRetourPrice(0); return
+    }
+    const pickupDate = new Date(retourDate + 'T' + retourTime)
+    if (isNaN(pickupDate.getTime())) { setRetourPrice(0); return }
+    const result = computePrice(
+      tripData.distance, tripData.duration, pickupDate, configPrix as any,
+      forfaits, tripData.toCoords, tripData.fromCoords, tollCost, 0
+    )
+    const nbV = Math.ceil(bookingData.passengers / 4)
+    const lugSup = Math.max(0, bookingData.luggage - nbV * 4) * 2
+    const fp = Math.round((result.totalPrice * nbV + lugSup) * 100) / 100
+    setRetourPrice(fp)
+    setRetourPriceDetails({ tariffType: result.tariffType, isForfait: result.isForfait, totalPrice: fp })
+  }, [isAllerRetour, retourDate, retourTime, tripData.distance, tripData.duration, tripData.toCoords, tripData.fromCoords, bookingData.passengers, bookingData.luggage, forfaits, configPrix, tollCost])
 
   const [jourOffError, setJourOffError] = useState('')
 
@@ -954,10 +979,45 @@ const TaxiBookingHomePreview = () => {
         console.warn('Erreur envoi email:', emailError)
       }
 
+      // Réservation retour (si aller-retour)
+      let savedRetourId = ''
+      if (isAllerRetour && retourDate && retourTime && retourPrice > 0) {
+        try {
+          const rand2 = Math.random().toString(36).substring(2, 6).toUpperCase()
+          savedRetourId = 'TBS-' + (Date.now() + 1).toString().slice(-6) + '-' + rand2
+          const retourPickup = new Date(retourDate + 'T' + retourTime)
+          await fetch('/api/reservations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              reservationId: savedRetourId,
+              customer: reservationData.customer,
+              trip: { from: { address: tripData.to }, to: { address: tripData.from }, distance: tripData.distance },
+              pricing: { totalPrice: retourPrice, priceDetails: retourPriceDetails },
+              bookingDetails: { passengers: bookingData.passengers, luggage: bookingData.luggage, notes: `Retour de ${reservationId}`, nbVehicules, luggageSupplement },
+              pickupDate: retourPickup.toISOString(),
+              notes: `Retour de ${reservationId}`,
+            })
+          })
+          setRetourReservationId(savedRetourId)
+          fetch('/api/notify-telegram', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'reservation', payload: {
+              ...reservationData,
+              reservationId: savedRetourId,
+              trip: { from: { address: tripData.to }, to: { address: tripData.from }, distance: tripData.distance },
+              pricing: { totalPrice: retourPrice },
+              estimatedPickupTime: retourPickup.toLocaleString('fr-FR', { timeZone: 'Europe/Paris', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+            }})
+          }).catch(() => {})
+        } catch { /* retour non bloquant */ }
+      }
+
       setReservation({...reservationData, emailSent})
       const successMessage = bookingData.customerEmail && emailSent
-        ? `Réservation confirmée ! Numéro : ${reservationId}. Email de confirmation envoyé.`
-        : `Réservation confirmée ! Numéro : ${reservationId}`
+        ? `Réservation confirmée ! Numéro : ${reservationId}${savedRetourId ? ` + retour ${savedRetourId}` : ''}. Email de confirmation envoyé.`
+        : `Réservation confirmée ! Numéro : ${reservationId}${savedRetourId ? ` + retour ${savedRetourId}` : ''}`
       setSuccess(successMessage)
       setStep(totalSteps)
 
@@ -1125,6 +1185,54 @@ const TaxiBookingHomePreview = () => {
               required
             />
           </div>
+
+          {/* Toggle aller-retour */}
+          {tripData.toCoords && (
+            <div className="border border-blue-200 bg-blue-50 rounded-lg p-3">
+              <label className="flex items-center gap-3 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={isAllerRetour}
+                  onChange={e => {
+                    setIsAllerRetour(e.target.checked)
+                    if (!e.target.checked) { setRetourDate(''); setRetourTime('') }
+                  }}
+                  className="w-4 h-4 accent-blue-600"
+                />
+                <span className="text-sm font-medium text-blue-800">Ajouter un retour</span>
+                {isAllerRetour && retourPrice > 0 && (
+                  <span className="ml-auto text-blue-700 font-semibold text-sm">+{retourPrice.toFixed(2)}€</span>
+                )}
+              </label>
+              {isAllerRetour && (
+                <div className="grid grid-cols-2 gap-2 mt-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      <Calendar className="inline w-3 h-3 mr-1" />Date retour
+                    </label>
+                    <input
+                      type="date"
+                      value={retourDate}
+                      onChange={e => setRetourDate(e.target.value)}
+                      min={bookingData.departureDate || localNow().date}
+                      className="w-full p-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 text-gray-900"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      <Clock className="inline w-3 h-3 mr-1" />Heure retour
+                    </label>
+                    <input
+                      type="time"
+                      value={retourTime}
+                      onChange={e => setRetourTime(e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 text-gray-900"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Passagers et bagages - sliders */}
           <div className="grid grid-cols-2 gap-4 sm:gap-6 pb-3">
@@ -1313,7 +1421,8 @@ const TaxiBookingHomePreview = () => {
 
               const allFieldsValid = tripData.fromCoords && tripData.toCoords &&
                                     bookingData.departureDate && bookingData.departureTime &&
-                                    bookingData.passengers && tripData.price && !jourOffError
+                                    bookingData.passengers && tripData.price && !jourOffError &&
+                                    (!isAllerRetour || (retourDate && retourTime))
 
               if (allFieldsValid) {
                 const pickupDt = new Date(bookingData.departureDate + 'T' + bookingData.departureTime)
@@ -1677,6 +1786,22 @@ const TaxiBookingHomePreview = () => {
                   </div>
                 )}
               </div>
+              {isAllerRetour && retourPrice > 0 && (
+                <div className="mt-4 border-t border-green-200 pt-3 text-sm">
+                  <div className="flex justify-between text-gray-700 mb-1">
+                    <span>Aller</span>
+                    <span className="font-medium">{(tripData.price || 0).toFixed(2)}€</span>
+                  </div>
+                  <div className="flex justify-between text-gray-700 mb-2">
+                    <span>Retour · {retourDate ? new Date(retourDate + 'T00:00').toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) : ''} {retourTime}</span>
+                    <span className="font-medium">{retourPrice.toFixed(2)}€</span>
+                  </div>
+                  <div className="flex justify-between font-bold text-green-800 border-t border-green-200 pt-2">
+                    <span>Total aller-retour</span>
+                    <span>{((tripData.price || 0) + retourPrice).toFixed(2)}€</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1881,6 +2006,12 @@ const TaxiBookingHomePreview = () => {
                 <span className="font-medium">+{luggageSupplement.toFixed(2)}€</span>
               </div>
             )}
+            {isAllerRetour && retourDate && retourTime && (
+              <div className="flex justify-between text-blue-700 font-medium">
+                <span>Retour</span>
+                <span>{retourDate ? new Date(retourDate + 'T00:00').toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) : ''} {retourTime} · {retourPrice > 0 ? `${retourPrice.toFixed(2)}€` : '...'}</span>
+              </div>
+            )}
             <hr className="my-3" />
             <div className="flex justify-between text-lg font-bold">
               <span>{t('totalPrice')}:</span>
@@ -1915,6 +2046,12 @@ const TaxiBookingHomePreview = () => {
                 )}
               </div>
             </div>
+            {isAllerRetour && retourPrice > 0 && (
+              <div className="flex justify-between text-base font-bold text-blue-800 border-t border-blue-200 pt-2 mt-1">
+                <span>Total aller-retour</span>
+                <span>{((tripData.price || 0) + retourPrice).toFixed(2)}€</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -1974,7 +2111,7 @@ const TaxiBookingHomePreview = () => {
       
       {reservation && (
         <div className="bg-white border border-green-200 rounded-lg p-6 max-w-md mx-auto">
-          <h4 className="font-semibold text-gray-900 mb-4">{t('bookingDetails')}</h4>
+          <h4 className="font-semibold text-gray-900 mb-4">{retourReservationId ? 'Aller — ' : ''}{t('bookingDetails')}</h4>
           <div className="space-y-2 text-sm text-gray-900 text-left">
             <div><strong>{t('reservationNumber')} :</strong> {reservation.reservationId}</div>
             <div><strong>{t('clientLabel')}</strong> {reservation.customer.name}</div>
@@ -1983,6 +2120,18 @@ const TaxiBookingHomePreview = () => {
             <div><strong>{t('priceLabel')}</strong> {reservation.pricing.totalPrice.toFixed(2)}€</div>
             <div><strong>{t('distanceLabel')}</strong> {reservation.trip.distance.toFixed(1)} km</div>
             <div><strong>{t('pickupLabel')}</strong> {reservation.estimatedPickupTime}</div>
+          </div>
+        </div>
+      )}
+
+      {retourReservationId && (
+        <div className="bg-white border border-blue-200 rounded-lg p-6 max-w-md mx-auto">
+          <h4 className="font-semibold text-blue-900 mb-4">Retour — réservé</h4>
+          <div className="space-y-2 text-sm text-gray-900 text-left">
+            <div><strong>N° réservation :</strong> {retourReservationId}</div>
+            <div><strong>Trajet :</strong> {tripData.to?.split(',')[0]} → {tripData.from?.split(',')[0]}</div>
+            <div><strong>Date :</strong> {retourDate ? new Date(retourDate + 'T' + retourTime).toLocaleString('fr-FR', { timeZone: 'Europe/Paris', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''}</div>
+            <div><strong>Prix :</strong> {retourPrice.toFixed(2)}€</div>
           </div>
         </div>
       )}
@@ -2050,6 +2199,11 @@ const TaxiBookingHomePreview = () => {
           setLeadMongoId('')
           setLeadReservationId('')
           setFrozenCapture(false)
+          setIsAllerRetour(false)
+          setRetourDate('')
+          setRetourTime('')
+          setRetourPrice(0)
+          setRetourReservationId('')
         }}
         className="bg-blue-600 text-white py-3 px-8 rounded-lg font-medium hover:bg-blue-700 transition-colors"
       >
