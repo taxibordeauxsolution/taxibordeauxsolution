@@ -15,6 +15,8 @@ export default function Header() {
     if (pathname === '/') {
       const id = window.innerWidth >= 1024 ? 'reservation' : 'reservation-mobile'
       document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    } else if (pathname === '/aeroport' || pathname === '/gare') {
+      document.getElementById('reserver-en-ligne')?.scrollIntoView({ behavior: 'smooth' })
     } else {
       router.push('/booking')
     }
