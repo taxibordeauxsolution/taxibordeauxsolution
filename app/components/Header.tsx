@@ -13,8 +13,8 @@ export default function Header() {
 
   const goToReservation = () => {
     if (pathname === '/') {
-      const el = document.getElementById('reservation') || document.getElementById('reservation-mobile')
-      el?.scrollIntoView({ behavior: 'smooth' })
+      const id = window.innerWidth >= 1024 ? 'reservation' : 'reservation-mobile'
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
     } else {
       router.push('/booking')
     }
