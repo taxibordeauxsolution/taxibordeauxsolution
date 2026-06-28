@@ -68,6 +68,7 @@ function EditModal({ r, token, onClose, onSaved }: {
   const [notes,      setNotes]      = useState(r.notes)
   const [adminNotes, setAdminNotes] = useState(r.adminNotes || '')
   const [notifyClient, setNotifyClient] = useState(false)
+  const [notifySms,    setNotifySms]    = useState(false)
   const [saving, setSaving]         = useState(false)
   const [error,  setError]          = useState('')
 
@@ -88,8 +89,16 @@ function EditModal({ r, token, onClose, onSaved }: {
         }),
       })
       const json = await res.json()
-      if (json.success) onSaved()
-      else setError(json.message || 'Erreur')
+      if (json.success) {
+        if (notifySms) {
+          const d = new Date(date + 'T' + time)
+          const dateStr = d.toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: '2-digit', timeZone: 'Europe/Paris' })
+          const timeStr = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })
+          const msg = `Bonjour ${name.trim().split(' ')[0]}, votre course a été modifiée. Nouveau créneau : le ${dateStr} à ${timeStr}, de ${addrStr(r.trip.from).split(',')[0]} → ${addrStr(r.trip.to).split(',')[0]}. À bientôt ! Taxi Bordeaux Solution +33 5 54 54 34 66`
+          window.open(`sms:${phone.trim()}?body=${encodeURIComponent(msg)}`)
+        }
+        onSaved()
+      } else setError(json.message || 'Erreur')
     } catch { setError('Erreur réseau') }
     setSaving(false)
   }
@@ -136,12 +145,18 @@ function EditModal({ r, token, onClose, onSaved }: {
               <textarea value={adminNotes} onChange={e => setAdminNotes(e.target.value)} rows={2} className="mt-1 w-full px-3 py-2 border border-amber-200 dark:border-amber-800/50 bg-amber-50 dark:bg-amber-900/20 dark:text-amber-100 rounded-lg text-sm focus:border-amber-400 focus:outline-none resize-none" />
             </div>
           </div>
-          {r.customer.email && (
+          <div className="space-y-2">
+            {r.customer.email && (
+              <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-600 dark:text-slate-400">
+                <input type="checkbox" checked={notifyClient} onChange={e => setNotifyClient(e.target.checked)} className="rounded border-slate-300" />
+                Notifier par email ({r.customer.email})
+              </label>
+            )}
             <label className="flex items-center gap-2 cursor-pointer text-sm text-slate-600 dark:text-slate-400">
-              <input type="checkbox" checked={notifyClient} onChange={e => setNotifyClient(e.target.checked)} className="rounded border-slate-300" />
-              Notifier le client par email ({r.customer.email})
+              <input type="checkbox" checked={notifySms} onChange={e => setNotifySms(e.target.checked)} className="rounded border-slate-300" />
+              Notifier par SMS ({phone || r.customer.phone})
             </label>
-          )}
+          </div>
           {error && <p className="text-xs text-red-600 bg-red-50 rounded px-3 py-2">{error}</p>}
         </div>
         <div className="flex justify-end gap-3 p-4 border-t border-slate-300 dark:border-slate-700">
