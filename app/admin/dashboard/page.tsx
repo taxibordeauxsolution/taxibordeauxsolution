@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Taxi, ChartBar, Clock, CheckCircle, HourglassSimple, XCircle, ArrowRight, ArrowClockwise, CalendarBlank, CurrencyEur, MapPin, FunnelSimple, Globe, NavigationArrow, Phone, PhoneCall } from '@phosphor-icons/react'
 import { getToken } from '@/app/admin/lib/token'
 
@@ -38,6 +39,7 @@ interface Estimation {
 }
 
 export default function AdminDashboard() {
+  const router = useRouter()
   const [stats, setStats] = useState<Stats>({
     reservations: { total: 0, en_attente: 0, confirmee: 0, en_route: 0, terminee: 0, annulee: 0 },
     estimations: { total: 0, avgPrice: 0, funnel: { estimations: 0, leads: 0, contactes: 0, convertis: 0, perdus: 0 }, topSources: [] },
@@ -234,7 +236,7 @@ export default function AdminDashboard() {
           </h2>
           <div className="space-y-2">
             {todayResas.map(r => (
-              <div key={r._id} className="bg-white dark:bg-slate-800 rounded-xl p-3 text-sm space-y-2">
+              <div key={r._id} onClick={() => router.push('/admin/reservations')} className="bg-white dark:bg-slate-800 rounded-xl p-3 text-sm space-y-2 cursor-pointer hover:shadow-md transition-all">
                 <div className="flex items-center gap-3">
                   {statusIcon(r.status)}
                   <div className="flex-1 min-w-0">
@@ -247,13 +249,13 @@ export default function AdminDashboard() {
                 {(r.status === 'en_attente' || r.status === 'confirmee' || r.status === 'en_route') && (
                   <div className="flex items-center gap-2 pl-5">
                     {r.status === 'en_attente' && (
-                      <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 rounded-lg text-xs font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/60 transition-colors">Confirmer</button>
+                      <button onClick={e => { e.stopPropagation(); updateResaStatus(r._id, 'confirmee') }} className="px-2.5 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 rounded-lg text-xs font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/60 transition-colors">Confirmer</button>
                     )}
                     {(r.status === 'en_attente' || r.status === 'confirmee') && (
-                      <button onClick={() => updateResaStatus(r._id, 'en_route')} className="px-2.5 py-1 bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400 rounded-lg text-xs font-semibold hover:bg-orange-200 dark:hover:bg-orange-900/60 transition-colors">En route</button>
+                      <button onClick={e => { e.stopPropagation(); updateResaStatus(r._id, 'en_route') }} className="px-2.5 py-1 bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400 rounded-lg text-xs font-semibold hover:bg-orange-200 dark:hover:bg-orange-900/60 transition-colors">En route</button>
                     )}
                     {(r.status === 'en_attente' || r.status === 'confirmee' || r.status === 'en_route') && (
-                      <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-2.5 py-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 rounded-lg text-xs font-semibold hover:bg-green-200 dark:hover:bg-green-900/60 transition-colors">Terminer</button>
+                      <button onClick={e => { e.stopPropagation(); updateResaStatus(r._id, 'terminee') }} className="px-2.5 py-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 rounded-lg text-xs font-semibold hover:bg-green-200 dark:hover:bg-green-900/60 transition-colors">Terminer</button>
                     )}
                   </div>
                 )}
@@ -265,35 +267,35 @@ export default function AdminDashboard() {
 
       {/* Stats principales */}
       <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
+        <Link href="/admin/reservations" className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md transition-all">
           <div className="text-xs text-slate-500 dark:text-slate-400">Réservations</div>
           <div className="text-2xl font-bold text-slate-900 dark:text-white">{stats.reservations.total}</div>
-        </div>
-        <div className="rounded-2xl p-4 shadow-sm border bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800/50">
+        </Link>
+        <Link href="/admin/reservations" className="rounded-2xl p-4 shadow-sm border bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800/50 hover:shadow-md hover:border-yellow-300 dark:hover:border-yellow-700 transition-all">
           <div className="text-xs text-yellow-700 dark:text-yellow-400">En attente</div>
           <div className="text-2xl font-bold text-yellow-700 dark:text-yellow-400">{stats.reservations.en_attente}</div>
-        </div>
-        <div className={`rounded-2xl p-4 shadow-sm border ${stats.reservations.en_route > 0 ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800/50' : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700'}`}>
+        </Link>
+        <Link href="/admin/reservations" className={`rounded-2xl p-4 shadow-sm border hover:shadow-md transition-all ${stats.reservations.en_route > 0 ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800/50 hover:border-orange-300' : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-700'}`}>
           <div className={`text-xs ${stats.reservations.en_route > 0 ? 'text-orange-700 dark:text-orange-400' : 'text-slate-500 dark:text-slate-400'}`}>En route</div>
           <div className={`text-2xl font-bold ${stats.reservations.en_route > 0 ? 'text-orange-700 dark:text-orange-400' : 'text-slate-900 dark:text-white'}`}>{stats.reservations.en_route}</div>
-        </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
+        </Link>
+        <Link href="/admin/estimations" className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md transition-all">
           <div className="text-xs text-slate-500 dark:text-slate-400">Estimations</div>
           <div className="text-2xl font-bold text-slate-900 dark:text-white">{stats.estimations.total}</div>
-        </div>
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700">
+        </Link>
+        <Link href="/admin/estimations" className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-300 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md transition-all">
           <div className="text-xs text-slate-500 dark:text-slate-400">Prix moyen</div>
           <div className="text-2xl font-bold text-green-700 dark:text-green-400">{stats.estimations.avgPrice.toFixed(0)}€</div>
-        </div>
+        </Link>
       </div>
 
       {/* Revenus */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="rounded-2xl p-4 shadow-sm border bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800/50">
+        <Link href="/admin/reservations" className="rounded-2xl p-4 shadow-sm border bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800/50 hover:shadow-md hover:border-green-300 transition-all">
           <div className="text-xs text-green-700 dark:text-green-400">Aujourd'hui</div>
           <div className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400">{stats.revenus.aujourdhui.toFixed(0)}€</div>
-        </div>
-        <div className="rounded-2xl p-4 shadow-sm border bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800/50">
+        </Link>
+        <Link href="/admin/reservations" className="rounded-2xl p-4 shadow-sm border bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800/50 hover:shadow-md hover:border-green-300 transition-all">
           <div className="text-xs text-green-700 dark:text-green-400">Cette semaine</div>
           <div className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400">{stats.revenus.semaine.toFixed(0)}€</div>
           {diffSem !== null && (
@@ -304,8 +306,8 @@ export default function AdminDashboard() {
           {stats.revenus.semainePrecedente > 0 && (
             <div className="text-xs text-slate-500 dark:text-slate-400">{stats.revenus.semainePrecedente.toFixed(0)}€ sem. préc.</div>
           )}
-        </div>
-        <div className="rounded-2xl p-4 shadow-sm border bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800/50">
+        </Link>
+        <Link href="/admin/reservations" className="rounded-2xl p-4 shadow-sm border bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800/50 hover:shadow-md hover:border-green-300 transition-all">
           <div className="text-xs text-green-700 dark:text-green-400">Ce mois</div>
           <div className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400">{stats.revenus.mois.toFixed(0)}€</div>
           {diffMois !== null && (
@@ -316,7 +318,7 @@ export default function AdminDashboard() {
           {stats.revenus.moisPrecedent > 0 && (
             <div className="text-xs text-slate-500 dark:text-slate-400">{stats.revenus.moisPrecedent.toFixed(0)}€ mois préc.</div>
           )}
-        </div>
+        </Link>
       </div>
 
       {/* Funnel de conversion */}
@@ -413,7 +415,7 @@ export default function AdminDashboard() {
         ) : (
           <div className="space-y-2">
             {recentEstimations.map(e => (
-              <div key={e._id} className="flex items-center gap-2 text-sm py-2 border-b border-slate-50 dark:border-slate-700 last:border-0">
+              <Link key={e._id} href="/admin/estimations" className="flex items-center gap-2 text-sm py-2 border-b border-slate-50 dark:border-slate-700 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg px-1 -mx-1 transition-colors">
                 <CurrencyEur size={14} className="text-green-600 dark:text-green-400 shrink-0" />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm text-slate-700 dark:text-slate-300 truncate">
@@ -424,7 +426,7 @@ export default function AdminDashboard() {
                   <div className="font-bold text-green-700 dark:text-green-400">{e.price.toFixed(0)}€</div>
                   <div className="text-xs text-slate-600 dark:text-slate-500">{formatDate(e.createdAt)}</div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
@@ -446,7 +448,7 @@ export default function AdminDashboard() {
         ) : (
           <div className="space-y-2">
             {recentResas.map(r => (
-              <div key={r._id} className="text-sm py-1.5 border-b border-slate-50 dark:border-slate-700 last:border-0 space-y-1">
+              <div key={r._id} onClick={() => router.push('/admin/reservations')} className="text-sm py-1.5 border-b border-slate-50 dark:border-slate-700 last:border-0 space-y-1 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg px-1 -mx-1 transition-colors">
                 <div className="flex items-center gap-2">
                   {statusIcon(r.status)}
                   <div className="flex-1 min-w-0">
@@ -465,9 +467,9 @@ export default function AdminDashboard() {
                 {(r.status === 'en_attente' || r.status === 'confirmee') && (
                   <div className="flex items-center gap-1.5 pl-5">
                     {r.status === 'en_attente' && (
-                      <button onClick={() => updateResaStatus(r._id, 'confirmee')} className="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 rounded text-xs font-semibold hover:bg-blue-200">Conf.</button>
+                      <button onClick={e => { e.stopPropagation(); updateResaStatus(r._id, 'confirmee') }} className="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 rounded text-xs font-semibold hover:bg-blue-200">Conf.</button>
                     )}
-                    <button onClick={() => updateResaStatus(r._id, 'terminee')} className="px-1.5 py-0.5 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 rounded text-xs font-semibold hover:bg-green-200">Term.</button>
+                    <button onClick={e => { e.stopPropagation(); updateResaStatus(r._id, 'terminee') }} className="px-1.5 py-0.5 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 rounded text-xs font-semibold hover:bg-green-200">Term.</button>
                   </div>
                 )}
               </div>
@@ -490,7 +492,7 @@ export default function AdminDashboard() {
           </div>
           <div className="space-y-2">
             {recentLeads.map(r => (
-              <div key={r._id} className="bg-white dark:bg-slate-800 rounded-xl p-3 text-sm flex items-center gap-3">
+              <div key={r._id} onClick={() => router.push('/admin/leads')} className="bg-white dark:bg-slate-800 rounded-xl p-3 text-sm flex items-center gap-3 cursor-pointer hover:shadow-md transition-all">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-semibold text-slate-900 dark:text-white">{r.customer.name}</span>
@@ -508,7 +510,7 @@ export default function AdminDashboard() {
                   <div className="font-bold text-green-700 dark:text-green-400 text-xs">{formatPrix(r)}</div>
                   <div className="text-xs text-slate-600 dark:text-slate-500">{formatDate(r.pickupDate)}</div>
                 </div>
-                <button onClick={() => updateResaStatus(r._id, 'en_attente')}
+                <button onClick={e => { e.stopPropagation(); updateResaStatus(r._id, 'en_attente') }}
                   className="px-2.5 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition-colors shrink-0">
                   Convertir
                 </button>
