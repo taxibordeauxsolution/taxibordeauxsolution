@@ -802,37 +802,35 @@ export default function AdminReservations() {
                       </div>
                     )}
 
-                    {/* SMS Confirmation */}
-                    <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-1"><DeviceMobile size={12} className="text-blue-400" /> Confirmer par SMS</p>
-                      <a
-                        href={`sms:${r.customer.phone}?body=${encodeURIComponent(
-                          `Bonjour ${r.customer.name.split(' ')[0]}, votre taxi est confirmé le ${new Date(r.pickupDate).toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: '2-digit', timeZone: 'Europe/Paris' })} à ${new Date(r.pickupDate).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })}, de ${addrStr(r.trip.from).split(',')[0]} → ${addrStr(r.trip.to).split(',')[0]}. À bientôt ! Taxi Bordeaux Solution +33 5 54 54 34 66`
-                        )}`}
-                        onClick={e => e.stopPropagation()}
-                        className="flex items-center gap-1.5 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors w-fit"
-                      >
-                        <DeviceMobile size={14} /> Envoyer confirmation SMS
-                      </a>
-                    </div>
-
-                    {/* Demander un avis Google */}
-                    <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-1"><Star size={12} weight="fill" className="text-amber-400" /> Demander un avis Google</p>
-                      <div className="flex gap-2">
+                    {/* Communications client */}
+                    <div className="pt-2 border-t border-slate-200 dark:border-slate-700 space-y-2">
+                      <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Communications</p>
+                      <div className="flex flex-wrap gap-2">
+                        <a
+                          href={`sms:${r.customer.phone}?body=${encodeURIComponent(
+                            `Bonjour ${r.customer.name.split(' ')[0]}, votre taxi est confirmé le ${new Date(r.pickupDate).toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: '2-digit', timeZone: 'Europe/Paris' })} à ${new Date(r.pickupDate).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })}, de ${addrStr(r.trip.from).split(',')[0]} → ${addrStr(r.trip.to).split(',')[0]}. À bientôt ! Taxi Bordeaux Solution +33 5 54 54 34 66`
+                          )}`}
+                          onClick={e => e.stopPropagation()}
+                          className="flex items-center gap-1.5 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+                        >
+                          <DeviceMobile size={14} /> Confirmation SMS
+                        </a>
                         <a
                           href={`sms:${r.customer.phone}?body=${encodeURIComponent(`Bonjour ${r.customer.name.split(' ')[0]}, merci d'avoir choisi Taxi Bordeaux Solution ! Si vous êtes satisfait(e), un petit avis Google nous aiderait beaucoup 🙏\nhttps://g.page/r/CSgLIx6QFNEvEBM/review`)}`}
                           onClick={e => e.stopPropagation()}
-                          className="flex items-center gap-1.5 px-3 py-2 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800/50 rounded-lg text-xs font-semibold hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors"
+                          className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors"
                         >
-                          <DeviceMobile size={14} /> SMS
+                          <Star size={14} weight="fill" /> Avis SMS
                         </a>
                         {r.customer.email && (
                           <button
-                            onClick={e => { e.stopPropagation(); sendReviewEmail(r) }}
+                            onClick={e => {
+                              e.stopPropagation()
+                              if (window.confirm(`Envoyer une demande d'avis Google par email à ${r.customer.email} ?`)) sendReviewEmail(r)
+                            }}
                             className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors"
                           >
-                            <Envelope size={14} /> Email
+                            <Envelope size={14} /> Avis Email
                           </button>
                         )}
                       </div>
