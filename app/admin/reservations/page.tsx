@@ -278,6 +278,8 @@ export default function AdminReservations() {
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const searchTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [openSections, setOpenSections] = useState<Set<string>>(new Set())
+  const toggleSection = (key: string) => setOpenSections(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n })
   const [page, setPage] = useState(() => {
     if (typeof window === 'undefined') return 1
     const p = new URLSearchParams(window.location.search).get('page')
@@ -802,41 +804,7 @@ export default function AdminReservations() {
                       </div>
                     )}
 
-                    {/* Communications client */}
-                    <div className="pt-2 border-t border-slate-200 dark:border-slate-700 space-y-2">
-                      <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Communications</p>
-                      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-                        <a
-                          href={`sms:${r.customer.phone}?body=${encodeURIComponent(
-                            `Bonjour ${r.customer.name.split(' ')[0]}, votre taxi est confirmé le ${new Date(r.pickupDate).toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: '2-digit', timeZone: 'Europe/Paris' })} à ${new Date(r.pickupDate).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })}, de ${addrStr(r.trip.from).split(',')[0]} → ${addrStr(r.trip.to).split(',')[0]}. À bientôt ! Taxi Bordeaux Solution +33 5 54 54 34 66`
-                          )}`}
-                          onClick={e => e.stopPropagation()}
-                          className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
-                        >
-                          <DeviceMobile size={14} /> Confirmation SMS
-                        </a>
-                        <a
-                          href={`sms:${r.customer.phone}?body=${encodeURIComponent(`Bonjour ${r.customer.name.split(' ')[0]}, merci d'avoir choisi Taxi Bordeaux Solution ! Si vous êtes satisfait(e), un petit avis Google nous aiderait beaucoup 🙏\nhttps://g.page/r/CSgLIx6QFNEvEBM/review`)}`}
-                          onClick={e => e.stopPropagation()}
-                          className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors"
-                        >
-                          <Star size={14} weight="fill" /> Avis SMS
-                        </a>
-                        {r.customer.email && (
-                          <button
-                            onClick={e => {
-                              e.stopPropagation()
-                              if (window.confirm(`Envoyer une demande d'avis Google par email à ${r.customer.email} ?`)) sendReviewEmail(r)
-                            }}
-                            className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors"
-                          >
-                            <Envelope size={14} /> Avis Email
-                          </button>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Statut */}
+                    {/* Statut — toujours visible */}
                     <div className="pt-2 border-t border-slate-300 dark:border-slate-700">
                       <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide mb-2">Statut</p>
                       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
@@ -877,27 +845,79 @@ export default function AdminReservations() {
                       </div>
                     </div>
 
-                    {/* Course */}
+                    {/* Communications — déroulant */}
                     <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
-                      <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide mb-2">Course</p>
-                      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-                        <a href={buildBookingUrl(r, false)} target="_blank" rel="noopener noreferrer"
-                          className="shrink-0 px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center gap-1.5">
-                          <PlusCircle size={14} /> Nouvelle course
-                        </a>
-                        <a href={buildBookingUrl(r, true)} target="_blank" rel="noopener noreferrer"
-                          className="shrink-0 px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center gap-1.5">
-                          <ArrowsLeftRight size={14} /> Créer retour
-                        </a>
-                        <button onClick={() => setEditModal(r)}
-                          className="shrink-0 px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center gap-1.5">
-                          <PencilSimple size={14} /> Modifier
-                        </button>
-                        <button onClick={() => setHistModal({ name: r.customer.name, phone: r.customer.phone })}
-                          className="shrink-0 px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center gap-1.5">
-                          <UserList size={14} /> Historique
-                        </button>
-                      </div>
+                      <button
+                        onClick={e => { e.stopPropagation(); toggleSection(`${r._id}-comm`) }}
+                        className="flex items-center justify-between w-full text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+                      >
+                        <span className="flex items-center gap-1.5"><DeviceMobile size={13} /> Communications</span>
+                        <CaretDown size={13} className={`transition-transform duration-200 ${openSections.has(`${r._id}-comm`) ? 'rotate-180' : ''}`} />
+                      </button>
+                      {openSections.has(`${r._id}-comm`) && (
+                        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none mt-2">
+                          <a
+                            href={`sms:${r.customer.phone}?body=${encodeURIComponent(
+                              `Bonjour ${r.customer.name.split(' ')[0]}, votre taxi est confirmé le ${new Date(r.pickupDate).toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: '2-digit', timeZone: 'Europe/Paris' })} à ${new Date(r.pickupDate).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })}, de ${addrStr(r.trip.from).split(',')[0]} → ${addrStr(r.trip.to).split(',')[0]}. À bientôt ! Taxi Bordeaux Solution +33 5 54 54 34 66`
+                            )}`}
+                            onClick={e => e.stopPropagation()}
+                            className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg text-xs font-semibold hover:bg-blue-100 transition-colors"
+                          >
+                            <DeviceMobile size={14} /> Confirmation SMS
+                          </a>
+                          <a
+                            href={`sms:${r.customer.phone}?body=${encodeURIComponent(`Bonjour ${r.customer.name.split(' ')[0]}, merci d'avoir choisi Taxi Bordeaux Solution ! Si vous êtes satisfait(e), un petit avis Google nous aiderait beaucoup 🙏\nhttps://g.page/r/CSgLIx6QFNEvEBM/review`)}`}
+                            onClick={e => e.stopPropagation()}
+                            className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-lg text-xs font-semibold hover:bg-amber-100 transition-colors"
+                          >
+                            <Star size={14} weight="fill" /> Avis SMS
+                          </a>
+                          {r.customer.email && (
+                            <button
+                              onClick={e => {
+                                e.stopPropagation()
+                                if (window.confirm(`Envoyer une demande d'avis Google par email à ${r.customer.email} ?`)) sendReviewEmail(r)
+                              }}
+                              className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-lg text-xs font-semibold hover:bg-amber-100 transition-colors"
+                            >
+                              <Envelope size={14} /> Avis Email
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Course — déroulant */}
+                    <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
+                      <button
+                        onClick={e => { e.stopPropagation(); toggleSection(`${r._id}-course`) }}
+                        className="flex items-center justify-between w-full text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+                      >
+                        <span className="flex items-center gap-1.5"><Taxi size={13} /> Course</span>
+                        <CaretDown size={13} className={`transition-transform duration-200 ${openSections.has(`${r._id}-course`) ? 'rotate-180' : ''}`} />
+                      </button>
+                      {openSections.has(`${r._id}-course`) && (
+                        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none mt-2">
+                          <a href={buildBookingUrl(r, false)} target="_blank" rel="noopener noreferrer"
+                            onClick={e => e.stopPropagation()}
+                            className="shrink-0 px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-colors flex items-center gap-1.5">
+                            <PlusCircle size={14} /> Nouvelle course
+                          </a>
+                          <a href={buildBookingUrl(r, true)} target="_blank" rel="noopener noreferrer"
+                            onClick={e => e.stopPropagation()}
+                            className="shrink-0 px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-colors flex items-center gap-1.5">
+                            <ArrowsLeftRight size={14} /> Créer retour
+                          </a>
+                          <button onClick={e => { e.stopPropagation(); setEditModal(r) }}
+                            className="shrink-0 px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-colors flex items-center gap-1.5">
+                            <PencilSimple size={14} /> Modifier
+                          </button>
+                          <button onClick={e => { e.stopPropagation(); setHistModal({ name: r.customer.name, phone: r.customer.phone }) }}
+                            className="shrink-0 px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 transition-colors flex items-center gap-1.5">
+                            <UserList size={14} /> Historique
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
