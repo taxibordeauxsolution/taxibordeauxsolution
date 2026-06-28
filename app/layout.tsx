@@ -223,7 +223,7 @@ export default function RootLayout({
 
       </head>
 
-      <body className={inter.className}>
+      <body className={`${inter.className} pb-16 lg:pb-0`}>
         <Header />
         <main className="min-h-screen">
           {children}

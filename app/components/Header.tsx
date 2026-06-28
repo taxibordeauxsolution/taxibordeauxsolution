@@ -21,7 +21,6 @@ export default function Header() {
   }
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false)
-  const [visible, setVisible] = useState(true)
   const [scrolled, setScrolled] = useState(false)
   const lastScrollY = useRef(0)
 
@@ -43,10 +42,7 @@ export default function Header() {
       const currentY = window.scrollY
       setScrolled(currentY > 20)
       if (currentY > lastScrollY.current && currentY > 80) {
-        setVisible(false)
         setServicesDropdownOpen(false)
-      } else {
-        setVisible(true)
       }
       lastScrollY.current = currentY
     }
@@ -61,10 +57,11 @@ export default function Header() {
   if (isAdmin) return null
 
   return (
+    <>
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        visible ? 'translate-y-0' : '-translate-y-full'
-      } ${scrolled ? 'lg:pt-2 lg:px-8' : 'lg:pt-3 lg:px-12'}`}
+        scrolled ? 'lg:pt-2 lg:px-8' : 'lg:pt-3 lg:px-12'
+      }`}
     >
       <div
         className={`transition-all duration-300 lg:max-w-5xl lg:mx-auto ${
@@ -169,12 +166,6 @@ export default function Header() {
 
             {/* Mobile */}
             <div className="lg:hidden flex items-center gap-2.5">
-              <a
-                href={`tel:${phoneNumber}`}
-                className="bg-green-600 text-white p-2.5 rounded-xl hover:bg-green-700 transition-colors"
-              >
-                <Phone size={20} />
-              </a>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="text-gray-700 hover:text-blue-600 p-2.5 rounded-xl hover:bg-gray-50 transition-colors"
@@ -249,5 +240,26 @@ export default function Header() {
         </div>
       </div>
     </header>
+
+    {/* Barre fixe mobile — toujours visible en bas d'écran */}
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-[0_-4px_16px_rgba(0,0,0,0.08)] pb-[env(safe-area-inset-bottom)]">
+      <div className="grid grid-cols-2 gap-2 px-3 py-2.5">
+        <a
+          href={`tel:${phoneNumber}`}
+          className="flex items-center justify-center gap-2 bg-green-600 text-white font-semibold text-sm py-3 rounded-xl hover:bg-green-700 active:bg-green-800 transition-colors shadow-sm"
+        >
+          <Phone size={18} />
+          {phoneDisplay}
+        </a>
+        <button
+          onClick={goToReservation}
+          className="flex items-center justify-center gap-2 bg-blue-600 text-white font-semibold text-sm py-3 rounded-xl hover:bg-blue-700 active:bg-blue-800 transition-colors shadow-sm cursor-pointer"
+        >
+          <Calendar size={18} />
+          Réserver en ligne
+        </button>
+      </div>
+    </div>
+  </>
   )
 }

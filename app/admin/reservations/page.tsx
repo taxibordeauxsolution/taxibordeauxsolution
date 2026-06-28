@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react'
 import {
-  ArrowClockwise, Trash, Taxi, Phone, Envelope, MapPin, Clock,
+  ArrowClockwise, Trash, Taxi, Phone, Envelope, MapPin,
   CheckCircle, XCircle, HourglassSimple, CaretDown, CaretLeft, CaretRight,
   MagnifyingGlass, Receipt, NavigationArrow, PlusCircle, PencilSimple,
   ArrowsLeftRight, UserList, Export, X, AddressBook,
@@ -689,15 +689,19 @@ export default function AdminReservations() {
                     className="rounded border-slate-300 shrink-0 mt-1 sm:mt-0" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">{r.reservationId}</span>
+                      <span className="font-bold text-slate-900 dark:text-white text-base sm:text-lg leading-tight">{r.customer.name}</span>
                       <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${sc.color}`}>{sc.label}</span>
                       {r.pricing.isForfait && <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800">Forfait</span>}
                       {isPast(r.pickupDate) && r.status === 'en_attente' && <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-100 text-orange-800">Passée</span>}
                     </div>
-                    <div className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                      <span className="font-medium">{r.customer.name}</span>
-                      <span className="mx-1 sm:mx-2 text-slate-500">|</span>
-                      <span className="inline-flex items-center gap-0.5"><Clock size={14} className="inline" /> {formatDate(r.pickupDate)}</span>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className="text-blue-600 dark:text-blue-400 font-bold text-xl sm:text-2xl leading-none tabular-nums">
+                        {new Date(r.pickupDate).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })}
+                      </span>
+                      <span className="text-slate-700 dark:text-slate-300 font-semibold text-sm">
+                        {new Date(r.pickupDate).toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: '2-digit', timeZone: 'Europe/Paris' })}
+                      </span>
+                      <span className="text-xs text-slate-400 dark:text-slate-500 ml-1">{r.reservationId}</span>
                     </div>
                     <div className="text-xs sm:text-sm text-slate-500 mt-0.5 truncate">
                       <MapPin size={14} className="inline text-green-500" /> {addrStr(r.trip.from).split(',')[0]}
