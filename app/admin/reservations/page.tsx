@@ -805,20 +805,20 @@ export default function AdminReservations() {
                     {/* Communications client */}
                     <div className="pt-2 border-t border-slate-200 dark:border-slate-700 space-y-2">
                       <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Communications</p>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
                         <a
                           href={`sms:${r.customer.phone}?body=${encodeURIComponent(
                             `Bonjour ${r.customer.name.split(' ')[0]}, votre taxi est confirmé le ${new Date(r.pickupDate).toLocaleDateString('fr-FR', { weekday: 'short', day: '2-digit', month: '2-digit', timeZone: 'Europe/Paris' })} à ${new Date(r.pickupDate).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Paris' })}, de ${addrStr(r.trip.from).split(',')[0]} → ${addrStr(r.trip.to).split(',')[0]}. À bientôt ! Taxi Bordeaux Solution +33 5 54 54 34 66`
                           )}`}
                           onClick={e => e.stopPropagation()}
-                          className="flex items-center gap-1.5 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+                          className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
                         >
                           <DeviceMobile size={14} /> Confirmation SMS
                         </a>
                         <a
                           href={`sms:${r.customer.phone}?body=${encodeURIComponent(`Bonjour ${r.customer.name.split(' ')[0]}, merci d'avoir choisi Taxi Bordeaux Solution ! Si vous êtes satisfait(e), un petit avis Google nous aiderait beaucoup 🙏\nhttps://g.page/r/CSgLIx6QFNEvEBM/review`)}`}
                           onClick={e => e.stopPropagation()}
-                          className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors"
+                          className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors"
                         >
                           <Star size={14} weight="fill" /> Avis SMS
                         </a>
@@ -828,7 +828,7 @@ export default function AdminReservations() {
                               e.stopPropagation()
                               if (window.confirm(`Envoyer une demande d'avis Google par email à ${r.customer.email} ?`)) sendReviewEmail(r)
                             }}
-                            className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors"
+                            className="shrink-0 flex items-center gap-1.5 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors"
                           >
                             <Envelope size={14} /> Avis Email
                           </button>
@@ -836,62 +836,68 @@ export default function AdminReservations() {
                       </div>
                     </div>
 
-                    {/* Actions statut */}
-                    <div className="grid grid-cols-2 sm:flex gap-2 pt-2 border-t border-slate-300 dark:border-slate-700">
-                      {r.status !== 'confirmee' && r.status !== 'en_route' && r.status !== 'terminee' && (
-                        <button onClick={() => updateStatus(r._id, 'confirmee')}
-                          className="px-3 py-2 sm:py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700">
-                          Confirmer
+                    {/* Statut */}
+                    <div className="pt-2 border-t border-slate-300 dark:border-slate-700">
+                      <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide mb-2">Statut</p>
+                      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+                        {r.status !== 'confirmee' && r.status !== 'en_route' && r.status !== 'terminee' && (
+                          <button onClick={() => updateStatus(r._id, 'confirmee')}
+                            className="shrink-0 px-3 py-2 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition-colors">
+                            Confirmer
+                          </button>
+                        )}
+                        {(r.status === 'confirmee' || r.status === 'en_attente') && (
+                          <button onClick={() => updateStatus(r._id, 'en_route')}
+                            className="shrink-0 px-3 py-2 bg-orange-500 text-white rounded-lg text-xs font-semibold hover:bg-orange-600 transition-colors flex items-center gap-1.5">
+                            <NavigationArrow size={14} /> En route
+                          </button>
+                        )}
+                        {r.status !== 'terminee' && r.status !== 'annulee' && (
+                          <button onClick={() => updateStatus(r._id, 'terminee')}
+                            className="shrink-0 px-3 py-2 bg-green-600 text-white rounded-lg text-xs font-semibold hover:bg-green-700 transition-colors">
+                            Terminer
+                          </button>
+                        )}
+                        {r.status !== 'annulee' && r.status !== 'terminee' && (
+                          <button onClick={() => updateStatus(r._id, 'annulee')}
+                            className="shrink-0 px-3 py-2 bg-red-600 text-white rounded-lg text-xs font-semibold hover:bg-red-700 transition-colors">
+                            Annuler
+                          </button>
+                        )}
+                        {(r.status === 'annulee' || r.status === 'terminee') && (
+                          <button onClick={() => updateStatus(r._id, 'en_attente')}
+                            className="shrink-0 px-3 py-2 bg-yellow-500 text-white rounded-lg text-xs font-semibold hover:bg-yellow-600 transition-colors">
+                            Remettre en attente
+                          </button>
+                        )}
+                        <button onClick={e => { e.stopPropagation(); generateInvoice(r) }}
+                          className="shrink-0 px-3 py-2 bg-slate-700 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition-colors flex items-center gap-1.5">
+                          <Receipt size={14} /> Facture PDF
                         </button>
-                      )}
-                      {(r.status === 'confirmee' || r.status === 'en_attente') && (
-                        <button onClick={() => updateStatus(r._id, 'en_route')}
-                          className="px-3 py-2 sm:py-1.5 bg-orange-500 text-white rounded-lg text-xs font-semibold hover:bg-orange-600 transition-colors flex items-center justify-center gap-1.5">
-                          <NavigationArrow size={14} /> En route
-                        </button>
-                      )}
-                      {r.status !== 'terminee' && r.status !== 'annulee' && (
-                        <button onClick={() => updateStatus(r._id, 'terminee')}
-                          className="px-3 py-2 sm:py-1.5 bg-green-600 text-white rounded-lg text-xs font-semibold hover:bg-green-700">
-                          Terminer
-                        </button>
-                      )}
-                      {r.status !== 'annulee' && r.status !== 'terminee' && (
-                        <button onClick={() => updateStatus(r._id, 'annulee')}
-                          className="px-3 py-2 sm:py-1.5 bg-red-600 text-white rounded-lg text-xs font-semibold hover:bg-red-700">
-                          Annuler
-                        </button>
-                      )}
-                      {(r.status === 'annulee' || r.status === 'terminee') && (
-                        <button onClick={() => updateStatus(r._id, 'en_attente')}
-                          className="px-3 py-2 sm:py-1.5 bg-yellow-500 text-white rounded-lg text-xs font-semibold hover:bg-yellow-600 col-span-2 sm:col-span-1">
-                          Remettre en attente
-                        </button>
-                      )}
-                      <button onClick={e => { e.stopPropagation(); generateInvoice(r) }}
-                        className="px-3 py-2 sm:py-1.5 bg-slate-700 text-white rounded-lg text-xs font-semibold hover:bg-slate-800 transition-colors flex items-center justify-center gap-1.5 col-span-2 sm:col-span-1 sm:ml-auto">
-                        <Receipt size={14} /> Facture PDF
-                      </button>
+                      </div>
                     </div>
 
-                    {/* Actions course */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-                      <a href={buildBookingUrl(r, false)} target="_blank" rel="noopener noreferrer"
-                        className="px-3 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 rounded-lg text-xs font-semibold hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors flex items-center justify-center gap-1.5">
-                        <PlusCircle size={14} /> Nouvelle course
-                      </a>
-                      <a href={buildBookingUrl(r, true)} target="_blank" rel="noopener noreferrer"
-                        className="px-3 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/50 rounded-lg text-xs font-semibold hover:bg-indigo-100 dark:hover:bg-indigo-900/50 flex items-center justify-center gap-1.5">
-                        <ArrowsLeftRight size={14} /> Créer retour
-                      </a>
-                      <button onClick={() => setEditModal(r)}
-                        className="px-3 py-2 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors flex items-center justify-center gap-1.5">
-                        <PencilSimple size={14} /> Modifier
-                      </button>
-                      <button onClick={() => setHistModal({ name: r.customer.name, phone: r.customer.phone })}
-                        className="px-3 py-2 bg-slate-50 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-600 transition-colors flex items-center justify-center gap-1.5">
-                        <UserList size={14} /> Historique
-                      </button>
+                    {/* Course */}
+                    <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
+                      <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide mb-2">Course</p>
+                      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+                        <a href={buildBookingUrl(r, false)} target="_blank" rel="noopener noreferrer"
+                          className="shrink-0 px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center gap-1.5">
+                          <PlusCircle size={14} /> Nouvelle course
+                        </a>
+                        <a href={buildBookingUrl(r, true)} target="_blank" rel="noopener noreferrer"
+                          className="shrink-0 px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center gap-1.5">
+                          <ArrowsLeftRight size={14} /> Créer retour
+                        </a>
+                        <button onClick={() => setEditModal(r)}
+                          className="shrink-0 px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center gap-1.5">
+                          <PencilSimple size={14} /> Modifier
+                        </button>
+                        <button onClick={() => setHistModal({ name: r.customer.name, phone: r.customer.phone })}
+                          className="shrink-0 px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 rounded-lg text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors flex items-center gap-1.5">
+                          <UserList size={14} /> Historique
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
