@@ -43,6 +43,8 @@ function addrStr(v: string | { address?: string }): string {
   return typeof v === 'string' ? v : v?.address || ''
 }
 
+const wazeUrl = (addr: string) => `https://waze.com/ul?q=${encodeURIComponent(addr)}&navigate=yes`
+
 // Construit l'URL du formulaire de réservation client avec les infos pré-remplies
 function buildBookingUrl(r: Reservation, retour = false): string {
   const p = new URLSearchParams({
@@ -735,9 +737,13 @@ export default function AdminReservations() {
                       <span className="text-xs text-slate-400 dark:text-slate-500 ml-1">{r.reservationId}</span>
                     </div>
                     <div className="text-xs sm:text-sm text-slate-500 mt-0.5 truncate">
-                      <MapPin size={14} className="inline text-green-500" /> {addrStr(r.trip.from).split(',')[0]}
+                      <a href={wazeUrl(addrStr(r.trip.from))} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="hover:text-blue-600 transition-colors inline-flex items-center gap-0.5">
+                        <MapPin size={14} className="inline text-green-500 shrink-0" /> {addrStr(r.trip.from).split(',')[0]}
+                      </a>
                       <span className="mx-1">→</span>
-                      <MapPin size={14} className="inline text-red-500" /> {addrStr(r.trip.to).split(',')[0]}
+                      <a href={wazeUrl(addrStr(r.trip.to))} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} className="hover:text-blue-600 transition-colors inline-flex items-center gap-0.5">
+                        <MapPin size={14} className="inline text-red-500 shrink-0" /> {addrStr(r.trip.to).split(',')[0]}
+                      </a>
                     </div>
                     <div className="flex items-center justify-between mt-1.5 sm:hidden">
                       <span className="text-xs text-slate-600 dark:text-slate-400">{r.trip.distance?.toFixed(1)} km</span>
@@ -801,12 +807,12 @@ export default function AdminReservations() {
                     <div className="text-xs text-slate-600 dark:text-slate-500 space-y-1">
                       <div className="flex items-start gap-1">
                         <span className="shrink-0">Départ :</span>
-                        <span className="break-words">{addrStr(r.trip.from)}</span>
+                        <a href={wazeUrl(addrStr(r.trip.from))} target="_blank" rel="noopener noreferrer" className="break-words text-blue-600 dark:text-blue-400 hover:underline">{addrStr(r.trip.from)}</a>
                         <CopyButton text={addrStr(r.trip.from)} className="shrink-0 -mt-0.5" />
                       </div>
                       <div className="flex items-start gap-1">
                         <span className="shrink-0">Destination :</span>
-                        <span className="break-words">{addrStr(r.trip.to)}</span>
+                        <a href={wazeUrl(addrStr(r.trip.to))} target="_blank" rel="noopener noreferrer" className="break-words text-blue-600 dark:text-blue-400 hover:underline">{addrStr(r.trip.to)}</a>
                         <CopyButton text={addrStr(r.trip.to)} className="shrink-0 -mt-0.5" />
                       </div>
                       <div>Créée le {formatDate(r.createdAt)}</div>
