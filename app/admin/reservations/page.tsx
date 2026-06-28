@@ -5,7 +5,7 @@ import {
   ArrowClockwise, Trash, Taxi, Phone, Envelope, MapPin,
   CheckCircle, XCircle, HourglassSimple, CaretDown, CaretLeft, CaretRight,
   MagnifyingGlass, Receipt, NavigationArrow, PlusCircle, PencilSimple,
-  ArrowsLeftRight, UserList, Export, X, AddressBook,
+  ArrowsLeftRight, UserList, Export, X, AddressBook, DeviceMobile, Star,
 } from '@phosphor-icons/react'
 import jsPDF from 'jspdf'
 import { getToken } from '@/app/admin/lib/token'
@@ -564,6 +564,20 @@ export default function AdminReservations() {
     } catch (e: any) { toast(`Erreur : ${e instanceof Error ? e.message : 'inconnue'}`, 'error') }
   }
 
+  const sendReviewEmail = async (r: Reservation) => {
+    if (!r.customer.email) return
+    try {
+      const res  = await fetch('/api/admin/send-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+        body: JSON.stringify({ email: r.customer.email, customerName: r.customer.name }),
+      })
+      const json = await res.json()
+      if (json.success) showNotif('success', `Demande d'avis envoyée à ${r.customer.email}`)
+      else showNotif('warning', `Erreur : ${json.message}`)
+    } catch { showNotif('warning', "Erreur lors de l'envoi") }
+  }
+
   return (
     <div className="space-y-6">
       {/* Modales */}
@@ -787,6 +801,28 @@ export default function AdminReservations() {
                         Facture <span className="font-bold">FAC-{r.invoiceNumber}</span> déjà générée
                       </div>
                     )}
+
+                    {/* Demander un avis Google */}
+                    <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-1"><Star size={12} weight="fill" className="text-amber-400" /> Demander un avis Google</p>
+                      <div className="flex gap-2">
+                        <a
+                          href={`sms:${r.customer.phone}?body=${encodeURIComponent(`Bonjour ${r.customer.name.split(' ')[0]}, merci d'avoir choisi Taxi Bordeaux Solution ! Si vous êtes satisfait(e), un petit avis Google nous aiderait beaucoup 🙏\nhttps://g.page/r/CSgLIx6QFNEvEBM/review`)}`}
+                          onClick={e => e.stopPropagation()}
+                          className="flex items-center gap-1.5 px-3 py-2 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800/50 rounded-lg text-xs font-semibold hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors"
+                        >
+                          <DeviceMobile size={14} /> SMS
+                        </a>
+                        {r.customer.email && (
+                          <button
+                            onClick={e => { e.stopPropagation(); sendReviewEmail(r) }}
+                            className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50 rounded-lg text-xs font-semibold hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors"
+                          >
+                            <Envelope size={14} /> Email
+                          </button>
+                        )}
+                      </div>
+                    </div>
 
                     {/* Actions statut */}
                     <div className="grid grid-cols-2 sm:flex gap-2 pt-2 border-t border-slate-300 dark:border-slate-700">
